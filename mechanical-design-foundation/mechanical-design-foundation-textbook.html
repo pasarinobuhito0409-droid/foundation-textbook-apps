@@ -1,0 +1,849 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>機械設計 基礎アプリ</title>
+  <link rel="manifest" href="mechanical-design-manifest.webmanifest">
+  <meta name="theme-color" content="#14532d">
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f4f4ef;
+      --paper: #fffef8;
+      --ink: #182026;
+      --muted: #637076;
+      --line: #d8d5cb;
+      --green: #14532d;
+      --blue: #1d4ed8;
+      --red: #c2410c;
+      --yellow: #a16207;
+      --violet: #6d28d9;
+      --shadow: 0 16px 34px rgba(35, 40, 35, 0.12);
+      --radius: 8px;
+      font-family: "Yu Gothic", "Hiragino Sans", "Meiryo", system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; min-width: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.72), rgba(255,255,255,.26)),
+        repeating-linear-gradient(90deg, rgba(30, 45, 38, .026) 0 1px, transparent 1px 12px),
+        var(--bg);
+      line-height: 1.7;
+    }
+
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(244,244,239,.94);
+      border-bottom: 1px solid rgba(75, 84, 70, .2);
+      backdrop-filter: blur(12px);
+    }
+
+    .topbar-inner,
+    .page {
+      width: min(1180px, calc(100% - 28px));
+      margin: 0 auto;
+    }
+
+    .topbar-inner {
+      min-height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .brand strong { display: block; font-size: 18px; line-height: 1.25; }
+    .brand span { display: block; color: var(--muted); font-size: 13px; }
+
+    .quick-nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .nav-button,
+    .primary-button,
+    .ghost-button,
+    .choice-button,
+    .topic-button {
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      color: var(--ink);
+    }
+
+    .nav-button {
+      padding: 8px 12px;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .primary-button {
+      border-color: transparent;
+      background: var(--ink);
+      color: white;
+      padding: 10px 14px;
+      box-shadow: 0 10px 22px rgba(24,32,38,.18);
+    }
+
+    .ghost-button { padding: 10px 14px; }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, .98fr) minmax(340px, 1.02fr);
+      gap: 28px;
+      align-items: center;
+      min-height: calc(100vh - 86px);
+      padding: 34px 0 42px;
+    }
+
+    .eyebrow { margin: 0 0 10px; color: var(--green); font-weight: 800; }
+    h1, h2, h3 { letter-spacing: 0; }
+    h1 { margin: 0; font-size: clamp(38px, 6vw, 70px); line-height: 1.04; }
+    .lead { margin: 18px 0 0; max-width: 720px; color: #2f3d42; font-size: 18px; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+
+    .design-stage {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,254,248,.86);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .stage-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .scene {
+      padding: 18px;
+      min-height: 360px;
+      background: linear-gradient(180deg, rgba(255,255,255,.88), rgba(235,238,232,.76));
+    }
+
+    .machine-sketch {
+      position: relative;
+      height: 245px;
+      border: 1px dashed rgba(90, 82, 68, .28);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(255,255,255,.8), rgba(224,232,230,.7));
+    }
+
+    .base-plate {
+      position: absolute;
+      left: 12%;
+      right: 12%;
+      bottom: 48px;
+      height: 34px;
+      border-radius: 7px;
+      background: linear-gradient(180deg, #cfd8dc, #6b7b83);
+      box-shadow: 0 18px 24px rgba(42,50,54,.2);
+    }
+
+    .bracket-left,
+    .bracket-right {
+      position: absolute;
+      bottom: 82px;
+      width: 64px;
+      height: 118px;
+      border-radius: 7px;
+      background: linear-gradient(90deg, #2f3b42, #778891);
+    }
+
+    .bracket-left { left: 20%; }
+    .bracket-right { right: 20%; }
+
+    .shaft {
+      position: absolute;
+      left: 19%;
+      right: 19%;
+      top: 94px;
+      height: 28px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #eef4f6, #8a9aa2 58%, #5e6d75);
+    }
+
+    .load-mark {
+      position: absolute;
+      left: 50%;
+      top: 34px;
+      width: 5px;
+      height: 64px;
+      background: var(--red);
+      border-radius: 999px;
+      animation: loadPulse 1.7s ease-in-out infinite;
+    }
+
+    .load-mark::after {
+      content: "荷重↓";
+      position: absolute;
+      left: 12px;
+      top: 16px;
+      color: var(--red);
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .hole {
+      position: absolute;
+      bottom: 58px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #243039;
+      box-shadow: inset 0 2px 3px rgba(0,0,0,.35);
+    }
+
+    .hole.a { left: 30%; }
+    .hole.b { right: 30%; }
+
+    @keyframes loadPulse {
+      0%,100% { transform: translateY(0); opacity: .58; }
+      50% { transform: translateY(24px); opacity: 1; }
+    }
+
+    .meter-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .meter {
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.7);
+    }
+
+    .meter span { color: var(--muted); font-size: 12px; }
+    .meter strong { display: block; font-size: 20px; line-height: 1.15; }
+
+    .section {
+      padding: 44px 0;
+      border-top: 1px solid rgba(75, 84, 70, .2);
+    }
+
+    .section h2 {
+      margin: 0 0 14px;
+      font-size: clamp(24px, 3vw, 38px);
+      line-height: 1.15;
+    }
+
+    .section-intro {
+      max-width: 850px;
+      margin: 0 0 22px;
+      color: #2f3d42;
+      font-size: 17px;
+    }
+
+    .grid-3,
+    .topic-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .card,
+    .lesson-panel,
+    .review-panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: 0 10px 18px rgba(52,47,39,.06);
+    }
+
+    .card { padding: 14px; min-height: 128px; }
+    .card strong { display: block; margin-bottom: 6px; }
+    .card p { margin: 0; color: var(--muted); font-size: 14px; }
+
+    .lesson-layout {
+      display: grid;
+      grid-template-columns: minmax(260px, 360px) minmax(0, 1fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .topic-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .topic-button {
+      width: 100%;
+      text-align: left;
+      padding: 10px;
+      background: rgba(255,255,255,.75);
+    }
+
+    .topic-button.active {
+      border-color: rgba(20,83,45,.7);
+      background: rgba(20,83,45,.08);
+    }
+
+    .topic-button strong,
+    .topic-button span { display: block; }
+    .topic-button span { color: var(--muted); font-size: 13px; }
+
+    .lesson-panel { padding: 18px; }
+
+    .icon-line {
+      display: grid;
+      grid-template-columns: 28px minmax(0, 1fr);
+      gap: 10px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(90,82,68,.16);
+    }
+
+    .icon-line:last-child { border-bottom: 0; }
+    .icon-line b { display: block; margin-bottom: 3px; }
+    .icon-line p { margin: 0; color: #334044; }
+
+    .review-layout {
+      display: grid;
+      grid-template-columns: minmax(260px, 340px) minmax(0, 1fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .review-panel { padding: 16px; }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .stat {
+      padding: 10px;
+      min-height: 76px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.72);
+    }
+
+    .stat span { color: var(--muted); font-size: 12px; }
+    .stat strong { display: block; margin-top: 4px; font-size: 22px; line-height: 1.15; }
+
+    .review-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .question-box {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,.85), rgba(238,241,235,.74));
+    }
+
+    .question-box h3 {
+      margin: 8px 0 12px;
+      font-size: clamp(21px, 3vw, 30px);
+      line-height: 1.25;
+    }
+
+    .question-meta { color: var(--muted); font-size: 13px; }
+    .choices { display: grid; gap: 8px; }
+    .choice-button { min-height: 44px; padding: 10px; text-align: left; background: #fff; }
+    .choice-button.correct { border-color: rgba(36,122,83,.7); background: rgba(36,122,83,.08); }
+    .choice-button.wrong { border-color: rgba(194,65,12,.55); background: rgba(194,65,12,.07); }
+
+    .feedback {
+      display: none;
+      margin-top: 12px;
+      padding: 12px;
+      border-left: 4px solid var(--green);
+      background: rgba(20,83,45,.07);
+    }
+
+    .feedback.show { display: block; }
+
+    .append-note {
+      margin: 16px 0 0;
+      padding: 12px;
+      border: 1px dashed rgba(20,83,45,.35);
+      border-radius: var(--radius);
+      color: var(--muted);
+      background: rgba(255,255,255,.66);
+      font-size: 14px;
+    }
+
+    @media (max-width: 900px) {
+      .hero,
+      .grid-3,
+      .topic-grid,
+      .lesson-layout,
+      .review-layout,
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .hero { min-height: 0; }
+    }
+
+    @media (max-width: 620px) {
+      .topbar-inner { align-items: flex-start; padding: 10px 0; }
+      .quick-nav { justify-content: flex-start; }
+      .scene { min-height: 300px; padding: 12px; }
+      .machine-sketch { height: 220px; }
+      .meter-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <strong>機械設計 基礎アプリ</strong>
+        <span>三輪さん専用 / 追加して育てるPWA教科書</span>
+      </div>
+      <nav class="quick-nav" aria-label="ページ内メニュー">
+        <a class="nav-button" href="#lesson">教科書</a>
+        <a class="nav-button" href="#review">復習</a>
+        <a class="nav-button" href="#roadmap">地図</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">MD01 今日の1テーマ</p>
+        <h1>機械設計は、目的を形に変える仕事。</h1>
+        <p class="lead">
+          部品名を覚える前に、何のために作るか、どこに力が入るか、どう作るかを見る。
+          ここを固めると、図面・材料・加工・組立・CAEが一本につながる。
+        </p>
+        <div class="hero-actions">
+          <a class="primary-button" href="#lesson">今日の教科書</a>
+          <a class="ghost-button" href="#review">すぐ復習</a>
+        </div>
+      </div>
+
+      <aside class="design-stage" aria-label="機械設計の見える化">
+        <div class="stage-head">
+          <strong>頭の中の設計</strong>
+          <span>目的 → 力 → 形 → 作り方</span>
+        </div>
+        <div class="scene">
+          <div class="machine-sketch" aria-hidden="true">
+            <div class="base-plate"></div>
+            <div class="bracket-left"></div>
+            <div class="bracket-right"></div>
+            <div class="shaft"></div>
+            <div class="load-mark"></div>
+            <div class="hole a"></div>
+            <div class="hole b"></div>
+          </div>
+          <div class="meter-grid">
+            <div class="meter"><span>見る順番</span><strong>目的</strong></div>
+            <div class="meter"><span>次に見る</span><strong>力</strong></div>
+            <div class="meter"><span>最後に決める</span><strong>形</strong></div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section" id="roadmap" aria-labelledby="roadmap-title">
+      <h2 id="roadmap-title">基礎の地図</h2>
+      <p class="section-intro">
+        まずは機械設計の土台を、この順番で積む。
+        新しい内容はこの地図に足していく。
+      </p>
+      <div class="grid-3">
+        <article class="card"><strong>1. 目的</strong><p>何を支え、何を動かし、何を守るか。</p></article>
+        <article class="card"><strong>2. 力</strong><p>押す、引く、曲げる、ねじる、ぶつかる。</p></article>
+        <article class="card"><strong>3. 形</strong><p>板、箱、軸、ブラケット、リブ、穴。</p></article>
+        <article class="card"><strong>4. 材料</strong><p>鉄、アルミ、樹脂。強さと作りやすさ。</p></article>
+        <article class="card"><strong>5. 加工</strong><p>切る、曲げる、削る、溶接、組立。</p></article>
+        <article class="card"><strong>6. 図面</strong><p>他人が同じ物を作れる指示書。</p></article>
+      </div>
+    </section>
+
+    <section class="section" id="lesson" aria-labelledby="lesson-title">
+      <h2 id="lesson-title">今日の教科書</h2>
+      <p class="section-intro">
+        1回で覚えることは1つ。
+        機械設計は「目的を、力に耐える形へ変える」こと。
+      </p>
+
+      <div class="lesson-layout">
+        <nav class="topic-list" id="topicList" aria-label="機械設計テーマ"></nav>
+        <article class="lesson-panel" id="lessonPanel"></article>
+      </div>
+    </section>
+
+    <section class="section" id="review" aria-labelledby="review-title">
+      <h2 id="review-title">いつでも復習</h2>
+      <p class="section-intro">
+        仕事前に毎回HTMLを作らなくていい。
+        このアプリの中に問題を貯めて、今日の復習・弱点だけ・テーマ別で出す。
+      </p>
+
+      <div class="review-layout">
+        <aside class="topic-list" id="reviewTopicList" aria-label="復習テーマ"></aside>
+        <div class="review-panel">
+          <div class="stats">
+            <div class="stat"><span>復習済み</span><strong id="answeredCount">0問</strong></div>
+            <div class="stat"><span>正解率</span><strong id="rateText">0%</strong></div>
+            <div class="stat"><span>今のテーマ</span><strong id="topicText">目的</strong></div>
+          </div>
+          <div class="review-actions">
+            <button class="primary-button" id="dueButton">今日の復習</button>
+            <button class="ghost-button" id="weakButton">弱点だけ</button>
+            <button class="ghost-button" id="installButton" hidden>ホーム画面に追加</button>
+          </div>
+          <div class="question-box">
+            <span class="question-meta" id="kindText">想起（しょうき：思い出す）</span>
+            <h3 id="questionText"></h3>
+            <div class="choices" id="choices"></div>
+            <div class="feedback" id="feedback"></div>
+          </div>
+          <div class="hero-actions">
+            <button class="ghost-button" id="nextButton">次の問題</button>
+            <button class="ghost-button" id="resetButton">復習だけリセット</button>
+          </div>
+          <p class="append-note">
+            追加方針：新しい授業は `topics` に足す。新しい問題は `questionBank` に足す。
+            古い内容は消さず、カードとして残す。
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const storageKey = "miwa-mechanical-design-foundation-v1";
+
+    const topics = [
+      {
+        id: "purpose",
+        code: "MD01",
+        title: "機械設計とは何か",
+        short: "目的を形に変える",
+        lines: [
+          ["🔵", "定義（ていぎ：言葉の意味）", "機械設計は、目的を満たす形を考え、作れる指示にする仕事。"],
+          ["🟢", "しくみ", "目的を見る。力を見る。形を決める。材料と加工を選ぶ。図面にする。"],
+          ["🟡", "なぜ", "形だけ先に決めると、強さ・作りやすさ・組立で失敗しやすい。"],
+          ["🔴", "注意", "かっこいい形より先に、何を支えるか、どこに力が入るかを見る。"],
+          ["🟣", "設計判断", "板を厚くする前に、曲げ、リブ、固定、荷重の向きを見る。"],
+          ["⚫", "発明家視点", "目的から形へ変換できると、まだ世の中にない道具を作れる。"]
+        ]
+      },
+      {
+        id: "drawing",
+        code: "MD02",
+        title: "図面とは何か",
+        short: "作る人への指示書",
+        lines: [
+          ["🔵", "定義", "図面は、誰が見ても同じ物を作れるようにする指示書。"],
+          ["🟢", "しくみ", "形、寸法、公差、材料、表面処理、数量を伝える。"],
+          ["🟡", "なぜ", "頭の中の形だけでは、加工する人に正確に伝わらない。"],
+          ["🔴", "注意", "寸法が足りない図面は、現場が想像で作ることになる。"],
+          ["🟣", "設計判断", "重要な場所ほど、寸法と基準をはっきりさせる。"],
+          ["⚫", "発明家視点", "図面化できる発明は、人に作ってもらえる発明になる。"]
+        ]
+      },
+      {
+        id: "material",
+        code: "MD03",
+        title: "材料",
+        short: "強さと作りやすさ",
+        lines: [
+          ["🔵", "定義", "材料は、部品の性格を決める元。鉄、アルミ、樹脂など。"],
+          ["🟢", "しくみ", "強い、軽い、曲げやすい、削りやすい、錆びにくい、値段が違う。"],
+          ["🟡", "なぜ", "同じ形でも材料が違うと、重さ、強さ、加工性が変わる。"],
+          ["🔴", "注意", "強い材料がいつも正解ではない。重い、加工しにくい、高いことがある。"],
+          ["🟣", "設計判断", "荷重、環境、加工方法、コストを見て選ぶ。"],
+          ["⚫", "発明家視点", "材料を選べると、同じアイデアを軽くも安くもできる。"]
+        ]
+      },
+      {
+        id: "process",
+        code: "MD04",
+        title: "加工",
+        short: "作れる形にする",
+        lines: [
+          ["🔵", "定義", "加工は、材料を切る、曲げる、削る、溶接するなどして形にすること。"],
+          ["🟢", "しくみ", "加工方法によって、得意な形、苦手な形、必要な寸法が変わる。"],
+          ["🟡", "なぜ", "作れない形は、CAD上では存在しても現場では困る。"],
+          ["🔴", "注意", "小さすぎる穴、近すぎる曲げ、工具が入らない形は失敗しやすい。"],
+          ["🟣", "設計判断", "最初から加工方法を想像しながら形を決める。"],
+          ["⚫", "発明家視点", "加工を知るほど、作れる発明の範囲が広がる。"]
+        ]
+      },
+      {
+        id: "screw",
+        code: "MD05",
+        title: "ねじ",
+        short: "外せる固定",
+        lines: [
+          ["🔵", "定義", "ねじは、部品を締めて固定し、必要なら外せる部品。"],
+          ["🟢", "しくみ", "軸力（じくりょく：締め付ける力）で部品同士を押さえる。"],
+          ["🟡", "なぜ", "摩擦が増えるので、部品がずれにくくなる。"],
+          ["🔴", "注意", "ねじはせん断だけで受けると危ないことがある。締結面で受ける考えが大事。"],
+          ["🟣", "設計判断", "サイズ、本数、配置、締め付け方向、工具スペースを見る。"],
+          ["⚫", "発明家視点", "外せる構造にできると、修理できる発明になる。"]
+        ]
+      },
+      {
+        id: "tolerance",
+        code: "MD06",
+        title: "公差",
+        short: "ズレを許す範囲",
+        lines: [
+          ["🔵", "定義", "公差（こうさ）は、寸法が少しズレてもよい範囲。"],
+          ["🟢", "しくみ", "加工品は完全に同じ寸法にはならない。だから許せる範囲を決める。"],
+          ["🟡", "なぜ", "全部を厳しくすると高くなる。ゆるすぎると組み立たない。"],
+          ["🔴", "注意", "重要ではない場所まで厳しくすると、現場とコストがつらくなる。"],
+          ["🟣", "設計判断", "動く場所、はまる場所、基準になる場所だけ厳しくする。"],
+          ["⚫", "発明家視点", "公差を使えると、試作品から量産へ進める。"]
+        ]
+      }
+    ];
+
+    const questionBank = [
+      q("purpose-1", "purpose", "想起（しょうき：思い出す）", "機械設計を一言で言うと？", ["目的を形に変える仕事", "色を決める仕事", "部品名を暗記する仕事"], 0, "目的を満たす形を考えて、作れる指示にするから。", "棚を作る時も、何を置くかが先。", "目的から形へ変えられると、発明を現物にできる。"),
+      q("purpose-2", "purpose", "順番", "形を決める前に見るものは？", ["目的と力", "塗装色だけ", "ファイル名"], 0, "何を支えるか、どこに力が入るかで形が変わる。", "傘は雨を防ぐ目的があるから広がった形になる。", "目的を見る力は、ゼロから道具を作る核になる。"),
+      q("drawing-1", "drawing", "定義（ていぎ）", "図面とは何？", ["同じ物を作るための指示書", "かっこいい絵", "材料の値段表"], 0, "形、寸法、材料などを作る人へ伝えるから。", "料理のレシピに近い。", "図面化できる発明は人に作ってもらえる。"),
+      q("drawing-2", "drawing", "注意", "寸法が足りない図面で起きることは？", ["現場が想像で作る", "必ず安くなる", "材料が強くなる"], 0, "必要な寸法がないと、作る側が判断するしかない。", "地図に目的地が書いていない状態。", "伝える力はチームで発明する力になる。"),
+      q("material-1", "material", "判別（はんべつ）", "強い材料がいつも正解ではない理由は？", ["重い、高い、加工しにくいことがある", "必ず透明だから", "図面に書けないから"], 0, "設計は強さだけでなく、重さ、値段、作りやすさを見る。", "分厚い鉄板の机は強いが重すぎる。", "材料を選べると、発明を軽くできる。"),
+      q("material-2", "material", "適用（てきよう）", "軽さを優先したい時に候補になる材料は？", ["アルミや樹脂", "鉛だけ", "水だけ"], 0, "鉄より軽い材料を選ぶと軽量化しやすい。", "自転車で軽いフレームを選ぶ感じ。", "軽い発明は持ち運びやすくなる。"),
+      q("process-1", "process", "想起", "加工とは何？", ["材料を切る、曲げる、削るなどして形にすること", "完成品を眺めること", "名前を決めること"], 0, "材料を実際の形へ変える作業だから。", "紙を切って箱にするのも加工のイメージ。", "加工を知ると作れる発明になる。"),
+      q("process-2", "process", "注意", "CADでは見えるけど現場で困る形は？", ["工具が入らない形", "説明が短い形", "色が地味な形"], 0, "削る、曲げる、締める道具が入らないと作業できない。", "狭すぎる隙間にドライバーが入らない感じ。", "現場を想像できる設計者は強い。"),
+      q("screw-1", "screw", "定義", "ねじの大きな特徴は？", ["固定できて外せる", "必ず溶ける", "電気を作る"], 0, "締めて固定し、必要なら外せるから。", "電池カバーのねじは外して修理できる。", "外せる発明は修理しやすい。"),
+      q("screw-2", "screw", "しくみ", "ねじが部品を固定する主な力は？", ["締め付ける力", "色の力", "音の力"], 0, "締めると部品同士を押さえつけ、ずれにくくなる。", "手で紙を強く押さえると動きにくい。", "締結を分かると、分解できる機械が作れる。"),
+      q("tolerance-1", "tolerance", "定義", "公差とは何？", ["寸法のズレを許す範囲", "部品の色", "工具の名前"], 0, "加工品は完全に同じ寸法にならないので、許す範囲を決める。", "服のサイズに少し幅がある感じ。", "公差を使えると量産を考えられる。"),
+      q("tolerance-2", "tolerance", "設計判断", "全部の公差を厳しくするとどうなる？", ["コストや加工がつらくなる", "必ず軽くなる", "図面が消える"], 0, "厳しい寸法ほど加工と検査が大変になる。", "全部を特注サイズにすると高くなる。", "大事な場所だけ厳しくできると設計が上手くなる。")
+    ];
+
+    function q(id, topic, kind, question, choices, answer, why, daily, invention) {
+      return { id, topic, kind, question, choices, answer, why, daily, invention };
+    }
+
+    const state = {
+      topic: "purpose",
+      reviewMode: "due",
+      currentQuestion: "",
+      answered: {},
+      correct: 0,
+      wrong: 0
+    };
+
+    const topicList = document.querySelector("#topicList");
+    const reviewTopicList = document.querySelector("#reviewTopicList");
+    const lessonPanel = document.querySelector("#lessonPanel");
+    const answeredCount = document.querySelector("#answeredCount");
+    const rateText = document.querySelector("#rateText");
+    const topicText = document.querySelector("#topicText");
+    const kindText = document.querySelector("#kindText");
+    const questionText = document.querySelector("#questionText");
+    const choices = document.querySelector("#choices");
+    const feedback = document.querySelector("#feedback");
+    const installButton = document.querySelector("#installButton");
+    let deferredInstallPrompt = null;
+
+    function loadState() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(storageKey));
+        if (saved) Object.assign(state, saved);
+      } catch {
+        localStorage.removeItem(storageKey);
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem(storageKey, JSON.stringify(state));
+    }
+
+    function currentTopic() {
+      return topics.find((topic) => topic.id === state.topic) || topics[0];
+    }
+
+    function renderTopics() {
+      const html = topics.map((topic) => `
+        <button class="topic-button ${topic.id === state.topic ? "active" : ""}" data-topic="${topic.id}" type="button">
+          <strong>${topic.code} ${topic.title}</strong>
+          <span>${topic.short}</span>
+        </button>
+      `).join("");
+      topicList.innerHTML = html;
+      reviewTopicList.innerHTML = html;
+      document.querySelectorAll(".topic-button").forEach((button) => {
+        button.addEventListener("click", () => {
+          state.topic = button.dataset.topic;
+          state.reviewMode = "due";
+          state.currentQuestion = firstQuestionForTopic(state.topic).id;
+          saveState();
+          renderAll();
+        });
+      });
+    }
+
+    function renderLesson() {
+      const topic = currentTopic();
+      lessonPanel.innerHTML = `
+        <h3>${topic.code} ${topic.title}</h3>
+        ${topic.lines.map(([icon, title, body]) => `
+          <div class="icon-line">
+            <span>${icon}</span>
+            <div>
+              <b>${title}</b>
+              <p>${body}</p>
+            </div>
+          </div>
+        `).join("")}
+      `;
+    }
+
+    function firstQuestionForTopic(topicId) {
+      return questionBank.find((item) => item.topic === topicId) || questionBank[0];
+    }
+
+    function reviewCandidates() {
+      const byTopic = questionBank.filter((item) => item.topic === state.topic);
+      if (state.reviewMode === "weak") {
+        const weak = questionBank.filter((item) => state.answered[item.id] === "wrong");
+        return weak.length ? weak : byTopic;
+      }
+      const fresh = byTopic.filter((item) => !state.answered[item.id]);
+      return fresh.length ? fresh : byTopic;
+    }
+
+    function currentQuestion() {
+      return questionBank.find((item) => item.id === state.currentQuestion) || firstQuestionForTopic(state.topic);
+    }
+
+    function nextQuestion() {
+      const list = reviewCandidates();
+      const index = list.findIndex((item) => item.id === state.currentQuestion);
+      const next = list[(index + 1 + list.length) % list.length] || questionBank[0];
+      state.currentQuestion = next.id;
+      saveState();
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      const item = currentQuestion();
+      const attempts = state.correct + state.wrong;
+      const rate = attempts ? Math.round((state.correct / attempts) * 100) : 0;
+      answeredCount.textContent = `${Object.keys(state.answered).length}問`;
+      rateText.textContent = `${rate}%`;
+      topicText.textContent = currentTopic().title;
+      kindText.textContent = item.kind;
+      questionText.textContent = item.question;
+      feedback.classList.remove("show");
+      feedback.innerHTML = "";
+      choices.innerHTML = "";
+
+      item.choices.forEach((choice, index) => {
+        const button = document.createElement("button");
+        button.className = "choice-button";
+        button.type = "button";
+        button.textContent = choice;
+        button.addEventListener("click", () => answer(item, index, button));
+        choices.appendChild(button);
+      });
+    }
+
+    function answer(item, index, button) {
+      const correct = index === item.answer;
+      choices.querySelectorAll(".choice-button").forEach((choice, choiceIndex) => {
+        choice.classList.toggle("correct", choiceIndex === item.answer);
+        choice.classList.toggle("wrong", choice === button && !correct);
+      });
+      state.answered[item.id] = correct ? "correct" : "wrong";
+      if (correct) state.correct += 1;
+      if (!correct) state.wrong += 1;
+      feedback.innerHTML = `
+        <b>再問：</b>${item.question}<br>
+        <b>答え：</b>${item.choices[item.answer]}<br>
+        <b>なぜ：</b>${item.why}<br>
+        <b>日常の例：</b>${item.daily}<br>
+        <b>発明へのつながり：</b>${item.invention}
+      `;
+      feedback.classList.add("show");
+      saveState();
+      renderQuestionStatsOnly();
+    }
+
+    function renderQuestionStatsOnly() {
+      const attempts = state.correct + state.wrong;
+      const rate = attempts ? Math.round((state.correct / attempts) * 100) : 0;
+      answeredCount.textContent = `${Object.keys(state.answered).length}問`;
+      rateText.textContent = `${rate}%`;
+    }
+
+    function bindControls() {
+      document.querySelector("#dueButton").addEventListener("click", () => {
+        state.reviewMode = "due";
+        nextQuestion();
+      });
+      document.querySelector("#weakButton").addEventListener("click", () => {
+        state.reviewMode = "weak";
+        nextQuestion();
+      });
+      document.querySelector("#nextButton").addEventListener("click", nextQuestion);
+      document.querySelector("#resetButton").addEventListener("click", () => {
+        state.answered = {};
+        state.correct = 0;
+        state.wrong = 0;
+        state.currentQuestion = firstQuestionForTopic(state.topic).id;
+        saveState();
+        renderQuestion();
+      });
+    }
+
+    function registerPwa() {
+      if ("serviceWorker" in navigator && location.protocol !== "file:") {
+        navigator.serviceWorker.register("mechanical-design-service-worker.js");
+      }
+      window.addEventListener("beforeinstallprompt", (event) => {
+        event.preventDefault();
+        deferredInstallPrompt = event;
+        installButton.hidden = false;
+      });
+      installButton.addEventListener("click", async () => {
+        if (!deferredInstallPrompt) return;
+        deferredInstallPrompt.prompt();
+        await deferredInstallPrompt.userChoice;
+        deferredInstallPrompt = null;
+        installButton.hidden = true;
+      });
+    }
+
+    function renderAll() {
+      renderTopics();
+      renderLesson();
+      renderQuestion();
+    }
+
+    loadState();
+    if (!state.currentQuestion) state.currentQuestion = firstQuestionForTopic(state.topic).id;
+    bindControls();
+    registerPwa();
+    renderAll();
+  </script>
+</body>
+</html>

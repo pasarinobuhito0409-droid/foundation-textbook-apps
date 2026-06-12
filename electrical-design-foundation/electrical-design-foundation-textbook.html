@@ -1,0 +1,2178 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>電気設計とCAE的思考 基礎編</title>
+  <link rel="manifest" href="electrical-design-manifest.webmanifest">
+  <meta name="theme-color" content="#247a53">
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f4f6f2;
+      --paper: #ffffff;
+      --ink: #172126;
+      --muted: #5f6d73;
+      --line: #d9e1de;
+      --blue: #2364aa;
+      --green: #247a53;
+      --yellow: #b97814;
+      --red: #c34836;
+      --violet: #6f4bb6;
+      --panel: #eff5f7;
+      --soft-yellow: #fff4d8;
+      --soft-green: #e8f6ee;
+      --soft-blue: #eaf2ff;
+      --shadow: 0 16px 34px rgba(20, 34, 40, 0.12);
+      --radius: 8px;
+      font-family: "Yu Gothic", "Hiragino Sans", "Meiryo", system-ui, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      min-width: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      width: 100%;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.76), rgba(255, 255, 255, 0.28)),
+        repeating-linear-gradient(90deg, rgba(27, 58, 66, 0.025) 0 1px, transparent 1px 12px),
+        var(--bg);
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(244, 246, 242, 0.94);
+      border-bottom: 1px solid rgba(72, 95, 96, 0.2);
+      backdrop-filter: blur(12px);
+    }
+
+    .topbar-inner {
+      width: min(1180px, calc(100% - 28px));
+      margin: 0 auto;
+      min-height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .brand {
+      min-width: 0;
+    }
+
+    .brand strong {
+      display: block;
+      font-size: 18px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    .brand span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .quick-nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .nav-button,
+    .pill-button,
+    .quiz-button,
+    .stage-button {
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      color: var(--ink);
+      cursor: pointer;
+    }
+
+    .nav-button {
+      padding: 8px 12px;
+      text-decoration: none;
+      font-size: 14px;
+      min-width: 0;
+    }
+
+    .page {
+      width: min(1180px, calc(100% - 28px));
+      margin: 0 auto;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 0.96fr) minmax(360px, 1.04fr);
+      gap: 28px;
+      align-items: center;
+      min-height: calc(100vh - 92px);
+      padding: 32px 0 42px;
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--green);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    h1,
+    h2,
+    h3 {
+      letter-spacing: 0;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 720px;
+      font-size: 56px;
+      line-height: 1.07;
+      overflow-wrap: anywhere;
+      word-break: break-all;
+      line-break: strict;
+    }
+
+    .title-line,
+    .lead-line {
+      display: block;
+    }
+
+    .lead {
+      max-width: 650px;
+      margin: 18px 0 0;
+      color: #34474d;
+      font-size: 18px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .pill-button {
+      padding: 10px 14px;
+      font-weight: 800;
+    }
+
+    .pill-button.primary {
+      border-color: #1d4f86;
+      background: #1d4f86;
+      color: #fff;
+    }
+
+    .hero-visual {
+      min-width: 0;
+    }
+
+    .hero-visual img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      border: 1px solid rgba(52, 76, 78, 0.3);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      background: var(--paper);
+    }
+
+    .image-caption {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .band {
+      margin: 0 -14px;
+      padding: 36px 14px;
+      border-top: 1px solid rgba(80, 101, 101, 0.16);
+    }
+
+    .band:first-of-type {
+      border-top: 0;
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: end;
+      margin-bottom: 18px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: 30px;
+      line-height: 1.2;
+    }
+
+    .section-head p {
+      margin: 8px 0 0;
+      max-width: 720px;
+      color: var(--muted);
+    }
+
+    .progress-meter {
+      min-width: 180px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+    }
+
+    .meter-label {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .meter-track {
+      height: 10px;
+      margin-top: 8px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #dce4e2;
+    }
+
+    .meter-fill {
+      height: 100%;
+      width: 20%;
+      background: linear-gradient(90deg, var(--green), var(--blue));
+    }
+
+    .topic-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .topic-card {
+      min-height: 150px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+    }
+
+    .topic-card.current {
+      border-color: rgba(35, 100, 170, 0.55);
+      background: var(--soft-blue);
+      box-shadow: 0 12px 26px rgba(35, 100, 170, 0.12);
+    }
+
+    .topic-card strong {
+      display: block;
+      font-size: 18px;
+    }
+
+    .topic-card span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .concept-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .concept {
+      min-height: 210px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+    }
+
+    .concept.condition {
+      background: var(--soft-blue);
+    }
+
+    .concept.phenomenon {
+      background: var(--soft-yellow);
+    }
+
+    .concept.judgment {
+      background: var(--soft-green);
+    }
+
+    .concept h3 {
+      margin: 0 0 10px;
+      font-size: 22px;
+    }
+
+    .concept p {
+      margin: 0;
+    }
+
+    .concept-visual {
+      position: relative;
+      min-height: 96px;
+      margin: 0 0 14px;
+      overflow: hidden;
+      border: 1px solid rgba(75, 99, 101, 0.22);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .source-block,
+    .load-block,
+    .judge-block {
+      position: absolute;
+      top: 26px;
+      width: 54px;
+      min-height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 6px;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .source-block {
+      left: 18px;
+      background: var(--blue);
+    }
+
+    .load-block {
+      right: 18px;
+      background: var(--green);
+    }
+
+    .judge-block {
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--violet);
+    }
+
+    .visual-wire {
+      position: absolute;
+      left: 72px;
+      right: 72px;
+      top: 46px;
+      height: 10px;
+      border-radius: 999px;
+      background:
+        linear-gradient(90deg, transparent 0 22%, rgba(255, 255, 255, 0.9) 22% 34%, transparent 34% 100%),
+        #9fb2b5;
+      background-size: 64px 100%, auto;
+      animation: currentMove 1.4s linear infinite;
+    }
+
+    .heat-waves,
+    .signal-dot,
+    .check-ring {
+      position: absolute;
+      pointer-events: none;
+    }
+
+    .heat-waves {
+      left: 50%;
+      top: 12px;
+      width: 78px;
+      height: 26px;
+      transform: translateX(-50%);
+      background: repeating-linear-gradient(90deg, transparent 0 10px, rgba(195, 72, 54, 0.72) 10px 13px, transparent 13px 20px);
+      mask: radial-gradient(circle at 50% 100%, transparent 0 10px, #000 11px 22px, transparent 23px);
+      animation: heatPulse 1.2s ease-in-out infinite;
+    }
+
+    .signal-dot {
+      left: 22px;
+      top: 56px;
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: var(--yellow);
+      box-shadow: 0 0 0 0 rgba(185, 120, 20, 0.28);
+      animation: signalPulse 1.3s ease-in-out infinite;
+    }
+
+    .check-ring {
+      left: 50%;
+      top: 16px;
+      width: 54px;
+      height: 54px;
+      transform: translateX(-50%);
+      border: 4px solid rgba(36, 122, 83, 0.68);
+      border-radius: 999px;
+      animation: ringScan 1.7s ease-in-out infinite;
+    }
+
+    .definition {
+      align-items: center;
+    }
+
+    .definition-visual {
+      min-height: 58px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 6px;
+      margin-top: 8px;
+      padding: 10px;
+      border: 1px solid rgba(75, 99, 101, 0.18);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .push-gauge,
+    .flow-gauge,
+    .resist-gauge {
+      position: relative;
+      height: 16px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #e1e8e6;
+    }
+
+    .push-gauge::before,
+    .flow-gauge::before,
+    .resist-gauge::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+    }
+
+    .push-gauge::before {
+      width: 74%;
+      background: linear-gradient(90deg, var(--blue), #6aa5df);
+    }
+
+    .flow-gauge::before {
+      width: 62%;
+      background:
+        linear-gradient(90deg, rgba(255, 255, 255, 0.75) 0 20%, transparent 20% 100%),
+        var(--green);
+      background-size: 30px 100%;
+      animation: currentMove 0.9s linear infinite;
+    }
+
+    .resist-gauge::before {
+      width: 48%;
+      background: linear-gradient(90deg, var(--yellow), var(--red));
+      animation: resistPulse 1.1s ease-in-out infinite;
+    }
+
+    .visual-note {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .lesson-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 0.88fr) minmax(360px, 1.12fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    .explain-panel,
+    .stage-panel,
+    .quiz-panel,
+    .review-panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: 0 10px 22px rgba(20, 34, 40, 0.06);
+    }
+
+    .explain-panel {
+      padding: 20px;
+    }
+
+    .explain-panel h3,
+    .stage-panel h3,
+    .quiz-panel h3,
+    .review-panel h3 {
+      margin: 0 0 10px;
+      font-size: 22px;
+    }
+
+    .definition-list {
+      display: grid;
+      gap: 10px;
+      margin: 16px 0 0;
+    }
+
+    .definition {
+      display: grid;
+      grid-template-columns: 92px minmax(0, 1fr);
+      gap: 10px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfcfb;
+    }
+
+    .definition b {
+      color: var(--blue);
+    }
+
+    .stage-panel {
+      padding: 16px;
+    }
+
+    .control-diagram {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .stage-button {
+      min-height: 104px;
+      padding: 12px;
+      text-align: left;
+      background: #fbfcfb;
+    }
+
+    .stage-button[aria-pressed="true"] {
+      border-color: var(--blue);
+      background: var(--soft-blue);
+      box-shadow: inset 0 0 0 1px rgba(35, 100, 170, 0.35);
+    }
+
+    .stage-button strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 17px;
+    }
+
+    .stage-button span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .stage-detail {
+      min-height: 170px;
+      margin-top: 14px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #f8fbfc;
+    }
+
+    .stage-detail h4 {
+      margin: 0 0 8px;
+      font-size: 20px;
+    }
+
+    .stage-detail p {
+      margin: 8px 0 0;
+    }
+
+    .stage-mini-visual {
+      position: relative;
+      min-height: 98px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(75, 99, 101, 0.18);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .stage-mini-visual .source-block {
+      top: 28px;
+    }
+
+    .stage-mini-visual .load-block,
+    .stage-mini-visual .judge-block {
+      top: 28px;
+    }
+
+    .stage-mini-visual .sensor-eye {
+      position: absolute;
+      left: 50%;
+      top: 23px;
+      width: 54px;
+      height: 54px;
+      transform: translateX(-50%);
+      border: 4px solid var(--yellow);
+      border-radius: 999px;
+      background: radial-gradient(circle at center, var(--yellow) 0 8px, transparent 9px);
+      animation: ringScan 1.5s ease-in-out infinite;
+    }
+
+    .touch-lab {
+      display: grid;
+      grid-template-columns: minmax(0, 0.92fr) minmax(360px, 1.08fr);
+      gap: 18px;
+      align-items: stretch;
+      margin-top: 20px;
+    }
+
+    .lab-panel {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: 0 10px 22px rgba(20, 34, 40, 0.06);
+    }
+
+    .lab-panel h3 {
+      margin: 0 0 8px;
+      font-size: 22px;
+    }
+
+    .lab-panel p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .slider-row {
+      display: grid;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .slider-label {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-weight: 800;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--blue);
+    }
+
+    .lab-readout {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .readout-card {
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfcfb;
+    }
+
+    .readout-card strong {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .readout-card span {
+      display: block;
+      margin-top: 4px;
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .circuit-visual {
+      min-height: 270px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(75, 99, 101, 0.22);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(244, 248, 249, 0.96)),
+        repeating-linear-gradient(0deg, rgba(27, 58, 66, 0.035) 0 1px, transparent 1px 18px);
+    }
+
+    .circuit-part {
+      position: absolute;
+      display: grid;
+      place-items: center;
+      min-width: 82px;
+      min-height: 54px;
+      padding: 8px;
+      border-radius: var(--radius);
+      color: #fff;
+      font-weight: 900;
+      text-align: center;
+      line-height: 1.25;
+      box-shadow: 0 8px 18px rgba(20, 34, 40, 0.12);
+    }
+
+    .part-power {
+      left: 26px;
+      top: 40px;
+      background: var(--blue);
+    }
+
+    .part-switch {
+      left: 50%;
+      top: 40px;
+      transform: translateX(-50%);
+      background: var(--yellow);
+    }
+
+    .part-load {
+      right: 26px;
+      top: 40px;
+      background: var(--green);
+    }
+
+    .part-motor {
+      right: 34px;
+      bottom: 40px;
+      width: 80px;
+      min-width: 80px;
+      min-height: 80px;
+      border-radius: 999px;
+      background: var(--violet);
+    }
+
+    .circuit-line {
+      position: absolute;
+      height: var(--wire-height, 12px);
+      border-radius: 999px;
+      background:
+        linear-gradient(90deg, rgba(255, 255, 255, 0.8) 0 20%, transparent 20% 100%),
+        var(--wire-color, #9fb2b5);
+      background-size: var(--flow-size, 48px) 100%, auto;
+      animation: currentMove var(--flow-speed, 1.3s) linear infinite;
+      opacity: var(--wire-opacity, 0.95);
+    }
+
+    .line-a {
+      left: 106px;
+      right: calc(50% + 48px);
+      top: 64px;
+    }
+
+    .line-b {
+      left: calc(50% + 48px);
+      right: 108px;
+      top: 64px;
+    }
+
+    .line-c {
+      right: 72px;
+      top: 104px;
+      width: 12px;
+      height: 96px;
+      background: var(--wire-color, #9fb2b5);
+      animation: none;
+    }
+
+    .line-d {
+      right: 72px;
+      left: 110px;
+      bottom: 76px;
+    }
+
+    .lamp-glow {
+      position: absolute;
+      right: 46px;
+      top: 24px;
+      width: var(--lamp-size, 68px);
+      height: var(--lamp-size, 68px);
+      border-radius: 999px;
+      background: rgba(255, 217, 79, var(--lamp-alpha, 0.2));
+      box-shadow: 0 0 var(--lamp-shadow, 16px) rgba(255, 190, 72, var(--lamp-alpha, 0.2));
+      transform: translate(50%, -18%);
+      transition: all 160ms ease;
+    }
+
+    .motor-blade {
+      position: absolute;
+      right: 58px;
+      bottom: 64px;
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background:
+        linear-gradient(90deg, transparent 42%, #fff 42% 58%, transparent 58%),
+        linear-gradient(0deg, transparent 42%, #fff 42% 58%, transparent 58%);
+      opacity: var(--motor-opacity, 0.35);
+      animation: motorSpin var(--motor-speed, 1.8s) linear infinite;
+    }
+
+    .wire-heat {
+      position: absolute;
+      left: 42%;
+      bottom: 100px;
+      width: 110px;
+      height: 28px;
+      transform: translateX(-50%);
+      opacity: var(--heat-opacity, 0.2);
+      background: repeating-linear-gradient(90deg, transparent 0 12px, rgba(195, 72, 54, 0.88) 12px 16px, transparent 16px 24px);
+      mask: radial-gradient(circle at 50% 100%, transparent 0 8px, #000 9px 22px, transparent 23px);
+      animation: heatPulse 1.1s ease-in-out infinite;
+    }
+
+    .lab-state {
+      margin-top: 14px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #f8fbfc;
+      font-weight: 800;
+    }
+
+    .toggle-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .toggle-button {
+      min-height: 54px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfcfb;
+      color: var(--ink);
+      cursor: pointer;
+      font-weight: 900;
+    }
+
+    .toggle-button[aria-pressed="true"] {
+      border-color: var(--green);
+      background: var(--soft-green);
+      box-shadow: inset 0 0 0 1px rgba(36, 122, 83, 0.28);
+    }
+
+    .cae-map {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .map-row {
+      min-height: 130px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+    }
+
+    .map-row strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--violet);
+      font-size: 18px;
+    }
+
+    .map-visual {
+      position: relative;
+      min-height: 78px;
+      margin-bottom: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(75, 99, 101, 0.18);
+      border-radius: var(--radius);
+      background: #f8fbfc;
+    }
+
+    .map-visual .fixed,
+    .map-visual .load,
+    .map-visual .drop,
+    .map-visual .risk {
+      position: absolute;
+      border-radius: 6px;
+    }
+
+    .map-visual .fixed {
+      left: 14px;
+      top: 15px;
+      width: 34px;
+      height: 48px;
+      background: var(--blue);
+    }
+
+    .map-visual .load {
+      left: 60px;
+      right: 22px;
+      top: 35px;
+      height: 10px;
+      background: var(--green);
+      animation: currentMove 1.2s linear infinite;
+    }
+
+    .map-visual .drop {
+      left: 18px;
+      right: 18px;
+      top: 34px;
+      height: 11px;
+      background: linear-gradient(90deg, var(--green), var(--yellow), var(--red));
+      transform: skewX(-12deg);
+    }
+
+    .map-visual .risk {
+      left: 58%;
+      top: 20px;
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      background: rgba(195, 72, 54, 0.78);
+      box-shadow: 0 0 0 0 rgba(195, 72, 54, 0.26);
+      animation: signalPulse 1.2s ease-in-out infinite;
+    }
+
+    .quiz-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .quiz-panel {
+      padding: 18px;
+    }
+
+    .quiz-question {
+      margin: 0 0 12px;
+      font-weight: 800;
+    }
+
+    .quiz-options {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .quiz-button {
+      padding: 10px;
+      text-align: left;
+      background: #fbfcfb;
+    }
+
+    .quiz-button.correct {
+      border-color: var(--green);
+      background: var(--soft-green);
+    }
+
+    .quiz-button.wrong {
+      border-color: var(--red);
+      background: #fff0ed;
+    }
+
+    .quiz-feedback {
+      display: none;
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: var(--radius);
+      background: #f4f8f8;
+      border: 1px solid var(--line);
+    }
+
+    .quiz-feedback.show {
+      display: block;
+    }
+
+    .feedback-visual {
+      position: relative;
+      min-height: 86px;
+      margin-top: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(75, 99, 101, 0.18);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .feedback-visual .source-block,
+    .feedback-visual .load-block,
+    .feedback-visual .judge-block {
+      top: 22px;
+    }
+
+    .feedback-visual .visual-wire {
+      top: 42px;
+    }
+
+    .review-panel {
+      padding: 18px;
+      background: #fffdf6;
+    }
+
+    .review-list {
+      margin: 10px 0 0;
+      padding-left: 1.2em;
+    }
+
+    .review-app {
+      display: grid;
+      gap: 16px;
+    }
+
+    .review-app-strip {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    .review-app-strip strong,
+    .review-topic-button strong {
+      display: block;
+    }
+
+    .review-app-strip span,
+    .review-topic-button span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .review-workspace {
+      display: grid;
+      grid-template-columns: minmax(260px, 340px) minmax(0, 1fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .review-topic-list,
+    .review-question-panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    .review-topic-list {
+      display: grid;
+      gap: 8px;
+      padding: 12px;
+    }
+
+    .review-topic-button {
+      width: 100%;
+      min-height: 58px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfcfb;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .review-topic-button.active {
+      border-color: rgba(36, 122, 83, 0.72);
+      background: var(--soft-green);
+    }
+
+    .review-question-panel {
+      padding: 16px;
+    }
+
+    .review-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .review-stat {
+      min-height: 78px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfcfb;
+    }
+
+    .review-stat span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .review-stat strong {
+      display: block;
+      margin-top: 4px;
+      font-size: 22px;
+      line-height: 1.15;
+    }
+
+    .review-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .review-card-box {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,.9), rgba(239,245,247,.76));
+    }
+
+    .review-card-box h3 {
+      margin: 8px 0 12px;
+      font-size: clamp(21px, 3vw, 30px);
+      line-height: 1.25;
+    }
+
+    .review-kind {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .review-choices {
+      display: grid;
+      gap: 8px;
+    }
+
+    .review-choice {
+      min-height: 44px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .review-choice.correct {
+      border-color: var(--green);
+      background: var(--soft-green);
+    }
+
+    .review-choice.wrong {
+      border-color: var(--red);
+      background: #fff0ed;
+    }
+
+    .review-answer {
+      display: none;
+      margin-top: 12px;
+      padding: 12px;
+      border-left: 4px solid var(--green);
+      background: #f4f8f8;
+    }
+
+    .review-answer.show {
+      display: block;
+    }
+
+    .append-rule {
+      margin: 14px 0 0;
+      padding: 12px;
+      border: 1px dashed rgba(36, 122, 83, 0.36);
+      border-radius: var(--radius);
+      color: var(--muted);
+      background: #fbfcfb;
+      font-size: 14px;
+    }
+
+    .done-line {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-top: 16px;
+    }
+
+    .status-text {
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .footer-space {
+      min-height: 42px;
+    }
+
+    @media (max-width: 920px) {
+      .topbar-inner,
+      .section-head,
+      .hero,
+      .lesson-layout,
+      .review-workspace,
+      .review-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 10px 0;
+      }
+
+      .quick-nav {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        justify-content: flex-start;
+        width: 100%;
+      }
+
+      .nav-button {
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 32px;
+        line-height: 1.18;
+      }
+
+      .hero {
+        min-height: auto;
+      }
+
+      .topic-grid,
+      .concept-grid,
+      .control-diagram,
+      .touch-lab,
+      .cae-map {
+        grid-template-columns: 1fr;
+      }
+
+      .progress-meter {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .page,
+      .topbar-inner {
+        width: min(100% - 20px, 1180px);
+      }
+
+      h1 {
+        font-size: 26px;
+        line-height: 1.18;
+        word-break: break-all;
+      }
+
+      .lead {
+        font-size: 16px;
+        word-break: break-all;
+      }
+
+      .section-head h2 {
+        font-size: 25px;
+      }
+
+      .definition,
+      .lab-readout,
+      .toggle-row,
+      .quiz-options {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-actions {
+        display: grid;
+      }
+
+      .quick-nav {
+        grid-template-columns: 1fr;
+      }
+
+      .band {
+        margin: 0;
+        padding-left: 0;
+        padding-right: 0;
+      }
+
+      .hero-visual img {
+        aspect-ratio: 4 / 3;
+      }
+    }
+
+    @keyframes currentMove {
+      from {
+        background-position: 0 0, 0 0;
+      }
+      to {
+        background-position: 64px 0, 0 0;
+      }
+    }
+
+    @keyframes heatPulse {
+      0%,
+      100% {
+        opacity: 0.32;
+        transform: translateX(-50%) translateY(0);
+      }
+      50% {
+        opacity: 0.92;
+        transform: translateX(-50%) translateY(-4px);
+      }
+    }
+
+    @keyframes resistPulse {
+      0%,
+      100% {
+        opacity: 0.62;
+      }
+      50% {
+        opacity: 1;
+      }
+    }
+
+    @keyframes signalPulse {
+      0%,
+      100% {
+        transform: scale(0.92);
+        box-shadow: 0 0 0 0 rgba(185, 120, 20, 0.28);
+      }
+      50% {
+        transform: scale(1.08);
+        box-shadow: 0 0 0 12px rgba(185, 120, 20, 0);
+      }
+    }
+
+    @keyframes ringScan {
+      0%,
+      100% {
+        opacity: 0.45;
+        transform: translateX(-50%) scale(0.82);
+      }
+      50% {
+        opacity: 1;
+        transform: translateX(-50%) scale(1.04);
+      }
+    }
+
+    @keyframes motorSpin {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <strong>電気設計とCAE的思考 基礎編</strong>
+        <span>朝の勉強まとめ / E01 電気って何が動いてるの？</span>
+      </div>
+      <nav class="quick-nav" aria-label="教材内ナビゲーション">
+        <a class="nav-button" href="#progress">進捗</a>
+        <a class="nav-button" href="#lesson">E01</a>
+        <a class="nav-button" href="#touch-lab">体感</a>
+        <a class="nav-button" href="#quiz">テスト</a>
+        <a class="nav-button" href="#review-app">復習</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="hero" aria-labelledby="hero-title">
+      <div>
+        <p class="eyebrow">CAEの電気設計版</p>
+        <h1 id="hero-title"><span class="title-line">見えない電気を、</span><span class="title-line">設計者の目で見る。</span></h1>
+        <p class="lead">
+          <span class="lead-line">この教科書は、電気を暗記ではなく</span>
+          <span class="lead-line">「条件 → 現象 → 判断」で見る練習帳です。</span>
+          <span class="lead-line">CAEで固定や荷重を見るように、</span>
+          <span class="lead-line">電源・配線・センサー・モーターの流れを見ます。</span>
+        </p>
+        <div class="hero-actions">
+          <a class="pill-button primary" href="#lesson">E01から始める</a>
+          <a class="pill-button" href="#map">CAEとの対応を見る</a>
+          <a class="pill-button" href="#review-app">すぐ復習</a>
+        </div>
+      </div>
+      <figure class="hero-visual">
+        <img src="electrical-design-e01-control-panel.png" alt="開いた制御盤の中で、電源、配線、センサー、モーターの流れを示した教材用画像">
+        <figcaption class="image-caption">
+          まず見るのは部品名ではなく、電気がどこから来て、どこへ流れ、何を動かすか。
+        </figcaption>
+      </figure>
+    </section>
+
+    <section class="band" id="progress" aria-labelledby="progress-title">
+      <div class="section-head">
+        <div>
+          <h2 id="progress-title">進捗ボード</h2>
+          <p>E01から順番に進めます。まずは電気を怖がらず、設計者として見る目を作ります。</p>
+        </div>
+        <div class="progress-meter" aria-label="進捗 1/5">
+          <div class="meter-label"><span>初版</span><span>1 / 5</span></div>
+          <div class="meter-track"><div class="meter-fill"></div></div>
+        </div>
+      </div>
+
+      <div class="topic-grid">
+        <article class="topic-card current">
+          <strong>E01</strong>
+          <span>電気って何が動いてるの？</span>
+        </article>
+        <article class="topic-card">
+          <strong>E02</strong>
+          <span>電圧・電流・抵抗</span>
+        </article>
+        <article class="topic-card">
+          <strong>E03</strong>
+          <span>なぜ線が熱くなるのか</span>
+        </article>
+        <article class="topic-card">
+          <strong>E04</strong>
+          <span>電源容量と余裕</span>
+        </article>
+        <article class="topic-card">
+          <strong>E05</strong>
+          <span>安全に配線するとは何か</span>
+        </article>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="formula-title">
+      <div class="section-head">
+        <div>
+          <h2 id="formula-title">この教科書の見方</h2>
+          <p>毎回この3つで見ます。電気の話を、現場で判断できる形に変換します。</p>
+        </div>
+      </div>
+
+      <div class="concept-grid">
+        <article class="concept condition">
+          <div class="concept-visual" aria-hidden="true">
+            <div class="source-block">24V</div>
+            <div class="visual-wire"></div>
+            <div class="load-block">負荷</div>
+            <div class="signal-dot"></div>
+          </div>
+          <h3>条件</h3>
+          <p>何Vの電源か。何A流したいか。線の太さは足りるか。機械は何をしたいか。</p>
+        </article>
+        <article class="concept phenomenon">
+          <div class="concept-visual" aria-hidden="true">
+            <div class="source-block">流れ</div>
+            <div class="visual-wire"></div>
+            <div class="load-block">動く</div>
+            <div class="heat-waves"></div>
+          </div>
+          <h3>現象</h3>
+          <p>電気が流れる。センサーが信号を出す。モーターが動く。線や部品が熱を持つ。</p>
+        </article>
+        <article class="concept judgment">
+          <div class="concept-visual" aria-hidden="true">
+            <div class="source-block">条件</div>
+            <div class="visual-wire"></div>
+            <div class="judge-block">判定</div>
+            <div class="check-ring"></div>
+          </div>
+          <h3>判断</h3>
+          <p>危なくないか。余裕はあるか。止まった時にどこを見るか。図面にどう残すか。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="band" id="lesson" aria-labelledby="lesson-title">
+      <div class="section-head">
+        <div>
+          <h2 id="lesson-title">E01 電気って何が動いてるの？</h2>
+          <p>今日の結論は、電気は「見えない流れ」だけど、条件を見ればかなり予想できる、です。</p>
+        </div>
+      </div>
+
+      <div class="lesson-layout">
+        <article class="explain-panel">
+          <h3>最初の言い方</h3>
+          <p>
+            電気は、線の中を小さな粒が押されて動くことで、機械へ力を渡します。
+            ただし設計者は粒そのものを見るのではなく、押す力と流れる量を見ます。
+          </p>
+
+          <div class="definition-list">
+            <div class="definition">
+              <b>電圧</b>
+              <span>
+                電気を押す力。水道でいう水圧に近い。
+                <span class="definition-visual" aria-hidden="true">
+                  <span class="push-gauge"></span>
+                  <span class="visual-note">押す力が強いほど、先へ送ろうとする力が大きい。</span>
+                </span>
+              </span>
+            </div>
+            <div class="definition">
+              <b>電流</b>
+              <span>
+                流れている電気の量。多すぎると熱が出やすい。
+                <span class="definition-visual" aria-hidden="true">
+                  <span class="flow-gauge"></span>
+                  <span class="visual-note">白い筋が速く流れるほど、量が多いイメージ。</span>
+                </span>
+              </span>
+            </div>
+            <div class="definition">
+              <b>抵抗</b>
+              <span>
+                流れにくさ。線や部品の中で熱に変わることがある。
+                <span class="definition-visual" aria-hidden="true">
+                  <span class="resist-gauge"></span>
+                  <span class="visual-note">流れにくい場所は、力が熱へ逃げやすい。</span>
+                </span>
+              </span>
+            </div>
+          </div>
+
+          <div class="done-line">
+            <button class="pill-button primary" type="button" id="completeButton">E01を完了にする</button>
+            <span class="status-text" id="completeStatus">未完了</span>
+          </div>
+        </article>
+
+        <article class="stage-panel">
+          <h3>制御盤で見る順番</h3>
+          <p>下の4つを押すと、見る場所が切り替わります。</p>
+
+          <div class="control-diagram" aria-label="制御盤で見る順番">
+            <button class="stage-button" type="button" data-stage="power" aria-pressed="true">
+              <strong>1. 電源</strong>
+              <span>どこから来るか</span>
+            </button>
+            <button class="stage-button" type="button" data-stage="wire" aria-pressed="false">
+              <strong>2. 配線</strong>
+              <span>どう通るか</span>
+            </button>
+            <button class="stage-button" type="button" data-stage="sensor" aria-pressed="false">
+              <strong>3. センサー</strong>
+              <span>何を知らせるか</span>
+            </button>
+            <button class="stage-button" type="button" data-stage="motor" aria-pressed="false">
+              <strong>4. モーター</strong>
+              <span>何を動かすか</span>
+            </button>
+          </div>
+
+          <div class="stage-detail" id="stageDetail" aria-live="polite"></div>
+        </article>
+      </div>
+
+      <div class="touch-lab" id="touch-lab">
+        <article class="lab-panel">
+          <h3>触って見る：電流と熱</h3>
+          <p>つまみを動かすと、流れ・熱・危険度が変わります。</p>
+
+          <div class="slider-row">
+            <label class="slider-label" for="currentSlider">
+              <span>電流</span>
+              <span id="currentLabel">4A</span>
+            </label>
+            <input id="currentSlider" type="range" min="1" max="12" value="4">
+          </div>
+
+          <div class="slider-row">
+            <label class="slider-label" for="wireSlider">
+              <span>線の太さ</span>
+              <span id="wireLabel">6</span>
+            </label>
+            <input id="wireSlider" type="range" min="2" max="10" value="6">
+          </div>
+
+          <div class="toggle-row">
+            <button class="toggle-button" type="button" id="switchButton" aria-pressed="true">スイッチ ON</button>
+            <button class="toggle-button" type="button" id="sensorButton" aria-pressed="true">センサー 検出</button>
+          </div>
+
+          <div class="lab-readout" aria-live="polite">
+            <div class="readout-card">
+              <strong>流れ</strong>
+              <span id="flowReadout">ふつう</span>
+            </div>
+            <div class="readout-card">
+              <strong>熱</strong>
+              <span id="heatReadout">低い</span>
+            </div>
+            <div class="readout-card">
+              <strong>判断</strong>
+              <span id="judgeReadout">OK</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="lab-panel">
+          <h3>動く画像：回路の流れ</h3>
+          <p>ONなら流れる。センサーが入るとモーターまで進みます。</p>
+
+          <div class="circuit-visual" id="circuitVisual" aria-label="電源、スイッチ、ランプ、モーターへ流れる電気の動く説明図">
+            <div class="lamp-glow" aria-hidden="true"></div>
+            <div class="wire-heat" aria-hidden="true"></div>
+            <div class="circuit-line line-a" aria-hidden="true"></div>
+            <div class="circuit-line line-b" aria-hidden="true"></div>
+            <div class="circuit-line line-c" aria-hidden="true"></div>
+            <div class="circuit-line line-d" aria-hidden="true"></div>
+            <div class="circuit-part part-power">電源<br>24V</div>
+            <div class="circuit-part part-switch">SW</div>
+            <div class="circuit-part part-load">ランプ</div>
+            <div class="circuit-part part-motor">M</div>
+            <div class="motor-blade" aria-hidden="true"></div>
+          </div>
+
+          <div class="lab-state" id="labState">電気が流れ、ランプとモーターまで届いています。</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="band" id="map" aria-labelledby="map-title">
+      <div class="section-head">
+        <div>
+          <h2 id="map-title">CAEとの対応</h2>
+          <p>CAEでやっていた考え方を、電気設計へ置き換えます。</p>
+        </div>
+      </div>
+
+      <div class="cae-map">
+        <article class="map-row">
+          <div class="map-visual" aria-hidden="true">
+            <span class="fixed"></span>
+            <span class="load"></span>
+          </div>
+          <strong>固定 → 電源条件</strong>
+          <p>CAEで固定を間違えると結果がズレる。電気では電源電圧や供給条件を間違えると、全部の判断がズレる。</p>
+        </article>
+        <article class="map-row">
+          <div class="map-visual" aria-hidden="true">
+            <span class="load"></span>
+            <span class="risk"></span>
+          </div>
+          <strong>荷重 → 負荷電流</strong>
+          <p>CAEの荷重は、電気ではモーターや部品が欲しがる電流。ここを見ないと線の太さを決められない。</p>
+        </article>
+        <article class="map-row">
+          <div class="map-visual" aria-hidden="true">
+            <span class="drop"></span>
+          </div>
+          <strong>たわみ → 電圧降下・熱</strong>
+          <p>機械が曲がるように、電気では電圧が落ちたり熱が出たりする。見えない変形として扱う。</p>
+        </article>
+        <article class="map-row">
+          <div class="map-visual" aria-hidden="true">
+            <span class="fixed"></span>
+            <span class="risk"></span>
+          </div>
+          <strong>赤い場所 → 危ない場所</strong>
+          <p>CAEの赤い部分を見るように、電気では熱い線、余裕がない電源、信号が乱れる場所を見る。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="band" id="quiz" aria-labelledby="quiz-title">
+      <div class="section-head">
+        <div>
+          <h2 id="quiz-title">ミニテスト</h2>
+          <p>タップすると答えが出ます。目的は点数ではなく、見る順番を体に入れることです。</p>
+        </div>
+      </div>
+
+      <div class="quiz-list">
+        <article class="quiz-panel" data-answer="b">
+          <h3>Q1</h3>
+          <p class="quiz-question">モーターが動かない時、最初に見るべきものは？</p>
+          <div class="quiz-options">
+            <button class="quiz-button" type="button" data-choice="a">モーターのメーカー名</button>
+            <button class="quiz-button" type="button" data-choice="b">電源が来ているか</button>
+            <button class="quiz-button" type="button" data-choice="c">図面の見た目</button>
+          </div>
+          <div class="quiz-feedback">
+            正解は「電源が来ているか」。条件の入口がないと、後ろの現象は起きません。
+            <div class="feedback-visual" aria-hidden="true">
+              <div class="source-block">電源</div>
+              <div class="visual-wire"></div>
+              <div class="load-block">モーター</div>
+              <div class="signal-dot"></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="quiz-panel" data-answer="a">
+          <h3>Q2</h3>
+          <p class="quiz-question">線が熱くなる時、まず疑うことは？</p>
+          <div class="quiz-options">
+            <button class="quiz-button" type="button" data-choice="a">流れる量が線に対して多い</button>
+            <button class="quiz-button" type="button" data-choice="b">線の色が悪い</button>
+            <button class="quiz-button" type="button" data-choice="c">盤が大きすぎる</button>
+          </div>
+          <div class="quiz-feedback">
+            正解は「流れる量が線に対して多い」。電流が多いほど熱の問題が出やすくなります。
+            <div class="feedback-visual" aria-hidden="true">
+              <div class="source-block">多い</div>
+              <div class="visual-wire"></div>
+              <div class="load-block">細い線</div>
+              <div class="heat-waves"></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="quiz-panel" data-answer="c">
+          <h3>Q3</h3>
+          <p class="quiz-question">電気設計でCAEっぽく見る、とはどういうこと？</p>
+          <div class="quiz-options">
+            <button class="quiz-button" type="button" data-choice="a">全部を暗記すること</button>
+            <button class="quiz-button" type="button" data-choice="b">部品を高いものにすること</button>
+            <button class="quiz-button" type="button" data-choice="c">条件から現象を予想して判断すること</button>
+          </div>
+          <div class="quiz-feedback">
+            正解は「条件から現象を予想して判断すること」。この教材の中心です。
+            <div class="feedback-visual" aria-hidden="true">
+              <div class="source-block">条件</div>
+              <div class="visual-wire"></div>
+              <div class="judge-block">判断</div>
+              <div class="check-ring"></div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="band" id="review-app" aria-labelledby="review-app-title">
+      <div class="section-head">
+        <div>
+          <h2 id="review-app-title">いつでも復習アプリ</h2>
+          <p>電気設計も、毎回HTML問題を作らず、このアプリの中から復習問題を出します。</p>
+        </div>
+      </div>
+
+      <div class="review-app">
+        <div class="review-app-strip">
+          <div>
+            <strong>追加して育てる問題バンク</strong>
+            <span>新しい朝勉強は、古い内容を残したままE02、E03...として増やします。</span>
+          </div>
+          <div class="review-actions">
+            <button class="pill-button primary" type="button" id="elecDueButton">今日の復習</button>
+            <button class="pill-button" type="button" id="elecWeakButton">弱点だけ</button>
+            <button class="pill-button" type="button" id="elecInstallButton" hidden>ホーム画面に追加</button>
+          </div>
+        </div>
+
+        <div class="review-workspace">
+          <nav class="review-topic-list" id="elecTopicList" aria-label="電気設計復習テーマ"></nav>
+
+          <div class="review-question-panel">
+            <div class="review-stats">
+              <div class="review-stat"><span>復習済み</span><strong id="elecAnswered">0問</strong></div>
+              <div class="review-stat"><span>正解率</span><strong id="elecRate">0%</strong></div>
+              <div class="review-stat"><span>今のテーマ</span><strong id="elecTopic">電源</strong></div>
+            </div>
+
+            <div class="review-card-box">
+              <span class="review-kind" id="elecKind">想起（しょうき：思い出す）</span>
+              <h3 id="elecQuestion">電気設計で最初に見る入口は？</h3>
+              <div class="review-choices" id="elecChoices"></div>
+              <div class="review-answer" id="elecAnswer"></div>
+            </div>
+
+            <div class="done-line">
+              <button class="pill-button" type="button" id="elecNextButton">次の問題</button>
+              <button class="pill-button" type="button" id="elecResetButton">復習だけリセット</button>
+            </div>
+
+            <p class="append-rule">
+              追加方針：新しい電気設計テーマは `elecTopics` に追加。
+              新しい問題は `elecQuestionBank` に追加。
+              古いE01は消さずに残す。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="review-title">
+      <article class="review-panel">
+        <h2 id="review-title">夜の5分復習</h2>
+        <p>今日の復習は、この3つだけで十分です。</p>
+        <ol class="review-list">
+          <li>電気は、見えないけれど条件で予想できる。</li>
+          <li>最初に見る順番は、電源 → 配線 → センサー → モーター。</li>
+          <li>電気設計も、条件 → 現象 → 判断で見る。</li>
+        </ol>
+      </article>
+    </section>
+
+    <div class="footer-space"></div>
+  </main>
+
+  <script>
+    const stageText = {
+      power: {
+        title: "1. 電源を見る",
+        visual: `<div class="stage-mini-visual" aria-hidden="true"><div class="source-block">24V</div><div class="visual-wire"></div><div class="load-block">負荷</div><div class="signal-dot"></div></div>`,
+        body: "電源は電気の入口です。何Vで、どれくらい流せるかを見ます。",
+        check: "判断: そもそも機械を動かすだけの力と量があるか。"
+      },
+      wire: {
+        title: "2. 配線を見る",
+        visual: `<div class="stage-mini-visual" aria-hidden="true"><div class="source-block">線</div><div class="visual-wire"></div><div class="load-block">負荷</div><div class="heat-waves"></div></div>`,
+        body: "配線は電気の通り道です。細すぎる線に大きな電流を流すと熱くなります。",
+        check: "判断: 線の太さ、長さ、通し方に無理がないか。"
+      },
+      sensor: {
+        title: "3. センサーを見る",
+        visual: `<div class="stage-mini-visual" aria-hidden="true"><div class="source-block">検知</div><div class="visual-wire"></div><div class="load-block">信号</div><div class="sensor-eye"></div></div>`,
+        body: "センサーは機械の状態を知らせる部品です。信号が来ないと、次の動きに進めません。",
+        check: "判断: 何を検知して、どこへ信号を渡すか。"
+      },
+      motor: {
+        title: "4. モーターを見る",
+        visual: `<div class="stage-mini-visual" aria-hidden="true"><div class="source-block">電気</div><div class="visual-wire"></div><div class="load-block">回転</div><div class="check-ring"></div></div>`,
+        body: "モーターは電気を動きに変える部品です。動く時に大きな電流を必要とします。",
+        check: "判断: 動かす負荷に対して、電源と配線に余裕があるか。"
+      }
+    };
+
+    const stageDetail = document.querySelector("#stageDetail");
+    const stageButtons = document.querySelectorAll(".stage-button");
+
+    function showStage(name) {
+      const data = stageText[name];
+      stageDetail.innerHTML = `${data.visual}<h4>${data.title}</h4><p>${data.body}</p><p><b>${data.check}</b></p>`;
+      stageButtons.forEach((button) => {
+        button.setAttribute("aria-pressed", String(button.dataset.stage === name));
+      });
+    }
+
+    stageButtons.forEach((button) => {
+      button.addEventListener("click", () => showStage(button.dataset.stage));
+    });
+
+    showStage("power");
+
+    document.querySelectorAll(".quiz-panel").forEach((panel) => {
+      const answer = panel.dataset.answer;
+      const feedback = panel.querySelector(".quiz-feedback");
+      panel.querySelectorAll(".quiz-button").forEach((button) => {
+        button.addEventListener("click", () => {
+          panel.querySelectorAll(".quiz-button").forEach((item) => {
+            item.classList.remove("correct", "wrong");
+          });
+          if (button.dataset.choice === answer) {
+            button.classList.add("correct");
+          } else {
+            button.classList.add("wrong");
+            panel.querySelector(`[data-choice="${answer}"]`).classList.add("correct");
+          }
+          feedback.classList.add("show");
+        });
+      });
+    });
+
+    const currentSlider = document.querySelector("#currentSlider");
+    const wireSlider = document.querySelector("#wireSlider");
+    const currentLabel = document.querySelector("#currentLabel");
+    const wireLabel = document.querySelector("#wireLabel");
+    const switchButton = document.querySelector("#switchButton");
+    const sensorButton = document.querySelector("#sensorButton");
+    const circuitVisual = document.querySelector("#circuitVisual");
+    const flowReadout = document.querySelector("#flowReadout");
+    const heatReadout = document.querySelector("#heatReadout");
+    const judgeReadout = document.querySelector("#judgeReadout");
+    const labState = document.querySelector("#labState");
+
+    function togglePressed(button) {
+      const pressed = button.getAttribute("aria-pressed") === "true";
+      button.setAttribute("aria-pressed", String(!pressed));
+    }
+
+    function renderLab() {
+      const current = Number(currentSlider.value);
+      const wire = Number(wireSlider.value);
+      const switchOn = switchButton.getAttribute("aria-pressed") === "true";
+      const sensorOn = sensorButton.getAttribute("aria-pressed") === "true";
+      const active = switchOn;
+      const motorActive = switchOn && sensorOn;
+      const loadRatio = current / wire;
+      const heatLevel = active ? Math.max(0, Math.min(1, (loadRatio - 0.72) / 0.72)) : 0;
+      const danger = active && loadRatio > 1.18;
+
+      currentLabel.textContent = `${current}A`;
+      wireLabel.textContent = `${wire}`;
+      switchButton.textContent = switchOn ? "スイッチ ON" : "スイッチ OFF";
+      sensorButton.textContent = sensorOn ? "センサー 検出" : "センサー 未検出";
+
+      circuitVisual.style.setProperty("--wire-color", active ? (danger ? "#c34836" : "#247a53") : "#cfd8d6");
+      circuitVisual.style.setProperty("--wire-opacity", active ? "0.96" : "0.22");
+      circuitVisual.style.setProperty("--wire-height", `${Math.max(8, Math.min(19, current + 5))}px`);
+      circuitVisual.style.setProperty("--flow-size", `${Math.max(26, 78 - current * 4)}px`);
+      circuitVisual.style.setProperty("--flow-speed", active ? `${Math.max(0.36, 1.75 - current * 0.1)}s` : "8s");
+      circuitVisual.style.setProperty("--heat-opacity", String(Math.max(0.04, heatLevel)));
+      circuitVisual.style.setProperty("--lamp-alpha", String(active ? Math.min(0.9, 0.18 + current / 16) : 0.08));
+      circuitVisual.style.setProperty("--lamp-size", `${active ? 58 + current * 3 : 48}px`);
+      circuitVisual.style.setProperty("--lamp-shadow", `${active ? 12 + current * 4 : 8}px`);
+      circuitVisual.style.setProperty("--motor-opacity", motorActive ? "1" : "0.25");
+      circuitVisual.style.setProperty("--motor-speed", motorActive ? `${Math.max(0.32, 1.9 - current * 0.11)}s` : "7s");
+
+      flowReadout.textContent = !active ? "停止" : current >= 9 ? "多い" : current >= 5 ? "ふつう" : "少ない";
+      heatReadout.textContent = !active ? "なし" : heatLevel > 0.68 ? "高い" : heatLevel > 0.22 ? "注意" : "低い";
+      judgeReadout.textContent = danger ? "NG" : active ? "OK" : "未通電";
+
+      if (!switchOn) {
+        labState.textContent = "スイッチOFFなので、電気は入口で止まっています。";
+      } else if (!sensorOn) {
+        labState.textContent = "ランプまでは届きますが、センサー未検出なのでモーターは止まっています。";
+      } else if (danger) {
+        labState.textContent = "流れる量が線に対して多いです。線の太さか電流条件を見直します。";
+      } else {
+        labState.textContent = "電気が流れ、ランプとモーターまで届いています。";
+      }
+    }
+
+    [currentSlider, wireSlider].forEach((slider) => {
+      slider.addEventListener("input", renderLab);
+    });
+
+    switchButton.addEventListener("click", () => {
+      togglePressed(switchButton);
+      renderLab();
+    });
+
+    sensorButton.addEventListener("click", () => {
+      togglePressed(sensorButton);
+      renderLab();
+    });
+
+    renderLab();
+
+    const elecTopics = [
+      { id: "power", code: "E01", title: "電源", short: "電気の入口" },
+      { id: "wire", code: "E02", title: "配線", short: "電気の通り道" },
+      { id: "sensor", code: "E03", title: "センサー", short: "状態を知らせる" },
+      { id: "motor", code: "E04", title: "モーター", short: "電気を動きに変える" },
+      { id: "heat", code: "E05", title: "熱", short: "電流が多い時の危険" },
+      { id: "cae", code: "E06", title: "CAE的思考", short: "条件から判断する" }
+    ];
+
+    const elecQuestionBank = [
+      elecQ("power-1", "power", "想起（しょうき：思い出す）", "電気設計で最初に見る入口は？", ["電源", "線の色", "盤の大きさ"], 0, "電源が来ていないと、後ろの部品は何も動かないから。", "水道も元栓が閉まっていたら水が出ない。", "入口を見る習慣は、故障解析にも発明装置づくりにも効く。"),
+      elecQ("power-2", "power", "判別（はんべつ：見分ける）", "24V機器に対してまず確認することは？", ["24Vが供給されているか", "メーカー名が長いか", "線が曲がっているか"], 0, "必要な電圧がなければ、機器は期待通り動かない。", "乾電池が足りないリモコンは動かない。", "電源条件を読めると、機械の動作を予想できる。"),
+      elecQ("wire-1", "wire", "定義（ていぎ）", "配線とは何？", ["電気の通り道", "部品の値段", "盤の色"], 0, "電源から負荷まで電気を運ぶ道だから。", "道路があるから車が目的地へ行ける。", "通り道を設計できると、装置全体を組める。"),
+      elecQ("wire-2", "wire", "因果説明（いんがせつめい）", "細い線に大きな電流を流すと何が起きやすい？", ["熱くなる", "軽くなる", "透明になる"], 0, "流れにくい場所で電気のエネルギーが熱に変わりやすい。", "細いストローで大量の水を吸うと苦しい。", "発熱を読めると、安全な機械を作れる。"),
+      elecQ("sensor-1", "sensor", "定義", "センサーの役割は？", ["機械の状態を知らせる", "電源を重くする", "線を太くする"], 0, "物がある、近づいた、温度が上がったなどを信号にする。", "玄関ライトの人感センサーは人を見つける。", "状態を取れると、自動で動く発明に近づく。"),
+      elecQ("sensor-2", "sensor", "適用（てきよう）", "センサー信号が来ない時に見ることは？", ["検出条件と配線", "盤の塗装", "ネジのメーカー"], 0, "そもそも検出しているか、信号が通っているかを見る。", "インターホンが鳴らない時、ボタンと線を見る感じ。", "信号の流れを読めると制御が分かる。"),
+      elecQ("motor-1", "motor", "定義", "モーターは何をする部品？", ["電気を動きに変える", "電気を絵にする", "線を短くする"], 0, "電気エネルギーで回転や動きを作る。", "扇風機は電気で羽を回す。", "動きを作れると発明品が機械になる。"),
+      elecQ("motor-2", "motor", "注意", "モーター起動時に注意することは？", ["大きな電流が必要なことがある", "必ず軽いこと", "色だけ見ること"], 0, "動き出す瞬間は負荷が大きく、電流が増えることがある。", "自転車もこぎ出しが一番重い。", "起動条件を読めると止まらない装置を作れる。"),
+      elecQ("heat-1", "heat", "原因", "線が熱くなる主な原因は？", ["電流が線に対して多い", "文字が小さい", "盤が白い"], 0, "線の許容量を超えると発熱しやすい。", "細い道に車が多すぎると混む。", "熱を読めると安全設計につながる。"),
+      elecQ("heat-2", "heat", "設計判断", "熱が不安な時に考えることは？", ["線を太くする、電流を下げる、経路を見直す", "図面名を変える", "部品を隠す"], 0, "流す量と通り道を見直すのが基本。", "水が多すぎるなら太いホースにする。", "余裕を持たせる設計は信頼性につながる。"),
+      elecQ("cae-1", "cae", "対応", "電気設計でCAEっぽく見るとは？", ["条件から現象を予想して判断する", "全部暗記する", "色だけ見る"], 0, "CAEの固定・荷重を見るように、電源・負荷・配線を見る。", "料理で材料と火加減から出来上がりを予想する。", "条件から考える力は、機械と電気をつなぐ。"),
+      elecQ("cae-2", "cae", "想起", "電気設計の見る順番は？", ["電源 → 配線 → センサー → モーター", "色 → 名前 → 値段", "机 → 椅子 → 窓"], 0, "入口から出口へ流れを追うと、原因を見つけやすい。", "水漏れも蛇口から順番に見る。", "流れを追えると、複雑な装置も怖くなくなる。")
+    ];
+
+    function elecQ(id, topic, kind, question, choices, answer, why, daily, invention) {
+      return { id, topic, kind, question, choices, answer, why, daily, invention };
+    }
+
+    const elecStorageKey = "miwa-electrical-design-review-v1";
+    const elecState = {
+      topic: "power",
+      mode: "due",
+      currentId: "",
+      answered: {},
+      correct: 0,
+      wrong: 0
+    };
+
+    const elecTopicList = document.querySelector("#elecTopicList");
+    const elecAnswered = document.querySelector("#elecAnswered");
+    const elecRate = document.querySelector("#elecRate");
+    const elecTopic = document.querySelector("#elecTopic");
+    const elecKind = document.querySelector("#elecKind");
+    const elecQuestion = document.querySelector("#elecQuestion");
+    const elecChoices = document.querySelector("#elecChoices");
+    const elecAnswer = document.querySelector("#elecAnswer");
+    const elecInstallButton = document.querySelector("#elecInstallButton");
+    let elecDeferredInstallPrompt = null;
+
+    function loadElecReview() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(elecStorageKey));
+        if (saved) Object.assign(elecState, saved);
+      } catch {
+        localStorage.removeItem(elecStorageKey);
+      }
+    }
+
+    function saveElecReview() {
+      localStorage.setItem(elecStorageKey, JSON.stringify(elecState));
+    }
+
+    function elecCurrentTopic() {
+      return elecTopics.find((topic) => topic.id === elecState.topic) || elecTopics[0];
+    }
+
+    function elecFirstQuestion(topicId) {
+      return elecQuestionBank.find((item) => item.topic === topicId) || elecQuestionBank[0];
+    }
+
+    function elecCandidates() {
+      const byTopic = elecQuestionBank.filter((item) => item.topic === elecState.topic);
+      if (elecState.mode === "weak") {
+        const weak = elecQuestionBank.filter((item) => elecState.answered[item.id] === "wrong");
+        return weak.length ? weak : byTopic;
+      }
+      const fresh = byTopic.filter((item) => !elecState.answered[item.id]);
+      return fresh.length ? fresh : byTopic;
+    }
+
+    function elecCurrentQuestion() {
+      return elecQuestionBank.find((item) => item.id === elecState.currentId) || elecFirstQuestion(elecState.topic);
+    }
+
+    function renderElecTopics() {
+      elecTopicList.innerHTML = elecTopics.map((topic) => `
+        <button class="review-topic-button ${topic.id === elecState.topic ? "active" : ""}" type="button" data-topic="${topic.id}">
+          <strong>${topic.code} ${topic.title}</strong>
+          <span>${topic.short}</span>
+        </button>
+      `).join("");
+      elecTopicList.querySelectorAll(".review-topic-button").forEach((button) => {
+        button.addEventListener("click", () => {
+          elecState.topic = button.dataset.topic;
+          elecState.mode = "due";
+          elecState.currentId = elecFirstQuestion(elecState.topic).id;
+          saveElecReview();
+          renderElecReview();
+        });
+      });
+    }
+
+    function renderElecReview() {
+      renderElecTopics();
+      const item = elecCurrentQuestion();
+      const attempts = elecState.correct + elecState.wrong;
+      const rate = attempts ? Math.round((elecState.correct / attempts) * 100) : 0;
+      elecAnswered.textContent = `${Object.keys(elecState.answered).length}問`;
+      elecRate.textContent = `${rate}%`;
+      elecTopic.textContent = elecCurrentTopic().title;
+      elecKind.textContent = item.kind;
+      elecQuestion.textContent = item.question;
+      elecChoices.innerHTML = "";
+      elecAnswer.classList.remove("show");
+      elecAnswer.innerHTML = "";
+
+      item.choices.forEach((choice, index) => {
+        const button = document.createElement("button");
+        button.className = "review-choice";
+        button.type = "button";
+        button.textContent = choice;
+        button.addEventListener("click", () => answerElecReview(item, index, button));
+        elecChoices.appendChild(button);
+      });
+    }
+
+    function answerElecReview(item, index, button) {
+      const correct = index === item.answer;
+      elecChoices.querySelectorAll(".review-choice").forEach((choice, choiceIndex) => {
+        choice.classList.toggle("correct", choiceIndex === item.answer);
+        choice.classList.toggle("wrong", choice === button && !correct);
+      });
+      elecState.answered[item.id] = correct ? "correct" : "wrong";
+      if (correct) elecState.correct += 1;
+      if (!correct) elecState.wrong += 1;
+      elecAnswer.innerHTML = `
+        <b>再問：</b>${item.question}<br>
+        <b>答え：</b>${item.choices[item.answer]}<br>
+        <b>なぜ：</b>${item.why}<br>
+        <b>日常の例：</b>${item.daily}<br>
+        <b>発明へのつながり：</b>${item.invention}
+      `;
+      elecAnswer.classList.add("show");
+      saveElecReview();
+      const attempts = elecState.correct + elecState.wrong;
+      elecAnswered.textContent = `${Object.keys(elecState.answered).length}問`;
+      elecRate.textContent = `${Math.round((elecState.correct / attempts) * 100)}%`;
+    }
+
+    function nextElecQuestion() {
+      const list = elecCandidates();
+      const index = list.findIndex((item) => item.id === elecState.currentId);
+      const next = list[(index + 1 + list.length) % list.length] || elecQuestionBank[0];
+      elecState.currentId = next.id;
+      saveElecReview();
+      renderElecReview();
+    }
+
+    document.querySelector("#elecDueButton").addEventListener("click", () => {
+      elecState.mode = "due";
+      nextElecQuestion();
+    });
+
+    document.querySelector("#elecWeakButton").addEventListener("click", () => {
+      elecState.mode = "weak";
+      nextElecQuestion();
+    });
+
+    document.querySelector("#elecNextButton").addEventListener("click", nextElecQuestion);
+
+    document.querySelector("#elecResetButton").addEventListener("click", () => {
+      elecState.answered = {};
+      elecState.correct = 0;
+      elecState.wrong = 0;
+      elecState.currentId = elecFirstQuestion(elecState.topic).id;
+      saveElecReview();
+      renderElecReview();
+    });
+
+    function registerElecPwa() {
+      if ("serviceWorker" in navigator && location.protocol !== "file:") {
+        navigator.serviceWorker.register("electrical-design-service-worker.js");
+      }
+      window.addEventListener("beforeinstallprompt", (event) => {
+        event.preventDefault();
+        elecDeferredInstallPrompt = event;
+        elecInstallButton.hidden = false;
+      });
+      elecInstallButton.addEventListener("click", async () => {
+        if (!elecDeferredInstallPrompt) return;
+        elecDeferredInstallPrompt.prompt();
+        await elecDeferredInstallPrompt.userChoice;
+        elecDeferredInstallPrompt = null;
+        elecInstallButton.hidden = true;
+      });
+    }
+
+    loadElecReview();
+    if (!elecState.currentId) elecState.currentId = elecFirstQuestion(elecState.topic).id;
+    renderElecReview();
+    registerElecPwa();
+
+    const completeButton = document.querySelector("#completeButton");
+    const completeStatus = document.querySelector("#completeStatus");
+    const storageKey = "electrical_design_textbook_e01_complete";
+
+    function renderComplete() {
+      const done = localStorage.getItem(storageKey) === "true";
+      completeStatus.textContent = done ? "完了済み" : "未完了";
+      completeButton.textContent = done ? "E01完了を取り消す" : "E01を完了にする";
+    }
+
+    completeButton.addEventListener("click", () => {
+      const done = localStorage.getItem(storageKey) === "true";
+      localStorage.setItem(storageKey, String(!done));
+      renderComplete();
+    });
+
+    renderComplete();
+  </script>
+</body>
+</html>

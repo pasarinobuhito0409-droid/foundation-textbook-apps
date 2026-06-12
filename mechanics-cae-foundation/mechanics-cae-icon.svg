@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#f5f2ec"/>
+  <rect x="76" y="150" width="70" height="220" rx="14" fill="#263238"/>
+  <path d="M132 248 C230 230 322 270 430 324" fill="none" stroke="#607d8b" stroke-width="42" stroke-linecap="round"/>
+  <path d="M146 233 C238 220 326 258 418 306" fill="none" stroke="#dce7ec" stroke-width="9" stroke-linecap="round" opacity=".75"/>
+  <circle cx="168" cy="252" r="52" fill="#e63946" opacity=".28"/>
+  <path d="M405 136 v124" stroke="#c0352b" stroke-width="18" stroke-linecap="round"/>
+  <path d="M365 220 l40 48 40-48" fill="none" stroke="#c0352b" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="256" y="426" text-anchor="middle" font-family="Arial, sans-serif" font-size="48" font-weight="700" fill="#0f766e">CAE</text>
+</svg>

@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>三輪さん専用 基礎教科書アプリ</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f4f4ef;
+      --paper: #fffef8;
+      --ink: #182026;
+      --muted: #637076;
+      --line: #d8d5cb;
+      --green: #14532d;
+      --blue: #1d4ed8;
+      --shadow: 0 16px 34px rgba(35, 40, 35, 0.12);
+      --radius: 8px;
+      font-family: "Yu Gothic", "Hiragino Sans", "Meiryo", system-ui, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.72), rgba(255,255,255,.26)),
+        repeating-linear-gradient(90deg, rgba(30, 45, 38, .026) 0 1px, transparent 1px 12px),
+        var(--bg);
+      line-height: 1.7;
+    }
+
+    main {
+      width: min(980px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 36px 0 54px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(34px, 7vw, 70px);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 720px;
+      margin: 18px 0 26px;
+      color: #2f3d42;
+      font-size: 18px;
+    }
+
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .app-card {
+      min-height: 210px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .app-card strong {
+      display: block;
+      font-size: 22px;
+      line-height: 1.25;
+    }
+
+    .app-card p {
+      color: var(--muted);
+      margin: 10px 0 0;
+    }
+
+    .open {
+      margin-top: 18px;
+      min-height: 42px;
+      border-radius: var(--radius);
+      background: var(--ink);
+      color: white;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+    }
+
+    .note {
+      margin-top: 22px;
+      padding: 14px;
+      border: 1px dashed rgba(20, 83, 45, .35);
+      border-radius: var(--radius);
+      color: var(--muted);
+      background: rgba(255,255,255,.7);
+    }
+
+    @media (max-width: 820px) {
+      .app-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>基礎教科書アプリ</h1>
+    <p class="lead">
+      三輪さん専用。
+      機械設計、電気設計、CAEをスマホで復習できる入口。
+    </p>
+
+    <div class="app-grid">
+      <a class="app-card" href="./mechanical-design-foundation/mechanical-design-foundation-textbook.html">
+        <span>
+          <strong>機械設計 基礎</strong>
+          <p>目的、図面、材料、加工、ねじ、公差を復習する。</p>
+        </span>
+        <span class="open">開く</span>
+      </a>
+
+      <a class="app-card" href="./electrical-design-foundation/electrical-design-foundation-textbook.html">
+        <span>
+          <strong>電気設計 基礎</strong>
+          <p>電源、配線、センサー、モーター、熱を復習する。</p>
+        </span>
+        <span class="open">開く</span>
+      </a>
+
+      <a class="app-card" href="./mechanics-cae-foundation/mechanics-cae-foundation-textbook.html">
+        <span>
+          <strong>設計力学とCAE</strong>
+          <p>力、固定、荷重、応力、たわみ、CAEの見方を復習する。</p>
+        </span>
+        <span class="open">開く</span>
+      </a>
+    </div>
+
+    <p class="note">
+      スマホでは、各アプリを開いたあとブラウザの共有メニューから
+      「ホーム画面に追加」を選ぶとアプリのように起動できます。
+    </p>
+  </main>
+</body>
+</html>

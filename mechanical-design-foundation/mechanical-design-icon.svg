@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#f4f4ef"/>
+  <rect x="82" y="306" width="348" height="48" rx="10" fill="#61717a"/>
+  <rect x="128" y="168" width="64" height="138" rx="10" fill="#263238"/>
+  <rect x="320" y="168" width="64" height="138" rx="10" fill="#263238"/>
+  <rect x="132" y="206" width="248" height="34" rx="17" fill="#90a4ae"/>
+  <circle cx="160" cy="330" r="16" fill="#172126"/>
+  <circle cx="352" cy="330" r="16" fill="#172126"/>
+  <path d="M256 90 v90" stroke="#c2410c" stroke-width="18" stroke-linecap="round"/>
+  <path d="M220 146 l36 42 36-42" fill="none" stroke="#c2410c" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="256" y="432" text-anchor="middle" font-family="Arial, sans-serif" font-size="46" font-weight="700" fill="#14532d">MD</text>
+</svg>
