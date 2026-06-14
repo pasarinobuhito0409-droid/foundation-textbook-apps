@@ -106,7 +106,8 @@
     .nav-button,
     .pill-button,
     .quiz-button,
-    .stage-button {
+    .stage-button,
+    .routine-check {
       min-height: 42px;
       border: 1px solid var(--line);
       border-radius: var(--radius);
@@ -267,7 +268,7 @@
 
     .meter-fill {
       height: 100%;
-      width: 20%;
+      width: 40%;
       background: linear-gradient(90deg, var(--green), var(--blue));
     }
 
@@ -291,6 +292,11 @@
       box-shadow: 0 12px 26px rgba(35, 100, 170, 0.12);
     }
 
+    .topic-card.done {
+      border-color: rgba(36, 122, 83, 0.58);
+      background: var(--soft-green);
+    }
+
     .topic-card strong {
       display: block;
       font-size: 18px;
@@ -301,6 +307,93 @@
       margin-top: 8px;
       color: var(--muted);
       font-size: 14px;
+    }
+
+    .morning-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(300px, 0.9fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .morning-card {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: 0 10px 22px rgba(20, 34, 40, 0.06);
+    }
+
+    .morning-card h3 {
+      margin: 0 0 10px;
+      font-size: 22px;
+    }
+
+    .morning-card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .routine-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .routine-check {
+      width: 100%;
+      padding: 12px;
+      text-align: left;
+      background: #fbfcfb;
+    }
+
+    .routine-check.done {
+      border-color: var(--green);
+      background: var(--soft-green);
+    }
+
+    .routine-check strong {
+      display: block;
+      font-size: 16px;
+    }
+
+    .routine-check span {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .morning-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .invent-note {
+      width: 100%;
+      min-height: 120px;
+      margin-top: 12px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      resize: vertical;
+      font: inherit;
+      line-height: 1.6;
+    }
+
+    .mini-route {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .mini-route div {
+      padding: 10px;
+      border: 1px solid rgba(80, 101, 101, 0.16);
+      border-radius: var(--radius);
+      background: #fbfcfb;
     }
 
     .concept-grid {
@@ -653,6 +746,115 @@
     .lab-panel p {
       margin: 0;
       color: var(--muted);
+    }
+
+    .e02-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(360px, 1.1fr);
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .e02-visual {
+      position: relative;
+      min-height: 340px;
+      overflow: hidden;
+      border: 1px solid rgba(75, 99, 101, 0.22);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(244, 248, 249, 0.96)),
+        repeating-linear-gradient(90deg, rgba(27, 58, 66, 0.035) 0 1px, transparent 1px 20px);
+    }
+
+    .e02-wire {
+      position: absolute;
+      left: 12%;
+      right: 12%;
+      top: 47%;
+      height: var(--e02-wire-height, 12px);
+      border-radius: 999px;
+      background:
+        linear-gradient(90deg, rgba(255, 255, 255, 0.76) 0 18%, transparent 18% 100%),
+        var(--e02-wire-color, #247a53);
+      background-size: var(--e02-flow-size, 56px) 100%, auto;
+      animation: currentMove var(--e02-flow-speed, 1.2s) linear infinite;
+      opacity: var(--e02-wire-opacity, 0.95);
+    }
+
+    .e02-part {
+      position: absolute;
+      display: grid;
+      place-items: center;
+      min-width: 88px;
+      min-height: 64px;
+      padding: 8px;
+      border-radius: var(--radius);
+      color: #fff;
+      font-weight: 900;
+      text-align: center;
+      box-shadow: 0 10px 20px rgba(20, 34, 40, 0.16);
+    }
+
+    .e02-battery {
+      left: 8%;
+      top: 38%;
+      background: var(--blue);
+    }
+
+    .e02-resistor {
+      left: 42%;
+      top: 37%;
+      background: var(--yellow);
+    }
+
+    .e02-lamp {
+      right: 8%;
+      top: 34%;
+      width: 92px;
+      height: 92px;
+      border-radius: 999px;
+      background: radial-gradient(circle at center, rgba(255,255,255,0.96) 0 16px, #ffd35a 17px 42px, #b97814 43px);
+      box-shadow:
+        0 0 var(--e02-lamp-shadow, 18px) rgba(255, 197, 63, var(--e02-brightness, 0.35)),
+        0 12px 24px rgba(20, 34, 40, 0.18);
+      color: #4f3a00;
+    }
+
+    .e02-heat {
+      position: absolute;
+      left: 40%;
+      top: 58%;
+      width: 120px;
+      height: 74px;
+      opacity: var(--e02-heat-opacity, 0.14);
+      background:
+        radial-gradient(circle at 24px 36px, rgba(195, 72, 54, 0.72) 0 8px, transparent 9px),
+        radial-gradient(circle at 58px 24px, rgba(195, 72, 54, 0.62) 0 10px, transparent 11px),
+        radial-gradient(circle at 88px 40px, rgba(195, 72, 54, 0.52) 0 8px, transparent 9px);
+      animation: heatWobble 1.5s ease-in-out infinite;
+    }
+
+    .breaker-badge {
+      position: absolute;
+      left: 50%;
+      bottom: 22px;
+      transform: translateX(-50%);
+      padding: 10px 14px;
+      border-radius: var(--radius);
+      background: var(--e02-breaker-bg, var(--soft-green));
+      border: 1px solid var(--e02-breaker-border, rgba(36, 122, 83, 0.45));
+      font-weight: 900;
+    }
+
+    .e02-summary {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .e02-summary .readout-card {
+      min-height: 86px;
     }
 
     .slider-row {
@@ -1247,6 +1449,9 @@
       .concept-grid,
       .control-diagram,
       .touch-lab,
+      .morning-grid,
+      .e02-layout,
+      .e02-summary,
       .cae-map {
         grid-template-columns: 1fr;
       }
@@ -1280,6 +1485,7 @@
       .definition,
       .lab-readout,
       .toggle-row,
+      .morning-actions,
       .quiz-options {
         grid-template-columns: 1fr;
       }
@@ -1373,11 +1579,13 @@
     <div class="topbar-inner">
       <div class="brand">
         <strong>電気設計とCAE的思考 基礎編</strong>
-        <span>朝の勉強まとめ / E01 電気って何が動いてるの？</span>
+        <span>朝の勉強まとめ / E01 + E02 体感モード</span>
       </div>
       <nav class="quick-nav" aria-label="教材内ナビゲーション">
+        <a class="nav-button" href="#morning-mode">朝10分</a>
         <a class="nav-button" href="#progress">進捗</a>
         <a class="nav-button" href="#lesson">E01</a>
+        <a class="nav-button" href="#e02-lab">E02</a>
         <a class="nav-button" href="#touch-lab">体感</a>
         <a class="nav-button" href="#quiz">テスト</a>
         <a class="nav-button" href="#review-app">復習</a>
@@ -1397,7 +1605,8 @@
           <span class="lead-line">電源・配線・センサー・モーターの流れを見ます。</span>
         </p>
         <div class="hero-actions">
-          <a class="pill-button primary" href="#lesson">E01から始める</a>
+          <a class="pill-button primary" href="#morning-mode">朝10分で始める</a>
+          <a class="pill-button" href="#e02-lab">E02を触る</a>
           <a class="pill-button" href="#map">CAEとの対応を見る</a>
           <a class="pill-button" href="#review-app">すぐ復習</a>
         </div>
@@ -1410,24 +1619,83 @@
       </figure>
     </section>
 
+    <section class="band" id="morning-mode" aria-labelledby="morning-title">
+      <div class="section-head">
+        <div>
+          <h2 id="morning-title">朝10分モード</h2>
+          <p>仕事前に迷わない入口です。見る、触る、解く、発明へつなげる、だけを短く回します。</p>
+        </div>
+      </div>
+
+      <div class="morning-grid">
+        <article class="morning-card">
+          <h3>今日の流れ</h3>
+          <p>全部やっても10分。時間がない日は上から2つだけでOKです。</p>
+
+          <div class="routine-list" aria-label="朝10分ルーティン">
+            <button class="routine-check" type="button" data-routine="look">
+              <strong>1分 見る</strong>
+              <span>制御盤画像で、電源から出口まで目で追う。</span>
+            </button>
+            <button class="routine-check" type="button" data-routine="touch">
+              <strong>3分 触る</strong>
+              <span>E02のつまみで、電圧・電流・抵抗を動かす。</span>
+            </button>
+            <button class="routine-check" type="button" data-routine="quiz">
+              <strong>3分 解く</strong>
+              <span>今日の復習か弱点だけを3問タップする。</span>
+            </button>
+            <button class="routine-check" type="button" data-routine="invent">
+              <strong>3分 発明メモ</strong>
+              <span>今日の気づきを1行だけ残す。</span>
+            </button>
+          </div>
+
+          <div class="morning-actions">
+            <a class="pill-button primary" href="#e02-lab">E02実験へ</a>
+            <a class="pill-button" href="#review-app">復習へ</a>
+            <button class="pill-button" type="button" id="routineResetButton">朝10分をリセット</button>
+          </div>
+        </article>
+
+        <article class="morning-card">
+          <h3>今日の1テーマ</h3>
+          <p>電圧・電流・抵抗を、暗記ではなく「つまみで変わるもの」として覚えます。</p>
+
+          <div class="mini-route">
+            <div><strong>電圧</strong><br>電気を押す力。水道でいう水圧。</div>
+            <div><strong>電流</strong><br>実際に流れる量。多すぎると熱が出る。</div>
+            <div><strong>抵抗</strong><br>流れにくさ。細い道や詰まりに近い。</div>
+          </div>
+
+          <label for="inventMemo"><strong>発明メモ</strong></label>
+          <textarea class="invent-note" id="inventMemo" placeholder="例：小さい装置でも、電源と線の余裕を先に見れば安全に作れそう。"></textarea>
+          <div class="done-line">
+            <button class="pill-button primary" type="button" id="saveMemoButton">メモ保存</button>
+            <span class="status-text" id="memoStatus">未保存</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
     <section class="band" id="progress" aria-labelledby="progress-title">
       <div class="section-head">
         <div>
           <h2 id="progress-title">進捗ボード</h2>
-          <p>E01から順番に進めます。まずは電気を怖がらず、設計者として見る目を作ります。</p>
+          <p>E01で流れを見る目を作り、E02で電圧・電流・抵抗を触って覚えます。</p>
         </div>
-        <div class="progress-meter" aria-label="進捗 1/5">
-          <div class="meter-label"><span>初版</span><span>1 / 5</span></div>
+        <div class="progress-meter" aria-label="進捗 2/5">
+          <div class="meter-label"><span>朝勉強版</span><span>2 / 5</span></div>
           <div class="meter-track"><div class="meter-fill"></div></div>
         </div>
       </div>
 
       <div class="topic-grid">
-        <article class="topic-card current">
+        <article class="topic-card done">
           <strong>E01</strong>
           <span>電気って何が動いてるの？</span>
         </article>
-        <article class="topic-card">
+        <article class="topic-card current">
           <strong>E02</strong>
           <span>電圧・電流・抵抗</span>
         </article>
@@ -1631,6 +1899,77 @@
           </div>
 
           <div class="lab-state" id="labState">電気が流れ、ランプとモーターまで届いています。</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="band" id="e02-lab" aria-labelledby="e02-title">
+      <div class="section-head">
+        <div>
+          <h2 id="e02-title">E02 電圧・電流・抵抗</h2>
+          <p>今日の結論は、電圧は押す力、抵抗は通りにくさ、電流は実際に流れた量、です。</p>
+        </div>
+      </div>
+
+      <div class="e02-layout">
+        <article class="lab-panel">
+          <h3>触って覚えるオームの実験</h3>
+          <p>つまみを動かすと、ランプの明るさ・配線の熱・ブレーカー判断が変わります。</p>
+
+          <div class="slider-row">
+            <label class="slider-label" for="voltageSlider">
+              <span>電圧（押す力）</span>
+              <span id="voltageLabel">24V</span>
+            </label>
+            <input id="voltageSlider" type="range" min="6" max="48" value="24" step="1">
+          </div>
+
+          <div class="slider-row">
+            <label class="slider-label" for="resistanceSlider">
+              <span>抵抗（通りにくさ）</span>
+              <span id="resistanceLabel">6Ω</span>
+            </label>
+            <input id="resistanceSlider" type="range" min="2" max="12" value="6" step="1">
+          </div>
+
+          <div class="e02-summary">
+            <div class="readout-card">
+              <strong>電流</strong>
+              <span id="ohmCurrentReadout">4.0A</span>
+            </div>
+            <div class="readout-card">
+              <strong>熱</strong>
+              <span id="ohmHeatReadout">低い</span>
+            </div>
+            <div class="readout-card">
+              <strong>判断</strong>
+              <span id="ohmJudgeReadout">OK</span>
+            </div>
+          </div>
+
+          <div class="done-line">
+            <button class="pill-button primary" type="button" id="e02CompleteButton">E02を完了にする</button>
+            <span class="status-text" id="e02CompleteStatus">未完了</span>
+          </div>
+        </article>
+
+        <article class="lab-panel">
+          <h3>見える化：押す力と通りにくさ</h3>
+          <p>抵抗を下げたまま電圧を上げると、たくさん流れて熱が出ます。</p>
+
+          <div class="e02-visual" id="ohmVisual" aria-label="電圧、抵抗、電流、発熱、ブレーカー判断の動く説明図">
+            <div class="e02-wire" aria-hidden="true"></div>
+            <div class="e02-heat" aria-hidden="true"></div>
+            <div class="e02-part e02-battery">電圧<br><span id="batteryText">24V</span></div>
+            <div class="e02-part e02-resistor">抵抗<br><span id="resistorText">6Ω</span></div>
+            <div class="e02-part e02-lamp">ランプ</div>
+            <div class="breaker-badge" id="breakerText">ブレーカー OK</div>
+          </div>
+
+          <p class="append-rule">
+            覚え方：電圧を上げる、または抵抗を下げると、電流は増えます。
+            増えすぎた電流は、熱と危険につながります。
+          </p>
         </article>
       </div>
     </section>
@@ -1954,18 +2293,128 @@
 
     renderLab();
 
+    const routineKey = "electrical_design_morning_routine_v1";
+    const routineButtons = document.querySelectorAll(".routine-check");
+    const routineResetButton = document.querySelector("#routineResetButton");
+    const inventMemo = document.querySelector("#inventMemo");
+    const saveMemoButton = document.querySelector("#saveMemoButton");
+    const memoStatus = document.querySelector("#memoStatus");
+    const memoKey = "electrical_design_invention_memo_v1";
+
+    function loadRoutine() {
+      try {
+        return JSON.parse(localStorage.getItem(routineKey)) || {};
+      } catch {
+        localStorage.removeItem(routineKey);
+        return {};
+      }
+    }
+
+    function renderRoutine() {
+      const state = loadRoutine();
+      routineButtons.forEach((button) => {
+        button.classList.toggle("done", state[button.dataset.routine] === true);
+      });
+    }
+
+    routineButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const state = loadRoutine();
+        state[button.dataset.routine] = !state[button.dataset.routine];
+        localStorage.setItem(routineKey, JSON.stringify(state));
+        renderRoutine();
+      });
+    });
+
+    routineResetButton.addEventListener("click", () => {
+      localStorage.removeItem(routineKey);
+      renderRoutine();
+    });
+
+    inventMemo.value = localStorage.getItem(memoKey) || "";
+    saveMemoButton.addEventListener("click", () => {
+      localStorage.setItem(memoKey, inventMemo.value.trim());
+      memoStatus.textContent = "保存済み";
+    });
+
+    const voltageSlider = document.querySelector("#voltageSlider");
+    const resistanceSlider = document.querySelector("#resistanceSlider");
+    const voltageLabel = document.querySelector("#voltageLabel");
+    const resistanceLabel = document.querySelector("#resistanceLabel");
+    const ohmCurrentReadout = document.querySelector("#ohmCurrentReadout");
+    const ohmHeatReadout = document.querySelector("#ohmHeatReadout");
+    const ohmJudgeReadout = document.querySelector("#ohmJudgeReadout");
+    const ohmVisual = document.querySelector("#ohmVisual");
+    const batteryText = document.querySelector("#batteryText");
+    const resistorText = document.querySelector("#resistorText");
+    const breakerText = document.querySelector("#breakerText");
+    const e02CompleteButton = document.querySelector("#e02CompleteButton");
+    const e02CompleteStatus = document.querySelector("#e02CompleteStatus");
+    const e02StorageKey = "electrical_design_textbook_e02_complete";
+
+    function renderOhm() {
+      const voltage = Number(voltageSlider.value);
+      const resistance = Number(resistanceSlider.value);
+      const current = voltage / resistance;
+      const heatLevel = Math.min(1, current / 8);
+      const danger = current > 8;
+      const caution = current > 5.5;
+
+      voltageLabel.textContent = `${voltage}V`;
+      resistanceLabel.textContent = `${resistance}Ω`;
+      batteryText.textContent = `${voltage}V`;
+      resistorText.textContent = `${resistance}Ω`;
+      ohmCurrentReadout.textContent = `${current.toFixed(1)}A`;
+      ohmHeatReadout.textContent = danger ? "高い" : caution ? "注意" : "低い";
+      ohmJudgeReadout.textContent = danger ? "NG" : caution ? "注意" : "OK";
+      breakerText.textContent = danger ? "ブレーカー遮断" : caution ? "ブレーカー注意" : "ブレーカー OK";
+
+      ohmVisual.style.setProperty("--e02-wire-color", danger ? "#c34836" : caution ? "#b97814" : "#247a53");
+      ohmVisual.style.setProperty("--e02-wire-height", `${Math.max(8, Math.min(24, 8 + current))}px`);
+      ohmVisual.style.setProperty("--e02-flow-size", `${Math.max(24, 78 - current * 3)}px`);
+      ohmVisual.style.setProperty("--e02-flow-speed", `${Math.max(0.34, 1.7 - current * 0.08)}s`);
+      ohmVisual.style.setProperty("--e02-brightness", String(Math.min(0.92, 0.18 + current / 10)));
+      ohmVisual.style.setProperty("--e02-lamp-shadow", `${Math.min(70, 16 + current * 6)}px`);
+      ohmVisual.style.setProperty("--e02-heat-opacity", String(Math.max(0.12, heatLevel)));
+      ohmVisual.style.setProperty("--e02-breaker-bg", danger ? "#fff0ed" : caution ? "var(--soft-yellow)" : "var(--soft-green)");
+      ohmVisual.style.setProperty("--e02-breaker-border", danger ? "rgba(195, 72, 54, 0.55)" : caution ? "rgba(185, 120, 20, 0.5)" : "rgba(36, 122, 83, 0.45)");
+    }
+
+    function renderE02Complete() {
+      const done = localStorage.getItem(e02StorageKey) === "true";
+      e02CompleteStatus.textContent = done ? "完了済み" : "未完了";
+      e02CompleteButton.textContent = done ? "E02完了を取り消す" : "E02を完了にする";
+    }
+
+    [voltageSlider, resistanceSlider].forEach((slider) => {
+      slider.addEventListener("input", renderOhm);
+    });
+
+    e02CompleteButton.addEventListener("click", () => {
+      const done = localStorage.getItem(e02StorageKey) === "true";
+      localStorage.setItem(e02StorageKey, String(!done));
+      renderE02Complete();
+    });
+
+    renderRoutine();
+    renderOhm();
+    renderE02Complete();
+
     const elecTopics = [
       { id: "power", code: "E01", title: "電源", short: "電気の入口" },
-      { id: "wire", code: "E02", title: "配線", short: "電気の通り道" },
-      { id: "sensor", code: "E03", title: "センサー", short: "状態を知らせる" },
-      { id: "motor", code: "E04", title: "モーター", short: "電気を動きに変える" },
-      { id: "heat", code: "E05", title: "熱", short: "電流が多い時の危険" },
-      { id: "cae", code: "E06", title: "CAE的思考", short: "条件から判断する" }
+      { id: "ohm", code: "E02", title: "電圧・電流・抵抗", short: "押す力と通りにくさ" },
+      { id: "wire", code: "E03", title: "配線", short: "電気の通り道" },
+      { id: "sensor", code: "E04", title: "センサー", short: "状態を知らせる" },
+      { id: "motor", code: "E05", title: "モーター", short: "電気を動きに変える" },
+      { id: "heat", code: "E06", title: "熱", short: "電流が多い時の危険" },
+      { id: "cae", code: "E07", title: "CAE的思考", short: "条件から判断する" }
     ];
 
     const elecQuestionBank = [
       elecQ("power-1", "power", "想起（しょうき：思い出す）", "電気設計で最初に見る入口は？", ["電源", "線の色", "盤の大きさ"], 0, "電源が来ていないと、後ろの部品は何も動かないから。", "水道も元栓が閉まっていたら水が出ない。", "入口を見る習慣は、故障解析にも発明装置づくりにも効く。"),
       elecQ("power-2", "power", "判別（はんべつ：見分ける）", "24V機器に対してまず確認することは？", ["24Vが供給されているか", "メーカー名が長いか", "線が曲がっているか"], 0, "必要な電圧がなければ、機器は期待通り動かない。", "乾電池が足りないリモコンは動かない。", "電源条件を読めると、機械の動作を予想できる。"),
+      elecQ("ohm-1", "ohm", "体感（たいかん：体でわかる）", "抵抗を上げると、電流はどうなりやすい？", ["減る", "増える", "必ず同じ"], 0, "通りにくくなるほど、同じ電圧では流れる量が減るから。", "細いストローほど、一気に水を飲みにくい。", "小型装置の省エネ設計や安全配線に効く。"),
+      elecQ("ohm-2", "ohm", "判断（はんだん：決める）", "電圧を上げて抵抗を下げると、何に注意する？", ["電流と発熱", "部品名の長さ", "盤の色"], 0, "電流が増えすぎると、線や部品が熱くなるから。", "狭い道に車をたくさん流すと渋滞と熱気が出る。", "発明装置で止まらない安全回路を考える入口になる。"),
       elecQ("wire-1", "wire", "定義（ていぎ）", "配線とは何？", ["電気の通り道", "部品の値段", "盤の色"], 0, "電源から負荷まで電気を運ぶ道だから。", "道路があるから車が目的地へ行ける。", "通り道を設計できると、装置全体を組める。"),
       elecQ("wire-2", "wire", "因果説明（いんがせつめい）", "細い線に大きな電流を流すと何が起きやすい？", ["熱くなる", "軽くなる", "透明になる"], 0, "流れにくい場所で電気のエネルギーが熱に変わりやすい。", "細いストローで大量の水を吸うと苦しい。", "発熱を読めると、安全な機械を作れる。"),
       elecQ("sensor-1", "sensor", "定義", "センサーの役割は？", ["機械の状態を知らせる", "電源を重くする", "線を太くする"], 0, "物がある、近づいた、温度が上がったなどを信号にする。", "玄関ライトの人感センサーは人を見つける。", "状態を取れると、自動で動く発明に近づく。"),
