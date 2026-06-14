@@ -144,8 +144,8 @@
       grid-template-columns: minmax(0, 0.96fr) minmax(360px, 1.04fr);
       gap: 28px;
       align-items: center;
-      min-height: calc(100vh - 92px);
-      padding: 32px 0 42px;
+      min-height: auto;
+      padding: 30px 0 28px;
     }
 
     .eyebrow {
@@ -208,8 +208,9 @@
     .hero-visual img {
       display: block;
       width: 100%;
+      max-height: 320px;
       aspect-ratio: 16 / 9;
-      object-fit: cover;
+      object-fit: contain;
       border: 1px solid rgba(52, 76, 78, 0.3);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
@@ -418,6 +419,118 @@
       background: var(--soft-green);
       color: #24433a;
       font-weight: 800;
+    }
+
+    .study-deck {
+      scroll-margin-top: 84px;
+      margin: 0 -14px 18px;
+      padding: 18px 14px;
+      border-top: 1px solid rgba(80, 101, 101, 0.16);
+      border-bottom: 1px solid rgba(80, 101, 101, 0.16);
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .deck-shell {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(320px, 0.78fr);
+      gap: 16px;
+      align-items: end;
+    }
+
+    .deck-summary h2 {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.2;
+    }
+
+    .deck-summary p {
+      margin: 8px 0 0;
+      color: var(--muted);
+    }
+
+    .deck-tabs {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .deck-tab {
+      min-height: 54px;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      color: var(--ink);
+      cursor: pointer;
+      text-align: left;
+      font: inherit;
+    }
+
+    .deck-tab strong,
+    .deck-tab span {
+      display: block;
+      line-height: 1.35;
+    }
+
+    .deck-tab span {
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .deck-tab.active {
+      border-color: rgba(29, 79, 134, 0.72);
+      background: var(--soft-blue);
+      box-shadow: 0 10px 22px rgba(35, 100, 170, 0.12);
+    }
+
+    .deck-controls {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+    }
+
+    .deck-arrow {
+      min-height: 40px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfcfb;
+      color: var(--ink);
+      cursor: pointer;
+      font-weight: 800;
+    }
+
+    .deck-arrow:disabled {
+      opacity: 0.42;
+      cursor: default;
+    }
+
+    .deck-status {
+      color: var(--muted);
+      text-align: center;
+      font-weight: 800;
+      line-height: 1.45;
+    }
+
+    [data-slide-section] {
+      scroll-margin-top: 84px;
+      display: none;
+    }
+
+    .band[data-slide-section].active-slide {
+      display: block;
+      min-height: min(680px, calc(100vh - 180px));
+    }
+
+    .hero[data-slide-section].active-slide {
+      display: grid;
     }
 
     .morning-grid {
@@ -1525,6 +1638,7 @@
       .section-head,
       .hero,
       .lesson-layout,
+      .deck-shell,
       .review-workspace,
       .review-stats {
         grid-template-columns: 1fr;
@@ -1571,9 +1685,17 @@
       .progress-meter {
         width: 100%;
       }
+
+      .deck-tabs {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
     }
 
     @media (max-width: 560px) {
+      .topbar {
+        position: static;
+      }
+
       .page,
       .topbar-inner {
         width: min(100% - 20px, 1180px);
@@ -1607,7 +1729,7 @@
       }
 
       .quick-nav {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
       .nav-button {
@@ -1622,6 +1744,22 @@
         padding: 10px;
       }
 
+      .deck-tabs {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .deck-controls {
+        grid-template-columns: 1fr;
+      }
+
+      .deck-status {
+        order: -1;
+      }
+
+      .band[data-slide-section].active-slide {
+        min-height: auto;
+      }
+
       .band {
         margin: 0;
         padding-left: 0;
@@ -1630,6 +1768,7 @@
 
       .hero-visual img {
         aspect-ratio: 4 / 3;
+        max-height: 220px;
       }
     }
 
@@ -1706,19 +1845,59 @@
         <span>本モード / 上から読める朝の勉強まとめ</span>
       </div>
       <nav class="quick-nav" aria-label="教材内ナビゲーション">
-        <a class="nav-button" href="#hero-title">表紙</a>
-        <a class="nav-button" href="#progress">目次</a>
-        <a class="nav-button" href="#formula-title">見方</a>
-        <a class="nav-button" href="#lesson">E01</a>
-        <a class="nav-button" href="#e02-lab">E02</a>
-        <a class="nav-button" href="#quiz">問題</a>
-        <a class="nav-button" href="#review-app">復習</a>
+        <a class="nav-button" href="#study-deck" data-deck-jump="today">表紙</a>
+        <a class="nav-button" href="#study-deck" data-deck-jump="today">今日</a>
+        <a class="nav-button" href="#study-deck" data-deck-jump="e01">E01</a>
+        <a class="nav-button" href="#study-deck" data-deck-jump="e02">E02</a>
+        <a class="nav-button" href="#study-deck" data-deck-jump="quiz">問題</a>
+        <a class="nav-button" href="#study-deck" data-deck-jump="review">復習</a>
       </nav>
     </div>
   </header>
 
   <main class="page">
-    <section class="hero" aria-labelledby="hero-title">
+    <section class="study-deck" id="study-deck" aria-labelledby="deck-title">
+      <div class="deck-shell">
+        <div class="deck-summary">
+          <h2 id="deck-title">タブ + スライド学習</h2>
+          <p>タブで章を選び、中は1枚ずつ進みます。巻物みたいに全部を一気に見せません。</p>
+        </div>
+        <div class="deck-controls" aria-label="スライド操作">
+          <button class="deck-arrow" type="button" id="deckPrevButton">前へ</button>
+          <div class="deck-status" id="deckStatus" aria-live="polite">今日 1 / 3</div>
+          <button class="deck-arrow" type="button" id="deckNextButton">次へ</button>
+        </div>
+      </div>
+
+      <div class="deck-tabs" role="tablist" aria-label="学習タブ">
+        <button class="deck-tab active" type="button" data-tab="today">
+          <strong>今日</strong>
+          <span>表紙と見方</span>
+        </button>
+        <button class="deck-tab" type="button" data-tab="e01">
+          <strong>E01</strong>
+          <span>電気の流れ</span>
+        </button>
+        <button class="deck-tab" type="button" data-tab="e02">
+          <strong>E02</strong>
+          <span>電圧と抵抗</span>
+        </button>
+        <button class="deck-tab" type="button" data-tab="quiz">
+          <strong>問題</strong>
+          <span>すぐ確認</span>
+        </button>
+        <button class="deck-tab" type="button" data-tab="review">
+          <strong>復習</strong>
+          <span>あとで戻る</span>
+        </button>
+        <button class="deck-tab" type="button" data-tab="memo">
+          <strong>メモ</strong>
+          <span>朝10分</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="hero active-slide" id="cover" aria-labelledby="hero-title" data-slide-section data-tab="today" data-slide-title="表紙">
       <div>
         <p class="eyebrow">CAEの電気設計版</p>
         <h1 id="hero-title"><span class="title-line">見えない電気を、</span><span class="title-line">設計者の目で見る。</span></h1>
@@ -1729,9 +1908,9 @@
           <span class="lead-line">電源・配線・センサー・モーターの流れを見ます。</span>
         </p>
         <div class="hero-actions">
-          <a class="pill-button primary" href="#progress">目次から読む</a>
-          <a class="pill-button" href="#e02-lab">今日のE02を触る</a>
-          <a class="pill-button" href="#morning-mode">朝10分だけやる</a>
+          <a class="pill-button primary" href="#study-deck" data-deck-jump="today">タブで始める</a>
+          <a class="pill-button" href="#study-deck" data-deck-jump="e02">今日のE02を触る</a>
+          <a class="pill-button" href="#study-deck" data-deck-jump="memo">朝10分だけやる</a>
         </div>
       </div>
       <figure class="hero-visual">
@@ -1742,7 +1921,7 @@
       </figure>
     </section>
 
-    <section class="band" id="progress" aria-labelledby="progress-title">
+    <section class="band" id="progress" aria-labelledby="progress-title" data-slide-section data-tab="today" data-slide-title="目次と今ここ">
       <div class="section-head">
         <div>
           <h2 id="progress-title">目次と今ここ</h2>
@@ -1820,7 +1999,7 @@
       </div>
     </section>
 
-    <section class="band" id="morning-mode" aria-labelledby="morning-title">
+    <section class="band" id="morning-mode" aria-labelledby="morning-title" data-slide-section data-tab="memo" data-slide-title="朝10分のしおり">
       <div class="section-head">
         <div>
           <h2 id="morning-title">朝10分のしおり</h2>
@@ -1879,7 +2058,7 @@
       </div>
     </section>
 
-    <section class="band" aria-labelledby="formula-title">
+    <section class="band" aria-labelledby="formula-title" data-slide-section data-tab="today" data-slide-title="この教科書の見方">
       <div class="section-head">
         <div>
           <h2 id="formula-title">この教科書の見方</h2>
@@ -1921,7 +2100,7 @@
       </div>
     </section>
 
-    <section class="band" id="lesson" aria-labelledby="lesson-title">
+    <section class="band" id="lesson" aria-labelledby="lesson-title" data-slide-section data-tab="e01" data-slide-title="E01 電気の流れ">
       <div class="section-head">
         <div>
           <h2 id="lesson-title">E01 電気って何が動いてるの？</h2>
@@ -2068,7 +2247,7 @@
       </div>
     </section>
 
-    <section class="band" id="e02-lab" aria-labelledby="e02-title">
+    <section class="band" id="e02-lab" aria-labelledby="e02-title" data-slide-section data-tab="e02" data-slide-title="E02 触る実験">
       <div class="section-head">
         <div>
           <h2 id="e02-title">E02 電圧・電流・抵抗</h2>
@@ -2139,7 +2318,7 @@
       </div>
     </section>
 
-    <section class="band" id="map" aria-labelledby="map-title">
+    <section class="band" id="map" aria-labelledby="map-title" data-slide-section data-tab="e02" data-slide-title="CAEとの対応">
       <div class="section-head">
         <div>
           <h2 id="map-title">CAEとの対応</h2>
@@ -2182,7 +2361,7 @@
       </div>
     </section>
 
-    <section class="band" id="quiz" aria-labelledby="quiz-title">
+    <section class="band" id="quiz" aria-labelledby="quiz-title" data-slide-section data-tab="quiz" data-slide-title="ミニテスト">
       <div class="section-head">
         <div>
           <h2 id="quiz-title">ミニテスト</h2>
@@ -2250,7 +2429,7 @@
       </div>
     </section>
 
-    <section class="band" id="review-app" aria-labelledby="review-app-title">
+    <section class="band" id="review-app" aria-labelledby="review-app-title" data-slide-section data-tab="review" data-slide-title="復習アプリ">
       <div class="section-head">
         <div>
           <h2 id="review-app-title">いつでも復習アプリ</h2>
@@ -2303,7 +2482,7 @@
       </div>
     </section>
 
-    <section class="band" aria-labelledby="review-title">
+    <section class="band" id="night-review" aria-labelledby="review-title" data-slide-section data-tab="review" data-slide-title="夜の5分復習">
       <article class="review-panel">
         <h2 id="review-title">夜の5分復習</h2>
         <p>今日の復習は、この3つだけで十分です。</p>
@@ -2381,6 +2560,97 @@
         });
       });
     });
+
+    const deckTabs = Array.from(document.querySelectorAll(".deck-tab"));
+    const deckSections = Array.from(document.querySelectorAll("[data-slide-section]"));
+    const deckStatus = document.querySelector("#deckStatus");
+    const deckPrevButton = document.querySelector("#deckPrevButton");
+    const deckNextButton = document.querySelector("#deckNextButton");
+    const deckState = {
+      tab: "today",
+      index: 0
+    };
+
+    function deckSlidesFor(tab) {
+      return deckSections.filter((section) => section.dataset.tab === tab);
+    }
+
+    function updateDeck(options = {}) {
+      const slides = deckSlidesFor(deckState.tab);
+      if (!slides.length) return;
+      deckState.index = Math.max(0, Math.min(deckState.index, slides.length - 1));
+
+      deckSections.forEach((section) => {
+        section.classList.toggle("active-slide", section === slides[deckState.index]);
+      });
+
+      deckTabs.forEach((tab) => {
+        const active = tab.dataset.tab === deckState.tab;
+        tab.classList.toggle("active", active);
+        tab.setAttribute("aria-selected", active ? "true" : "false");
+      });
+
+      const activeSlide = slides[deckState.index];
+      const label = deckTabs.find((tab) => tab.dataset.tab === deckState.tab)?.querySelector("strong")?.textContent || "今日";
+      const title = activeSlide.dataset.slideTitle || activeSlide.querySelector("h2")?.textContent || "";
+      deckStatus.textContent = `${label} ${deckState.index + 1} / ${slides.length}　${title}`;
+      deckPrevButton.disabled = deckState.index === 0;
+      deckNextButton.disabled = deckState.index === slides.length - 1;
+
+      if (options.scroll) {
+        document.querySelector("#study-deck").scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+
+    function setDeck(tab, index = 0, options = {}) {
+      deckState.tab = tab;
+      deckState.index = index;
+      updateDeck(options);
+    }
+
+    deckTabs.forEach((tab) => {
+      tab.addEventListener("click", () => setDeck(tab.dataset.tab, 0, { scroll: true }));
+    });
+
+    document.querySelectorAll("[data-deck-jump]").forEach((link) => {
+      link.addEventListener("click", (event) => {
+        event.preventDefault();
+        setDeck(link.dataset.deckJump, 0, { scroll: true });
+      });
+    });
+
+    document.querySelectorAll(".reading-list a").forEach((link) => {
+      link.addEventListener("click", (event) => {
+        const target = document.querySelector(link.getAttribute("href"));
+        const section = target?.closest("[data-slide-section]");
+        if (!section) return;
+        event.preventDefault();
+        const slides = deckSlidesFor(section.dataset.tab);
+        setDeck(section.dataset.tab, slides.indexOf(section), { scroll: true });
+      });
+    });
+
+    deckPrevButton.addEventListener("click", () => {
+      if (deckState.index > 0) setDeck(deckState.tab, deckState.index - 1, { scroll: true });
+    });
+
+    deckNextButton.addEventListener("click", () => {
+      const slides = deckSlidesFor(deckState.tab);
+      if (deckState.index < slides.length - 1) setDeck(deckState.tab, deckState.index + 1, { scroll: true });
+    });
+
+    const hashTarget = location.hash ? document.querySelector(location.hash) : null;
+    const hashSection = hashTarget?.closest("[data-slide-section]");
+    if (hashSection) {
+      const slides = deckSlidesFor(hashSection.dataset.tab);
+      setDeck(hashSection.dataset.tab, slides.indexOf(hashSection));
+      setTimeout(() => document.querySelector("#study-deck").scrollIntoView({ block: "start" }), 0);
+    } else if (hashTarget?.id === "study-deck") {
+      updateDeck();
+      setTimeout(() => hashTarget.scrollIntoView({ block: "start" }), 0);
+    } else {
+      updateDeck();
+    }
 
     const currentSlider = document.querySelector("#currentSlider");
     const wireSlider = document.querySelector("#wireSlider");

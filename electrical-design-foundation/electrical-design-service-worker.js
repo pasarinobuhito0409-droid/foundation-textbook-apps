@@ -1,4 +1,4 @@
-const CACHE_NAME = "electrical-design-foundation-v3";
+const CACHE_NAME = "electrical-design-foundation-v4";
 
 const APP_SHELL = [
   "./",
