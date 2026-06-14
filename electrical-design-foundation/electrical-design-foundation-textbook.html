@@ -971,6 +971,243 @@
       line-height: 1.45;
     }
 
+    .learning-spine {
+      display: grid;
+      gap: 18px;
+    }
+
+    .story-step {
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(380px, 1.05fr);
+      gap: 22px;
+      align-items: center;
+      padding: 24px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .story-step:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .story-step.touch-step {
+      align-items: start;
+    }
+
+    .step-copy {
+      max-width: 620px;
+    }
+
+    .step-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      color: var(--blue);
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    .step-kicker::before {
+      content: attr(data-step);
+      display: inline-grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      background: var(--soft-blue);
+      color: var(--blue);
+      border: 1px solid rgba(35, 100, 170, 0.25);
+    }
+
+    .step-copy h3 {
+      margin: 0 0 10px;
+      font-size: clamp(24px, 3vw, 34px);
+      line-height: 1.22;
+    }
+
+    .step-copy p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.8;
+    }
+
+    .step-copy p + p {
+      margin-top: 10px;
+    }
+
+    .story-answer {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-left: 5px solid var(--green);
+      background: linear-gradient(90deg, rgba(36, 122, 83, 0.09), rgba(255, 255, 255, 0));
+      font-size: 18px;
+      font-weight: 900;
+      line-height: 1.65;
+    }
+
+    .foundation-stack {
+      display: grid;
+      gap: 10px;
+    }
+
+    .foundation-line {
+      display: grid;
+      grid-template-columns: 78px minmax(0, 1fr) minmax(210px, 0.86fr);
+      gap: 14px;
+      align-items: center;
+      padding: 14px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .foundation-line:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .foundation-line b {
+      color: var(--blue);
+      font-size: 18px;
+    }
+
+    .foundation-line span {
+      color: var(--ink);
+      line-height: 1.65;
+    }
+
+    .why-flow {
+      display: grid;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .why-flow div {
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr);
+      gap: 10px;
+      align-items: start;
+      padding: 10px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .why-flow strong {
+      display: inline-grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      background: var(--soft-green);
+      color: var(--green);
+      font-size: 14px;
+    }
+
+    .why-flow span {
+      line-height: 1.65;
+    }
+
+    .micro-visual {
+      position: relative;
+      min-height: 320px;
+      overflow: hidden;
+      border: 1px solid rgba(75, 99, 101, 0.22);
+      border-radius: var(--radius);
+      background:
+        radial-gradient(circle at 22% 52%, rgba(35, 100, 170, 0.2), transparent 0 24%),
+        radial-gradient(circle at 78% 44%, rgba(255, 193, 71, 0.22), transparent 0 24%),
+        linear-gradient(135deg, #f7fbfb, #eef5f2);
+    }
+
+    .micro-wire {
+      position: absolute;
+      left: 8%;
+      right: 8%;
+      top: 49%;
+      height: 36px;
+      border-radius: 999px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.2)),
+        repeating-linear-gradient(90deg, #b88f56 0 18px, #d7ad73 18px 36px);
+      box-shadow: inset 0 0 12px rgba(56, 34, 15, 0.18), 0 14px 28px rgba(20, 34, 40, 0.1);
+    }
+
+    .electron {
+      position: absolute;
+      top: calc(49% + 8px);
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: #2f7fd3;
+      box-shadow: 0 0 16px rgba(47, 127, 211, 0.72);
+      animation: electronDrift 2.2s linear infinite;
+    }
+
+    .electron:nth-child(2) {
+      animation-delay: -0.7s;
+    }
+
+    .electron:nth-child(3) {
+      animation-delay: -1.4s;
+    }
+
+    .atom-core {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 88px;
+      height: 88px;
+      transform: translate(-50%, -50%);
+      border-radius: 999px;
+      background:
+        radial-gradient(circle, #fff 0 10px, #ffd35a 11px 28px, rgba(255, 211, 90, 0.12) 29px 100%);
+      border: 1px solid rgba(185, 120, 20, 0.3);
+      box-shadow: 0 0 38px rgba(255, 193, 71, 0.44);
+      animation: heatPulse 1.7s ease-in-out infinite;
+    }
+
+    .micro-label {
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      bottom: 16px;
+      padding: 12px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.88);
+      font-weight: 900;
+      line-height: 1.55;
+      box-shadow: 0 8px 18px rgba(20, 34, 40, 0.08);
+    }
+
+    .judgment-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .judgment-strip div {
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfcfb;
+    }
+
+    .judgment-strip strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--green);
+    }
+
+    .story-complete {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+    }
+
     .lesson-layout {
       display: grid;
       grid-template-columns: minmax(0, 0.88fr) minmax(360px, 1.12fr);
@@ -2050,6 +2287,7 @@
       .topbar-inner,
       .section-head,
       .hero,
+      .story-step,
       .lesson-layout,
       .deck-shell,
       .review-workspace,
@@ -2092,8 +2330,21 @@
       .toc-tools,
       .e02-layout,
       .e02-summary,
+      .judgment-strip,
       .cae-map {
         grid-template-columns: 1fr;
+      }
+
+      .step-copy {
+        max-width: none;
+      }
+
+      .foundation-line {
+        grid-template-columns: 74px minmax(0, 1fr);
+      }
+
+      .foundation-line .definition-visual {
+        grid-column: 1 / -1;
       }
 
       .progress-meter {
@@ -2136,6 +2387,29 @@
       .morning-actions,
       .quiz-options {
         grid-template-columns: 1fr;
+      }
+
+      .story-step {
+        padding: 20px 0;
+        gap: 16px;
+      }
+
+      .step-copy h3 {
+        font-size: 24px;
+      }
+
+      .step-copy p {
+        font-size: 16px;
+        line-height: 1.75;
+      }
+
+      .foundation-line {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .micro-visual {
+        min-height: 280px;
       }
 
       .hero-actions {
@@ -2378,6 +2652,28 @@
       }
       to {
         transform: rotate(360deg);
+      }
+    }
+
+    @keyframes electronDrift {
+      from {
+        left: 9%;
+        opacity: 0;
+        transform: translateY(0) scale(0.82);
+      }
+      14% {
+        opacity: 1;
+      }
+      50% {
+        transform: translateY(-4px) scale(1);
+      }
+      86% {
+        opacity: 1;
+      }
+      to {
+        left: 87%;
+        opacity: 0;
+        transform: translateY(3px) scale(0.82);
       }
     }
   </style>
@@ -2649,145 +2945,190 @@
       <div class="section-head">
         <div>
           <h2 id="lesson-title">E01 電気って何が動いてるの？</h2>
-          <p>今日の結論は、電気は「見えない流れ」だけど、条件を見ればかなり予想できる、です。</p>
+          <p>今日の結論は、電気は「押す力で動く見えない流れ」です。現場、理由、ミクロ、体感の順に見ます。</p>
         </div>
       </div>
 
-      <div class="lesson-layout">
-        <article class="explain-panel">
-          <h3>最初の言い方</h3>
-          <p>
-            電気は、線の中を小さな粒が押されて動くことで、機械へ力を渡します。
-            ただし設計者は粒そのものを見るのではなく、押す力と流れる量を見ます。
-          </p>
+      <div class="learning-spine">
+        <article class="story-step">
+          <div class="step-copy">
+            <span class="step-kicker" data-step="1">基礎</span>
+            <h3>まずは3語だけでつかむ</h3>
+            <p>電気設計では、最初から全部を覚えません。</p>
+            <p>まず「押す力」「流れる量」「通りにくさ」だけを見ます。</p>
+            <div class="story-answer">電気は、押されて流れ、通りにくい所で熱になりやすい。</div>
+          </div>
 
-          <div class="definition-list">
-            <div class="definition">
+          <div class="foundation-stack" aria-label="電気の基礎3語">
+            <div class="foundation-line">
               <b>電圧</b>
-              <span>
-                電気を押す力。水道でいう水圧に近い。
-                <span class="definition-visual real-micro voltage-micro" aria-hidden="true">
-                  <span class="push-gauge"></span>
-                  <span class="visual-note">押す力が強いほど、先へ送ろうとする力が大きい。</span>
-                </span>
+              <span>電気を押す力。水道でいう水圧に近い。</span>
+              <span class="definition-visual real-micro voltage-micro" aria-hidden="true">
+                <span class="push-gauge"></span>
+                <span class="visual-note">押す力が強いほど、先へ送ろうとする力が大きい。</span>
               </span>
             </div>
-            <div class="definition">
+            <div class="foundation-line">
               <b>電流</b>
-              <span>
-                流れている電気の量。多すぎると熱が出やすい。
-                <span class="definition-visual real-micro current-micro" aria-hidden="true">
-                  <span class="flow-gauge"></span>
-                  <span class="visual-note">白い筋が速く流れるほど、量が多いイメージ。</span>
-                </span>
+              <span>流れている電気の量。多すぎると熱が出やすい。</span>
+              <span class="definition-visual real-micro current-micro" aria-hidden="true">
+                <span class="flow-gauge"></span>
+                <span class="visual-note">白い筋が速く流れるほど、量が多いイメージ。</span>
               </span>
             </div>
-            <div class="definition">
+            <div class="foundation-line">
               <b>抵抗</b>
-              <span>
-                流れにくさ。線や部品の中で熱に変わることがある。
-                <span class="definition-visual real-micro resistance-micro" aria-hidden="true">
-                  <span class="resist-gauge"></span>
-                  <span class="visual-note">流れにくい場所は、力が熱へ逃げやすい。</span>
-                </span>
+              <span>流れにくさ。線や部品の中で熱に変わることがある。</span>
+              <span class="definition-visual real-micro resistance-micro" aria-hidden="true">
+                <span class="resist-gauge"></span>
+                <span class="visual-note">流れにくい場所は、力が熱へ逃げやすい。</span>
               </span>
             </div>
           </div>
+        </article>
 
-          <div class="done-line">
-            <button class="pill-button primary" type="button" id="completeButton">E01を完了にする</button>
-            <span class="status-text" id="completeStatus">未完了</span>
+        <article class="story-step">
+          <div class="step-copy">
+            <span class="step-kicker" data-step="2">なぜ？</span>
+            <h3>なぜ制御盤を見ると分かるのか</h3>
+            <p>電気は見えません。</p>
+            <p>でも、電源、配線、センサー、モーターの順に見ると、どこで止まったかを推理できます。</p>
+            <div class="why-flow">
+              <div><strong>1</strong><span>電源が押す。ここが入口。</span></div>
+              <div><strong>2</strong><span>配線が通す。細い、長い、緩い所は弱点。</span></div>
+              <div><strong>3</strong><span>センサーが知らせる。信号が来ないと次へ進めない。</span></div>
+              <div><strong>4</strong><span>モーターが動く。最後に現象として見える。</span></div>
+            </div>
+          </div>
+
+          <div class="stage-panel">
+            <h3>制御盤で見る順番</h3>
+            <p>下の4つを押すと、見る場所が切り替わります。</p>
+
+            <div class="control-diagram" aria-label="制御盤で見る順番">
+              <button class="stage-button" type="button" data-stage="power" aria-pressed="true">
+                <strong>1. 電源</strong>
+                <span>どこから来るか</span>
+              </button>
+              <button class="stage-button" type="button" data-stage="wire" aria-pressed="false">
+                <strong>2. 配線</strong>
+                <span>どう通るか</span>
+              </button>
+              <button class="stage-button" type="button" data-stage="sensor" aria-pressed="false">
+                <strong>3. センサー</strong>
+                <span>何を知らせるか</span>
+              </button>
+              <button class="stage-button" type="button" data-stage="motor" aria-pressed="false">
+                <strong>4. モーター</strong>
+                <span>何を動かすか</span>
+              </button>
+            </div>
+
+            <div class="stage-detail" id="stageDetail" aria-live="polite"></div>
           </div>
         </article>
 
-        <article class="stage-panel">
-          <h3>制御盤で見る順番</h3>
-          <p>下の4つを押すと、見る場所が切り替わります。</p>
-
-          <div class="control-diagram" aria-label="制御盤で見る順番">
-            <button class="stage-button" type="button" data-stage="power" aria-pressed="true">
-              <strong>1. 電源</strong>
-              <span>どこから来るか</span>
-            </button>
-            <button class="stage-button" type="button" data-stage="wire" aria-pressed="false">
-              <strong>2. 配線</strong>
-              <span>どう通るか</span>
-            </button>
-            <button class="stage-button" type="button" data-stage="sensor" aria-pressed="false">
-              <strong>3. センサー</strong>
-              <span>何を知らせるか</span>
-            </button>
-            <button class="stage-button" type="button" data-stage="motor" aria-pressed="false">
-              <strong>4. モーター</strong>
-              <span>何を動かすか</span>
-            </button>
+        <article class="story-step">
+          <div class="step-copy">
+            <span class="step-kicker" data-step="3">ミクロ</span>
+            <h3>線の中では何が起きているのか</h3>
+            <p>金属の中には、動きやすい小さな電気の粒があります。</p>
+            <p>電圧がかかると、その粒が少しずつ同じ向きへ流れます。</p>
+            <p>流れにくい場所では、ぶつかりが増えて熱になりやすくなります。</p>
           </div>
 
-          <div class="stage-detail" id="stageDetail" aria-live="polite"></div>
-        </article>
-      </div>
-
-      <div class="touch-lab" id="touch-lab">
-        <article class="lab-panel">
-          <h3>触って見る：電流と熱</h3>
-          <p>つまみを動かすと、流れ・熱・危険度が変わります。</p>
-
-          <div class="slider-row">
-            <label class="slider-label" for="currentSlider">
-              <span>電流</span>
-              <span id="currentLabel">4A</span>
-            </label>
-            <input id="currentSlider" type="range" min="1" max="12" value="4">
-          </div>
-
-          <div class="slider-row">
-            <label class="slider-label" for="wireSlider">
-              <span>線の太さ</span>
-              <span id="wireLabel">6</span>
-            </label>
-            <input id="wireSlider" type="range" min="2" max="10" value="6">
-          </div>
-
-          <div class="toggle-row">
-            <button class="toggle-button" type="button" id="switchButton" aria-pressed="true">スイッチ ON</button>
-            <button class="toggle-button" type="button" id="sensorButton" aria-pressed="true">センサー 検出</button>
-          </div>
-
-          <div class="lab-readout" aria-live="polite">
-            <div class="readout-card">
-              <strong>流れ</strong>
-              <span id="flowReadout">ふつう</span>
-            </div>
-            <div class="readout-card">
-              <strong>熱</strong>
-              <span id="heatReadout">低い</span>
-            </div>
-            <div class="readout-card">
-              <strong>判断</strong>
-              <span id="judgeReadout">OK</span>
-            </div>
+          <div class="micro-visual" aria-label="導線の中で電子が流れて熱が出るイメージ">
+            <div class="micro-wire" aria-hidden="true"></div>
+            <span class="electron" aria-hidden="true"></span>
+            <span class="electron" aria-hidden="true"></span>
+            <span class="electron" aria-hidden="true"></span>
+            <span class="atom-core" aria-hidden="true"></span>
+            <div class="micro-label">ミクロでは、粒が流れる。ぶつかりが多い場所ほど熱へ変わる。</div>
           </div>
         </article>
 
-        <article class="lab-panel">
-          <h3>動く画像：回路の流れ</h3>
-          <p>ONなら流れる。センサーが入るとモーターまで進みます。</p>
+        <article class="story-step touch-step" id="touch-lab">
+          <div class="step-copy">
+            <span class="step-kicker" data-step="4">体感</span>
+            <h3>つまみで電流と熱を触る</h3>
+            <p>電流を増やす、線を細くする。</p>
+            <p>その時に、流れ、熱、判断がどう変わるかを見ます。</p>
 
-          <div class="circuit-visual" id="circuitVisual" aria-label="電源、スイッチ、ランプ、モーターへ流れる電気の動く説明図">
-            <div class="lamp-glow" aria-hidden="true"></div>
-            <div class="wire-heat" aria-hidden="true"></div>
-            <div class="circuit-line line-a" aria-hidden="true"></div>
-            <div class="circuit-line line-b" aria-hidden="true"></div>
-            <div class="circuit-line line-c" aria-hidden="true"></div>
-            <div class="circuit-line line-d" aria-hidden="true"></div>
-            <div class="circuit-part part-power">電源<br>24V</div>
-            <div class="circuit-part part-switch">SW</div>
-            <div class="circuit-part part-load">ランプ</div>
-            <div class="circuit-part part-motor">M</div>
-            <div class="motor-blade" aria-hidden="true"></div>
+            <div class="slider-row">
+              <label class="slider-label" for="currentSlider">
+                <span>電流</span>
+                <span id="currentLabel">4A</span>
+              </label>
+              <input id="currentSlider" type="range" min="1" max="12" value="4">
+            </div>
+
+            <div class="slider-row">
+              <label class="slider-label" for="wireSlider">
+                <span>線の太さ</span>
+                <span id="wireLabel">6</span>
+              </label>
+              <input id="wireSlider" type="range" min="2" max="10" value="6">
+            </div>
+
+            <div class="toggle-row">
+              <button class="toggle-button" type="button" id="switchButton" aria-pressed="true">スイッチ ON</button>
+              <button class="toggle-button" type="button" id="sensorButton" aria-pressed="true">センサー 検出</button>
+            </div>
+
+            <div class="lab-readout" aria-live="polite">
+              <div class="readout-card">
+                <strong>流れ</strong>
+                <span id="flowReadout">ふつう</span>
+              </div>
+              <div class="readout-card">
+                <strong>熱</strong>
+                <span id="heatReadout">低い</span>
+              </div>
+              <div class="readout-card">
+                <strong>判断</strong>
+                <span id="judgeReadout">OK</span>
+              </div>
+            </div>
           </div>
 
-          <div class="lab-state" id="labState">電気が流れ、ランプとモーターまで届いています。</div>
+          <div>
+            <div class="circuit-visual" id="circuitVisual" aria-label="電源、スイッチ、ランプ、モーターへ流れる電気の動く説明図">
+              <div class="lamp-glow" aria-hidden="true"></div>
+              <div class="wire-heat" aria-hidden="true"></div>
+              <div class="circuit-line line-a" aria-hidden="true"></div>
+              <div class="circuit-line line-b" aria-hidden="true"></div>
+              <div class="circuit-line line-c" aria-hidden="true"></div>
+              <div class="circuit-line line-d" aria-hidden="true"></div>
+              <div class="circuit-part part-power">電源<br>24V</div>
+              <div class="circuit-part part-switch">SW</div>
+              <div class="circuit-part part-load">ランプ</div>
+              <div class="circuit-part part-motor">M</div>
+              <div class="motor-blade" aria-hidden="true"></div>
+            </div>
+
+            <div class="lab-state" id="labState">電気が流れ、ランプとモーターまで届いています。</div>
+          </div>
+        </article>
+
+        <article class="story-step">
+          <div class="step-copy">
+            <span class="step-kicker" data-step="5">判断</span>
+            <h3>設計者は何を見るのか</h3>
+            <p>最後は暗記ではなく、判断へつなげます。</p>
+            <p>動くか、熱くないか、止まった時にどこを見るか。</p>
+          </div>
+
+          <div>
+            <div class="judgment-strip">
+              <div><strong>動くか</strong><span>電源と信号が最後まで届いているか。</span></div>
+              <div><strong>熱くないか</strong><span>電流に対して線や部品に余裕があるか。</span></div>
+              <div><strong>探せるか</strong><span>止まった時に入口から順番に追えるか。</span></div>
+            </div>
+            <div class="story-complete">
+              <button class="pill-button primary" type="button" id="completeButton">E01を完了にする</button>
+              <span class="status-text" id="completeStatus">未完了</span>
+            </div>
+          </div>
         </article>
       </div>
     </section>
