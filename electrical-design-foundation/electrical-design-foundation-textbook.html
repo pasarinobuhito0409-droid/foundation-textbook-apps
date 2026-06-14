@@ -833,6 +833,8 @@
     }
 
     .definition-visual {
+      position: relative;
+      overflow: hidden;
       min-height: 58px;
       display: grid;
       grid-template-columns: 1fr;
@@ -842,16 +844,88 @@
       border: 1px solid rgba(75, 99, 101, 0.18);
       border-radius: var(--radius);
       background: #fff;
+      isolation: isolate;
+    }
+
+    .definition-visual.real-micro {
+      min-height: 96px;
+      background:
+        linear-gradient(90deg, rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.42)),
+        url("electrical-design-e01-control-panel.png");
+      background-size: 310% auto;
+      background-position: var(--micro-x, 50%) var(--micro-y, 50%);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.48);
+    }
+
+    .definition-visual.real-micro::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(circle at var(--pulse-x, 32%) 46%, rgba(255, 193, 71, 0.44), transparent 0 28%),
+        linear-gradient(180deg, transparent, rgba(15, 31, 38, 0.18));
+      mix-blend-mode: screen;
+      animation: signalPulse 1.35s ease-in-out infinite;
+    }
+
+    .definition-visual.real-micro::after {
+      content: "";
+      position: absolute;
+      left: 11%;
+      right: 13%;
+      top: 34px;
+      z-index: 1;
+      height: 8px;
+      border-radius: 999px;
+      background:
+        linear-gradient(90deg, transparent 0 18%, rgba(255, 255, 255, 0.96) 18% 30%, transparent 30% 100%),
+        var(--trace-color, #247a53);
+      background-size: var(--micro-flow-size, 42px) 100%, auto;
+      box-shadow: 0 0 14px var(--trace-glow, rgba(36, 122, 83, 0.5));
+      animation: currentMove var(--micro-flow-speed, 1s) linear infinite;
+    }
+
+    .voltage-micro {
+      --micro-x: 18%;
+      --micro-y: 31%;
+      --pulse-x: 25%;
+      --trace-color: #2f7fd3;
+      --trace-glow: rgba(47, 127, 211, 0.52);
+      --micro-flow-size: 62px;
+      --micro-flow-speed: 1.25s;
+    }
+
+    .current-micro {
+      --micro-x: 48%;
+      --micro-y: 51%;
+      --pulse-x: 52%;
+      --trace-color: #2a9a68;
+      --trace-glow: rgba(42, 154, 104, 0.58);
+      --micro-flow-size: 32px;
+      --micro-flow-speed: 0.68s;
+    }
+
+    .resistance-micro {
+      --micro-x: 69%;
+      --micro-y: 44%;
+      --pulse-x: 58%;
+      --trace-color: #d28d42;
+      --trace-glow: rgba(195, 72, 54, 0.58);
+      --micro-flow-size: 56px;
+      --micro-flow-speed: 1.2s;
     }
 
     .push-gauge,
     .flow-gauge,
     .resist-gauge {
       position: relative;
+      z-index: 2;
       height: 16px;
       overflow: hidden;
       border-radius: 999px;
-      background: #e1e8e6;
+      background: rgba(227, 235, 234, 0.84);
+      box-shadow: 0 0 14px rgba(255, 255, 255, 0.56);
     }
 
     .push-gauge::before,
@@ -884,6 +958,14 @@
     }
 
     .visual-note {
+      position: relative;
+      z-index: 2;
+      align-self: end;
+      width: fit-content;
+      max-width: 100%;
+      padding: 4px 7px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.86);
       color: var(--muted);
       font-size: 12px;
       line-height: 1.45;
@@ -1234,15 +1316,46 @@
       border: 1px solid rgba(75, 99, 101, 0.22);
       border-radius: var(--radius);
       background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(244, 248, 249, 0.96)),
-        repeating-linear-gradient(90deg, rgba(27, 58, 66, 0.035) 0 1px, transparent 1px 20px);
+        linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(9, 27, 32, 0.22)),
+        url("electrical-design-e01-control-panel.png");
+      background-size: cover;
+      background-position: center;
+      isolation: isolate;
+    }
+
+    .e02-visual::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(circle at 46% 44%, rgba(255, 190, 72, var(--e02-heat-opacity, 0.12)), transparent 0 20%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(13, 29, 34, 0.14));
+      pointer-events: none;
+    }
+
+    .e02-visual::after {
+      content: "リアル盤で見る：押す力 → 流れ → 熱";
+      position: absolute;
+      left: 18px;
+      top: 14px;
+      z-index: 4;
+      max-width: calc(100% - 36px);
+      padding: 7px 10px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.88);
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 900;
+      box-shadow: 0 8px 18px rgba(20, 34, 40, 0.1);
     }
 
     .e02-wire {
       position: absolute;
-      left: 12%;
-      right: 12%;
-      top: 47%;
+      left: 22%;
+      right: 21%;
+      top: 43%;
+      z-index: 2;
       height: var(--e02-wire-height, 12px);
       border-radius: 999px;
       background:
@@ -1251,51 +1364,59 @@
       background-size: var(--e02-flow-size, 56px) 100%, auto;
       animation: currentMove var(--e02-flow-speed, 1.2s) linear infinite;
       opacity: var(--e02-wire-opacity, 0.95);
+      filter: drop-shadow(0 0 12px var(--e02-wire-color, #247a53));
+      mix-blend-mode: screen;
     }
 
     .e02-part {
       position: absolute;
+      z-index: 3;
       display: grid;
       place-items: center;
-      min-width: 88px;
-      min-height: 64px;
-      padding: 8px;
-      border-radius: var(--radius);
-      color: #fff;
+      min-width: 76px;
+      min-height: 44px;
+      padding: 7px 9px;
+      border: 1px solid rgba(75, 99, 101, 0.2);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--ink);
       font-weight: 900;
       text-align: center;
-      box-shadow: 0 10px 20px rgba(20, 34, 40, 0.16);
+      box-shadow: 0 10px 20px rgba(20, 34, 40, 0.14);
+      backdrop-filter: blur(5px);
     }
 
     .e02-battery {
-      left: 8%;
-      top: 38%;
-      background: var(--blue);
+      left: 9%;
+      top: 19%;
+      border-left: 5px solid var(--blue);
     }
 
     .e02-resistor {
-      left: 42%;
-      top: 37%;
-      background: var(--yellow);
+      left: 44%;
+      top: 25%;
+      border-left: 5px solid var(--yellow);
     }
 
     .e02-lamp {
-      right: 8%;
-      top: 34%;
-      width: 92px;
-      height: 92px;
-      border-radius: 999px;
-      background: radial-gradient(circle at center, rgba(255,255,255,0.96) 0 16px, #ffd35a 17px 42px, #b97814 43px);
+      right: 5%;
+      top: 57%;
+      width: auto;
+      height: auto;
+      border-radius: 10px;
+      border-left: 5px solid var(--green);
+      background: rgba(255, 255, 255, 0.9);
       box-shadow:
         0 0 var(--e02-lamp-shadow, 18px) rgba(255, 197, 63, var(--e02-brightness, 0.35)),
         0 12px 24px rgba(20, 34, 40, 0.18);
-      color: #4f3a00;
+      color: var(--ink);
     }
 
     .e02-heat {
       position: absolute;
-      left: 40%;
-      top: 58%;
+      z-index: 2;
+      left: 49%;
+      top: 47%;
       width: 120px;
       height: 74px;
       opacity: var(--e02-heat-opacity, 0.14);
@@ -1308,6 +1429,7 @@
 
     .breaker-badge {
       position: absolute;
+      z-index: 4;
       left: 50%;
       bottom: 22px;
       transform: translateX(-50%);
@@ -1375,62 +1497,97 @@
     }
 
     .circuit-visual {
-      min-height: 270px;
+      min-height: 340px;
       position: relative;
       overflow: hidden;
       border: 1px solid rgba(75, 99, 101, 0.22);
       border-radius: var(--radius);
       background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(244, 248, 249, 0.96)),
-        repeating-linear-gradient(0deg, rgba(27, 58, 66, 0.035) 0 1px, transparent 1px 18px);
+        linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(10, 27, 32, 0.2)),
+        url("electrical-design-e01-control-panel.png");
+      background-size: cover;
+      background-position: center;
+      isolation: isolate;
+    }
+
+    .circuit-visual::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(circle at 70% 36%, rgba(255, 217, 79, var(--lamp-alpha, 0.2)), transparent 0 20%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(11, 28, 32, 0.16));
+      pointer-events: none;
+    }
+
+    .circuit-visual::after {
+      content: "リアル盤で見る：電源 → SW → ランプ → モーター";
+      position: absolute;
+      left: 18px;
+      top: 14px;
+      z-index: 5;
+      max-width: calc(100% - 36px);
+      padding: 7px 10px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.88);
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 900;
+      box-shadow: 0 8px 18px rgba(20, 34, 40, 0.1);
     }
 
     .circuit-part {
       position: absolute;
+      z-index: 4;
       display: grid;
       place-items: center;
-      min-width: 82px;
-      min-height: 54px;
-      padding: 8px;
-      border-radius: var(--radius);
-      color: #fff;
+      min-width: 72px;
+      min-height: 42px;
+      padding: 7px 9px;
+      border: 1px solid rgba(75, 99, 101, 0.2);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--ink);
       font-weight: 900;
       text-align: center;
       line-height: 1.25;
       box-shadow: 0 8px 18px rgba(20, 34, 40, 0.12);
+      backdrop-filter: blur(5px);
     }
 
     .part-power {
-      left: 26px;
-      top: 40px;
-      background: var(--blue);
+      left: 8%;
+      top: 14%;
+      border-left: 5px solid var(--blue);
     }
 
     .part-switch {
-      left: 50%;
-      top: 40px;
+      left: 49%;
+      top: 17%;
       transform: translateX(-50%);
-      background: var(--yellow);
+      border-left: 5px solid var(--yellow);
     }
 
     .part-load {
-      right: 26px;
-      top: 40px;
-      background: var(--green);
+      right: 13%;
+      top: 20%;
+      border-left: 5px solid var(--green);
     }
 
     .part-motor {
-      right: 34px;
-      bottom: 40px;
-      width: 80px;
-      min-width: 80px;
-      min-height: 80px;
-      border-radius: 999px;
-      background: var(--violet);
+      right: 5%;
+      bottom: 16%;
+      width: auto;
+      min-width: 62px;
+      min-height: 42px;
+      border-radius: 10px;
+      border-left: 5px solid var(--violet);
     }
 
     .circuit-line {
       position: absolute;
+      z-index: 2;
       height: var(--wire-height, 12px);
       border-radius: 999px;
       background:
@@ -1439,39 +1596,45 @@
       background-size: var(--flow-size, 48px) 100%, auto;
       animation: currentMove var(--flow-speed, 1.3s) linear infinite;
       opacity: var(--wire-opacity, 0.95);
+      filter: drop-shadow(0 0 12px var(--wire-color, #247a53));
+      mix-blend-mode: screen;
     }
 
     .line-a {
-      left: 106px;
-      right: calc(50% + 48px);
-      top: 64px;
+      left: 20%;
+      right: auto;
+      top: 34%;
+      width: 38%;
     }
 
     .line-b {
-      left: calc(50% + 48px);
-      right: 108px;
-      top: 64px;
+      left: 50%;
+      right: auto;
+      top: 35%;
+      width: 25%;
     }
 
     .line-c {
-      right: 72px;
-      top: 104px;
-      width: 12px;
-      height: 96px;
-      background: var(--wire-color, #9fb2b5);
-      animation: none;
+      left: 72%;
+      right: auto;
+      top: 50%;
+      width: 18%;
+      transform: rotate(18deg);
+      transform-origin: left center;
     }
 
     .line-d {
-      right: 72px;
-      left: 110px;
-      bottom: 76px;
+      left: 24%;
+      right: auto;
+      bottom: 27%;
+      width: 43%;
     }
 
     .lamp-glow {
       position: absolute;
-      right: 46px;
-      top: 24px;
+      z-index: 1;
+      right: 17%;
+      top: 18%;
       width: var(--lamp-size, 68px);
       height: var(--lamp-size, 68px);
       border-radius: 999px;
@@ -1483,8 +1646,9 @@
 
     .motor-blade {
       position: absolute;
-      right: 58px;
-      bottom: 64px;
+      z-index: 5;
+      right: 12%;
+      bottom: 21%;
       width: 32px;
       height: 32px;
       border-radius: 999px;
@@ -1497,8 +1661,9 @@
 
     .wire-heat {
       position: absolute;
-      left: 42%;
-      bottom: 100px;
+      z-index: 3;
+      left: 53%;
+      bottom: 39%;
       width: 110px;
       height: 28px;
       transform: translateX(-50%);
@@ -2019,6 +2184,92 @@
         aspect-ratio: 4 / 3;
         max-height: 220px;
       }
+
+      .definition-visual.real-micro {
+        min-height: 88px;
+        background-size: 360% auto;
+      }
+
+      .circuit-visual,
+      .e02-visual {
+        min-height: 300px;
+      }
+
+      .circuit-visual::after,
+      .e02-visual::after {
+        left: 10px;
+        top: 10px;
+        max-width: calc(100% - 20px);
+        font-size: 11px;
+      }
+
+      .circuit-part,
+      .e02-part,
+      .breaker-badge {
+        min-width: auto;
+        max-width: 120px;
+        padding: 6px 7px;
+        font-size: 12px;
+      }
+
+      .part-power {
+        left: 8px;
+        top: 17%;
+      }
+
+      .part-switch {
+        left: 52%;
+        top: 18%;
+      }
+
+      .part-load {
+        right: 8px;
+        top: 23%;
+      }
+
+      .part-motor {
+        right: 8px;
+        bottom: 17%;
+      }
+
+      .lamp-glow {
+        right: 14%;
+        top: 19%;
+      }
+
+      .motor-blade {
+        right: 14%;
+        bottom: 22%;
+      }
+
+      .e02-wire {
+        left: 18%;
+        right: 13%;
+        top: 45%;
+      }
+
+      .e02-battery {
+        left: 8px;
+        top: 24%;
+      }
+
+      .e02-resistor {
+        left: 47%;
+        top: 28%;
+        transform: translateX(-50%);
+      }
+
+      .e02-lamp {
+        right: 8px;
+        top: 56%;
+        max-width: 76px;
+      }
+
+      .breaker-badge {
+        bottom: 10px;
+        width: max-content;
+        max-width: calc(100% - 20px);
+      }
     }
 
     @keyframes currentMove {
@@ -2415,7 +2666,7 @@
               <b>電圧</b>
               <span>
                 電気を押す力。水道でいう水圧に近い。
-                <span class="definition-visual" aria-hidden="true">
+                <span class="definition-visual real-micro voltage-micro" aria-hidden="true">
                   <span class="push-gauge"></span>
                   <span class="visual-note">押す力が強いほど、先へ送ろうとする力が大きい。</span>
                 </span>
@@ -2425,7 +2676,7 @@
               <b>電流</b>
               <span>
                 流れている電気の量。多すぎると熱が出やすい。
-                <span class="definition-visual" aria-hidden="true">
+                <span class="definition-visual real-micro current-micro" aria-hidden="true">
                   <span class="flow-gauge"></span>
                   <span class="visual-note">白い筋が速く流れるほど、量が多いイメージ。</span>
                 </span>
@@ -2435,7 +2686,7 @@
               <b>抵抗</b>
               <span>
                 流れにくさ。線や部品の中で熱に変わることがある。
-                <span class="definition-visual" aria-hidden="true">
+                <span class="definition-visual real-micro resistance-micro" aria-hidden="true">
                   <span class="resist-gauge"></span>
                   <span class="visual-note">流れにくい場所は、力が熱へ逃げやすい。</span>
                 </span>
