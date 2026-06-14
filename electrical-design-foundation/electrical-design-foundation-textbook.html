@@ -1024,6 +1024,176 @@
       animation: ringScan 1.5s ease-in-out infinite;
     }
 
+    .real-stage-visual {
+      position: relative;
+      min-height: 190px;
+      margin: 0 0 14px;
+      overflow: hidden;
+      border: 1px solid rgba(75, 99, 101, 0.22);
+      border-radius: var(--radius);
+      background: #10191c;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+    }
+
+    .real-stage-visual img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-height: 190px;
+      object-fit: cover;
+      opacity: 0.82;
+      filter: saturate(1.05) contrast(1.02);
+    }
+
+    .real-stage-visual::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at var(--focus-x, 24%) var(--focus-y, 40%), rgba(255, 255, 255, 0.26), transparent 18%),
+        linear-gradient(90deg, rgba(11, 19, 22, 0.18), transparent 34%, rgba(11, 19, 22, 0.2));
+    }
+
+    .real-stage-visual .real-flow {
+      position: absolute;
+      left: var(--flow-left, 18%);
+      top: var(--flow-top, 52%);
+      width: var(--flow-width, 58%);
+      height: 8px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, transparent, rgba(44, 132, 255, 0.2), rgba(255, 226, 90, 0.95), rgba(40, 216, 109, 0.86), transparent);
+      background-size: 220% 100%;
+      box-shadow: 0 0 14px rgba(255, 226, 90, 0.78), 0 0 26px rgba(40, 216, 109, 0.32);
+      animation: realFlow 1.3s linear infinite;
+      z-index: 2;
+    }
+
+    .real-stage-visual .real-dot {
+      position: absolute;
+      left: var(--dot-left, 18%);
+      top: var(--dot-top, 52%);
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      background: #ffe25a;
+      box-shadow: 0 0 0 8px rgba(255, 226, 90, 0.22), 0 0 22px rgba(255, 226, 90, 0.92);
+      animation: realPulse 1.25s ease-in-out infinite;
+      z-index: 3;
+    }
+
+    .real-stage-visual .real-label {
+      position: absolute;
+      z-index: 4;
+      left: var(--label-left, 18%);
+      top: var(--label-top, 16%);
+      padding: 5px 8px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.92);
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 900;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+    }
+
+    .real-stage-visual .real-hot {
+      position: absolute;
+      left: 42%;
+      top: 38%;
+      z-index: 3;
+      width: 72px;
+      height: 72px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(255, 118, 70, 0.74), rgba(255, 118, 70, 0.08) 62%, transparent 70%);
+      filter: blur(1px);
+      opacity: 0;
+      animation: heatBreath 1.2s ease-in-out infinite;
+    }
+
+    .real-stage-visual .real-scan {
+      position: absolute;
+      left: 51%;
+      top: 66%;
+      z-index: 3;
+      width: 86px;
+      height: 42px;
+      border: 3px solid rgba(91, 221, 148, 0.92);
+      border-radius: 999px;
+      box-shadow: 0 0 18px rgba(91, 221, 148, 0.54);
+      opacity: 0;
+      animation: sensorSweep 1.45s ease-in-out infinite;
+    }
+
+    .real-stage-visual .real-rotor {
+      position: absolute;
+      right: 11%;
+      bottom: 18%;
+      z-index: 3;
+      width: 54px;
+      height: 54px;
+      border: 5px solid rgba(255, 255, 255, 0.86);
+      border-top-color: rgba(40, 216, 109, 0.98);
+      border-right-color: rgba(40, 216, 109, 0.98);
+      border-radius: 999px;
+      box-shadow: 0 0 18px rgba(40, 216, 109, 0.54);
+      opacity: 0;
+      animation: motorSpin 0.78s linear infinite;
+    }
+
+    .real-stage-visual.wire .real-hot,
+    .real-stage-visual.sensor .real-scan,
+    .real-stage-visual.motor .real-rotor {
+      opacity: 1;
+    }
+
+    .real-stage-visual.power {
+      --focus-x: 24%;
+      --focus-y: 36%;
+      --flow-left: 22%;
+      --flow-top: 48%;
+      --flow-width: 46%;
+      --dot-left: 22%;
+      --dot-top: 44%;
+      --label-left: 19%;
+      --label-top: 13%;
+    }
+
+    .real-stage-visual.wire {
+      --focus-x: 43%;
+      --focus-y: 49%;
+      --flow-left: 26%;
+      --flow-top: 47%;
+      --flow-width: 58%;
+      --dot-left: 43%;
+      --dot-top: 43%;
+      --label-left: 39%;
+      --label-top: 20%;
+    }
+
+    .real-stage-visual.sensor {
+      --focus-x: 52%;
+      --focus-y: 72%;
+      --flow-left: 40%;
+      --flow-top: 66%;
+      --flow-width: 28%;
+      --dot-left: 51%;
+      --dot-top: 62%;
+      --label-left: 49%;
+      --label-top: 55%;
+    }
+
+    .real-stage-visual.motor {
+      --focus-x: 84%;
+      --focus-y: 58%;
+      --flow-left: 61%;
+      --flow-top: 53%;
+      --flow-width: 25%;
+      --dot-left: 75%;
+      --dot-top: 49%;
+      --label-left: 75%;
+      --label-top: 34%;
+    }
+
     .touch-lab {
       display: grid;
       grid-template-columns: minmax(0, 0.92fr) minmax(360px, 1.08fr);
@@ -1906,6 +2076,51 @@
       }
     }
 
+    @keyframes realFlow {
+      from {
+        background-position: 120% 0;
+      }
+      to {
+        background-position: -120% 0;
+      }
+    }
+
+    @keyframes realPulse {
+      0%,
+      100% {
+        transform: scale(0.9);
+        opacity: 0.72;
+      }
+      50% {
+        transform: scale(1.14);
+        opacity: 1;
+      }
+    }
+
+    @keyframes heatBreath {
+      0%,
+      100% {
+        transform: translateY(4px) scale(0.88);
+        opacity: 0.28;
+      }
+      50% {
+        transform: translateY(-4px) scale(1.14);
+        opacity: 0.76;
+      }
+    }
+
+    @keyframes sensorSweep {
+      0%,
+      100% {
+        transform: translateX(-16px) scale(0.82);
+        opacity: 0.36;
+      }
+      50% {
+        transform: translateX(12px) scale(1.05);
+        opacity: 1;
+      }
+    }
+
     @keyframes motorSpin {
       from {
         transform: rotate(0deg);
@@ -2577,28 +2792,42 @@
   </main>
 
   <script>
+    function realStageVisual(kind, label) {
+      return `
+        <figure class="real-stage-visual ${kind}" aria-label="制御盤の実物画像上で${label}を見る">
+          <img src="electrical-design-e01-control-panel.png" alt="">
+          <span class="real-flow"></span>
+          <span class="real-dot"></span>
+          <span class="real-hot"></span>
+          <span class="real-scan"></span>
+          <span class="real-rotor"></span>
+          <span class="real-label">${label}</span>
+        </figure>
+      `;
+    }
+
     const stageText = {
       power: {
         title: "1. 電源を見る",
-        visual: `<div class="stage-mini-visual" aria-hidden="true"><div class="source-block">24V</div><div class="visual-wire"></div><div class="load-block">負荷</div><div class="signal-dot"></div></div>`,
+        visual: realStageVisual("power", "電源の入口"),
         body: "電源は電気の入口です。何Vで、どれくらい流せるかを見ます。",
         check: "判断: そもそも機械を動かすだけの力と量があるか。"
       },
       wire: {
         title: "2. 配線を見る",
-        visual: `<div class="stage-mini-visual" aria-hidden="true"><div class="source-block">線</div><div class="visual-wire"></div><div class="load-block">負荷</div><div class="heat-waves"></div></div>`,
+        visual: realStageVisual("wire", "配線と熱"),
         body: "配線は電気の通り道です。細すぎる線に大きな電流を流すと熱くなります。",
         check: "判断: 線の太さ、長さ、通し方に無理がないか。"
       },
       sensor: {
         title: "3. センサーを見る",
-        visual: `<div class="stage-mini-visual" aria-hidden="true"><div class="source-block">検知</div><div class="visual-wire"></div><div class="load-block">信号</div><div class="sensor-eye"></div></div>`,
+        visual: realStageVisual("sensor", "センサー信号"),
         body: "センサーは機械の状態を知らせる部品です。信号が来ないと、次の動きに進めません。",
         check: "判断: 何を検知して、どこへ信号を渡すか。"
       },
       motor: {
         title: "4. モーターを見る",
-        visual: `<div class="stage-mini-visual" aria-hidden="true"><div class="source-block">電気</div><div class="visual-wire"></div><div class="load-block">回転</div><div class="check-ring"></div></div>`,
+        visual: realStageVisual("motor", "モーター動作"),
         body: "モーターは電気を動きに変える部品です。動く時に大きな電流を必要とします。",
         check: "判断: 動かす負荷に対して、電源と配線に余裕があるか。"
       }
