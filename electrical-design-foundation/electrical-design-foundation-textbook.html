@@ -370,6 +370,16 @@
       background: var(--soft-blue);
     }
 
+    a.chapter-row {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    a.chapter-row:hover {
+      border-color: rgba(35, 100, 170, 0.42);
+      background: var(--soft-blue);
+    }
+
     .step-num,
     .chapter-code {
       display: grid;
@@ -396,6 +406,11 @@
       color: #fff;
     }
 
+    .chapter-row.next .chapter-code {
+      background: var(--soft-yellow);
+      color: var(--yellow);
+    }
+
     .reading-list strong,
     .chapter-row strong {
       display: block;
@@ -409,6 +424,69 @@
       color: var(--muted);
       font-size: 13px;
       line-height: 1.55;
+    }
+
+    .chapter-state {
+      display: inline-grid;
+      place-items: center;
+      min-height: 24px;
+      margin-top: 8px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: #e7eeec;
+      color: var(--muted);
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 900;
+    }
+
+    .chapter-state.done {
+      background: var(--soft-green);
+      color: var(--green);
+    }
+
+    .chapter-state.current {
+      background: var(--soft-blue);
+      color: var(--blue);
+    }
+
+    .chapter-state.next {
+      background: var(--soft-yellow);
+      color: var(--yellow);
+    }
+
+    .toc-tools {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .toc-tool-card {
+      min-height: 82px;
+      padding: 12px;
+      border: 1px solid rgba(80, 101, 101, 0.16);
+      border-radius: var(--radius);
+      background: #fbfcfb;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .toc-tool-card:hover {
+      border-color: rgba(35, 100, 170, 0.42);
+      background: var(--soft-blue);
+    }
+
+    .toc-tool-card strong,
+    .toc-tool-card span {
+      display: block;
+      line-height: 1.45;
+    }
+
+    .toc-tool-card span {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 13px;
     }
 
     .book-note {
@@ -450,7 +528,7 @@
 
     .deck-tabs {
       display: grid;
-      grid-template-columns: repeat(6, minmax(0, 1fr));
+      grid-template-columns: minmax(0, 220px);
       gap: 8px;
       margin-top: 14px;
     }
@@ -1676,6 +1754,7 @@
       .touch-lab,
       .morning-grid,
       .book-toc,
+      .toc-tools,
       .e02-layout,
       .e02-summary,
       .cae-map {
@@ -1687,7 +1766,7 @@
       }
 
       .deck-tabs {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: minmax(0, 220px);
       }
     }
 
@@ -1745,7 +1824,7 @@
       }
 
       .deck-tabs {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: 1fr;
       }
 
       .deck-controls {
@@ -1845,12 +1924,7 @@
         <span>本モード / 上から読める朝の勉強まとめ</span>
       </div>
       <nav class="quick-nav" aria-label="教材内ナビゲーション">
-        <a class="nav-button" href="#study-deck" data-deck-jump="today">表紙</a>
-        <a class="nav-button" href="#study-deck" data-deck-jump="today">今日</a>
-        <a class="nav-button" href="#study-deck" data-deck-jump="e01">E01</a>
-        <a class="nav-button" href="#study-deck" data-deck-jump="e02">E02</a>
-        <a class="nav-button" href="#study-deck" data-deck-jump="quiz">問題</a>
-        <a class="nav-button" href="#study-deck" data-deck-jump="review">復習</a>
+        <a class="nav-button" href="#study-deck" data-deck-jump="toc">目次</a>
       </nav>
     </div>
   </header>
@@ -1859,45 +1933,25 @@
     <section class="study-deck" id="study-deck" aria-labelledby="deck-title">
       <div class="deck-shell">
         <div class="deck-summary">
-          <h2 id="deck-title">タブ + スライド学習</h2>
-          <p>タブで章を選び、中は1枚ずつ進みます。巻物みたいに全部を一気に見せません。</p>
+          <h2 id="deck-title">目次ホーム</h2>
+          <p>ここにE01、E02、E03...をためます。どこから学べるか、どこまで進んだかを1発で見ます。</p>
         </div>
         <div class="deck-controls" aria-label="スライド操作">
           <button class="deck-arrow" type="button" id="deckPrevButton">前へ</button>
-          <div class="deck-status" id="deckStatus" aria-live="polite">今日 1 / 3</div>
+          <div class="deck-status" id="deckStatus" aria-live="polite">目次 1 / 1　学習ホーム</div>
           <button class="deck-arrow" type="button" id="deckNextButton">次へ</button>
         </div>
       </div>
 
       <div class="deck-tabs" role="tablist" aria-label="学習タブ">
-        <button class="deck-tab active" type="button" data-tab="today">
-          <strong>今日</strong>
-          <span>表紙と見方</span>
-        </button>
-        <button class="deck-tab" type="button" data-tab="e01">
-          <strong>E01</strong>
-          <span>電気の流れ</span>
-        </button>
-        <button class="deck-tab" type="button" data-tab="e02">
-          <strong>E02</strong>
-          <span>電圧と抵抗</span>
-        </button>
-        <button class="deck-tab" type="button" data-tab="quiz">
-          <strong>問題</strong>
-          <span>すぐ確認</span>
-        </button>
-        <button class="deck-tab" type="button" data-tab="review">
-          <strong>復習</strong>
-          <span>あとで戻る</span>
-        </button>
-        <button class="deck-tab" type="button" data-tab="memo">
-          <strong>メモ</strong>
-          <span>朝10分</span>
+        <button class="deck-tab active" type="button" data-tab="toc">
+          <strong>目次</strong>
+          <span>学びの地図</span>
         </button>
       </div>
     </section>
 
-    <section class="hero active-slide" id="cover" aria-labelledby="hero-title" data-slide-section data-tab="today" data-slide-title="表紙">
+    <section class="hero" id="cover" aria-labelledby="hero-title" data-slide-section data-tab="intro" data-slide-title="表紙">
       <div>
         <p class="eyebrow">CAEの電気設計版</p>
         <h1 id="hero-title"><span class="title-line">見えない電気を、</span><span class="title-line">設計者の目で見る。</span></h1>
@@ -1908,7 +1962,7 @@
           <span class="lead-line">電源・配線・センサー・モーターの流れを見ます。</span>
         </p>
         <div class="hero-actions">
-          <a class="pill-button primary" href="#study-deck" data-deck-jump="today">タブで始める</a>
+          <a class="pill-button primary" href="#study-deck" data-deck-jump="toc">目次へ戻る</a>
           <a class="pill-button" href="#study-deck" data-deck-jump="e02">今日のE02を触る</a>
           <a class="pill-button" href="#study-deck" data-deck-jump="memo">朝10分だけやる</a>
         </div>
@@ -1921,7 +1975,7 @@
       </figure>
     </section>
 
-    <section class="band" id="progress" aria-labelledby="progress-title" data-slide-section data-tab="today" data-slide-title="目次と今ここ">
+    <section class="band active-slide" id="progress" aria-labelledby="progress-title" data-slide-section data-tab="toc" data-slide-title="学習ホーム">
       <div class="section-head">
         <div>
           <h2 id="progress-title">目次と今ここ</h2>
@@ -1937,6 +1991,12 @@
         <article class="book-order">
           <h3>読む順番</h3>
           <ol class="reading-list">
+            <li>
+              <a href="#cover">
+                <span class="step-num">0</span>
+                <span><strong>表紙</strong>この教科書の目的を思い出す。</span>
+              </a>
+            </li>
             <li>
               <a href="#formula-title">
                 <span class="step-num">1</span>
@@ -1968,31 +2028,50 @@
               </a>
             </li>
           </ol>
-          <p class="book-note">今日は E02 を読んで、電流が増える条件を覚える。</p>
+          <p class="book-note" id="tocProgressText">今日は E02 を読んで、電流が増える条件を覚える。</p>
+
+          <div class="toc-tools" aria-label="目次内の学習入口">
+            <a class="toc-tool-card" href="#morning-mode">
+              <strong>朝10分</strong>
+              <span>短時間で今日の1テーマだけやる。</span>
+            </a>
+            <a class="toc-tool-card" href="#quiz">
+              <strong>問題</strong>
+              <span>読んだ直後にタップで確認する。</span>
+            </a>
+            <a class="toc-tool-card" href="#review-app">
+              <strong>復習</strong>
+              <span>今日、弱点、テーマ別で戻る。</span>
+            </a>
+            <a class="toc-tool-card" href="#morning-mode">
+              <strong>メモ</strong>
+              <span>発明につながる気づきを1行残す。</span>
+            </a>
+          </div>
         </article>
 
         <aside class="chapter-progress" aria-label="章の進み具合">
-          <h3>章の進み具合</h3>
+          <h3>学習テーマの棚</h3>
           <div class="chapter-list">
-            <div class="chapter-row done">
+            <a class="chapter-row done" href="#lesson" data-toc-topic="e01">
               <span class="chapter-code">E01</span>
-              <span><strong>電気って何が動いてるの？</strong>完了。流れを見る入口。</span>
-            </div>
-            <div class="chapter-row current">
+              <span><strong>電気って何が動いてるの？</strong>流れを見る入口。<em class="chapter-state done" id="tocE01State">完了</em></span>
+            </a>
+            <a class="chapter-row current" href="#e02-lab" data-toc-topic="e02">
               <span class="chapter-code">E02</span>
-              <span><strong>電圧・電流・抵抗</strong>今日ここ。つまみで体感する章。</span>
-            </div>
-            <div class="chapter-row">
+              <span><strong>電圧・電流・抵抗</strong>つまみで体感する章。<em class="chapter-state current" id="tocE02State">今ここ</em></span>
+            </a>
+            <div class="chapter-row next">
               <span class="chapter-code">E03</span>
-              <span><strong>なぜ線が熱くなるのか</strong>次。危ない条件を見る章。</span>
+              <span><strong>なぜ線が熱くなるのか</strong>次に追加する章。<em class="chapter-state next">次</em></span>
             </div>
             <div class="chapter-row">
               <span class="chapter-code">E04</span>
-              <span><strong>電源容量と余裕</strong>まだ。安全な余裕を見る章。</span>
+              <span><strong>電源容量と余裕</strong>これから貯める章。<em class="chapter-state">未学習</em></span>
             </div>
             <div class="chapter-row">
               <span class="chapter-code">E05</span>
-              <span><strong>安全に配線するとは何か</strong>まだ。図面と現場をつなぐ章。</span>
+              <span><strong>安全に配線するとは何か</strong>これから貯める章。<em class="chapter-state">未学習</em></span>
             </div>
           </div>
         </aside>
@@ -2058,7 +2137,7 @@
       </div>
     </section>
 
-    <section class="band" aria-labelledby="formula-title" data-slide-section data-tab="today" data-slide-title="この教科書の見方">
+    <section class="band" aria-labelledby="formula-title" data-slide-section data-tab="intro" data-slide-title="この教科書の見方">
       <div class="section-head">
         <div>
           <h2 id="formula-title">この教科書の見方</h2>
@@ -2566,8 +2645,17 @@
     const deckStatus = document.querySelector("#deckStatus");
     const deckPrevButton = document.querySelector("#deckPrevButton");
     const deckNextButton = document.querySelector("#deckNextButton");
+    const deckLabels = {
+      toc: "目次",
+      intro: "はじめに",
+      e01: "E01",
+      e02: "E02",
+      quiz: "問題",
+      review: "復習",
+      memo: "朝10分"
+    };
     const deckState = {
-      tab: "today",
+      tab: "toc",
       index: 0
     };
 
@@ -2591,7 +2679,7 @@
       });
 
       const activeSlide = slides[deckState.index];
-      const label = deckTabs.find((tab) => tab.dataset.tab === deckState.tab)?.querySelector("strong")?.textContent || "今日";
+      const label = deckLabels[deckState.tab] || "目次";
       const title = activeSlide.dataset.slideTitle || activeSlide.querySelector("h2")?.textContent || "";
       deckStatus.textContent = `${label} ${deckState.index + 1} / ${slides.length}　${title}`;
       deckPrevButton.disabled = deckState.index === 0;
@@ -2619,7 +2707,7 @@
       });
     });
 
-    document.querySelectorAll(".reading-list a").forEach((link) => {
+    document.querySelectorAll(".reading-list a, .chapter-row[href], .toc-tool-card[href]").forEach((link) => {
       link.addEventListener("click", (event) => {
         const target = document.querySelector(link.getAttribute("href"));
         const section = target?.closest("[data-slide-section]");
@@ -2786,6 +2874,35 @@
     const e02CompleteButton = document.querySelector("#e02CompleteButton");
     const e02CompleteStatus = document.querySelector("#e02CompleteStatus");
     const e02StorageKey = "electrical_design_textbook_e02_complete";
+    const e01StorageKey = "electrical_design_textbook_e01_complete";
+    const tocProgressText = document.querySelector("#tocProgressText");
+    const tocE01Row = document.querySelector('[data-toc-topic="e01"]');
+    const tocE02Row = document.querySelector('[data-toc-topic="e02"]');
+    const tocE01State = document.querySelector("#tocE01State");
+    const tocE02State = document.querySelector("#tocE02State");
+
+    function setTocState(row, stateEl, mode, text) {
+      if (!row || !stateEl) return;
+      row.classList.toggle("done", mode === "done");
+      row.classList.toggle("current", mode === "current");
+      row.classList.toggle("next", mode === "next");
+      stateEl.classList.toggle("done", mode === "done");
+      stateEl.classList.toggle("current", mode === "current");
+      stateEl.classList.toggle("next", mode === "next");
+      stateEl.textContent = text;
+    }
+
+    function renderTocProgress() {
+      const e01Done = localStorage.getItem(e01StorageKey) === "true";
+      const e02Done = localStorage.getItem(e02StorageKey) === "true";
+      setTocState(tocE01Row, tocE01State, e01Done ? "done" : "current", e01Done ? "完了" : "学習中");
+      setTocState(tocE02Row, tocE02State, e02Done ? "done" : "current", e02Done ? "完了" : "今ここ");
+      if (tocProgressText) {
+        tocProgressText.textContent = e02Done
+          ? "E02まで完了。次は E03 なぜ線が熱くなるのかへ進む。"
+          : "今日は E02 を読んで、電流が増える条件を覚える。";
+      }
+    }
 
     function renderOhm() {
       const voltage = Number(voltageSlider.value);
@@ -2819,6 +2936,7 @@
       const done = localStorage.getItem(e02StorageKey) === "true";
       e02CompleteStatus.textContent = done ? "完了済み" : "未完了";
       e02CompleteButton.textContent = done ? "E02完了を取り消す" : "E02を完了にする";
+      renderTocProgress();
     }
 
     [voltageSlider, resistanceSlider].forEach((slider) => {
@@ -3042,17 +3160,17 @@
 
     const completeButton = document.querySelector("#completeButton");
     const completeStatus = document.querySelector("#completeStatus");
-    const storageKey = "electrical_design_textbook_e01_complete";
 
     function renderComplete() {
-      const done = localStorage.getItem(storageKey) === "true";
+      const done = localStorage.getItem(e01StorageKey) === "true";
       completeStatus.textContent = done ? "完了済み" : "未完了";
       completeButton.textContent = done ? "E01完了を取り消す" : "E01を完了にする";
+      renderTocProgress();
     }
 
     completeButton.addEventListener("click", () => {
-      const done = localStorage.getItem(storageKey) === "true";
-      localStorage.setItem(storageKey, String(!done));
+      const done = localStorage.getItem(e01StorageKey) === "true";
+      localStorage.setItem(e01StorageKey, String(!done));
       renderComplete();
     });
 
