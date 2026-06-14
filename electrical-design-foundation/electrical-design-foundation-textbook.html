@@ -100,7 +100,7 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: flex-end;
-      gap: 8px;
+      gap: 4px;
     }
 
     .nav-button,
@@ -117,10 +117,21 @@
     }
 
     .nav-button {
-      padding: 8px 12px;
+      min-height: 34px;
+      padding: 6px 8px;
       text-decoration: none;
-      font-size: 14px;
+      font-size: 13px;
       min-width: 0;
+      border-color: transparent;
+      background: transparent;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .nav-button:hover {
+      border-color: var(--line);
+      background: var(--paper);
+      color: var(--ink);
     }
 
     .page {
@@ -307,6 +318,106 @@
       margin-top: 8px;
       color: var(--muted);
       font-size: 14px;
+    }
+
+    .book-toc {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .book-order,
+    .chapter-progress {
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: 0 10px 22px rgba(20, 34, 40, 0.06);
+    }
+
+    .book-order h3,
+    .chapter-progress h3 {
+      margin: 0 0 12px;
+      font-size: 22px;
+    }
+
+    .reading-list,
+    .chapter-list {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .reading-list a,
+    .chapter-row {
+      display: grid;
+      grid-template-columns: 46px minmax(0, 1fr);
+      gap: 12px;
+      align-items: start;
+      padding: 12px;
+      border: 1px solid rgba(80, 101, 101, 0.16);
+      border-radius: var(--radius);
+      background: #fbfcfb;
+      text-decoration: none;
+    }
+
+    .reading-list a:hover {
+      border-color: rgba(35, 100, 170, 0.42);
+      background: var(--soft-blue);
+    }
+
+    .step-num,
+    .chapter-code {
+      display: grid;
+      place-items: center;
+      min-height: 34px;
+      border-radius: 6px;
+      background: #e7eeec;
+      color: var(--ink);
+      font-weight: 900;
+    }
+
+    .chapter-row.done .chapter-code {
+      background: var(--soft-green);
+      color: var(--green);
+    }
+
+    .chapter-row.current {
+      border-color: rgba(35, 100, 170, 0.55);
+      background: var(--soft-blue);
+    }
+
+    .chapter-row.current .chapter-code {
+      background: var(--blue);
+      color: #fff;
+    }
+
+    .reading-list strong,
+    .chapter-row strong {
+      display: block;
+      line-height: 1.35;
+    }
+
+    .reading-list span,
+    .chapter-row span {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .book-note {
+      margin: 14px 0 0;
+      padding: 12px;
+      border-left: 4px solid var(--green);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      background: var(--soft-green);
+      color: #24433a;
+      font-weight: 800;
     }
 
     .morning-grid {
@@ -1450,6 +1561,7 @@
       .control-diagram,
       .touch-lab,
       .morning-grid,
+      .book-toc,
       .e02-layout,
       .e02-summary,
       .cae-map {
@@ -1495,7 +1607,19 @@
       }
 
       .quick-nav {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .nav-button {
+        min-height: 32px;
+        padding: 5px 6px;
+        text-align: center;
+      }
+
+      .reading-list a,
+      .chapter-row {
+        grid-template-columns: 38px minmax(0, 1fr);
+        padding: 10px;
       }
 
       .band {
@@ -1579,15 +1703,15 @@
     <div class="topbar-inner">
       <div class="brand">
         <strong>電気設計とCAE的思考 基礎編</strong>
-        <span>朝の勉強まとめ / E01 + E02 体感モード</span>
+        <span>本モード / 上から読める朝の勉強まとめ</span>
       </div>
       <nav class="quick-nav" aria-label="教材内ナビゲーション">
-        <a class="nav-button" href="#morning-mode">朝10分</a>
-        <a class="nav-button" href="#progress">進捗</a>
+        <a class="nav-button" href="#hero-title">表紙</a>
+        <a class="nav-button" href="#progress">目次</a>
+        <a class="nav-button" href="#formula-title">見方</a>
         <a class="nav-button" href="#lesson">E01</a>
         <a class="nav-button" href="#e02-lab">E02</a>
-        <a class="nav-button" href="#touch-lab">体感</a>
-        <a class="nav-button" href="#quiz">テスト</a>
+        <a class="nav-button" href="#quiz">問題</a>
         <a class="nav-button" href="#review-app">復習</a>
       </nav>
     </div>
@@ -1605,10 +1729,9 @@
           <span class="lead-line">電源・配線・センサー・モーターの流れを見ます。</span>
         </p>
         <div class="hero-actions">
-          <a class="pill-button primary" href="#morning-mode">朝10分で始める</a>
-          <a class="pill-button" href="#e02-lab">E02を触る</a>
-          <a class="pill-button" href="#map">CAEとの対応を見る</a>
-          <a class="pill-button" href="#review-app">すぐ復習</a>
+          <a class="pill-button primary" href="#progress">目次から読む</a>
+          <a class="pill-button" href="#e02-lab">今日のE02を触る</a>
+          <a class="pill-button" href="#morning-mode">朝10分だけやる</a>
         </div>
       </div>
       <figure class="hero-visual">
@@ -1619,11 +1742,89 @@
       </figure>
     </section>
 
+    <section class="band" id="progress" aria-labelledby="progress-title">
+      <div class="section-head">
+        <div>
+          <h2 id="progress-title">目次と今ここ</h2>
+          <p>この教科書は、上から読めば分かる順番にしています。迷ったらここへ戻ります。</p>
+        </div>
+        <div class="progress-meter" aria-label="進捗 2/5">
+          <div class="meter-label"><span>朝勉強版</span><span>2 / 5</span></div>
+          <div class="meter-track"><div class="meter-fill"></div></div>
+        </div>
+      </div>
+
+      <div class="book-toc">
+        <article class="book-order">
+          <h3>読む順番</h3>
+          <ol class="reading-list">
+            <li>
+              <a href="#formula-title">
+                <span class="step-num">1</span>
+                <span><strong>この教科書の見方</strong>条件、現象、判断の3つを先に覚える。</span>
+              </a>
+            </li>
+            <li>
+              <a href="#lesson">
+                <span class="step-num">2</span>
+                <span><strong>E01 電気の流れ</strong>電源から負荷まで、どこを見るかをつかむ。</span>
+              </a>
+            </li>
+            <li>
+              <a href="#e02-lab">
+                <span class="step-num">3</span>
+                <span><strong>E02 電圧・電流・抵抗</strong>つまみを動かして、増える・熱くなるを体感する。</span>
+              </a>
+            </li>
+            <li>
+              <a href="#quiz">
+                <span class="step-num">4</span>
+                <span><strong>ミニテスト</strong>読んだ内容を、すぐタップで確認する。</span>
+              </a>
+            </li>
+            <li>
+              <a href="#review-app">
+                <span class="step-num">5</span>
+                <span><strong>復習アプリ</strong>今日、弱点、テーマ別で戻れるようにする。</span>
+              </a>
+            </li>
+          </ol>
+          <p class="book-note">今日は E02 を読んで、電流が増える条件を覚える。</p>
+        </article>
+
+        <aside class="chapter-progress" aria-label="章の進み具合">
+          <h3>章の進み具合</h3>
+          <div class="chapter-list">
+            <div class="chapter-row done">
+              <span class="chapter-code">E01</span>
+              <span><strong>電気って何が動いてるの？</strong>完了。流れを見る入口。</span>
+            </div>
+            <div class="chapter-row current">
+              <span class="chapter-code">E02</span>
+              <span><strong>電圧・電流・抵抗</strong>今日ここ。つまみで体感する章。</span>
+            </div>
+            <div class="chapter-row">
+              <span class="chapter-code">E03</span>
+              <span><strong>なぜ線が熱くなるのか</strong>次。危ない条件を見る章。</span>
+            </div>
+            <div class="chapter-row">
+              <span class="chapter-code">E04</span>
+              <span><strong>電源容量と余裕</strong>まだ。安全な余裕を見る章。</span>
+            </div>
+            <div class="chapter-row">
+              <span class="chapter-code">E05</span>
+              <span><strong>安全に配線するとは何か</strong>まだ。図面と現場をつなぐ章。</span>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
     <section class="band" id="morning-mode" aria-labelledby="morning-title">
       <div class="section-head">
         <div>
-          <h2 id="morning-title">朝10分モード</h2>
-          <p>仕事前に迷わない入口です。見る、触る、解く、発明へつなげる、だけを短く回します。</p>
+          <h2 id="morning-title">朝10分のしおり</h2>
+          <p>時間がない日は、ここだけ使います。読む順番を短く圧縮した入口です。</p>
         </div>
       </div>
 
@@ -1674,42 +1875,6 @@
             <button class="pill-button primary" type="button" id="saveMemoButton">メモ保存</button>
             <span class="status-text" id="memoStatus">未保存</span>
           </div>
-        </article>
-      </div>
-    </section>
-
-    <section class="band" id="progress" aria-labelledby="progress-title">
-      <div class="section-head">
-        <div>
-          <h2 id="progress-title">進捗ボード</h2>
-          <p>E01で流れを見る目を作り、E02で電圧・電流・抵抗を触って覚えます。</p>
-        </div>
-        <div class="progress-meter" aria-label="進捗 2/5">
-          <div class="meter-label"><span>朝勉強版</span><span>2 / 5</span></div>
-          <div class="meter-track"><div class="meter-fill"></div></div>
-        </div>
-      </div>
-
-      <div class="topic-grid">
-        <article class="topic-card done">
-          <strong>E01</strong>
-          <span>電気って何が動いてるの？</span>
-        </article>
-        <article class="topic-card current">
-          <strong>E02</strong>
-          <span>電圧・電流・抵抗</span>
-        </article>
-        <article class="topic-card">
-          <strong>E03</strong>
-          <span>なぜ線が熱くなるのか</span>
-        </article>
-        <article class="topic-card">
-          <strong>E04</strong>
-          <span>電源容量と余裕</span>
-        </article>
-        <article class="topic-card">
-          <strong>E05</strong>
-          <span>安全に配線するとは何か</span>
         </article>
       </div>
     </section>
