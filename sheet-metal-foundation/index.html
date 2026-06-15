@@ -1,0 +1,1094 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>板金基礎 BK00</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#f3f0e8">
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #ece8df;
+      --paper: #fffdf7;
+      --panel: #f8f6ef;
+      --ink: #1b252b;
+      --muted: #667176;
+      --line: #d8d3c8;
+      --blue: #2368c5;
+      --blue-soft: #eaf2ff;
+      --red: #d34438;
+      --green: #23855a;
+      --yellow: #d9ad42;
+      --shadow: 0 20px 50px rgba(45, 39, 30, .14);
+      --radius: 8px;
+      font-family: "Yu Gothic", "Hiragino Sans", Meiryo, system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; min-width: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(120deg, rgba(255,255,255,.72), rgba(255,255,255,.15)),
+        radial-gradient(circle at 14% 5%, rgba(56, 79, 91, .12), transparent 34%),
+        var(--bg);
+      line-height: 1.65;
+    }
+
+    button, input, textarea { font: inherit; }
+    button { cursor: pointer; }
+
+    .app-shell {
+      width: min(1240px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 18px 0 28px;
+    }
+
+    .topbar {
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: clamp(22px, 4vw, 34px);
+      letter-spacing: 0;
+      line-height: 1.1;
+    }
+
+    .brand p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .install-button {
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 0 16px;
+      background: rgba(255,255,255,.74);
+      color: var(--ink);
+      box-shadow: 0 10px 24px rgba(45, 39, 30, .08);
+      font-weight: 700;
+    }
+
+    .workbench {
+      display: grid;
+      grid-template-columns: 118px minmax(0, 1fr) 300px;
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .rail,
+    .lesson,
+    .side-panel,
+    .tool-card,
+    .stage-card {
+      border: 1px solid rgba(124, 116, 101, .28);
+      border-radius: var(--radius);
+      background: rgba(255, 253, 247, .88);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+
+    .rail {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .rail-title {
+      font-size: 13px;
+      color: var(--muted);
+      margin: 0 0 2px;
+    }
+
+    .rail-button {
+      width: 100%;
+      min-height: 52px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      color: var(--ink);
+      display: grid;
+      grid-template-columns: 24px 1fr;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      text-align: left;
+      font-weight: 700;
+    }
+
+    .rail-button svg {
+      width: 22px;
+      height: 22px;
+      stroke-width: 1.9;
+    }
+
+    .rail-button.active {
+      background: linear-gradient(180deg, #3679d6, #1f5db5);
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 12px 24px rgba(35, 104, 197, .28);
+    }
+
+    .lesson {
+      padding: 14px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .chapter-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 10px;
+    }
+
+    .chapter-head h2 {
+      margin: 0;
+      font-size: clamp(19px, 3vw, 26px);
+      letter-spacing: 0;
+    }
+
+    .chapter-tag {
+      display: inline-grid;
+      place-items: center;
+      min-height: 32px;
+      padding: 0 12px;
+      border-radius: 999px;
+      color: white;
+      background: var(--blue);
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .stage-card {
+      position: relative;
+      overflow: hidden;
+      min-height: 370px;
+      background: #f6f4ee;
+    }
+
+    .stage-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .stage-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(255,253,247,.66) 0%, rgba(255,253,247,.04) 48%, rgba(255,253,247,.22) 100%),
+        linear-gradient(180deg, rgba(255,253,247,.04), rgba(255,253,247,.42));
+      pointer-events: none;
+    }
+
+    .stage-content {
+      position: relative;
+      z-index: 1;
+      min-height: 370px;
+      padding: 18px;
+      display: grid;
+      grid-template-columns: 1fr minmax(210px, 260px);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .lesson-title {
+      width: min(520px, 100%);
+      padding: 10px 12px;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.78);
+      border: 1px solid rgba(216, 211, 200, .7);
+    }
+
+    .lesson-title h3 {
+      margin: 0;
+      font-size: clamp(20px, 3vw, 30px);
+      line-height: 1.18;
+      letter-spacing: 0;
+    }
+
+    .lesson-title p {
+      margin: 8px 0 0;
+      color: #415159;
+      font-weight: 700;
+    }
+
+    .arrow-label {
+      position: absolute;
+      z-index: 2;
+      display: grid;
+      gap: 4px;
+      width: 118px;
+      color: var(--ink);
+      font-weight: 800;
+      font-size: 14px;
+      line-height: 1.25;
+    }
+
+    .arrow-label .line {
+      width: 62px;
+      height: 4px;
+      border-radius: 999px;
+      transform-origin: left center;
+    }
+
+    .arrow-label.pull {
+      left: 35px;
+      bottom: 88px;
+      color: #b72f2a;
+    }
+
+    .arrow-label.pull .line {
+      background: var(--red);
+      transform: rotate(-62deg);
+      box-shadow: 0 0 0 6px rgba(211, 68, 56, .12);
+    }
+
+    .arrow-label.press {
+      left: 315px;
+      bottom: 70px;
+      color: #1f65bd;
+    }
+
+    .arrow-label.press .line {
+      background: var(--blue);
+      transform: rotate(28deg);
+      box-shadow: 0 0 0 6px rgba(35, 104, 197, .12);
+    }
+
+    .molecule {
+      align-self: end;
+      justify-self: end;
+      width: 100%;
+      aspect-ratio: 1;
+      border: 1px solid rgba(71, 80, 84, .28);
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,.88), rgba(235, 231, 219, .9)),
+        #fff;
+      box-shadow: inset 0 0 0 10px rgba(255,255,255,.5), 0 14px 34px rgba(30, 30, 30, .14);
+      padding: 18px;
+      display: grid;
+      place-items: center;
+    }
+
+    .molecule-graphic {
+      position: relative;
+      width: 92%;
+      height: 92%;
+    }
+
+    .bond {
+      position: absolute;
+      height: 3px;
+      background: #9aa2a6;
+      border-radius: 999px;
+      transform-origin: left center;
+    }
+
+    .atom {
+      position: absolute;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #fff, #b8bec2 34%, #575f65 100%);
+      box-shadow: 0 4px 10px rgba(20,20,20,.25);
+    }
+
+    .atom.hot {
+      background: radial-gradient(circle at 35% 30%, #fff7ed, #f18a33 38%, #b84015 100%);
+      animation: pulse 1.6s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.16); }
+    }
+
+    .molecule-note {
+      position: absolute;
+      right: 18px;
+      bottom: 16px;
+      z-index: 2;
+      width: 250px;
+      padding: 8px 10px;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.8);
+      color: #3d4a4f;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .tool-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(260px, .85fr);
+      gap: 12px;
+    }
+
+    .tool-card {
+      padding: 14px;
+      box-shadow: none;
+      background: rgba(255,255,255,.78);
+    }
+
+    .tool-card h3,
+    .side-card h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      letter-spacing: 0;
+    }
+
+    .slider-row {
+      display: grid;
+      grid-template-columns: 86px 1fr 68px;
+      align-items: center;
+      gap: 10px;
+      margin: 11px 0;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--blue);
+    }
+
+    .value {
+      min-height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: #f1eee5;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .bend-result {
+      display: grid;
+      grid-template-columns: 1fr 70px;
+      gap: 12px;
+      align-items: center;
+      min-height: 150px;
+    }
+
+    .bend-demo {
+      position: relative;
+      min-height: 142px;
+      border-radius: var(--radius);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.82), rgba(242,239,230,.92));
+      overflow: hidden;
+      border: 1px solid var(--line);
+    }
+
+    .bent-strip {
+      position: absolute;
+      left: 42px;
+      right: 42px;
+      bottom: 38px;
+      height: var(--strip, 28px);
+      border-radius: 999px 999px 10px 10px;
+      background:
+        linear-gradient(90deg, #8ed0ff, #48a3e8 18%, #e8d554 47%, #ef6a3f 70%, #c92e32 100%);
+      transform: rotate(var(--angle, -8deg)) skewX(-10deg);
+      box-shadow: inset 0 -10px 16px rgba(10,10,10,.16), 0 18px 28px rgba(20,20,20,.16);
+      transition: height .2s ease, transform .2s ease;
+    }
+
+    .neutral-line {
+      position: absolute;
+      left: 16%;
+      right: 16%;
+      bottom: calc(38px + var(--strip, 28px) / 2);
+      height: 2px;
+      border-top: 2px dashed rgba(24,32,38,.5);
+      transform: rotate(var(--angle, -8deg)) skewX(-10deg);
+    }
+
+    .heat-scale {
+      display: grid;
+      gap: 5px;
+      justify-items: center;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .scale-bar {
+      width: 14px;
+      height: 90px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #c92e32, #f5c84d, #42a4e8);
+      border: 1px solid rgba(0,0,0,.12);
+    }
+
+    .quick-read {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .read-chip {
+      min-height: 50px;
+      padding: 9px;
+      border-radius: var(--radius);
+      background: var(--blue-soft);
+      border: 1px solid rgba(35, 104, 197, .18);
+      font-weight: 800;
+      color: #254563;
+    }
+
+    .side-panel {
+      padding: 12px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .side-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.82);
+      padding: 12px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 122px;
+      resize: vertical;
+      border: 1px solid #e0c887;
+      border-radius: var(--radius);
+      background: #fff7df;
+      padding: 10px;
+      color: var(--ink);
+      line-height: 1.55;
+    }
+
+    .choice {
+      width: 100%;
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fff;
+      margin: 6px 0;
+      text-align: left;
+      padding: 8px 10px;
+      font-weight: 800;
+    }
+
+    .choice.correct { border-color: #5fb582; background: #eaf8ef; }
+    .choice.wrong { border-color: #e39a93; background: #fff0ee; }
+
+    .feedback {
+      min-height: 42px;
+      margin-top: 6px;
+      padding: 8px 10px;
+      border-radius: 6px;
+      background: #eef4ff;
+      color: #27435b;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .primary {
+      width: 100%;
+      min-height: 42px;
+      border: 0;
+      border-radius: 7px;
+      background: var(--blue);
+      color: white;
+      font-weight: 900;
+    }
+
+    .progress-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      align-items: center;
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .bar {
+      height: 12px;
+      border-radius: 999px;
+      background: #e5e0d5;
+      overflow: hidden;
+    }
+
+    .bar span {
+      display: block;
+      height: 100%;
+      width: var(--p, 38%);
+      border-radius: inherit;
+      background: linear-gradient(90deg, #2f996b, #74c88d);
+      transition: width .2s ease;
+    }
+
+    .mobile-actions {
+      display: none;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin: 12px 0;
+    }
+
+    .mobile-action {
+      min-height: 72px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.86);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      font-weight: 800;
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    .roadmap {
+      margin-top: 12px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .road-row {
+      min-height: 46px;
+      display: grid;
+      grid-template-columns: 72px 1fr auto;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.72);
+    }
+
+    .road-row.active {
+      border-color: rgba(35, 104, 197, .34);
+      background: #edf5ff;
+    }
+
+    .badge {
+      display: inline-grid;
+      place-items: center;
+      min-height: 30px;
+      border-radius: 999px;
+      background: var(--blue);
+      color: white;
+      font-weight: 900;
+      padding: 0 10px;
+    }
+
+    .concept-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .concept-row {
+      display: grid;
+      grid-template-columns: 18px 1fr;
+      gap: 9px;
+      align-items: start;
+      padding: 10px;
+      border: 1px solid rgba(216, 211, 200, .86);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, .72);
+      color: #35454c;
+      font-weight: 700;
+    }
+
+    .concept-dot {
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      margin-top: 6px;
+      box-shadow: 0 0 0 4px rgba(255,255,255,.9);
+    }
+
+    .concept-row strong {
+      display: block;
+      color: var(--ink);
+      margin-bottom: 2px;
+    }
+
+    @media (max-width: 980px) {
+      .workbench {
+        grid-template-columns: 1fr;
+      }
+
+      .rail {
+        display: none;
+      }
+
+      .mobile-actions {
+        display: grid;
+      }
+
+      .side-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .stage-content {
+        grid-template-columns: 1fr;
+        min-height: 420px;
+      }
+
+      .molecule {
+        width: min(230px, 62vw);
+        justify-self: end;
+      }
+
+      .tool-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .app-shell {
+        width: min(100% - 16px, 430px);
+        padding-top: 8px;
+      }
+
+      .topbar {
+        align-items: flex-start;
+      }
+
+      .install-button {
+        min-width: 44px;
+        width: 44px;
+        padding: 0;
+        font-size: 0;
+      }
+
+      .install-button::before {
+        content: "+";
+        font-size: 24px;
+        font-weight: 900;
+      }
+
+      .lesson,
+      .side-panel {
+        padding: 10px;
+      }
+
+      .chapter-head {
+        display: grid;
+      }
+
+      .stage-card,
+      .stage-content {
+        min-height: 430px;
+      }
+
+      .stage-content {
+        padding: 12px;
+      }
+
+      .lesson-title {
+        width: 100%;
+      }
+
+      .lesson-title h3 {
+        font-size: 21px;
+      }
+
+      .arrow-label {
+        width: 98px;
+        font-size: 12px;
+      }
+
+      .arrow-label.pull {
+        left: 16px;
+        bottom: 142px;
+      }
+
+      .arrow-label.press {
+        left: auto;
+        right: 16px;
+        bottom: 118px;
+      }
+
+      .molecule-note {
+        position: relative;
+        right: auto;
+        bottom: auto;
+        width: 100%;
+        margin-top: 8px;
+      }
+
+      .quick-read {
+        grid-template-columns: 1fr;
+      }
+
+      .concept-list {
+        grid-template-columns: 1fr;
+      }
+
+      .slider-row {
+        grid-template-columns: 74px 1fr 58px;
+        gap: 7px;
+        font-size: 13px;
+      }
+
+      .road-row {
+        grid-template-columns: 64px 1fr;
+      }
+
+      .road-row span:last-child {
+        grid-column: 2;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <h1>板金基礎</h1>
+        <p>見て、触って、なぜをメモして、仕事前に復習する。</p>
+      </div>
+      <button class="install-button" id="installBtn" type="button">ホーム画面</button>
+    </header>
+
+    <main class="workbench">
+      <nav class="rail" aria-label="学習メニュー">
+        <p class="rail-title">BKシリーズ</p>
+        <button class="rail-button active" data-jump="#bk00" type="button"><span>BK00</span><span>入口</span></button>
+        <button class="rail-button" data-jump="#why" type="button" aria-label="なぜ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M8 14c-1.7-1.2-2.8-3-2.8-5A6.8 6.8 0 0 1 12 2.2 6.8 6.8 0 0 1 18.8 9c0 2-1.1 3.8-2.8 5-.7.5-1 1-1 1.8H9c0-.8-.3-1.3-1-1.8Z"/></svg><span>なぜ?</span></button>
+        <button class="rail-button" data-jump="#molecule" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="19" cy="19" r="2"/><circle cx="12" cy="12" r="2"/><path d="m7 12h3m4-1 3-4m-3 6 3 4"/></svg><span>分子</span></button>
+        <button class="rail-button" data-jump="#touch" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M8 13V5a2 2 0 1 1 4 0v6"/><path d="M12 11V4a2 2 0 1 1 4 0v9"/><path d="M16 13V7a2 2 0 1 1 4 0v7c0 4-3 7-7 7h-1c-3 0-5-2-5-5v-1l-2-3a2 2 0 0 1 3-2l2 2"/></svg><span>触る</span></button>
+        <button class="rail-button" data-jump="#memo" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 4h12l4 4v12H4z"/><path d="M16 4v5h5"/><path d="M8 13h8M8 17h6"/></svg><span>メモ</span></button>
+        <button class="rail-button" data-jump="#quiz" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M8 4h8v16H8z"/><path d="M10 8h4M10 12h4M10 16h3"/></svg><span>テスト</span></button>
+      </nav>
+
+      <section class="lesson" id="bk00">
+        <div class="chapter-head">
+          <div>
+            <h2>BK00　板金とは何か</h2>
+            <p style="margin:4px 0 0;color:var(--muted);font-weight:700;">1回で覚えることは1つ。板金は「薄い金属板を、切って、曲げて、形にする技術」。</p>
+          </div>
+          <span class="chapter-tag">今日の1テーマ</span>
+        </div>
+
+        <div class="mobile-actions" aria-label="スマホ用メニュー">
+          <a class="mobile-action" href="#why">なぜ?</a>
+          <a class="mobile-action" href="#molecule">分子</a>
+          <a class="mobile-action" href="#touch">触る</a>
+          <a class="mobile-action" href="#memo">メモ</a>
+          <a class="mobile-action" href="#quiz">テスト</a>
+          <a class="mobile-action" href="#review">復習</a>
+        </div>
+
+        <article class="stage-card" id="why">
+          <img class="stage-image" src="assets/bk00-bent-channel.png" alt="曲げられた角パイプ形状の板金部品">
+          <div class="stage-content">
+            <div>
+              <div class="lesson-title">
+                <h3>なぜ曲がるのか?</h3>
+                <p>外側は引っ張られ、内側は押しつぶされる。</p>
+              </div>
+              <div class="arrow-label pull"><span class="line"></span><span>引っ張り<br>のびる</span></div>
+              <div class="arrow-label press"><span class="line"></span><span>圧縮<br>ちぢむ</span></div>
+            </div>
+            <div class="molecule" id="molecule" aria-label="分子と結晶の動き">
+              <div class="molecule-graphic" aria-hidden="true">
+                <span class="bond" style="left:20%;top:22%;width:44%;transform:rotate(26deg)"></span>
+                <span class="bond" style="left:25%;top:54%;width:48%;transform:rotate(-18deg)"></span>
+                <span class="bond" style="left:46%;top:35%;width:34%;transform:rotate(58deg)"></span>
+                <span class="bond" style="left:18%;top:73%;width:54%;transform:rotate(8deg)"></span>
+                <span class="atom" style="left:9%;top:17%"></span>
+                <span class="atom hot" style="left:38%;top:27%"></span>
+                <span class="atom" style="left:68%;top:15%"></span>
+                <span class="atom" style="left:20%;top:56%"></span>
+                <span class="atom hot" style="left:52%;top:58%"></span>
+                <span class="atom" style="left:75%;top:70%"></span>
+              </div>
+            </div>
+            <p class="molecule-note">
+              分子（ぶんし：材料を作る小さな粒）と結晶（けっしょう：粒の並び）が少しずつ動き、形が残る。
+            </p>
+          </div>
+        </article>
+
+        <div class="tool-grid" id="touch">
+          <section class="tool-card">
+            <h3>触って理解する　曲げシミュレーター</h3>
+            <div class="slider-row">
+              <label for="thick">板厚</label>
+              <input id="thick" type="range" min="0.8" max="4.5" step="0.1" value="2">
+              <output class="value" id="thickValue">2.0mm</output>
+            </div>
+            <div class="slider-row">
+              <label for="radius">曲げR</label>
+              <input id="radius" type="range" min="0.5" max="7" step="0.1" value="2">
+              <output class="value" id="radiusValue">2.0mm</output>
+            </div>
+            <div class="slider-row">
+              <label for="force">力</label>
+              <input id="force" type="range" min="10" max="100" step="1" value="58">
+              <output class="value" id="forceValue">58%</output>
+            </div>
+            <div class="quick-read">
+              <div class="read-chip" id="riskChip">割れリスク: 中</div>
+              <div class="read-chip" id="shapeChip">曲がり: ふつう</div>
+              <div class="read-chip">見る順番: 固定→力→色</div>
+            </div>
+          </section>
+
+          <section class="tool-card">
+            <h3>結果イメージ</h3>
+            <div class="bend-result">
+              <div class="bend-demo">
+                <span class="bent-strip" id="bentStrip"></span>
+                <span class="neutral-line" id="neutralLine"></span>
+              </div>
+              <div class="heat-scale">
+                <span>高い</span>
+                <span class="scale-bar"></span>
+                <span>低い</span>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <section class="tool-card">
+          <h3>今日の説明</h3>
+          <div class="concept-list">
+            <div class="concept-row">
+              <span class="concept-dot" style="background:#3173d4;"></span>
+              <p><strong>定義（ていぎ：言葉の意味）</strong>板金は、薄い金属板を切る・穴をあける・曲げる・つなぐ加工。</p>
+            </div>
+            <div class="concept-row">
+              <span class="concept-dot" style="background:#45bf83;"></span>
+              <p><strong>しくみ</strong>曲げると、外側は引っ張り、内側は圧縮になる。</p>
+            </div>
+            <div class="concept-row">
+              <span class="concept-dot" style="background:#d3a73d;"></span>
+              <p><strong>なぜ</strong>金属の小さな粒がずれて、新しい形で止まるから。</p>
+            </div>
+            <div class="concept-row">
+              <span class="concept-dot" style="background:#d64b62;"></span>
+              <p><strong>注意</strong>穴が曲げ線に近いと、穴の形がゆがむ。</p>
+            </div>
+            <div class="concept-row">
+              <span class="concept-dot" style="background:#7359c9;"></span>
+              <p><strong>設計判断</strong>板厚、曲げR、穴と曲げ線の距離を先に見る。</p>
+            </div>
+            <div class="concept-row">
+              <span class="concept-dot" style="background:#183241;"></span>
+              <p><strong>発明家視点</strong>力の通り道が見えると、軽くて強い形を作れる。</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="roadmap" id="review">
+          <div class="road-row active">
+            <span class="badge">BK00</span>
+            <strong>板金とは何か ※いまここ</strong>
+            <span>見て・触って・1問解く</span>
+          </div>
+          <div class="road-row">
+            <span class="badge" style="background:#6f7b84;">BK01</span>
+            <strong>板厚と曲げR</strong>
+            <span>次に作るテーマ</span>
+          </div>
+          <div class="road-row">
+            <span class="badge" style="background:#6f7b84;">復習1</span>
+            <strong>BK00〜BK04の5個復習</strong>
+            <span>5テーマ後に自動復習</span>
+          </div>
+        </section>
+      </section>
+
+      <aside class="side-panel" aria-label="メモとテスト">
+        <section class="side-card" id="memo">
+          <h3>なぜ?メモ</h3>
+          <textarea id="memoBox" aria-label="なぜメモ">なぜスプリングバックは起きるの?
+材料でどう変わるの?
+曲げRを小さくすると何が危ない?</textarea>
+        </section>
+
+        <section class="side-card" id="quiz">
+          <h3>テストに挑戦</h3>
+          <p style="margin:0 0 8px;font-weight:800;">Q. 曲げたとき、外側は?</p>
+          <button class="choice" data-answer="correct" type="button">引っ張られる</button>
+          <button class="choice" data-answer="wrong" type="button">圧縮される</button>
+          <button class="choice" data-answer="wrong" type="button">何も変わらない</button>
+          <div class="feedback" id="feedback">選ぶと答えが出る。</div>
+          <button class="primary" id="nextQuiz" type="button">次の問題へ</button>
+        </section>
+
+        <section class="side-card">
+          <h3>復習の進み具合</h3>
+          <div class="progress-row">
+            <span>今日の復習</span>
+            <span id="progressText">40%</span>
+          </div>
+          <div class="bar" style="margin:8px 0 10px;"><span id="progressBar"></span></div>
+          <label style="display:flex;gap:8px;align-items:center;font-weight:800;margin:8px 0;">
+            <input type="checkbox" class="task-check" data-key="image"> 実物図を見た
+          </label>
+          <label style="display:flex;gap:8px;align-items:center;font-weight:800;margin:8px 0;">
+            <input type="checkbox" class="task-check" data-key="slider"> スライダーを触った
+          </label>
+          <label style="display:flex;gap:8px;align-items:center;font-weight:800;margin:8px 0;">
+            <input type="checkbox" class="task-check" data-key="quiz"> テストを解いた
+          </label>
+        </section>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    const $ = (selector, root = document) => root.querySelector(selector);
+    const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+
+    const storageKey = "sheet-metal-foundation-bk00";
+    const state = JSON.parse(localStorage.getItem(storageKey) || "{}");
+
+    const saveState = () => localStorage.setItem(storageKey, JSON.stringify(state));
+
+    const thick = $("#thick");
+    const radius = $("#radius");
+    const force = $("#force");
+    const strip = $("#bentStrip");
+    const neutral = $("#neutralLine");
+
+    function updateSimulation() {
+      const t = Number(thick.value);
+      const r = Number(radius.value);
+      const f = Number(force.value);
+      $("#thickValue").textContent = `${t.toFixed(1)}mm`;
+      $("#radiusValue").textContent = `${r.toFixed(1)}mm`;
+      $("#forceValue").textContent = `${f}%`;
+
+      const angle = -4 - f / 7 + Math.min(r, 6) * 1.2;
+      const height = Math.min(44, 18 + t * 6);
+      strip.style.setProperty("--angle", `${angle}deg`);
+      strip.style.setProperty("--strip", `${height}px`);
+      neutral.style.setProperty("--angle", `${angle}deg`);
+      neutral.style.setProperty("--strip", `${height}px`);
+
+      const ratio = r / t;
+      $("#riskChip").textContent = ratio < 1 ? "割れリスク: 高" : ratio < 1.8 ? "割れリスク: 中" : "割れリスク: 低";
+      $("#shapeChip").textContent = f > 72 ? "曲がり: 大きい" : f < 35 ? "曲がり: 小さい" : "曲がり: ふつう";
+      state.sliderTouched = true;
+      saveState();
+      updateProgress();
+    }
+
+    [thick, radius, force].forEach(input => input.addEventListener("input", updateSimulation));
+
+    $("#memoBox").value = state.memo || $("#memoBox").value;
+    $("#memoBox").addEventListener("input", event => {
+      state.memo = event.target.value;
+      saveState();
+    });
+
+    $$(".choice").forEach(button => {
+      button.addEventListener("click", () => {
+        $$(".choice").forEach(item => item.classList.remove("correct", "wrong"));
+        const ok = button.dataset.answer === "correct";
+        button.classList.add(ok ? "correct" : "wrong");
+        $("#feedback").textContent = ok
+          ? "正解。外側は引っ張られて伸びる。内側は押されて縮む。"
+          : "惜しい。曲げの外側は引っ張り、内側は圧縮を見る。";
+        state.quizDone = true;
+        state.quizCorrect = ok;
+        saveState();
+        updateProgress();
+      });
+    });
+
+    $("#nextQuiz").addEventListener("click", () => {
+      $("#feedback").textContent = "次は BK01 で、板厚と曲げRを問題にする。";
+    });
+
+    $$(".task-check").forEach(check => {
+      check.checked = Boolean(state[check.dataset.key]);
+      check.addEventListener("change", () => {
+        state[check.dataset.key] = check.checked;
+        saveState();
+        updateProgress();
+      });
+    });
+
+    $$(".rail-button").forEach(button => {
+      button.addEventListener("click", () => {
+        $$(".rail-button").forEach(item => item.classList.remove("active"));
+        button.classList.add("active");
+        const target = $(button.dataset.jump);
+        if (target) target.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+    });
+
+    function updateProgress() {
+      const checks = [
+        state.image,
+        state.sliderTouched || state.slider,
+        state.quizDone
+      ].filter(Boolean).length;
+      const percent = Math.max(40, Math.round((checks / 3) * 100));
+      $("#progressText").textContent = `${percent}%`;
+      $("#progressBar").style.setProperty("--p", `${percent}%`);
+      if (state.sliderTouched) {
+        const sliderCheck = $(".task-check[data-key='slider']");
+        sliderCheck.checked = true;
+        state.slider = true;
+        saveState();
+      }
+      if (state.quizDone) {
+        const quizCheck = $(".task-check[data-key='quiz']");
+        state.quiz = true;
+        quizCheck.checked = true;
+      }
+      $$(".task-check").forEach(check => {
+        check.checked = Boolean(state[check.dataset.key]);
+      });
+    }
+
+    window.addEventListener("load", () => {
+      state.image = true;
+      updateSimulation();
+      updateProgress();
+    });
+
+    let deferredPrompt;
+    const installBtn = $("#installBtn");
+    window.addEventListener("beforeinstallprompt", event => {
+      event.preventDefault();
+      deferredPrompt = event;
+      installBtn.textContent = "ホーム画面";
+    });
+
+    installBtn.addEventListener("click", async () => {
+      if (!deferredPrompt) {
+        alert("SafariやChromeの共有メニューから「ホーム画面に追加」を選んでください。");
+        return;
+      }
+      deferredPrompt.prompt();
+      await deferredPrompt.userChoice;
+      deferredPrompt = null;
+    });
+
+    if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
+      navigator.serviceWorker.register("./service-worker.js");
+    }
+  </script>
+</body>
+</html>
