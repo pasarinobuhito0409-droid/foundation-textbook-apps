@@ -490,6 +490,19 @@
       font-weight: 800;
     }
 
+    .quiz-count {
+      display: inline-grid;
+      place-items: center;
+      min-height: 28px;
+      padding: 0 10px;
+      margin: 0 0 8px;
+      border-radius: 999px;
+      background: var(--blue-soft);
+      color: #254563;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
     .choice.correct { border-color: #5fb582; background: #eaf8ef; }
     .choice.wrong { border-color: #e39a93; background: #fff0ee; }
 
@@ -925,10 +938,11 @@
 
         <section class="side-card" id="quiz">
           <h3>テストに挑戦</h3>
-          <p style="margin:0 0 8px;font-weight:800;">Q. 曲げたとき、外側は?</p>
-          <button class="choice" data-answer="correct" type="button">引っ張られる</button>
-          <button class="choice" data-answer="wrong" type="button">圧縮される</button>
-          <button class="choice" data-answer="wrong" type="button">何も変わらない</button>
+          <p class="quiz-count" id="quizCount">1 / 3</p>
+          <p id="quizQuestion" style="margin:0 0 8px;font-weight:800;">Q1. 曲げたとき、外側は?</p>
+          <button class="choice" data-choice-index="0" type="button">引っ張られる</button>
+          <button class="choice" data-choice-index="1" type="button">圧縮される</button>
+          <button class="choice" data-choice-index="2" type="button">何も変わらない</button>
           <div class="feedback" id="feedback">選ぶと答えが出る。</div>
           <button class="primary" id="nextQuiz" type="button">次の問題へ</button>
         </section>
@@ -960,8 +974,19 @@
 
     const storageKey = "sheet-metal-foundation-bk00";
     const state = JSON.parse(localStorage.getItem(storageKey) || "{}");
+    const QUIZ_VERSION = 2;
 
     const saveState = () => localStorage.setItem(storageKey, JSON.stringify(state));
+
+    if (state.quizVersion !== QUIZ_VERSION) {
+      state.quizVersion = QUIZ_VERSION;
+      state.quizIndex = 0;
+      state.quizAnsweredCount = 0;
+      state.quizDone = false;
+      state.quiz = false;
+      state.quizCorrect = false;
+      saveState();
+    }
 
     const thick = $("#thick");
     const radius = $("#radius");
@@ -1000,15 +1025,62 @@
       saveState();
     });
 
+    const quizQuestions = [
+      {
+        question: "Q1. 曲げたとき、外側は?",
+        choices: ["引っ張られる", "圧縮される", "何も変わらない"],
+        correct: 0,
+        ok: "正解。外側は引っ張られて伸びる。内側は押されて縮む。",
+        ng: "惜しい。曲げの外側は引っ張り、内側は圧縮を見る。"
+      },
+      {
+        question: "Q2. 曲げたとき、内側は?",
+        choices: ["引っ張られる", "圧縮される", "穴が増える"],
+        correct: 1,
+        ok: "正解。内側は押しつぶされる向きになる。",
+        ng: "惜しい。内側は圧縮。外側は引っ張り。"
+      },
+      {
+        question: "Q3. 穴が曲げ線に近いと?",
+        choices: ["穴の形がゆがみやすい", "必ず強くなる", "曲げRが消える"],
+        correct: 0,
+        ok: "正解。曲げで金属が動く場所に穴があると、穴も引っぱられてゆがむ。",
+        ng: "惜しい。曲げ線の近くは材料が大きく動くから、穴がゆがみやすい。"
+      }
+    ];
+
+    let quizIndex = Math.min(Number(state.quizIndex) || 0, quizQuestions.length - 1);
+    let answeredCurrent = false;
+
+    function renderQuiz() {
+      const current = quizQuestions[quizIndex];
+      $("#quizCount").textContent = `${quizIndex + 1} / ${quizQuestions.length}`;
+      $("#quizQuestion").textContent = current.question;
+      $$(".choice").forEach((button, index) => {
+        button.textContent = current.choices[index];
+        button.dataset.choiceIndex = String(index);
+        button.classList.remove("correct", "wrong");
+      });
+      $("#feedback").textContent = "選ぶと答えが出る。";
+      $("#nextQuiz").textContent = quizIndex === quizQuestions.length - 1 ? "最初から復習" : "次の問題へ";
+      answeredCurrent = false;
+      state.quizIndex = quizIndex;
+      saveState();
+    }
+
     $$(".choice").forEach(button => {
       button.addEventListener("click", () => {
-        $$(".choice").forEach(item => item.classList.remove("correct", "wrong"));
-        const ok = button.dataset.answer === "correct";
-        button.classList.add(ok ? "correct" : "wrong");
-        $("#feedback").textContent = ok
-          ? "正解。外側は引っ張られて伸びる。内側は押されて縮む。"
-          : "惜しい。曲げの外側は引っ張り、内側は圧縮を見る。";
-        state.quizDone = true;
+        const current = quizQuestions[quizIndex];
+        const choiceIndex = Number(button.dataset.choiceIndex);
+        const ok = choiceIndex === current.correct;
+        $$(".choice").forEach((item, index) => {
+          item.classList.toggle("correct", index === current.correct);
+          item.classList.toggle("wrong", index === choiceIndex && !ok);
+        });
+        $("#feedback").textContent = ok ? current.ok : current.ng;
+        answeredCurrent = true;
+        state.quizAnsweredCount = Math.max(Number(state.quizAnsweredCount) || 0, quizIndex + 1);
+        state.quizDone = state.quizAnsweredCount >= quizQuestions.length;
         state.quizCorrect = ok;
         saveState();
         updateProgress();
@@ -1016,7 +1088,20 @@
     });
 
     $("#nextQuiz").addEventListener("click", () => {
-      $("#feedback").textContent = "次は BK01 で、板厚と曲げRを問題にする。";
+      if (!answeredCurrent) {
+        $("#feedback").textContent = "先に1つ答えを選ぶと、次へ進める。";
+        return;
+      }
+      if (quizIndex === quizQuestions.length - 1) {
+        quizIndex = 0;
+        state.quizAnsweredCount = 0;
+        state.quizDone = false;
+        state.quiz = false;
+      } else {
+        quizIndex += 1;
+      }
+      renderQuiz();
+      updateProgress();
     });
 
     $$(".task-check").forEach(check => {
@@ -1065,6 +1150,7 @@
     window.addEventListener("load", () => {
       state.image = true;
       updateSimulation();
+      renderQuiz();
       updateProgress();
     });
 

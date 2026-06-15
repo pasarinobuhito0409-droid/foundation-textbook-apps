@@ -1,4 +1,4 @@
-const CACHE_NAME = "sheet-metal-foundation-v2";
+const CACHE_NAME = "sheet-metal-foundation-v3";
 const ASSETS = [
   "./",
   "./index.html",
