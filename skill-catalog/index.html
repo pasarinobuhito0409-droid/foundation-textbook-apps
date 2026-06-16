@@ -1,0 +1,989 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f1ea">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <title>スキル図鑑</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f4f1ea;
+      --paper: #fffdf8;
+      --ink: #182026;
+      --muted: #68737b;
+      --line: #d7d0c4;
+      --blue: #2368c5;
+      --green: #207a55;
+      --amber: #b46b0f;
+      --red: #b34352;
+      --purple: #6852bd;
+      --teal: #187f86;
+      --shadow: 0 18px 42px rgba(35, 31, 25, .12);
+      --radius: 8px;
+      font-family: "Yu Gothic", "Hiragino Sans", Meiryo, system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; min-width: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.75), rgba(255,255,255,.24)),
+        repeating-linear-gradient(90deg, rgba(32, 40, 35, .028) 0 1px, transparent 1px 12px),
+        var(--bg);
+      line-height: 1.65;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: 0;
+    }
+
+    .app {
+      width: min(1320px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 18px 0 92px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 0;
+      backdrop-filter: blur(14px);
+      background: rgba(244, 241, 234, .82);
+      border-bottom: 1px solid rgba(215, 208, 196, .65);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      color: white;
+      background: linear-gradient(135deg, var(--blue), var(--teal));
+      box-shadow: 0 10px 22px rgba(35, 104, 197, .24);
+    }
+
+    .status-pill {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 12px;
+      background: rgba(255,253,248,.82);
+      color: var(--muted);
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.02fr) minmax(340px, .98fr);
+      gap: 18px;
+      align-items: stretch;
+      margin-top: 18px;
+    }
+
+    .hero-copy {
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,253,248,.88);
+      box-shadow: var(--shadow);
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--blue);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(34px, 6vw, 62px);
+      line-height: 1.04;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 780px;
+      margin: 18px 0 0;
+      color: #334047;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .hero-image {
+      min-height: 330px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: #e5dfd2;
+      box-shadow: var(--shadow);
+      position: relative;
+    }
+
+    .hero-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .image-note {
+      position: absolute;
+      left: 12px;
+      bottom: 12px;
+      max-width: min(420px, calc(100% - 24px));
+      padding: 10px 12px;
+      border-radius: var(--radius);
+      background: rgba(255,253,248,.9);
+      color: #263239;
+      font-weight: 900;
+      border: 1px solid rgba(255,255,255,.62);
+    }
+
+    .goal-strip {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .goal {
+      min-height: 74px;
+      padding: 12px 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,253,248,.9);
+      color: var(--ink);
+      font-weight: 900;
+      text-align: left;
+      box-shadow: 0 10px 24px rgba(35,31,25,.07);
+    }
+
+    .goal span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .goal.is-active {
+      color: white;
+      background: var(--blue);
+      border-color: var(--blue);
+    }
+
+    .goal.is-active span { color: rgba(255,255,255,.82); }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 380px;
+      gap: 18px;
+      margin-top: 18px;
+      align-items: start;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,253,248,.92);
+      box-shadow: var(--shadow);
+    }
+
+    .search-panel {
+      padding: 16px;
+    }
+
+    .search-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .search-box {
+      width: 100%;
+      min-height: 48px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: white;
+      color: var(--ink);
+      font-weight: 800;
+      outline: 0;
+    }
+
+    .clear-btn {
+      min-height: 48px;
+      padding: 0 14px;
+      border-radius: var(--radius);
+      background: #202a31;
+      color: white;
+      font-weight: 900;
+    }
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .tab {
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: #eee9df;
+      color: #3c464c;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .tab.is-active {
+      background: var(--green);
+      color: white;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .skill-card {
+      min-height: 190px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: white;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+      position: relative;
+      box-shadow: 0 10px 24px rgba(35,31,25,.06);
+    }
+
+    .skill-card:hover,
+    .skill-card:focus-visible {
+      outline: 3px solid rgba(35, 104, 197, .2);
+      transform: translateY(-1px);
+    }
+
+    .skill-card.is-selected {
+      border-color: var(--blue);
+      background: #eef6ff;
+    }
+
+    .skill-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .jp-name {
+      font-size: 20px;
+      line-height: 1.25;
+      font-weight: 950;
+    }
+
+    .star {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: #f1eadc;
+      color: #927038;
+      font-weight: 950;
+      flex: 0 0 auto;
+    }
+
+    .star.is-on {
+      background: #ffe29a;
+      color: #5c4100;
+    }
+
+    .id {
+      display: inline-block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      word-break: break-word;
+    }
+
+    .does {
+      margin: 0;
+      color: #344048;
+      font-weight: 800;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .chip {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #eff1f2;
+      color: #43505a;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .detail {
+      position: sticky;
+      top: 76px;
+      overflow: hidden;
+    }
+
+    .detail-hero {
+      min-height: 86px;
+      padding: 16px;
+      color: white;
+      background: linear-gradient(135deg, var(--blue), var(--teal));
+    }
+
+    .detail-hero small {
+      display: block;
+      opacity: .82;
+      font-weight: 900;
+    }
+
+    .detail-hero h2 {
+      margin: 4px 0 0;
+      font-size: 30px;
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+
+    .detail-body {
+      padding: 16px;
+    }
+
+    .detail-block {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .detail-block:last-child {
+      border-bottom: 0;
+    }
+
+    .detail-title {
+      margin: 0 0 6px;
+      color: #172026;
+      font-weight: 950;
+    }
+
+    .detail-text {
+      margin: 0;
+      color: #3c4850;
+      font-weight: 800;
+    }
+
+    .map-box {
+      min-height: 210px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background:
+        radial-gradient(circle at 50% 50%, rgba(35,104,197,.16), transparent 0 23%, transparent 23%),
+        linear-gradient(135deg, #fbfaf6, #eef6f8);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .node {
+      position: absolute;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(24,32,38,.12);
+      background: white;
+      font-size: 12px;
+      font-weight: 950;
+      box-shadow: 0 8px 18px rgba(35,31,25,.12);
+    }
+
+    .node.main {
+      width: 112px;
+      min-height: 52px;
+      left: calc(50% - 56px);
+      top: calc(50% - 26px);
+      color: white;
+      background: var(--blue);
+      border-color: var(--blue);
+    }
+
+    .node.rel-0 { width: 96px; min-height: 46px; left: 12px; top: 18px; }
+    .node.rel-1 { width: 100px; min-height: 46px; right: 12px; top: 18px; }
+    .node.rel-2 { width: 96px; min-height: 46px; left: 22px; bottom: 18px; }
+    .node.rel-3 { width: 100px; min-height: 46px; right: 18px; bottom: 18px; }
+
+    .health {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .health-card {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,253,248,.9);
+      box-shadow: 0 10px 24px rgba(35,31,25,.06);
+    }
+
+    .health-card b {
+      display: block;
+      font-size: 24px;
+      line-height: 1.1;
+    }
+
+    .health-card span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .bottom-tabs {
+      display: none;
+    }
+
+    .empty {
+      padding: 32px;
+      border: 1px dashed var(--line);
+      border-radius: var(--radius);
+      background: white;
+      color: var(--muted);
+      font-weight: 900;
+      text-align: center;
+      grid-column: 1 / -1;
+    }
+
+    @media (max-width: 1120px) {
+      .hero,
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+
+      .detail {
+        position: static;
+      }
+
+      .goal-strip {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 760px) {
+      .app {
+        width: min(100% - 18px, 460px);
+        padding-top: 10px;
+      }
+
+      .topbar {
+        padding-top: 8px;
+      }
+
+      .brand span:last-child {
+        display: none;
+      }
+
+      .status-pill {
+        font-size: 12px;
+      }
+
+      .hero-copy {
+        padding: 18px;
+      }
+
+      .hero-image {
+        min-height: 240px;
+      }
+
+      .lead {
+        font-size: 15px;
+      }
+
+      .goal-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .health {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .search-row {
+        grid-template-columns: 1fr;
+      }
+
+      .bottom-tabs {
+        position: fixed;
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+        z-index: 30;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 6px;
+        padding: 7px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: rgba(255,253,248,.95);
+        box-shadow: var(--shadow);
+      }
+
+      .bottom-tabs button {
+        min-height: 44px;
+        border-radius: 10px;
+        background: #ece7dc;
+        color: #263239;
+        font-size: 12px;
+        font-weight: 950;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand" aria-label="スキル図鑑">
+        <div class="brand-mark">技</div>
+        <span>スキル図鑑</span>
+      </div>
+      <div class="status-pill" id="countLabel">読み込み中</div>
+    </header>
+
+    <section class="hero" id="top">
+      <div class="hero-copy">
+        <p class="eyebrow">三輪さん専用 / Codex と Claude の道具箱</p>
+        <h1>今日なにをしたいかで<br>スキルを探す。</h1>
+        <p class="lead">
+          日本語の短い名前で探し、内部ID（中の管理名）は小さく残す。
+          フォルダー名を無理に変えず、迷わない見た目にするアプリ。
+        </p>
+      </div>
+      <figure class="hero-image">
+        <img src="./assets/skill-catalog-preview.png" alt="スキル図鑑アプリの完成イメージ">
+        <figcaption class="image-note">完成イメージ：カードで探し、関係マップでつながりを見る</figcaption>
+      </figure>
+    </section>
+
+    <nav class="goal-strip" aria-label="目的から探す">
+      <button class="goal is-active" data-goal="all">全部見る<span>まず全体</span></button>
+      <button class="goal" data-goal="説明">説明したい<span>見える化</span></button>
+      <button class="goal" data-goal="作成">作りたい<span>HTML / PWA</span></button>
+      <button class="goal" data-goal="教科書">勉強したい<span>教科書</span></button>
+      <button class="goal" data-goal="画像">画像にしたい<span>リアル画像</span></button>
+      <button class="goal" data-goal="同期">共有したい<span>GitHub</span></button>
+      <button class="goal" data-goal="発明">発明したい<span>未来へ</span></button>
+    </nav>
+
+    <main class="workspace">
+      <section class="panel search-panel" id="searchArea">
+        <div class="search-row">
+          <input class="search-box" id="searchInput" type="search" placeholder="日本語名・内部ID・発動ワードで探す">
+          <button class="clear-btn" id="clearBtn">リセット</button>
+        </div>
+        <div class="tabs" id="categoryTabs"></div>
+        <div class="main-grid" id="skillGrid"></div>
+      </section>
+
+      <aside class="panel detail" id="detailArea" aria-live="polite">
+        <div class="detail-hero">
+          <small id="detailId">内部ID</small>
+          <h2 id="detailName">スキルを選ぶ</h2>
+        </div>
+        <div class="detail-body">
+          <div class="detail-block">
+            <p class="detail-title">何をする</p>
+            <p class="detail-text" id="detailDoes">左のカードを押すと、使う場面とつながりが見える。</p>
+          </div>
+          <div class="detail-block">
+            <p class="detail-title">いつ使う</p>
+            <p class="detail-text" id="detailWhen">「今日なにしたい？」から押して探せる。</p>
+          </div>
+          <div class="detail-block">
+            <p class="detail-title">発動ワード</p>
+            <div class="chips" id="detailTags"></div>
+          </div>
+          <div class="detail-block" id="mapArea">
+            <p class="detail-title">つながりマップ</p>
+            <div class="map-box" id="mapBox"></div>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <section class="health" id="healthArea" aria-label="整理チェック">
+      <div class="health-card"><b id="totalCount">0</b><span>登録スキル</span></div>
+      <div class="health-card"><b id="favoriteCount">0</b><span>お気に入り</span></div>
+      <div class="health-card"><b id="categoryCount">0</b><span>分類数</span></div>
+      <div class="health-card"><b id="issueCount">0</b><span>要整理チェック</span></div>
+    </section>
+  </div>
+
+  <nav class="bottom-tabs" aria-label="スマホ下タブ">
+    <button data-jump="#searchArea">探す</button>
+    <button data-jump="#categoryTabs">分類</button>
+    <button data-jump="#mapArea">マップ</button>
+    <button id="favoriteTab" type="button">お気に入り</button>
+  </nav>
+
+  <script>
+    const skills = [
+      { id: "adhd-readable-writing", name: "文章表示", cat: "文章", does: "短い息つぎで、読みやすい返事に整える。", when: "返事が長い、見にくい、説明を短くしたい時。", tags: ["表示", "文章", "短く", "読みやすい"], related: ["table-reply", "self-study", "visual-technical-explainer"] },
+      { id: "table-reply", name: "表で整理", cat: "文章", does: "必要な場所だけ表にして、比較を見やすくする。", when: "選択肢、進捗、ルール、比較がある時。", tags: ["表", "比較", "整理"], related: ["adhd-readable-writing", "context-curator"] },
+      { id: "all-rules", name: "全ルール", cat: "管理", does: "三輪さん用の全体ルールをまとめて見る。", when: "どのルールが効いているか確認したい時。", tags: ["セット", "全部", "ルール"], related: ["startup-bootstrap", "branch", "sync-gate"] },
+      { id: "startup-bootstrap", name: "起動読み直し", cat: "管理", does: "圧縮後や新セッションで、重要ルールを読み直す。", when: "コンテキスト圧縮後、セット確認、再開時。", tags: ["圧縮後", "再開", "読み直し"], related: ["all-rules", "branch", "context-curator"] },
+      { id: "branch", name: "道案内", cat: "管理", does: "フック、ゲート、スキル、メモリの読む順番を決める。", when: "どのスキルを読むべきか迷う時。", tags: ["ブランチ", "道", "セット", "フック"], related: ["gate-system", "sync-gate", "miwa-app-builder"] },
+      { id: "gate-system", name: "ゲート設計", cat: "管理", does: "同じ失敗を防ぐため、通る道と止める道を作る。", when: "同じミスが何度も起きた時。", tags: ["ゲート", "失敗防止", "ルール化"], related: ["branch", "meta-growth", "sync-gate"] },
+      { id: "context-curator", name: "文脈整理", cat: "管理", does: "ルールが多すぎる時、今必要なものだけ選ぶ。", when: "スキルが多くて動きが重い時。", tags: ["整理", "文脈", "優先"], related: ["branch", "meta-think", "all-rules"] },
+      { id: "meta-think", name: "考える癖", cat: "管理", does: "正しいか、なぜか、次に何をするかを内側で確認する。", when: "判断の前に一呼吸置きたい時。", tags: ["考える", "確認", "判断"], related: ["meta-growth", "partner-core"] },
+      { id: "meta-growth", name: "学び保存", cat: "管理", does: "失敗や成功を次回の動きに変える。", when: "次から同じことを言わせたくない時。", tags: ["反省", "成長", "暗黙", "保存"], related: ["auto-persist", "gate-system", "sync-gate"] },
+      { id: "auto-persist", name: "自動保存", cat: "同期", does: "覚えて、残して、共有する流れを自動化する。", when: "メモリにして、フックにして、保存してと言われた時。", tags: ["保存", "メモリ", "フック", "残す"], related: ["sync-gate", "claude-config-bridge", "meta-growth"] },
+      { id: "sync-gate", name: "同期ゲート", cat: "同期", does: "会社PC、GitHub、自宅PCのどこまで反映したかを分ける。", when: "自宅にも共有、完全にセット、反映したか確認する時。", tags: ["同期", "GitHub", "自宅PC", "会社PC"], related: ["claude-config-bridge", "auto-persist", "branch"] },
+      { id: "claude-config-bridge", name: "Claude共有", cat: "同期", does: "Claude Code側のスキルや設定とつなぐ。", when: "自宅の君、Claude Code、共有棚の話が出た時。", tags: ["Claude", "共有", "設定", "自宅"], related: ["sync-gate", "codex-claude-resume"] },
+      { id: "codex-claude-resume", name: "統合再開", cat: "同期", does: "CodexとClaude Codeの統合話をすぐ再開する。", when: "Claude統合、前回の続き、メモリスキルフックの話。", tags: ["Codex", "Claude", "再開"], related: ["claude-config-bridge", "startup-bootstrap"] },
+      { id: "codex", name: "Codex操作", cat: "道具", does: "Codex CLIやターミナル側の起動、確認を扱う。", when: "codex、コーデックス、ログイン、CLIの話。", tags: ["Codex", "CLI", "ログイン"], related: ["openai-docs", "codex-claude-resume"] },
+      { id: "miwa-app-builder", name: "アプリ作成", cat: "作成", does: "HTML、PWA、教材アプリを作る入口になる。", when: "作って、アプリ作って、画面作って、PWA作ってと言った時。", tags: ["作成", "HTML", "PWA", "アプリ"], related: ["game-screen-html", "artifact-to-pwa", "imagegen"] },
+      { id: "game-screen-html", name: "ゲーム画面", cat: "作成", does: "長いページではなく、1画面で切り替わる体験にする。", when: "ロードマップ、学習画面、触れるアプリを作る時。", tags: ["1画面", "ゲーム", "HTML", "UI"], related: ["miwa-app-builder", "real-visual-learning"] },
+      { id: "artifact-to-pwa", name: "スマホアプリ化", cat: "作成", does: "Webページをスマホのホーム画面から開ける形にする。", when: "スマホで見たい、アプリ化、PWA、公開URLの時。", tags: ["PWA", "スマホ", "ホーム画面", "公開"], related: ["miwa-app-builder", "foundation-textbook-apps", "sync-gate"] },
+      { id: "imagegen", name: "画像生成", cat: "画像", does: "リアル画像、完成イメージ、教材画像を作る。", when: "画像で見たい、完成イメージ、リアルな画像が必要な時。", tags: ["画像", "リアル", "完成イメージ", "GPT Image"], related: ["real-visual-learning", "visual-technical-explainer"] },
+      { id: "real-visual-first-gate", name: "リアル画像優先", cat: "画像", does: "技術説明を文字や簡単図だけで終わらせない。", when: "機械、板金、溶接、現場作業、見て理解したい時。", tags: ["リアル画像", "技術説明", "図解", "GPT Image 2"], related: ["imagegen", "visual-technical-explainer", "real-visual-learning"] },
+      { id: "real-visual-learning", name: "見える学習", cat: "画像", does: "勉強を現物、写真、動き、操作で理解できる形にする。", when: "教科書、学習マップ、触って覚える教材を作る時。", tags: ["学習", "リアル", "画像", "触る"], related: ["foundation-textbook-apps", "imagegen", "game-screen-html"] },
+      { id: "visual-technical-explainer", name: "技術図解", cat: "画像", does: "CAD、加工、組立、現場作業を目で分かる説明にする。", when: "これなに、どう使う、なぜこうなる、図で説明しての時。", tags: ["技術", "CAD", "図解", "説明"], related: ["real-visual-first-gate", "imagegen"] },
+      { id: "self-study", name: "超かみ砕き教科書", cat: "教科書", does: "小学生でも分かる順番で、結論から教える。", when: "勉強、教科書モード、進捗、復習、テストの時。", tags: ["勉強", "教科書", "復習", "テスト"], related: ["foundation-textbook-apps", "textbook-book-mode", "週テスト"] },
+      { id: "foundation-textbook-apps", name: "教科書アプリ共通", cat: "教科書", does: "機械、電気、CAE、板金などの教材アプリを共通化する。", when: "教科書アプリを作る、更新する、増やす時。", tags: ["教科書", "アプリ", "PWA", "復習"], related: ["self-study", "artifact-to-pwa", "textbook-book-mode"] },
+      { id: "textbook-book-mode", name: "本のように読む", cat: "教科書", does: "教材を上から読めば分かる本の道に整える。", when: "ごちゃごちゃ、見にくい、本のようにしたい時。", tags: ["本", "目次", "読みやすい", "整理"], related: ["foundation-textbook-apps", "self-study"] },
+      { id: "mechanics-cae-textbook", name: "力学CAE教科書", cat: "教科書", does: "力、固定、応力、変形を設計とCAEにつなげて学ぶ。", when: "設計力学、CAE基礎、力とは何かを学ぶ時。", tags: ["CAE", "力学", "機械設計", "基礎"], related: ["foundation-textbook-apps", "self-study"] },
+      { id: "electrical-design-textbook", name: "電気設計教科書", cat: "教科書", does: "電圧、電流、配線、制御盤を設計判断として学ぶ。", when: "電気設計の基礎をアプリ化、復習する時。", tags: ["電気", "配線", "制御盤", "基礎"], related: ["foundation-textbook-apps", "self-study"] },
+      { id: "fusion-textbook", name: "Fusion教科書", cat: "教科書", does: "Fusion 360でメカ、電気、ソフトをつなぐ学習を進める。", when: "Fusion、発明ロードマップ、CAD学習の時。", tags: ["Fusion", "CAD", "発明", "教科書"], related: ["real-visual-learning", "発明"] },
+      { id: "週テスト", name: "週テスト", cat: "教科書", does: "週ごとの復習テストを作る。", when: "週末テスト、復習テスト、問題作っての時。", tags: ["テスト", "復習", "問題", "クイズ"], related: ["self-study", "foundation-textbook-apps"] },
+      { id: "設計クロード", name: "設計相棒", cat: "設計", does: "機械設計、図面、板金、加工の考え方を支える。", when: "設計、機械設計、図面、加工、公差の相談。", tags: ["設計", "図面", "板金", "加工"], related: ["visual-technical-explainer", "mechanics-cae-textbook"] },
+      { id: "設計疑問", name: "設計疑問メモ", cat: "設計", does: "現場で湧いた疑問を逃さずタンク化する。", when: "これ何だっけ、なぜこうなる、後で調べたい時。", tags: ["疑問", "メモ", "設計", "現場"], related: ["設計クロード", "self-study"] },
+      { id: "sw-macro", name: "SolidWorksマクロ", cat: "設計", does: "SolidWorks VBAマクロを作る、直す。", when: "SolidWorks、マクロ、図面操作、PDF出力の時。", tags: ["SolidWorks", "マクロ", "VBA", "図面"], related: ["sw-shortcut", "設計クロード"] },
+      { id: "sw-shortcut", name: "SolidWorks効率化", cat: "設計", does: "ショートカット、Sキー、マウスジェスチャーを整える。", when: "SolidWorksの作業効率を上げたい時。", tags: ["SolidWorks", "ショートカット", "Sキー"], related: ["sw-macro", "設計クロード"] },
+      { id: "activity-tracker", name: "活動記録", cat: "生活", does: "月間予定をタップで完了記録し、達成率を見る。", when: "活動、予定、タスク完了、達成率の時。", tags: ["活動", "予定", "達成率", "PWA"], related: ["calendar-monthly", "effort-ratio"] },
+      { id: "calendar-monthly", name: "月間カレンダー", cat: "生活", does: "月間予定カレンダー画像を作る。", when: "カレンダー作って、予定表、月間予定の時。", tags: ["カレンダー", "予定", "月間"], related: ["activity-tracker", "effort-ratio"] },
+      { id: "effort-ratio", name: "努力割合", cat: "生活", does: "活動データから努力の割合をグラフにする。", when: "努力割合、活動割合、月間割合を見たい時。", tags: ["努力", "割合", "グラフ"], related: ["activity-tracker", "calendar-monthly"] },
+      { id: "case-checklist-app", name: "案件チェック", cat: "生活", does: "案件チェックリスト、工程表、納期管理を扱う。", when: "案件アプリ、チェックリスト、工程表の時。", tags: ["案件", "チェック", "工程", "納期"], related: ["activity-tracker"] },
+      { id: "mma-coach", name: "MMAコーチ", cat: "生活", does: "格闘技練習を音声ログから分類、振り返りする。", when: "MMA、練習ログ、技の癖を見たい時。", tags: ["MMA", "練習", "ログ"], related: ["activity-tracker", "effort-ratio"] },
+      { id: "custom-pc", name: "自作PC", cat: "調査", does: "PCパーツ選び、構成、購入判断を助ける。", when: "PC購入、自作PC、CPU、GPU、メモリの話。", tags: ["PC", "購入", "パーツ", "構成"], related: ["pc-purchase-resume", "purchase-verify-stock"] },
+      { id: "pc-purchase-resume", name: "PC購入再開", cat: "調査", does: "PC購入プロジェクトをすぐ再開する。", when: "PC候補確認、PC最終購入、PCの件の時。", tags: ["PC", "購入", "再開"], related: ["custom-pc", "pc-market-research"] },
+      { id: "pc-market-research", name: "PC市場調査", cat: "調査", does: "楽天、メルカリ、AmazonなどでPC候補を比べる。", when: "中古PCや部品の市場調査をしたい時。", tags: ["PC", "市場", "比較", "中古"], related: ["purchase-verify-stock", "custom-pc"] },
+      { id: "purchase-verify-stock", name: "在庫確認", cat: "調査", does: "おすすめ前に在庫、価格、販売状況を確認する。", when: "本命、推奨、買う候補を出す前。", tags: ["在庫", "価格", "購入", "確認"], related: ["pc-market-research", "deep-research-ranking"] },
+      { id: "deep-research-ranking", name: "徹底ランキング", cat: "調査", does: "深く調べて、ランキングやHTMLにまとめる。", when: "徹底的に探して、ガチランキング、地図写真つきの時。", tags: ["調査", "ランキング", "HTML", "地図"], related: ["healing-tourism-research", "browse-chrome"] },
+      { id: "healing-tourism-research", name: "癒し観光", cat: "調査", does: "疲れを癒す観光地を、地図と写真で整理する。", when: "周辺観光、癒し、日帰り、旅行プランの時。", tags: ["観光", "癒し", "地図", "写真"], related: ["trip-shiori", "deep-research-ranking"] },
+      { id: "trip-shiori", name: "旅のしおり", cat: "調査", does: "旅行プランをスマホで見やすいHTMLにする。", when: "しおり、旅程、観光プランを作る時。", tags: ["旅行", "しおり", "HTML", "地図"], related: ["healing-tourism-research"] },
+      { id: "browse-chrome", name: "ブラウザ読取", cat: "調査", does: "ブラウザのページを読んで調査を助ける。", when: "楽天、メルカリ、Amazon、ヤフオクのページ確認。", tags: ["ブラウザ", "調査", "ページ読取"], related: ["pc-market-research", "deep-research-ranking"] },
+      { id: "openai-docs", name: "OpenAI資料", cat: "調査", does: "OpenAI公式資料を確認する。", when: "OpenAI API、Codex、Responses APIの最新確認。", tags: ["OpenAI", "公式", "API", "Codex"], related: ["codex"] },
+      { id: "github:github", name: "GitHub確認", cat: "同期", does: "GitHubのリポジトリ、PR、Issueを確認する。", when: "GitHubの状態、PR、Issue、リポジトリを見る時。", tags: ["GitHub", "PR", "Issue"], related: ["github:yeet", "sync-gate"] },
+      { id: "github:yeet", name: "GitHub公開", cat: "同期", does: "変更をコミット、プッシュ、PR化する。", when: "公開、push、PR作っての時。", tags: ["GitHub", "push", "PR", "commit"], related: ["github:github", "sync-gate"] },
+      { id: "github:gh-fix-ci", name: "CI修理", cat: "同期", does: "GitHub Actionsの失敗を調べて直す。", when: "CIが落ちた、チェックが失敗した時。", tags: ["GitHub", "CI", "Actions"], related: ["github:github"] },
+      { id: "github:gh-address-comments", name: "PRコメント対応", cat: "同期", does: "PRレビューコメントを確認して対応する。", when: "レビュー対応、未解決コメント確認の時。", tags: ["GitHub", "PR", "レビュー"], related: ["github:github"] },
+      { id: "documents:documents", name: "文書作成", cat: "道具", does: "Wordやdocx文書を作る、直す。", when: "文書、Word、docx、Google Docs向けの時。", tags: ["Word", "文書", "docx"], related: ["presentations:Presentations"] },
+      { id: "presentations:Presentations", name: "資料スライド", cat: "道具", does: "PowerPointやプレゼン資料を作る、直す。", when: "スライド、PPT、発表資料の時。", tags: ["PPT", "スライド", "プレゼン"], related: ["documents:documents"] },
+      { id: "spreadsheets:Spreadsheets", name: "表計算", cat: "道具", does: "Excelや表データを作る、分析する。", when: "Excel、表、集計、グラフの時。", tags: ["Excel", "表", "分析"], related: ["documents:documents"] },
+      { id: "pdf:pdf", name: "PDF確認", cat: "道具", does: "PDFを読む、作る、見た目を確認する。", when: "PDFのレイアウト、変換、確認の時。", tags: ["PDF", "確認", "変換"], related: ["documents:documents"] },
+      { id: "design-ai-builder", name: "設計AI作成", cat: "作成", does: "設計書作成やレビュー用AIプロダクトを進める。", when: "設計専用AI、設計AIビルダーの話。", tags: ["AI", "設計", "プロダクト"], related: ["miwa-app-builder", "設計クロード"] },
+      { id: "miwa-codex-control-system", name: "Codex制御盤", cat: "作成", does: "Codexの外部制御基盤、ゲート、操作盤を作る。", when: "外部基盤、制御基盤、Codex制御盤の時。", tags: ["Codex", "制御", "ゲート", "基盤"], related: ["gate-system", "branch", "sync-gate"] },
+      { id: "発明", name: "発明計画", cat: "発明", does: "人間拡張、不老、ロボットなどの発明計画を支える。", when: "発明、ロボット、不老、脳拡張の話。", tags: ["発明", "ロボット", "不老", "未来"], related: ["発明-review", "longevity-200-builder", "robot-arm"] },
+      { id: "発明-review", name: "発明レビュー", cat: "発明", does: "発明計画を月次で見直す。", when: "発明レビュー、進捗確認、計画更新の時。", tags: ["発明", "レビュー", "月次"], related: ["発明", "知識アップデート"] },
+      { id: "longevity-200-builder", name: "不老プロジェクト", cat: "発明", does: "健康寿命や若返り研究を発明計画に落とす。", when: "長寿、不老、200歳、若返りの時。", tags: ["不老", "長寿", "若返り"], related: ["不老200", "human-as-machine"] },
+      { id: "不老200", name: "不老200", cat: "発明", does: "200歳まで若く生きる発明ロードマップを扱う。", when: "柱3、時間拡張、不老研究の深掘り。", tags: ["不老", "200歳", "時間拡張"], related: ["longevity-200-builder", "知識アップデート"] },
+      { id: "human-as-machine", name: "人体を機械として見る", cat: "発明", does: "人体を未来工学の完成品として研究する。", when: "分子機械、タンパク質、人体工学の話。", tags: ["人体", "分子", "未来工学"], related: ["不老200", "発明"] },
+      { id: "robot-arm", name: "ロボットアーム", cat: "発明", does: "小型アームロボットの設計、制御、学習を進める。", when: "ロボットアーム、サーボ、Arduinoの時。", tags: ["ロボット", "アーム", "Arduino"], related: ["発明", "fusion-textbook"] },
+      { id: "garakuta-lab", name: "ガラクタ研究所", cat: "発明", does: "ジャンク部品や廃材から発明を生む。", when: "ガラクタ、ジャンク、分解、部品台帳の時。", tags: ["ガラクタ", "ジャンク", "発明"], related: ["発明", "robot-arm"] },
+      { id: "知識アップデート", name: "知識更新", cat: "発明", does: "機械設計、物理、新材料の知識を更新する。", when: "最新知識、知識アップデート、週1更新の話。", tags: ["知識", "更新", "最新", "研究"], related: ["発明-review", "openai-docs"] },
+      { id: "world-mystery", name: "世界の謎", cat: "発明", does: "現実、物理法則、宇宙の謎を考える。", when: "世界の謎、なぜ現実、物理法則の起源の時。", tags: ["世界", "謎", "物理", "現実"], related: ["発明", "human-as-machine"] },
+      { id: "quantum-pc", name: "量子PC", cat: "発明", does: "量子コンピュータ関連の学びや調査を扱う。", when: "量子PC、量子コンピュータの話。", tags: ["量子", "PC", "未来"], related: ["world-mystery", "知識アップデート"] },
+      { id: "claude-bigsur", name: "Claude起動修理", cat: "道具", does: "Big SurなどでClaude Codeが壊れた時に直す。", when: "Claude Codeが起動しない、dyld、libicucoreの時。", tags: ["Claude", "Big Sur", "修理"], related: ["claude-config-bridge"] }
+    ];
+
+    const categoryColors = {
+      "文章": "#2368c5",
+      "管理": "#187f86",
+      "同期": "#207a55",
+      "作成": "#6852bd",
+      "画像": "#b34352",
+      "教科書": "#b46b0f",
+      "設計": "#40586f",
+      "生活": "#58732f",
+      "調査": "#7a4f20",
+      "道具": "#4c6275",
+      "発明": "#7d3f74"
+    };
+
+    const state = {
+      query: "",
+      category: "全部",
+      goal: "all",
+      selectedId: skills[0].id,
+      favorites: new Set(JSON.parse(localStorage.getItem("skillCatalogFavorites") || "[]"))
+    };
+
+    const grid = document.getElementById("skillGrid");
+    const searchInput = document.getElementById("searchInput");
+    const categoryTabs = document.getElementById("categoryTabs");
+    const countLabel = document.getElementById("countLabel");
+
+    function saveFavorites() {
+      localStorage.setItem("skillCatalogFavorites", JSON.stringify([...state.favorites]));
+    }
+
+    function categories() {
+      return ["全部", ...Array.from(new Set(skills.map(skill => skill.cat))).sort((a, b) => a.localeCompare(b, "ja"))];
+    }
+
+    function skillText(skill) {
+      return [skill.name, skill.id, skill.cat, skill.does, skill.when, ...(skill.tags || [])].join(" ").toLowerCase();
+    }
+
+    function filteredSkills() {
+      const query = state.query.trim().toLowerCase();
+      return skills.filter(skill => {
+        const categoryOk = state.category === "全部" || skill.cat === state.category;
+        const goalOk = state.goal === "all" || skillText(skill).includes(state.goal.toLowerCase());
+        const searchOk = !query || skillText(skill).includes(query);
+        return categoryOk && goalOk && searchOk;
+      });
+    }
+
+    function renderTabs() {
+      categoryTabs.innerHTML = "";
+      categories().forEach(category => {
+        const button = document.createElement("button");
+        button.className = `tab${state.category === category ? " is-active" : ""}`;
+        button.textContent = category;
+        button.addEventListener("click", () => {
+          state.category = category;
+          render();
+        });
+        categoryTabs.appendChild(button);
+      });
+    }
+
+    function renderCards() {
+      const list = filteredSkills();
+      grid.innerHTML = "";
+      countLabel.textContent = `${list.length} / ${skills.length} 件`;
+
+      if (!list.length) {
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        empty.textContent = "見つからない。検索語を短くするか、分類をリセットしてみる。";
+        grid.appendChild(empty);
+        return;
+      }
+
+      list.forEach(skill => {
+        const card = document.createElement("button");
+        card.className = `skill-card${state.selectedId === skill.id ? " is-selected" : ""}`;
+        card.style.borderTop = `5px solid ${categoryColors[skill.cat] || "#2368c5"}`;
+        card.addEventListener("click", event => {
+          if (event.target.closest(".star")) return;
+          state.selectedId = skill.id;
+          renderDetail();
+          renderCards();
+        });
+
+        const favorite = state.favorites.has(skill.id);
+        card.innerHTML = `
+          <div>
+            <div class="skill-head">
+              <div>
+                <div class="jp-name">${skill.name}</div>
+                <span class="id">内部ID: ${skill.id}</span>
+              </div>
+              <button class="star ${favorite ? "is-on" : ""}" title="お気に入り" aria-label="お気に入り">${favorite ? "★" : "☆"}</button>
+            </div>
+            <p class="does">${skill.does}</p>
+          </div>
+          <div class="chips">
+            <span class="chip">${skill.cat}</span>
+            ${(skill.tags || []).slice(0, 2).map(tag => `<span class="chip">${tag}</span>`).join("")}
+          </div>
+        `;
+
+        card.querySelector(".star").addEventListener("click", () => {
+          if (state.favorites.has(skill.id)) state.favorites.delete(skill.id);
+          else state.favorites.add(skill.id);
+          saveFavorites();
+          render();
+        });
+
+        grid.appendChild(card);
+      });
+    }
+
+    function findSkill(id) {
+      return skills.find(skill => skill.id === id) || skills[0];
+    }
+
+    function renderDetail() {
+      const skill = findSkill(state.selectedId);
+      document.getElementById("detailName").textContent = skill.name;
+      document.getElementById("detailId").textContent = `内部ID: ${skill.id}`;
+      document.getElementById("detailDoes").textContent = skill.does;
+      document.getElementById("detailWhen").textContent = skill.when;
+      document.querySelector(".detail-hero").style.background = `linear-gradient(135deg, ${categoryColors[skill.cat] || "#2368c5"}, #187f86)`;
+
+      const tags = document.getElementById("detailTags");
+      tags.innerHTML = "";
+      [skill.cat, ...(skill.tags || [])].forEach(tag => {
+        const span = document.createElement("span");
+        span.className = "chip";
+        span.textContent = tag;
+        tags.appendChild(span);
+      });
+
+      renderMap(skill);
+    }
+
+    function renderMap(skill) {
+      const map = document.getElementById("mapBox");
+      const related = (skill.related || []).map(findSkill).slice(0, 4);
+      map.innerHTML = `<div class="node main">${skill.name}</div>`;
+      related.forEach((item, index) => {
+        const node = document.createElement("button");
+        node.className = `node rel-${index}`;
+        node.textContent = item.name;
+        node.addEventListener("click", () => {
+          state.selectedId = item.id;
+          render();
+        });
+        map.appendChild(node);
+      });
+    }
+
+    function renderHealth() {
+      const dupes = skills
+        .map(skill => skill.name)
+        .filter((name, index, names) => names.indexOf(name) !== index);
+      const uncategorized = skills.filter(skill => !skill.cat || skill.cat === "その他").length;
+      const noTags = skills.filter(skill => !skill.tags || !skill.tags.length).length;
+      document.getElementById("totalCount").textContent = skills.length;
+      document.getElementById("favoriteCount").textContent = state.favorites.size;
+      document.getElementById("categoryCount").textContent = categories().length - 1;
+      document.getElementById("issueCount").textContent = new Set(dupes).size + uncategorized + noTags;
+    }
+
+    function renderGoals() {
+      document.querySelectorAll(".goal").forEach(button => {
+        button.classList.toggle("is-active", button.dataset.goal === state.goal);
+      });
+    }
+
+    function render() {
+      renderGoals();
+      renderTabs();
+      renderCards();
+      renderDetail();
+      renderHealth();
+    }
+
+    document.querySelectorAll(".goal").forEach(button => {
+      button.addEventListener("click", () => {
+        state.goal = button.dataset.goal;
+        state.category = "全部";
+        render();
+      });
+    });
+
+    searchInput.addEventListener("input", event => {
+      state.query = event.target.value;
+      renderCards();
+    });
+
+    document.getElementById("clearBtn").addEventListener("click", () => {
+      state.query = "";
+      state.category = "全部";
+      state.goal = "all";
+      searchInput.value = "";
+      render();
+    });
+
+    document.querySelectorAll("[data-jump]").forEach(button => {
+      button.addEventListener("click", () => {
+        document.querySelector(button.dataset.jump)?.scrollIntoView({ block: "start" });
+      });
+    });
+
+    document.getElementById("favoriteTab").addEventListener("click", () => {
+      state.query = "";
+      state.category = "全部";
+      state.goal = "all";
+      searchInput.value = "";
+      const favoriteIds = [...state.favorites];
+      if (favoriteIds.length) state.selectedId = favoriteIds[0];
+      grid.innerHTML = "";
+      const favorites = skills.filter(skill => state.favorites.has(skill.id));
+      countLabel.textContent = `${favorites.length} / ${skills.length} 件`;
+      if (!favorites.length) {
+        grid.innerHTML = `<div class="empty">まだお気に入りがない。カード右上の星を押す。</div>`;
+        return;
+      }
+      favorites.forEach(skill => {
+        const card = document.createElement("button");
+        card.className = "skill-card";
+        card.style.borderTop = `5px solid ${categoryColors[skill.cat] || "#2368c5"}`;
+        card.innerHTML = `<div><div class="jp-name">${skill.name}</div><span class="id">内部ID: ${skill.id}</span><p class="does">${skill.does}</p></div><div class="chips"><span class="chip">${skill.cat}</span></div>`;
+        card.addEventListener("click", () => {
+          state.selectedId = skill.id;
+          render();
+        });
+        grid.appendChild(card);
+      });
+      document.getElementById("searchArea").scrollIntoView({ block: "start" });
+    });
+
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./service-worker.js").catch(() => {});
+      });
+    }
+
+    render();
+  </script>
+</body>
+</html>

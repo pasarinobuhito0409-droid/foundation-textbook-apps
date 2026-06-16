@@ -12,8 +12,6 @@
       --ink: #172026;
       --muted: #667176;
       --line: #d8d3c8;
-      --blue: #2368c5;
-      --green: #1f7a55;
       --shadow: 0 18px 44px rgba(45, 39, 30, .12);
       --radius: 8px;
       font-family: "Yu Gothic", "Hiragino Sans", Meiryo, system-ui, sans-serif;
@@ -32,7 +30,7 @@
     }
 
     main {
-      width: min(1100px, calc(100% - 28px));
+      width: min(1120px, calc(100% - 28px));
       margin: 0 auto;
       padding: 34px 0 54px;
     }
@@ -45,25 +43,25 @@
     }
 
     .lead {
-      max-width: 760px;
+      max-width: 780px;
       margin: 18px 0 26px;
       color: #2f3d42;
       font-size: 18px;
-      font-weight: 700;
+      font-weight: 800;
     }
 
     .app-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(5, 1fr);
       gap: 14px;
     }
 
     .app-card {
-      min-height: 236px;
+      min-height: 248px;
       padding: 18px;
       border: 1px solid var(--line);
       border-radius: var(--radius);
-      background: rgba(255,253,247,.88);
+      background: rgba(255,253,247,.9);
       box-shadow: var(--shadow);
       text-decoration: none;
       color: inherit;
@@ -79,7 +77,7 @@
       position: absolute;
       inset: 0 0 auto;
       height: 5px;
-      background: var(--accent, var(--blue));
+      background: var(--accent);
     }
 
     .app-card strong {
@@ -91,7 +89,7 @@
     .app-card p {
       color: var(--muted);
       margin: 10px 0 0;
-      font-weight: 700;
+      font-weight: 800;
     }
 
     .open {
@@ -102,7 +100,7 @@
       color: white;
       display: grid;
       place-items: center;
-      font-weight: 900;
+      font-weight: 950;
     }
 
     .note {
@@ -112,10 +110,10 @@
       border-radius: var(--radius);
       color: var(--muted);
       background: rgba(255,255,255,.7);
-      font-weight: 700;
+      font-weight: 800;
     }
 
-    @media (max-width: 980px) {
+    @media (max-width: 1100px) {
       .app-grid { grid-template-columns: repeat(2, 1fr); }
     }
 
@@ -130,21 +128,22 @@
   <main>
     <h1>基礎教科書アプリ</h1>
     <p class="lead">
-      三輪さん専用。仕事前に開いて、見て、触って、テストして、少しずつ基礎を固める入口。
+      仕事前に開いて、見て、触って、テストして、少しずつ基礎を固める入口。
+      新しい教材や整理道具は、ここに増やしていく。
     </p>
 
     <div class="app-grid">
       <a class="app-card" style="--accent:#2368c5" href="./sheet-metal-foundation/index.html">
         <span>
           <strong>板金基礎</strong>
-          <p>板厚、曲げR、穴位置、加工NGを、実物図とシミュレーターで覚える。</p>
+          <p>板厚、曲げR、穴位置、加工NGを実物図とシミュレーターで覚える。</p>
         </span>
         <span class="open">開く</span>
       </a>
 
       <a class="app-card" style="--accent:#1f7a55" href="./mechanical-design-foundation/mechanical-design-foundation-textbook.html">
         <span>
-          <strong>機械設計 基礎</strong>
+          <strong>機械設計基礎</strong>
           <p>目的、構造、材料、加工、公差を設計判断として復習する。</p>
         </span>
         <span class="open">開く</span>
@@ -152,8 +151,8 @@
 
       <a class="app-card" style="--accent:#7c3aed" href="./electrical-design-foundation/electrical-design-foundation-textbook.html">
         <span>
-          <strong>電気設計 基礎</strong>
-          <p>目次ホームにE01/E02をため、1枚ずつ読み、朝10分とE02実験で電圧・電流・抵抗を復習する。</p>
+          <strong>電気設計基礎</strong>
+          <p>電圧、電流、抵抗、配線、制御盤を触れる教材で復習する。</p>
         </span>
         <span class="open">開く</span>
       </a>
@@ -161,14 +160,22 @@
       <a class="app-card" style="--accent:#b45309" href="./mechanics-cae-foundation/mechanics-cae-foundation-textbook.html">
         <span>
           <strong>力学とCAE</strong>
-          <p>力、固定、荷重、応力、変形を、板金とCAEにつなげる。</p>
+          <p>力、固定、荷重、応力、変形を現物感覚とCAEにつなげる。</p>
+        </span>
+        <span class="open">開く</span>
+      </a>
+
+      <a class="app-card" style="--accent:#187f86" href="./skill-catalog/index.html">
+        <span>
+          <strong>スキル図鑑</strong>
+          <p>日本語の短名でスキルを探し、内部IDとつながりを確認する。</p>
         </span>
         <span class="open">開く</span>
       </a>
     </div>
 
     <p class="note">
-      スマホでは、開いたアプリをブラウザの共有メニューから「ホーム画面に追加」すると、1タップで復習できます。
+      スマホでは、Safari や Chrome の共有メニューから「ホーム画面に追加」を押すと、1タップで開ける。
     </p>
   </main>
 </body>

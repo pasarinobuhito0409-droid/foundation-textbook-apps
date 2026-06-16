@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="スキル図鑑">
+  <rect width="512" height="512" rx="96" fill="#f4f1ea"/>
+  <rect x="86" y="86" width="340" height="340" rx="42" fill="#fffdf8" stroke="#d7d0c4" stroke-width="12"/>
+  <rect x="124" y="128" width="110" height="92" rx="18" fill="#2368c5"/>
+  <rect x="278" y="128" width="110" height="92" rx="18" fill="#207a55"/>
+  <rect x="124" y="270" width="110" height="92" rx="18" fill="#b46b0f"/>
+  <rect x="278" y="270" width="110" height="92" rx="18" fill="#6852bd"/>
+  <path d="M180 220v50m154-50v50M234 174h44M234 316h44" fill="none" stroke="#182026" stroke-width="14" stroke-linecap="round"/>
+</svg>
