@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>三輪さん専用 基礎教科書アプリ</title>
+  <title>基礎教科書アプリ</title>
   <style>
     :root {
       color-scheme: light;
@@ -52,16 +52,16 @@
 
     .app-grid {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 14px;
     }
 
     .app-card {
-      min-height: 248px;
+      min-height: 232px;
       padding: 18px;
       border: 1px solid var(--line);
       border-radius: var(--radius);
-      background: rgba(255,253,247,.9);
+      background: rgba(255,253,247,.92);
       box-shadow: var(--shadow);
       text-decoration: none;
       color: inherit;
@@ -113,7 +113,7 @@
       font-weight: 800;
     }
 
-    @media (max-width: 1100px) {
+    @media (max-width: 980px) {
       .app-grid { grid-template-columns: repeat(2, 1fr); }
     }
 
@@ -128,8 +128,8 @@
   <main>
     <h1>基礎教科書アプリ</h1>
     <p class="lead">
-      仕事前に開いて、見て、触って、テストして、少しずつ基礎を固める入口。
-      新しい教材や整理道具は、ここに増やしていく。
+      仕事前に開いて、見て、触って、テストして、基礎を少しずつ固める入口。
+      新しい教科書はここへ追加して、前の内容も残す。
     </p>
 
     <div class="app-grid">
@@ -137,6 +137,14 @@
         <span>
           <strong>板金基礎</strong>
           <p>板厚、曲げR、穴位置、加工NGを実物図とシミュレーターで覚える。</p>
+        </span>
+        <span class="open">開く</span>
+      </a>
+
+      <a class="app-card" style="--accent:#d7672f" href="./welding-foundation/index.html">
+        <span>
+          <strong>溶接基礎</strong>
+          <p>熱で溶ける、冷えて固まる、2枚がつながる流れを実物画像で覚える。</p>
         </span>
         <span class="open">開く</span>
       </a>
@@ -168,7 +176,7 @@
       <a class="app-card" style="--accent:#187f86" href="./skill-catalog/index.html">
         <span>
           <strong>スキル図鑑</strong>
-          <p>日本語の短名でスキルを探し、内部IDとつながりを確認する。</p>
+          <p>日本語の短い名前でスキルを探し、内部IDとのつながりを見る。</p>
         </span>
         <span class="open">開く</span>
       </a>

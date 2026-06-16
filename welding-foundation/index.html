@@ -1,0 +1,1168 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f1ea">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <title>溶接基礎 W00</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #ece8df;
+      --paper: #fffdf7;
+      --panel: #f8f6ef;
+      --ink: #182026;
+      --muted: #667176;
+      --line: #d8d3c8;
+      --blue: #2368c5;
+      --orange: #d7672f;
+      --red: #c83d34;
+      --green: #237a56;
+      --violet: #6750bb;
+      --shadow: 0 20px 50px rgba(45, 39, 30, .14);
+      --radius: 8px;
+      font-family: "Yu Gothic", "Hiragino Sans", Meiryo, system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; min-width: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(120deg, rgba(255,255,255,.74), rgba(255,255,255,.18)),
+        repeating-linear-gradient(90deg, rgba(24,32,38,.026) 0 1px, transparent 1px 12px),
+        var(--bg);
+      line-height: 1.65;
+      overflow-wrap: anywhere;
+    }
+
+    button, input, textarea { font: inherit; }
+    button { cursor: pointer; }
+
+    .app-shell {
+      width: min(1240px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 18px 0 34px;
+    }
+
+    .topbar {
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: clamp(24px, 4vw, 36px);
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    .brand p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .install-button {
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 0 16px;
+      background: rgba(255,255,255,.78);
+      color: var(--ink);
+      box-shadow: 0 10px 24px rgba(45, 39, 30, .08);
+      font-weight: 900;
+    }
+
+    .workbench {
+      display: grid;
+      grid-template-columns: 118px minmax(0, 1fr) 310px;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .rail,
+    .lesson,
+    .side-panel,
+    .card,
+    .stage-card {
+      border: 1px solid rgba(124, 116, 101, .28);
+      border-radius: var(--radius);
+      background: rgba(255, 253, 247, .9);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+
+    .rail {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      position: sticky;
+      top: 12px;
+    }
+
+    .rail-title {
+      font-size: 13px;
+      color: var(--muted);
+      margin: 0 0 2px;
+      font-weight: 900;
+    }
+
+    .rail-button {
+      width: 100%;
+      min-height: 54px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      color: var(--ink);
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      text-align: left;
+      font-weight: 900;
+    }
+
+    .rail-button span {
+      white-space: nowrap;
+    }
+
+    .rail-button.active {
+      color: white;
+      background: linear-gradient(180deg, #3679d6, #1f5db5);
+      border-color: transparent;
+      box-shadow: 0 12px 24px rgba(35, 104, 197, .28);
+    }
+
+    .lesson {
+      padding: 14px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .chapter-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 10px;
+    }
+
+    .chapter-head h2 {
+      margin: 0;
+      font-size: clamp(20px, 3vw, 28px);
+      letter-spacing: 0;
+    }
+
+    .chapter-head p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .chapter-tag {
+      display: inline-grid;
+      place-items: center;
+      min-height: 32px;
+      padding: 0 12px;
+      border-radius: 999px;
+      color: white;
+      background: var(--blue);
+      font-weight: 950;
+      white-space: nowrap;
+    }
+
+    .stage-card {
+      position: relative;
+      min-height: 430px;
+      overflow: hidden;
+      background: #201b18;
+    }
+
+    .stage-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .stage-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(255,253,247,.82) 0%, rgba(255,253,247,.18) 42%, rgba(255,253,247,.06) 100%),
+        linear-gradient(180deg, rgba(255,253,247,.02), rgba(255,253,247,.5));
+      pointer-events: none;
+    }
+
+    .stage-content {
+      position: relative;
+      z-index: 1;
+      min-height: 430px;
+      padding: 18px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 260px;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .lesson-title,
+    .visual-chip,
+    .molecule-card {
+      border: 1px solid rgba(216, 211, 200, .78);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.82);
+    }
+
+    .lesson-title {
+      width: min(520px, 100%);
+      padding: 12px;
+    }
+
+    .lesson-title h3 {
+      margin: 0;
+      font-size: clamp(22px, 3vw, 31px);
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+
+    .lesson-title p {
+      margin: 8px 0 0;
+      color: #3a4a52;
+      font-weight: 800;
+    }
+
+    .visual-chip {
+      position: absolute;
+      z-index: 2;
+      padding: 9px 10px;
+      color: #172026;
+      font-size: 13px;
+      font-weight: 950;
+      box-shadow: 0 10px 24px rgba(35,31,25,.12);
+    }
+
+    .visual-chip.heat { left: 34px; bottom: 96px; border-left: 6px solid var(--orange); }
+    .visual-chip.cool { left: 270px; bottom: 42px; border-left: 6px solid var(--blue); }
+    .visual-chip.haz { left: 34px; bottom: 214px; border-left: 6px solid var(--violet); }
+
+    .side-visuals {
+      display: grid;
+      gap: 10px;
+    }
+
+    .heat-map,
+    .molecule-card {
+      padding: 12px;
+    }
+
+    .heat-map h4,
+    .molecule-card h4 {
+      margin: 0 0 8px;
+      font-size: 15px;
+      letter-spacing: 0;
+    }
+
+    .cross-section {
+      min-height: 126px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background:
+        radial-gradient(ellipse at 50% 8%, rgba(223,65,44,.95) 0 14%, rgba(247,188,74,.9) 15% 28%, rgba(35,104,197,.52) 29% 42%, transparent 43%),
+        linear-gradient(180deg, #f8f6ef 0 42%, #b2b4b4 43% 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cross-section::before {
+      content: "";
+      position: absolute;
+      left: 14%;
+      right: 14%;
+      top: 39%;
+      height: 2px;
+      border-top: 2px dashed rgba(24,32,38,.55);
+    }
+
+    .scale {
+      display: grid;
+      grid-template-columns: 1fr 16px;
+      gap: 8px;
+      align-items: center;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .scale-bar {
+      width: 14px;
+      height: 74px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #c83d34, #f3c84e, #2368c5);
+      border: 1px solid rgba(0,0,0,.12);
+    }
+
+    .atoms {
+      position: relative;
+      min-height: 130px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, #fbfaf6, #e9eef0);
+      overflow: hidden;
+    }
+
+    .bond {
+      position: absolute;
+      height: 3px;
+      background: #9aa2a6;
+      border-radius: 999px;
+      transform-origin: left center;
+    }
+
+    .atom {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #fff, #b8bec2 34%, #575f65 100%);
+      box-shadow: 0 4px 10px rgba(20,20,20,.25);
+    }
+
+    .atom.hot {
+      background: radial-gradient(circle at 35% 30%, #fff7ed, #f18a33 38%, #b84015 100%);
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+    }
+
+    .mobile-actions {
+      display: none;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin: 12px 0;
+    }
+
+    .mobile-action {
+      min-height: 68px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.86);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      font-weight: 900;
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    .tool-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(260px, .9fr);
+      gap: 12px;
+    }
+
+    .card {
+      padding: 14px;
+      box-shadow: none;
+      background: rgba(255,255,255,.82);
+    }
+
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      letter-spacing: 0;
+    }
+
+    .slider-row {
+      display: grid;
+      grid-template-columns: 88px 1fr 74px;
+      align-items: center;
+      gap: 10px;
+      margin: 11px 0;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--orange);
+    }
+
+    .value {
+      min-height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: #f1eee5;
+      font-size: 13px;
+      font-weight: 950;
+    }
+
+    .sim-stage {
+      min-height: 188px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.85), rgba(236,233,224,.92)),
+        #f7f5ee;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .plate {
+      position: absolute;
+      left: 34px;
+      right: 34px;
+      bottom: 42px;
+      height: 38px;
+      border-radius: 8px;
+      background: linear-gradient(180deg, #c7c9c9, #858c91);
+      box-shadow: inset 0 8px 12px rgba(255,255,255,.38), 0 18px 28px rgba(20,20,20,.15);
+    }
+
+    .bead {
+      position: absolute;
+      left: 72px;
+      right: 72px;
+      bottom: 66px;
+      height: var(--bead-h, 22px);
+      border-radius: 999px;
+      background:
+        repeating-radial-gradient(ellipse at 18px 50%, rgba(255,255,255,.7) 0 3px, rgba(160,170,178,.78) 4px 13px, transparent 14px 22px),
+        linear-gradient(90deg, #7d8790, #e8eef0, #8a949a);
+      filter: drop-shadow(0 0 var(--glow, 18px) rgba(215,103,47,.55));
+      transition: height .18s ease, filter .18s ease;
+    }
+
+    .pool {
+      position: absolute;
+      left: calc(var(--pool-x, 54%) - 28px);
+      bottom: 65px;
+      width: 56px;
+      height: 30px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #fff5b6 0 20%, #ff9b32 34%, #d83c2f 62%, transparent 64%);
+      box-shadow: 0 0 var(--pool-glow, 32px) rgba(235,81,44,.75);
+      transition: left .18s ease, box-shadow .18s ease;
+    }
+
+    .quick-read {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .read-chip {
+      min-height: 54px;
+      padding: 9px;
+      border-radius: var(--radius);
+      background: #fff0e7;
+      border: 1px solid rgba(215, 103, 47, .22);
+      font-weight: 900;
+      color: #5a3323;
+    }
+
+    .concept-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .concept-row {
+      display: grid;
+      grid-template-columns: 18px 1fr;
+      gap: 9px;
+      align-items: start;
+      padding: 10px;
+      border: 1px solid rgba(216, 211, 200, .86);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, .75);
+      color: #35454c;
+      font-weight: 800;
+    }
+
+    .concept-dot {
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      margin-top: 6px;
+      box-shadow: 0 0 0 4px rgba(255,255,255,.9);
+    }
+
+    .concept-row strong {
+      display: block;
+      color: var(--ink);
+      margin-bottom: 2px;
+    }
+
+    .roadmap {
+      display: grid;
+      gap: 8px;
+    }
+
+    .road-row {
+      min-height: 48px;
+      display: grid;
+      grid-template-columns: 72px 1fr auto;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.74);
+    }
+
+    .road-row.active {
+      border-color: rgba(35, 104, 197, .34);
+      background: #edf5ff;
+    }
+
+    .badge {
+      display: inline-grid;
+      place-items: center;
+      min-height: 30px;
+      border-radius: 999px;
+      background: var(--blue);
+      color: white;
+      font-weight: 950;
+      padding: 0 10px;
+    }
+
+    .side-panel {
+      padding: 12px;
+      display: grid;
+      gap: 10px;
+      position: sticky;
+      top: 12px;
+    }
+
+    .side-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.84);
+      padding: 12px;
+    }
+
+    .side-card h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      letter-spacing: 0;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 130px;
+      resize: vertical;
+      border: 1px solid #e0c887;
+      border-radius: var(--radius);
+      background: #fff7df;
+      padding: 10px;
+      color: var(--ink);
+      line-height: 1.55;
+      font-weight: 800;
+    }
+
+    .quiz-count {
+      display: inline-grid;
+      place-items: center;
+      min-height: 28px;
+      padding: 0 10px;
+      margin: 0 0 8px;
+      border-radius: 999px;
+      background: #fff0e7;
+      color: #5a3323;
+      font-size: 13px;
+      font-weight: 950;
+    }
+
+    .choice {
+      width: 100%;
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fff;
+      margin: 6px 0;
+      text-align: left;
+      padding: 8px 10px;
+      font-weight: 900;
+    }
+
+    .choice.correct { border-color: #5fb582; background: #eaf8ef; }
+    .choice.wrong { border-color: #e39a93; background: #fff0ee; }
+
+    .feedback {
+      min-height: 42px;
+      margin-top: 6px;
+      padding: 8px 10px;
+      border-radius: 6px;
+      background: #eef4ff;
+      color: #27435b;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .primary {
+      width: 100%;
+      min-height: 42px;
+      border: 0;
+      border-radius: 7px;
+      background: var(--blue);
+      color: white;
+      font-weight: 950;
+    }
+
+    .progress-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      align-items: center;
+      font-weight: 900;
+      font-size: 14px;
+    }
+
+    .bar {
+      height: 12px;
+      border-radius: 999px;
+      background: #e5e0d5;
+      overflow: hidden;
+    }
+
+    .bar span {
+      display: block;
+      height: 100%;
+      width: var(--p, 34%);
+      border-radius: inherit;
+      background: linear-gradient(90deg, #2f996b, #74c88d);
+      transition: width .2s ease;
+    }
+
+    @media (max-width: 1020px) {
+      .workbench {
+        grid-template-columns: 1fr;
+      }
+
+      .rail {
+        display: none;
+      }
+
+      .side-panel {
+        position: static;
+      }
+
+      .mobile-actions {
+        display: grid;
+      }
+
+      .stage-content {
+        grid-template-columns: 1fr;
+        min-height: 470px;
+      }
+
+      .side-visuals {
+        max-width: 340px;
+        justify-self: end;
+      }
+
+      .tool-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .app-shell {
+        width: min(100% - 16px, 430px);
+        padding-top: 8px;
+      }
+
+      .topbar {
+        align-items: flex-start;
+      }
+
+      .install-button {
+        min-width: 44px;
+        width: 44px;
+        padding: 0;
+        font-size: 0;
+      }
+
+      .install-button::before {
+        content: "+";
+        font-size: 24px;
+        font-weight: 950;
+      }
+
+      .lesson,
+      .side-panel {
+        padding: 10px;
+      }
+
+      .chapter-head {
+        display: grid;
+      }
+
+      .stage-card,
+      .stage-content {
+        min-height: 520px;
+      }
+
+      .stage-content {
+        padding: 12px;
+      }
+
+      .visual-chip {
+        font-size: 12px;
+        max-width: 168px;
+      }
+
+      .visual-chip.heat { left: 12px; bottom: 168px; }
+      .visual-chip.cool { left: 12px; bottom: 108px; }
+      .visual-chip.haz { right: 12px; top: 154px; }
+
+      .side-visuals {
+        width: min(100%, 300px);
+        justify-self: end;
+      }
+
+      .quick-read,
+      .concept-list {
+        grid-template-columns: 1fr;
+      }
+
+      .slider-row {
+        grid-template-columns: 76px 1fr 62px;
+        gap: 7px;
+        font-size: 13px;
+      }
+
+      .road-row {
+        grid-template-columns: 64px 1fr;
+      }
+
+      .road-row span:last-child {
+        grid-column: 2;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <h1>溶接基礎</h1>
+        <p>見て、触って、なぜをメモして、仕事前に復習する。</p>
+      </div>
+      <button class="install-button" id="installBtn" type="button">ホーム画面</button>
+    </header>
+
+    <main class="workbench">
+      <nav class="rail" aria-label="学習メニュー">
+        <p class="rail-title">Wシリーズ</p>
+        <button class="rail-button active" data-jump="#w00" type="button"><span>W00</span><span>入口</span></button>
+        <button class="rail-button" data-jump="#why" type="button"><span>熱</span><span>なぜ</span></button>
+        <button class="rail-button" data-jump="#micro" type="button"><span>粒</span><span>分子</span></button>
+        <button class="rail-button" data-jump="#touch" type="button"><span>触</span><span>触る</span></button>
+        <button class="rail-button" data-jump="#memo" type="button"><span>?</span><span>メモ</span></button>
+        <button class="rail-button" data-jump="#quiz" type="button"><span>Q</span><span>テスト</span></button>
+      </nav>
+
+      <section class="lesson" id="w00">
+        <div class="chapter-head">
+          <div>
+            <h2>W00 なぜ溶けてつながる？</h2>
+            <p>今日の1テーマは「熱で金属が局所的に溶け、冷えて固まると1つにつながる」。</p>
+          </div>
+          <span class="chapter-tag">今日の1テーマ</span>
+        </div>
+
+        <div class="mobile-actions" aria-label="スマホ用メニュー">
+          <a class="mobile-action" href="#why">熱を見る</a>
+          <a class="mobile-action" href="#micro">分子を見る</a>
+          <a class="mobile-action" href="#touch">触る</a>
+          <a class="mobile-action" href="#memo">なぜ？メモ</a>
+          <a class="mobile-action" href="#quiz">テスト</a>
+          <a class="mobile-action" href="#review">復習</a>
+        </div>
+
+        <article class="stage-card" id="why">
+          <img class="stage-image" src="./assets/w00-weld-bead.png" alt="TIG溶接でできたビードと熱の色">
+          <div class="stage-content">
+            <div>
+              <div class="lesson-title">
+                <h3>溶接は、金属を少しだけ溶かして橋を作る加工。</h3>
+                <p>全部を溶かすのではなく、つなぎたい線の近くだけを熱でゆるめる。</p>
+              </div>
+              <div class="visual-chip heat">最初に見る：アークの熱でここだけ溶ける</div>
+              <div class="visual-chip cool">次に見る：冷えると固まり、ビードになる</div>
+              <div class="visual-chip haz">注意：まわりも熱で弱くなりやすい</div>
+            </div>
+
+            <div class="side-visuals">
+              <section class="heat-map" aria-label="熱の広がり">
+                <h4>熱の広がり</h4>
+                <div class="cross-section"></div>
+                <div class="scale">
+                  <span>赤いほど熱い。青いほど低い。<br>母材（もざい：元の金属）にも熱が入る。</span>
+                  <span class="scale-bar"></span>
+                </div>
+              </section>
+
+              <section class="molecule-card" id="micro">
+                <h4>金属の中</h4>
+                <div class="atoms">
+                  <span class="bond" style="left:18%;top:24%;width:48%;transform:rotate(25deg)"></span>
+                  <span class="bond" style="left:23%;top:58%;width:52%;transform:rotate(-18deg)"></span>
+                  <span class="bond" style="left:48%;top:36%;width:36%;transform:rotate(58deg)"></span>
+                  <span class="atom" style="left:8%;top:16%"></span>
+                  <span class="atom hot" style="left:36%;top:26%"></span>
+                  <span class="atom" style="left:68%;top:14%"></span>
+                  <span class="atom" style="left:18%;top:58%"></span>
+                  <span class="atom hot" style="left:52%;top:60%"></span>
+                  <span class="atom" style="left:76%;top:72%"></span>
+                </div>
+              </section>
+            </div>
+          </div>
+        </article>
+
+        <div class="tool-grid" id="touch">
+          <section class="card">
+            <h3>触って理解する 溶接シミュレーター</h3>
+            <div class="slider-row">
+              <label for="current">電流</label>
+              <input id="current" type="range" min="60" max="180" step="1" value="115">
+              <output class="value" id="currentValue">115A</output>
+            </div>
+            <div class="slider-row">
+              <label for="speed">速度</label>
+              <input id="speed" type="range" min="2" max="12" step=".1" value="5.5">
+              <output class="value" id="speedValue">5.5</output>
+            </div>
+            <div class="slider-row">
+              <label for="gap">すき間</label>
+              <input id="gap" type="range" min="0" max="2.4" step=".1" value=".7">
+              <output class="value" id="gapValue">0.7</output>
+            </div>
+            <div class="slider-row">
+              <label for="push">押さえ</label>
+              <input id="push" type="range" min="20" max="120" step="1" value="80">
+              <output class="value" id="pushValue">80N</output>
+            </div>
+            <div class="quick-read">
+              <div class="read-chip" id="heatChip">入熱: ちょうど</div>
+              <div class="read-chip" id="shapeChip">ビード: 安定</div>
+              <div class="read-chip" id="riskChip">弱点: 低い</div>
+            </div>
+          </section>
+
+          <section class="card">
+            <h3>結果イメージ</h3>
+            <div class="sim-stage" aria-label="溶接の結果イメージ">
+              <span class="plate"></span>
+              <span class="bead" id="bead"></span>
+              <span class="pool" id="pool"></span>
+            </div>
+          </section>
+        </div>
+
+        <section class="card">
+          <h3>今日の説明</h3>
+          <div class="concept-list">
+            <div class="concept-row">
+              <span class="concept-dot" style="background:#2368c5;"></span>
+              <p><strong>定義（ていぎ：言葉の意味）</strong>溶接は、材料を熱や圧力でつなぐ加工。今回は熱で溶かす話。</p>
+            </div>
+            <div class="concept-row">
+              <span class="concept-dot" style="background:#d7672f;"></span>
+              <p><strong>しくみ</strong>アーク（電気で出る高温の光）が金属を溶かし、冷えると固まる。</p>
+            </div>
+            <div class="concept-row">
+              <span class="concept-dot" style="background:#d9ad42;"></span>
+              <p><strong>なぜ</strong>金属の小さな粒が熱で動きやすくなり、混ざって、冷えて並び直すから。</p>
+            </div>
+            <div class="concept-row">
+              <span class="concept-dot" style="background:#c83d34;"></span>
+              <p><strong>注意</strong>熱が多すぎると穴あき、ひずみ、割れが起きる。少なすぎるとくっつきが浅い。</p>
+            </div>
+            <div class="concept-row">
+              <span class="concept-dot" style="background:#6750bb;"></span>
+              <p><strong>設計判断</strong>板厚、すき間、溶接長さ、熱が逃げる方向を見る。</p>
+            </div>
+            <div class="concept-row">
+              <span class="concept-dot" style="background:#183241;"></span>
+              <p><strong>発明家視点</strong>熱の通り道が見えると、軽くて強いつなぎ方を自分で考えられる。</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="roadmap" id="review">
+          <div class="road-row active">
+            <span class="badge">W00</span>
+            <strong>なぜ溶けてつながる？ ※いまここ</strong>
+            <span>実物画像・触る・3問</span>
+          </div>
+          <div class="road-row">
+            <span class="badge" style="background:#6f7b84;">W01</span>
+            <strong>アークとは何か</strong>
+            <span>電気と熱</span>
+          </div>
+          <div class="road-row">
+            <span class="badge" style="background:#6f7b84;">W02</span>
+            <strong>溶接の種類</strong>
+            <span>TIG / MIG / スポット</span>
+          </div>
+          <div class="road-row">
+            <span class="badge" style="background:#6f7b84;">復習</span>
+            <strong>W00〜W04の5テーマ復習</strong>
+            <span>自動で差し込む</span>
+          </div>
+        </section>
+      </section>
+
+      <aside class="side-panel" aria-label="メモとテスト">
+        <section class="side-card" id="memo">
+          <h3>なぜ？メモ</h3>
+          <textarea id="memoBox" aria-label="なぜメモ">なぜ熱が多いとひずむ？
+なぜすき間があると危ない？
+板厚が変わると何を変える？</textarea>
+        </section>
+
+        <section class="side-card" id="quiz">
+          <h3>テストに挑戦</h3>
+          <p class="quiz-count" id="quizCount">1 / 3</p>
+          <p id="quizQuestion" style="margin:0 0 8px;font-weight:900;">Q1. アークの役目は？</p>
+          <button class="choice" data-choice-index="0" type="button">金属を熱で溶かす</button>
+          <button class="choice" data-choice-index="1" type="button">金属を冷やす</button>
+          <button class="choice" data-choice-index="2" type="button">塗装する</button>
+          <div class="feedback" id="feedback">選ぶと答えが出る。</div>
+          <button class="primary" id="nextQuiz" type="button">次の問題へ</button>
+        </section>
+
+        <section class="side-card">
+          <h3>復習の進み具合</h3>
+          <div class="progress-row">
+            <span>今日の復習</span>
+            <span id="progressText">34%</span>
+          </div>
+          <div class="bar" style="margin:8px 0 10px;"><span id="progressBar"></span></div>
+          <label style="display:flex;gap:8px;align-items:center;font-weight:900;margin:8px 0;">
+            <input type="checkbox" class="task-check" data-key="image"> 実物画像を見た
+          </label>
+          <label style="display:flex;gap:8px;align-items:center;font-weight:900;margin:8px 0;">
+            <input type="checkbox" class="task-check" data-key="slider"> スライダーを触った
+          </label>
+          <label style="display:flex;gap:8px;align-items:center;font-weight:900;margin:8px 0;">
+            <input type="checkbox" class="task-check" data-key="quiz"> テストを解いた
+          </label>
+        </section>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    const $ = (selector, root = document) => root.querySelector(selector);
+    const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+    const storageKey = "welding-foundation-w00";
+    const state = JSON.parse(localStorage.getItem(storageKey) || "{}");
+    const saveState = () => localStorage.setItem(storageKey, JSON.stringify(state));
+
+    const current = $("#current");
+    const speed = $("#speed");
+    const gap = $("#gap");
+    const push = $("#push");
+    const bead = $("#bead");
+    const pool = $("#pool");
+
+    function updateSimulation() {
+      const amp = Number(current.value);
+      const travel = Number(speed.value);
+      const jointGap = Number(gap.value);
+      const hold = Number(push.value);
+      const heat = amp / Math.max(travel, 1);
+      const beadHeight = Math.max(14, Math.min(42, heat * 1.06 - jointGap * 4));
+      const glow = Math.max(10, Math.min(44, heat * 1.1));
+      const poolX = Math.max(28, Math.min(74, 86 - travel * 4.8));
+      const riskScore = Math.max(0, Math.round(jointGap * 34 + Math.abs(heat - 22) * 2.4 - hold / 8));
+
+      $("#currentValue").textContent = `${amp}A`;
+      $("#speedValue").textContent = travel.toFixed(1);
+      $("#gapValue").textContent = `${jointGap.toFixed(1)}`;
+      $("#pushValue").textContent = `${hold}N`;
+
+      bead.style.setProperty("--bead-h", `${beadHeight}px`);
+      bead.style.setProperty("--glow", `${glow}px`);
+      pool.style.setProperty("--pool-x", `${poolX}%`);
+      pool.style.setProperty("--pool-glow", `${glow + 12}px`);
+
+      $("#heatChip").textContent = heat > 30 ? "入熱: 多い" : heat < 15 ? "入熱: 少ない" : "入熱: ちょうど";
+      $("#shapeChip").textContent = travel > 9 ? "ビード: 細い" : travel < 3.5 ? "ビード: 太い" : "ビード: 安定";
+      $("#riskChip").textContent = riskScore > 38 ? "弱点: 高い" : riskScore > 18 ? "弱点: 中" : "弱点: 低い";
+
+      state.sliderTouched = true;
+      saveState();
+      updateProgress();
+    }
+
+    [current, speed, gap, push].forEach(input => input.addEventListener("input", updateSimulation));
+
+    $("#memoBox").value = state.memo || $("#memoBox").value;
+    $("#memoBox").addEventListener("input", event => {
+      state.memo = event.target.value;
+      saveState();
+    });
+
+    const quizQuestions = [
+      {
+        question: "Q1. アークの役目は？",
+        choices: ["金属を熱で溶かす", "金属を冷やす", "塗装する"],
+        correct: 0,
+        ok: "正解。アークは電気で高温を作り、金属を局所的に溶かす。",
+        ng: "惜しい。アークは冷やすものではなく、金属を熱で溶かすもの。"
+      },
+      {
+        question: "Q2. 熱が多すぎると起きやすいのは？",
+        choices: ["穴あきやひずみ", "必ず強くなる", "色だけ変わる"],
+        correct: 0,
+        ok: "正解。熱が入りすぎると、穴あき・ひずみ・割れの原因になる。",
+        ng: "惜しい。熱が多いほど良いわけではなく、穴あきやひずみが増える。"
+      },
+      {
+        question: "Q3. 溶接を見るとき最初に見る条件は？",
+        choices: ["板厚とすき間", "作業服の色", "机の色"],
+        correct: 0,
+        ok: "正解。板厚とすき間で、必要な熱とリスクが大きく変わる。",
+        ng: "惜しい。まず板厚・すき間・熱の逃げ道を見る。"
+      }
+    ];
+
+    let quizIndex = Math.min(Number(state.quizIndex) || 0, quizQuestions.length - 1);
+    let answeredCurrent = false;
+
+    function renderQuiz() {
+      const currentQuestion = quizQuestions[quizIndex];
+      $("#quizCount").textContent = `${quizIndex + 1} / ${quizQuestions.length}`;
+      $("#quizQuestion").textContent = currentQuestion.question;
+      $$(".choice").forEach((button, index) => {
+        button.textContent = currentQuestion.choices[index];
+        button.dataset.choiceIndex = String(index);
+        button.classList.remove("correct", "wrong");
+      });
+      $("#feedback").textContent = "選ぶと答えが出る。";
+      $("#nextQuiz").textContent = quizIndex === quizQuestions.length - 1 ? "最初から復習" : "次の問題へ";
+      answeredCurrent = false;
+      state.quizIndex = quizIndex;
+      saveState();
+    }
+
+    $$(".choice").forEach(button => {
+      button.addEventListener("click", () => {
+        const currentQuestion = quizQuestions[quizIndex];
+        const choiceIndex = Number(button.dataset.choiceIndex);
+        const ok = choiceIndex === currentQuestion.correct;
+        $$(".choice").forEach((item, index) => {
+          item.classList.toggle("correct", index === currentQuestion.correct);
+          item.classList.toggle("wrong", index === choiceIndex && !ok);
+        });
+        $("#feedback").textContent = ok ? currentQuestion.ok : currentQuestion.ng;
+        answeredCurrent = true;
+        state.quizAnsweredCount = Math.max(Number(state.quizAnsweredCount) || 0, quizIndex + 1);
+        state.quizDone = state.quizAnsweredCount >= quizQuestions.length;
+        saveState();
+        updateProgress();
+      });
+    });
+
+    $("#nextQuiz").addEventListener("click", () => {
+      if (!answeredCurrent) {
+        $("#feedback").textContent = "先に1つ答えを選ぶと、次へ進める。";
+        return;
+      }
+      if (quizIndex === quizQuestions.length - 1) {
+        quizIndex = 0;
+        state.quizAnsweredCount = 0;
+        state.quizDone = false;
+        state.quiz = false;
+      } else {
+        quizIndex += 1;
+      }
+      renderQuiz();
+      updateProgress();
+    });
+
+    $$(".task-check").forEach(check => {
+      check.checked = Boolean(state[check.dataset.key]);
+      check.addEventListener("change", () => {
+        state[check.dataset.key] = check.checked;
+        saveState();
+        updateProgress();
+      });
+    });
+
+    $$(".rail-button").forEach(button => {
+      button.addEventListener("click", () => {
+        $$(".rail-button").forEach(item => item.classList.remove("active"));
+        button.classList.add("active");
+        const target = $(button.dataset.jump);
+        if (target) target.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+    });
+
+    function updateProgress() {
+      const checks = [state.image, state.sliderTouched || state.slider, state.quizDone].filter(Boolean).length;
+      const percent = Math.max(34, Math.round((checks / 3) * 100));
+      $("#progressText").textContent = `${percent}%`;
+      $("#progressBar").style.setProperty("--p", `${percent}%`);
+      if (state.sliderTouched) {
+        state.slider = true;
+      }
+      $$(".task-check").forEach(check => {
+        check.checked = Boolean(state[check.dataset.key]) || (check.dataset.key === "slider" && state.sliderTouched) || (check.dataset.key === "quiz" && state.quizDone);
+      });
+      saveState();
+    }
+
+    window.addEventListener("load", () => {
+      state.image = true;
+      updateSimulation();
+      renderQuiz();
+      updateProgress();
+    });
+
+    let deferredPrompt;
+    const installBtn = $("#installBtn");
+    window.addEventListener("beforeinstallprompt", event => {
+      event.preventDefault();
+      deferredPrompt = event;
+      installBtn.textContent = "ホーム画面";
+    });
+
+    installBtn.addEventListener("click", async () => {
+      if (!deferredPrompt) {
+        alert("SafariやChromeの共有メニューから「ホーム画面に追加」を選んでください。");
+        return;
+      }
+      deferredPrompt.prompt();
+      await deferredPrompt.userChoice;
+      deferredPrompt = null;
+    });
+
+    if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
+      navigator.serviceWorker.register("./service-worker.js").catch(() => {});
+    }
+  </script>
+</body>
+</html>
