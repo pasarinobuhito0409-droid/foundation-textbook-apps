@@ -37,6 +37,8 @@
         repeating-linear-gradient(90deg, rgba(32, 40, 35, .028) 0 1px, transparent 1px 12px),
         var(--bg);
       line-height: 1.65;
+      overflow-x: hidden;
+      overflow-wrap: anywhere;
     }
 
     button,
@@ -137,6 +139,7 @@
     }
 
     .hero-image {
+      margin: 0;
       min-height: 330px;
       border: 1px solid var(--line);
       border-radius: var(--radius);
@@ -512,7 +515,7 @@
 
     @media (max-width: 760px) {
       .app {
-        width: min(100% - 18px, 460px);
+        width: min(calc(100% - 18px), 460px);
         padding-top: 10px;
       }
 
@@ -525,7 +528,7 @@
       }
 
       .status-pill {
-        font-size: 12px;
+        display: none;
       }
 
       .hero-copy {
@@ -558,10 +561,12 @@
 
       .bottom-tabs {
         position: fixed;
-        left: 10px;
-        right: 10px;
+        left: 50%;
+        right: auto;
         bottom: 10px;
         z-index: 30;
+        width: min(330px, calc(100vw - 30px));
+        transform: translateX(-50%);
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         gap: 6px;
@@ -666,7 +671,7 @@
     <button data-jump="#searchArea">探す</button>
     <button data-jump="#categoryTabs">分類</button>
     <button data-jump="#mapArea">マップ</button>
-    <button id="favoriteTab" type="button">お気に入り</button>
+    <button id="favoriteTab" type="button">星</button>
   </nav>
 
   <script>
