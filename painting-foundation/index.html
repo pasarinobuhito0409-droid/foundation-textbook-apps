@@ -1,0 +1,1097 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3efe7">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <title>塗装基礎 P00</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #eee9df;
+      --paper: #fffdf7;
+      --panel: #f8f5ee;
+      --ink: #182226;
+      --muted: #657073;
+      --line: #d9d1c2;
+      --blue: #2368c5;
+      --green: #217a57;
+      --orange: #c85f2c;
+      --red: #c23b35;
+      --yellow: #d2a73d;
+      --violet: #6654ba;
+      --shadow: 0 18px 46px rgba(45, 39, 31, .13);
+      --radius: 8px;
+      --degrease: 72;
+      --scuff: 58;
+      --film: 48;
+      --dry: 62;
+      font-family: "Yu Gothic", "Hiragino Sans", Meiryo, system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; min-width: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(120deg, rgba(255,255,255,.72), rgba(255,255,255,.14)),
+        repeating-linear-gradient(90deg, rgba(24,34,38,.026) 0 1px, transparent 1px 12px),
+        var(--bg);
+      line-height: 1.65;
+      overflow-wrap: anywhere;
+    }
+
+    button, input, textarea { font: inherit; }
+    button { cursor: pointer; }
+
+    .app-shell {
+      width: min(1260px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 18px 0 34px;
+    }
+
+    .topbar {
+      min-height: 64px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: clamp(26px, 4vw, 38px);
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+
+    .brand p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .install-button {
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 0 16px;
+      background: rgba(255,255,255,.8);
+      color: var(--ink);
+      box-shadow: 0 10px 24px rgba(45, 39, 31, .08);
+      font-weight: 950;
+    }
+
+    .workbench {
+      display: grid;
+      grid-template-columns: 126px minmax(0, 1fr) 324px;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .rail,
+    .lesson,
+    .side-panel,
+    .card,
+    .stage-card {
+      border: 1px solid rgba(124, 116, 101, .28);
+      border-radius: var(--radius);
+      background: rgba(255, 253, 247, .91);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+
+    .rail {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      position: sticky;
+      top: 12px;
+    }
+
+    .rail-title {
+      margin: 0 0 2px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 950;
+    }
+
+    .rail-button {
+      min-height: 54px;
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      color: var(--ink);
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      text-align: left;
+      text-decoration: none;
+      font-weight: 950;
+    }
+
+    .rail-button span { white-space: nowrap; }
+
+    .rail-button.active {
+      color: #fff;
+      border-color: transparent;
+      background: linear-gradient(180deg, #3d78c7, #245ea7);
+      box-shadow: 0 12px 24px rgba(35,104,197,.25);
+    }
+
+    .lesson {
+      padding: 14px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .chapter-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 10px;
+    }
+
+    .chapter-head h2 {
+      margin: 0;
+      font-size: clamp(21px, 3vw, 30px);
+      letter-spacing: 0;
+    }
+
+    .chapter-head p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-weight: 850;
+    }
+
+    .chapter-tag {
+      display: inline-grid;
+      place-items: center;
+      min-height: 34px;
+      padding: 0 13px;
+      border-radius: 999px;
+      color: #fff;
+      background: var(--blue);
+      font-weight: 950;
+      white-space: nowrap;
+    }
+
+    .mobile-actions {
+      display: none;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+
+    .mobile-action {
+      min-height: 42px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      display: inline-grid;
+      place-items: center;
+      color: inherit;
+      text-decoration: none;
+      white-space: nowrap;
+      font-weight: 950;
+    }
+
+    .stage-card {
+      position: relative;
+      min-height: 470px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 22% 16%, rgba(255,255,255,.82), transparent 26%),
+        linear-gradient(135deg, #414b50 0%, #1f292d 42%, #655b4d 100%);
+    }
+
+    .stage-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(255,253,247,.86) 0%, rgba(255,253,247,.28) 42%, rgba(255,253,247,.08) 100%),
+        linear-gradient(180deg, rgba(255,253,247,.02), rgba(255,253,247,.46));
+      pointer-events: none;
+    }
+
+    .stage-content {
+      position: relative;
+      z-index: 1;
+      min-height: 470px;
+      padding: 18px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 286px;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .lesson-title {
+      width: min(520px, 100%);
+      padding: 16px;
+      border: 1px solid rgba(255,255,255,.48);
+      border-radius: var(--radius);
+      background: rgba(255,253,247,.82);
+    }
+
+    .lesson-title h3 {
+      margin: 0;
+      font-size: clamp(22px, 3vw, 34px);
+      line-height: 1.22;
+      letter-spacing: 0;
+    }
+
+    .lesson-title p {
+      margin: 9px 0 0;
+      color: #344045;
+      font-weight: 900;
+    }
+
+    .paint-photo {
+      margin-top: 16px;
+      min-height: 210px;
+      position: relative;
+      border: 1px solid rgba(255,255,255,.62);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 55% 60%, rgba(255,255,255,.38), transparent 18%),
+        repeating-linear-gradient(9deg, rgba(255,255,255,.12) 0 1px, transparent 1px 7px),
+        linear-gradient(145deg, #aaa99f, #4d5960 46%, #2b3439);
+      box-shadow: inset 0 0 0 999px rgba(255,255,255,.04);
+    }
+
+    .spray-gun {
+      position: absolute;
+      right: 34px;
+      top: 18px;
+      width: 132px;
+      height: 74px;
+      transform: rotate(-12deg);
+    }
+
+    .gun-body {
+      position: absolute;
+      right: 0;
+      top: 12px;
+      width: 86px;
+      height: 32px;
+      border-radius: 9px;
+      background: linear-gradient(180deg, #e9e3d5, #8d918e);
+      box-shadow: 0 5px 16px rgba(0,0,0,.25);
+    }
+
+    .gun-cup {
+      position: absolute;
+      right: 23px;
+      top: -6px;
+      width: 40px;
+      height: 28px;
+      border-radius: 12px 12px 7px 7px;
+      background: linear-gradient(180deg, #f8f2e8, #bcb6aa);
+    }
+
+    .gun-nozzle {
+      position: absolute;
+      left: 0;
+      top: 24px;
+      width: 54px;
+      height: 13px;
+      border-radius: 999px 0 0 999px;
+      background: linear-gradient(180deg, #eee, #6a7070);
+    }
+
+    .spray-cloud {
+      position: absolute;
+      right: 118px;
+      top: 64px;
+      width: 220px;
+      height: 116px;
+      border-radius: 52% 48% 50% 50%;
+      background:
+        radial-gradient(circle at 55% 46%, rgba(33,122,87,.56), transparent 16%),
+        radial-gradient(circle at 38% 46%, rgba(35,104,197,.36), transparent 21%),
+        radial-gradient(circle at 66% 58%, rgba(255,255,255,.42), transparent 24%);
+      filter: blur(9px);
+      opacity: calc(.24 + var(--film) * .006);
+      transform: rotate(-8deg);
+    }
+
+    .metal-plate {
+      position: absolute;
+      left: 42px;
+      right: 52px;
+      bottom: 30px;
+      height: 86px;
+      border-radius: 7px;
+      transform: perspective(560px) rotateX(54deg) rotateZ(-4deg);
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.22), transparent 22%),
+        linear-gradient(180deg, rgba(255,255,255,.2), transparent 50%),
+        linear-gradient(90deg, #6f7c7e, #a5aaa2 46%, #526165);
+      box-shadow: 0 24px 38px rgba(0,0,0,.28);
+    }
+
+    .paint-strip {
+      position: absolute;
+      left: 20%;
+      right: 8%;
+      top: 18px;
+      height: calc(20px + var(--film) * .45px);
+      border-radius: 999px;
+      background: linear-gradient(90deg, #1b674b, #2e83b9 48%, #f4f0df);
+      opacity: .9;
+      box-shadow: 0 0 18px rgba(33,122,87,.4);
+    }
+
+    .scratch-lines {
+      position: absolute;
+      inset: 14px 18px;
+      opacity: calc(.16 + var(--scuff) * .006);
+      background:
+        repeating-linear-gradient(-14deg, transparent 0 9px, rgba(255,255,255,.34) 9px 10px);
+      mix-blend-mode: screen;
+    }
+
+    .callout-stack {
+      display: grid;
+      gap: 10px;
+    }
+
+    .mini-panel {
+      border: 1px solid rgba(124, 116, 101, .28);
+      border-radius: var(--radius);
+      background: rgba(255,253,247,.9);
+      padding: 12px;
+    }
+
+    .mini-panel h4 {
+      margin: 0 0 8px;
+      font-size: 14px;
+      letter-spacing: 0;
+    }
+
+    .layer-diagram {
+      height: 124px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: grid;
+      align-content: end;
+      background:
+        radial-gradient(circle at 22% 26%, rgba(255,255,255,.72), transparent 20%),
+        #ece7dc;
+    }
+
+    .layer {
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 950;
+      text-shadow: 0 1px 2px rgba(0,0,0,.32);
+    }
+
+    .layer.clear { height: 18px; background: rgba(255,255,255,.46); color: #283238; text-shadow: none; }
+    .layer.color { height: calc(16px + var(--film) * .24px); background: linear-gradient(90deg, #1f7a55, #327ec0); }
+    .layer.primer { height: 18px; background: #c69255; }
+    .layer.metal { height: 34px; background: linear-gradient(90deg, #828b8d, #c0c1b8, #6c7779); }
+
+    .molecule-view {
+      height: 134px;
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: linear-gradient(180deg, #f3eee4 0 45%, #818b8e 45% 100%);
+    }
+
+    .rough-surface {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 58px;
+      height: 32px;
+      background:
+        linear-gradient(135deg, transparent 0 12px, rgba(0,0,0,.18) 12px 13px, transparent 13px 25px),
+        linear-gradient(180deg, #a6aaa6, #6e797c);
+      clip-path: polygon(0 42%, 7% 32%, 14% 48%, 22% 25%, 32% 55%, 43% 34%, 52% 47%, 60% 24%, 72% 56%, 84% 34%, 100% 44%, 100% 100%, 0 100%);
+    }
+
+    .paint-finger {
+      position: absolute;
+      top: 28px;
+      width: 18px;
+      height: calc(30px + var(--scuff) * .28px);
+      border-radius: 999px;
+      background: linear-gradient(180deg, #1f7a55, #2b8cc6);
+      opacity: .8;
+      box-shadow: 0 0 12px rgba(31,122,85,.32);
+      animation: gripPulse 2.8s ease-in-out infinite;
+    }
+
+    .paint-finger:nth-child(1) { left: 18%; animation-delay: .1s; }
+    .paint-finger:nth-child(2) { left: 36%; animation-delay: .4s; }
+    .paint-finger:nth-child(3) { left: 55%; animation-delay: .7s; }
+    .paint-finger:nth-child(4) { left: 75%; animation-delay: 1s; }
+
+    @keyframes gripPulse {
+      0%, 100% { transform: translateY(-2px); }
+      50% { transform: translateY(5px); }
+    }
+
+    .sim-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 300px;
+      gap: 12px;
+    }
+
+    .card {
+      padding: 14px;
+    }
+
+    .card h3 {
+      margin: 0 0 12px;
+      font-size: 18px;
+      letter-spacing: 0;
+    }
+
+    .control-row {
+      display: grid;
+      grid-template-columns: 96px 1fr 72px;
+      gap: 10px;
+      align-items: center;
+      margin: 13px 0;
+      font-weight: 900;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--blue);
+    }
+
+    .value-pill {
+      min-height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: #eee9de;
+      font-weight: 950;
+    }
+
+    .score-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .score {
+      min-height: 74px;
+      border: 1px solid #c8d7ed;
+      border-radius: var(--radius);
+      background: #eef5ff;
+      padding: 10px;
+      font-weight: 950;
+    }
+
+    .score span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 3px;
+    }
+
+    .lesson-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .lesson-bit {
+      min-height: 120px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 14px;
+      background: #fffdf8;
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 10px;
+    }
+
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      margin-top: 4px;
+      box-shadow: inset 0 2px 4px rgba(255,255,255,.4);
+    }
+
+    .lesson-bit h4 {
+      margin: 0 0 6px;
+      font-size: 16px;
+    }
+
+    .lesson-bit p {
+      margin: 0;
+      color: #354349;
+      font-weight: 850;
+    }
+
+    .side-panel {
+      padding: 12px;
+      display: grid;
+      gap: 12px;
+      position: sticky;
+      top: 12px;
+    }
+
+    .memo-area {
+      width: 100%;
+      min-height: 160px;
+      resize: vertical;
+      border: 1px solid #e0c895;
+      border-radius: var(--radius);
+      padding: 12px;
+      background:
+        repeating-linear-gradient(180deg, #fff8e7 0 35px, #ead8ad 36px),
+        #fff8e7;
+      color: var(--ink);
+    }
+
+    .quiz-box {
+      border: 1px solid #9abbe8;
+      border-radius: var(--radius);
+      background: #eef6ff;
+      padding: 12px;
+    }
+
+    .quiz-box h3,
+    .review-box h3 {
+      margin: 0 0 10px;
+      font-size: 17px;
+    }
+
+    .quiz-question {
+      margin: 0 0 9px;
+      font-weight: 950;
+    }
+
+    .choice {
+      width: 100%;
+      min-height: 42px;
+      border: 1px solid #c8d7ed;
+      border-radius: var(--radius);
+      background: #fff;
+      margin: 6px 0;
+      text-align: left;
+      padding: 8px 10px;
+      font-weight: 900;
+    }
+
+    .choice.correct { background: #dbf3df; border-color: #6abf7f; }
+    .choice.wrong { background: #ffe4e0; border-color: #d77d72; }
+
+    .feedback {
+      min-height: 42px;
+      margin-top: 8px;
+      padding: 10px;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.72);
+      font-weight: 900;
+    }
+
+    .next-button,
+    .primary-button {
+      width: 100%;
+      min-height: 42px;
+      border: 0;
+      border-radius: var(--radius);
+      background: var(--blue);
+      color: #fff;
+      margin-top: 8px;
+      font-weight: 950;
+    }
+
+    .review-box {
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fffdf8;
+    }
+
+    .progress-line {
+      height: 10px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: #e3dfd5;
+      margin: 8px 0 10px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #217a57, #67b77b);
+      transition: width .2s ease;
+    }
+
+    .check-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 8px 0;
+      font-weight: 900;
+    }
+
+    .chapter-road {
+      display: grid;
+      gap: 8px;
+    }
+
+    .road-row {
+      min-height: 52px;
+      display: grid;
+      grid-template-columns: 58px 1fr;
+      align-items: center;
+      gap: 10px;
+      padding: 9px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fffdf8;
+      font-weight: 900;
+    }
+
+    .road-code {
+      min-height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius);
+      color: #fff;
+      background: var(--blue);
+      font-weight: 950;
+    }
+
+    @media (max-width: 1060px) {
+      .workbench { grid-template-columns: 1fr; }
+      .rail { display: none; }
+      .side-panel { position: static; }
+      .mobile-actions { display: flex; }
+      .stage-content { grid-template-columns: 1fr; }
+      .callout-stack { grid-template-columns: repeat(2, 1fr); }
+      .sim-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 680px) {
+      .app-shell { width: min(100% - 18px, 430px); padding-top: 10px; }
+      .topbar { align-items: start; }
+      .brand p,
+      .chapter-head p { font-size: 13px; line-height: 1.55; }
+      .install-button { display: none; }
+      .lesson { padding: 10px; }
+      .chapter-head { display: grid; }
+      .chapter-tag { width: 100%; }
+      .stage-card,
+      .stage-content { min-height: 560px; }
+      .stage-content { padding: 12px; }
+      .callout-stack,
+      .lesson-grid,
+      .score-grid { grid-template-columns: 1fr; }
+      .control-row { grid-template-columns: 82px 1fr 62px; }
+      .paint-photo { min-height: 190px; }
+      .spray-gun { transform: rotate(-12deg) scale(.78); transform-origin: top right; }
+      .spray-cloud { width: 160px; right: 92px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <h1>塗装基礎</h1>
+        <p>三輪さん専用 1ページ教科書。<br>塗る前で、結果の8割が決まる。</p>
+      </div>
+      <button class="install-button" id="installButton" hidden>ホーム画面に追加</button>
+    </header>
+
+    <div class="workbench">
+      <nav class="rail" aria-label="学習メニュー">
+        <p class="rail-title">今日の入口</p>
+        <a class="rail-button active" href="#why"><span>🎨</span><span>P00</span></a>
+        <a class="rail-button" href="#sim"><span>☝</span><span>触る</span></a>
+        <a class="rail-button" href="#lesson"><span>🔬</span><span>なぜ</span></a>
+        <a class="rail-button" href="#memo"><span>📝</span><span>メモ</span></a>
+        <a class="rail-button" href="#quiz"><span>✅</span><span>テスト</span></a>
+        <a class="rail-button" href="#review"><span>↻</span><span>復習</span></a>
+      </nav>
+
+      <main class="lesson">
+        <section class="chapter-head" aria-label="章の見出し">
+          <div>
+            <h2>P00 なぜ塗装ははがれる？</h2>
+            <p>最初は「色」ではなく、塗料が金属につかまる道を見る。</p>
+          </div>
+          <span class="chapter-tag">完成イメージから入る</span>
+        </section>
+
+        <div class="mobile-actions" aria-label="スマホ用メニュー">
+          <a class="mobile-action" href="#why">P00</a>
+          <a class="mobile-action" href="#sim">触る</a>
+          <a class="mobile-action" href="#lesson">なぜ</a>
+          <a class="mobile-action" href="#memo">メモ</a>
+          <a class="mobile-action" href="#quiz">テスト</a>
+          <a class="mobile-action" href="#review">復習</a>
+        </div>
+
+        <article class="stage-card" id="why">
+          <div class="stage-content">
+            <div>
+              <div class="lesson-title">
+                <h3>塗装は、金属の上に薄い服を着せる加工。</h3>
+                <p>油・水・サビ・ツルツル面があると、服がすべってはがれる。</p>
+              </div>
+
+              <div class="paint-photo" aria-label="塗装の完成イメージ">
+                <div class="spray-gun">
+                  <span class="gun-cup"></span>
+                  <span class="gun-body"></span>
+                  <span class="gun-nozzle"></span>
+                </div>
+                <span class="spray-cloud"></span>
+                <span class="metal-plate">
+                  <span class="paint-strip"></span>
+                  <span class="scratch-lines"></span>
+                </span>
+              </div>
+            </div>
+
+            <div class="callout-stack">
+              <section class="mini-panel">
+                <h4>塗膜の層</h4>
+                <div class="layer-diagram" aria-label="塗装の層">
+                  <span class="layer clear">クリア</span>
+                  <span class="layer color">色</span>
+                  <span class="layer primer">プライマー</span>
+                  <span class="layer metal">金属</span>
+                </div>
+              </section>
+
+              <section class="mini-panel">
+                <h4>足付けでつかまる</h4>
+                <div class="molecule-view" aria-label="足付けと密着のイメージ">
+                  <span class="paint-finger"></span>
+                  <span class="paint-finger"></span>
+                  <span class="paint-finger"></span>
+                  <span class="paint-finger"></span>
+                  <span class="rough-surface"></span>
+                </div>
+              </section>
+            </div>
+          </div>
+        </article>
+
+        <section class="sim-grid" id="sim">
+          <article class="card">
+            <h3>触って理解する 塗装シミュレーター</h3>
+            <label class="control-row">
+              <span>脱脂</span>
+              <input id="degrease" type="range" min="0" max="100" value="72">
+              <span class="value-pill" id="degreaseValue">72%</span>
+            </label>
+            <label class="control-row">
+              <span>足付け</span>
+              <input id="scuff" type="range" min="0" max="100" value="58">
+              <span class="value-pill" id="scuffValue">58%</span>
+            </label>
+            <label class="control-row">
+              <span>塗膜</span>
+              <input id="film" type="range" min="10" max="100" value="48">
+              <span class="value-pill" id="filmValue">48%</span>
+            </label>
+            <label class="control-row">
+              <span>乾燥</span>
+              <input id="dry" type="range" min="0" max="100" value="62">
+              <span class="value-pill" id="dryValue">62%</span>
+            </label>
+
+            <div class="score-grid">
+              <div class="score"><span>密着</span><strong id="adhesionScore">良い</strong></div>
+              <div class="score"><span>はがれリスク</span><strong id="peelRisk">中</strong></div>
+              <div class="score"><span>設計判断</span><strong id="designHint">脱脂を先に見る</strong></div>
+            </div>
+          </article>
+
+          <article class="card">
+            <h3>結果イメージ</h3>
+            <div class="layer-diagram" aria-label="条件で変わる塗膜">
+              <span class="layer clear">表面</span>
+              <span class="layer color">塗膜</span>
+              <span class="layer primer">下塗り</span>
+              <span class="layer metal">下地</span>
+            </div>
+            <p>
+              脱脂と足付けが弱いと、塗料は金属に入る場所が少ない。
+              乾燥が弱いと、触る前に中がまだやわらかい。
+            </p>
+          </article>
+        </section>
+
+        <section class="card" id="lesson">
+          <h3>今日の説明</h3>
+          <div class="lesson-grid">
+            <article class="lesson-bit">
+              <span class="dot" style="background:var(--blue)"></span>
+              <div>
+                <h4>定義（ていぎ：言葉の意味）</h4>
+                <p>塗装は、金属を守る薄い膜を作る加工。</p>
+              </div>
+            </article>
+            <article class="lesson-bit">
+              <span class="dot" style="background:var(--green)"></span>
+              <div>
+                <h4>しくみ</h4>
+                <p>脱脂で油を取り、足付けで小さいひっかかりを作り、塗料がそこへ入る。</p>
+              </div>
+            </article>
+            <article class="lesson-bit">
+              <span class="dot" style="background:var(--yellow)"></span>
+              <div>
+                <h4>なぜ</h4>
+                <p>分子（ぶんし：小さい粒）の近くまで見ると、油は塗料と金属の間にあるラップみたいな邪魔物。</p>
+              </div>
+            </article>
+            <article class="lesson-bit">
+              <span class="dot" style="background:var(--red)"></span>
+              <div>
+                <h4>注意</h4>
+                <p>厚く塗れば強い、ではない。厚すぎると中が乾きにくく、あとで割れやすい。</p>
+              </div>
+            </article>
+            <article class="lesson-bit">
+              <span class="dot" style="background:var(--violet)"></span>
+              <div>
+                <h4>設計判断</h4>
+                <p>剥がれが怖い場所は、塗る前に材質・下地処理・角の丸み・水のたまりを先に見る。</p>
+              </div>
+            </article>
+            <article class="lesson-bit">
+              <span class="dot" style="background:#17303a"></span>
+              <div>
+                <h4>発明家視点</h4>
+                <p>表面の小さい世界が見えると、塗装だけでなく接着・コーティング・防錆も設計できる。</p>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="card">
+          <h3>進む道</h3>
+          <div class="chapter-road">
+            <div class="road-row"><span class="road-code">P00</span><span>なぜ塗装ははがれる？ ※今日</span></div>
+            <div class="road-row"><span class="road-code">P01</span><span>脱脂と油膜。見えない汚れがなぜ邪魔か。</span></div>
+            <div class="road-row"><span class="road-code">P02</span><span>足付けと表面粗さ。ツルツルとなぜ違うか。</span></div>
+            <div class="road-row"><span class="road-code">P03</span><span>プライマー。金属と色をつなぐ接着役。</span></div>
+            <div class="road-row"><span class="road-code">P04</span><span>塗膜と乾燥。厚み・時間・割れの関係。</span></div>
+          </div>
+        </section>
+      </main>
+
+      <aside class="side-panel">
+        <section class="memo" id="memo">
+          <h3>なぜ？メモ</h3>
+          <textarea class="memo-area" id="whyMemo" placeholder="なぜ下地で決まる？&#10;なぜ油で密着しない？&#10;どうしたら現場で見分ける？"></textarea>
+        </section>
+
+        <section class="quiz-box" id="quiz">
+          <h3>テストに挑戦</h3>
+          <p class="quiz-question" id="quizQuestion"></p>
+          <div id="choices"></div>
+          <div class="feedback" id="feedback">答えると理由が出る。</div>
+          <button class="next-button" id="nextQuestion">次の問題へ</button>
+        </section>
+
+        <section class="review-box" id="review">
+          <h3>復習の進み具合</h3>
+          <strong id="reviewPercent">0%</strong>
+          <div class="progress-line"><div class="progress-fill" id="reviewFill"></div></div>
+          <label class="check-row"><input type="checkbox" class="review-check"> 完成イメージを見た</label>
+          <label class="check-row"><input type="checkbox" class="review-check"> スライダーを触った</label>
+          <label class="check-row"><input type="checkbox" class="review-check"> テストを解いた</label>
+          <label class="check-row"><input type="checkbox" class="review-check"> なぜ？メモを書いた</label>
+          <button class="primary-button" id="resetProgress">今日だけリセット</button>
+        </section>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    const sliders = [
+      ["degrease", "degreaseValue", "--degrease"],
+      ["scuff", "scuffValue", "--scuff"],
+      ["film", "filmValue", "--film"],
+      ["dry", "dryValue", "--dry"]
+    ];
+
+    const stateKey = "painting-foundation-v1";
+    const saved = JSON.parse(localStorage.getItem(stateKey) || "{}");
+
+    function saveState() {
+      const data = {
+        memo: document.getElementById("whyMemo").value,
+        sliders: Object.fromEntries(sliders.map(([id]) => [id, document.getElementById(id).value])),
+        checks: [...document.querySelectorAll(".review-check")].map(input => input.checked),
+        quizIndex
+      };
+      localStorage.setItem(stateKey, JSON.stringify(data));
+    }
+
+    function updateSim() {
+      let values = {};
+      sliders.forEach(([id, labelId, cssVar]) => {
+        const input = document.getElementById(id);
+        const value = Number(input.value);
+        values[id] = value;
+        document.documentElement.style.setProperty(cssVar, value);
+        document.getElementById(labelId).textContent = value + "%";
+      });
+
+      const adhesion = Math.round(values.degrease * .38 + values.scuff * .34 + values.dry * .18 + (100 - Math.abs(values.film - 56)) * .10);
+      document.getElementById("adhesionScore").textContent = adhesion > 76 ? "強い" : adhesion > 54 ? "ふつう" : "弱い";
+      document.getElementById("peelRisk").textContent = adhesion > 76 ? "低い" : adhesion > 54 ? "中" : "高い";
+
+      let hint = "脱脂を先に見る";
+      if (values.degrease < 45) hint = "油を取る";
+      else if (values.scuff < 45) hint = "足付けを増やす";
+      else if (values.film > 82) hint = "厚塗り注意";
+      else if (values.dry < 45) hint = "乾燥時間を待つ";
+      document.getElementById("designHint").textContent = hint;
+    }
+
+    const quizzes = [
+      {
+        q: "Q. 塗装がはがれやすい原因は？",
+        a: ["油や水が下に残っている", "色がきれいすぎる", "乾いたあとに見るから"],
+        correct: 0,
+        why: "油や水があると、塗料が金属に直接つかまれない。"
+      },
+      {
+        q: "Q. 足付けは何のため？",
+        a: ["小さいひっかかりを作る", "金属を冷やす", "塗料を薄める"],
+        correct: 0,
+        why: "小さいキズに塗料が入り、機械的につかまる場所が増える。"
+      },
+      {
+        q: "Q. 厚く塗りすぎると何が起きやすい？",
+        a: ["中が乾きにくい", "必ず強くなる", "金属が軽くなる"],
+        correct: 0,
+        why: "外だけ乾いても中がやわらかいと、あとで割れやすい。"
+      }
+    ];
+
+    let quizIndex = Number(saved.quizIndex || 0);
+    const questionEl = document.getElementById("quizQuestion");
+    const choicesEl = document.getElementById("choices");
+    const feedbackEl = document.getElementById("feedback");
+
+    function renderQuiz() {
+      const quiz = quizzes[quizIndex % quizzes.length];
+      questionEl.textContent = quiz.q;
+      choicesEl.innerHTML = "";
+      feedbackEl.textContent = "答えると理由が出る。";
+      quiz.a.forEach((text, index) => {
+        const button = document.createElement("button");
+        button.className = "choice";
+        button.textContent = text;
+        button.addEventListener("click", () => {
+          [...choicesEl.children].forEach((child, i) => {
+            child.classList.toggle("correct", i === quiz.correct);
+            child.classList.toggle("wrong", i === index && index !== quiz.correct);
+          });
+          feedbackEl.textContent = index === quiz.correct ? "正解。" + quiz.why : "惜しい。" + quiz.why;
+          document.querySelectorAll(".review-check")[2].checked = true;
+          updateReview();
+          saveState();
+        });
+        choicesEl.appendChild(button);
+      });
+    }
+
+    function updateReview() {
+      const checks = [...document.querySelectorAll(".review-check")];
+      const done = checks.filter(input => input.checked).length;
+      const percent = Math.round(done / checks.length * 100);
+      document.getElementById("reviewPercent").textContent = percent + "%";
+      document.getElementById("reviewFill").style.width = percent + "%";
+    }
+
+    sliders.forEach(([id]) => {
+      const input = document.getElementById(id);
+      if (saved.sliders && saved.sliders[id]) input.value = saved.sliders[id];
+      input.addEventListener("input", () => {
+        document.querySelectorAll(".review-check")[1].checked = true;
+        updateSim();
+        updateReview();
+        saveState();
+      });
+    });
+
+    document.getElementById("whyMemo").value = saved.memo || "";
+    document.getElementById("whyMemo").addEventListener("input", () => {
+      document.querySelectorAll(".review-check")[3].checked = document.getElementById("whyMemo").value.trim().length > 0;
+      updateReview();
+      saveState();
+    });
+
+    document.querySelectorAll(".review-check").forEach((input, index) => {
+      input.checked = saved.checks ? Boolean(saved.checks[index]) : index === 0;
+      input.addEventListener("change", () => {
+        updateReview();
+        saveState();
+      });
+    });
+
+    document.getElementById("nextQuestion").addEventListener("click", () => {
+      quizIndex = (quizIndex + 1) % quizzes.length;
+      renderQuiz();
+      saveState();
+    });
+
+    document.getElementById("resetProgress").addEventListener("click", () => {
+      document.querySelectorAll(".review-check").forEach(input => input.checked = false);
+      updateReview();
+      saveState();
+    });
+
+    let installPrompt = null;
+    window.addEventListener("beforeinstallprompt", event => {
+      event.preventDefault();
+      installPrompt = event;
+      const button = document.getElementById("installButton");
+      button.hidden = false;
+      button.addEventListener("click", async () => {
+        button.hidden = true;
+        await installPrompt.prompt();
+        installPrompt = null;
+      }, { once: true });
+    });
+
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("./service-worker.js");
+    }
+
+    updateSim();
+    renderQuiz();
+    updateReview();
+  </script>
+</body>
+</html>

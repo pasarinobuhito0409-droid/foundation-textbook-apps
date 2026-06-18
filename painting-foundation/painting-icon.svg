@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" role="img" aria-label="塗装基礎">
+  <rect width="192" height="192" rx="36" fill="#f3efe7"/>
+  <rect x="34" y="116" width="124" height="34" rx="8" fill="#6f7a7c"/>
+  <rect x="48" y="106" width="98" height="18" rx="9" fill="#217a57"/>
+  <path d="M53 116h92" stroke="#2f83be" stroke-width="10" stroke-linecap="round"/>
+  <path d="M120 52h42v20h-42z" fill="#d7d1c4"/>
+  <path d="M68 78h62v24H68z" rx="8" fill="#aeb4b0"/>
+  <path d="M34 92h48" stroke="#6c7474" stroke-width="12" stroke-linecap="round"/>
+  <path d="M72 96c-10 18-20 24-32 26" stroke="#2f83be" stroke-width="10" stroke-linecap="round" opacity=".45"/>
+  <circle cx="60" cy="56" r="14" fill="#c85f2c"/>
+</svg>
