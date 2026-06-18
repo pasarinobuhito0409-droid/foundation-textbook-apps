@@ -1,10 +1,14 @@
-const CACHE_NAME = "painting-foundation-v1";
+const CACHE_NAME = "painting-foundation-v2";
 const ASSETS = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
   "./service-worker.js",
-  "./painting-icon.svg"
+  "./painting-icon.svg",
+  "./assets/spray-finishing-workbench-real.jpg",
+  "./assets/coating-cross-section-real.png",
+  "./assets/coating-micro-cross-section-real.png",
+  "./assets/peeling-rust-real.jpg"
 ];
 
 self.addEventListener("install", event => {

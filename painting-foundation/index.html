@@ -212,8 +212,8 @@
       min-height: 470px;
       overflow: hidden;
       background:
-        radial-gradient(circle at 22% 16%, rgba(255,255,255,.82), transparent 26%),
-        linear-gradient(135deg, #414b50 0%, #1f292d 42%, #655b4d 100%);
+        linear-gradient(90deg, rgba(255,253,247,.92) 0%, rgba(255,253,247,.62) 38%, rgba(16,22,24,.2) 100%),
+        url("./assets/spray-finishing-workbench-real.jpg") center / cover no-repeat;
     }
 
     .stage-card::after {
@@ -258,110 +258,73 @@
       font-weight: 900;
     }
 
-    .paint-photo {
-      margin-top: 16px;
-      min-height: 210px;
+    .real-photo {
       position: relative;
-      border: 1px solid rgba(255,255,255,.62);
+      margin: 0;
+      border: 1px solid rgba(255,255,255,.66);
       border-radius: var(--radius);
       overflow: hidden;
-      background:
-        radial-gradient(circle at 55% 60%, rgba(255,255,255,.38), transparent 18%),
-        repeating-linear-gradient(9deg, rgba(255,255,255,.12) 0 1px, transparent 1px 7px),
-        linear-gradient(145deg, #aaa99f, #4d5960 46%, #2b3439);
-      box-shadow: inset 0 0 0 999px rgba(255,255,255,.04);
+      background: #12191c;
+      box-shadow: 0 18px 34px rgba(0,0,0,.2);
     }
 
-    .spray-gun {
-      position: absolute;
-      right: 34px;
-      top: 18px;
-      width: 132px;
-      height: 74px;
-      transform: rotate(-12deg);
+    .real-photo img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
-    .gun-body {
-      position: absolute;
-      right: 0;
-      top: 12px;
-      width: 86px;
-      height: 32px;
-      border-radius: 9px;
-      background: linear-gradient(180deg, #e9e3d5, #8d918e);
-      box-shadow: 0 5px 16px rgba(0,0,0,.25);
+    .hero-photo {
+      margin-top: 16px;
+      min-height: 252px;
     }
 
-    .gun-cup {
+    .photo-label {
       position: absolute;
-      right: 23px;
-      top: -6px;
-      width: 40px;
-      height: 28px;
-      border-radius: 12px 12px 7px 7px;
-      background: linear-gradient(180deg, #f8f2e8, #bcb6aa);
+      left: 12px;
+      bottom: 12px;
+      display: inline-grid;
+      gap: 3px;
+      max-width: min(320px, calc(100% - 24px));
+      padding: 10px 12px;
+      border: 1px solid rgba(255,255,255,.55);
+      border-radius: var(--radius);
+      background: rgba(255,253,247,.88);
+      color: var(--ink);
+      font-weight: 950;
+      backdrop-filter: blur(10px);
     }
 
-    .gun-nozzle {
-      position: absolute;
-      left: 0;
-      top: 24px;
-      width: 54px;
-      height: 13px;
-      border-radius: 999px 0 0 999px;
-      background: linear-gradient(180deg, #eee, #6a7070);
+    .photo-label small {
+      color: var(--muted);
+      font-weight: 900;
     }
 
-    .spray-cloud {
-      position: absolute;
-      right: 118px;
-      top: 64px;
-      width: 220px;
-      height: 116px;
-      border-radius: 52% 48% 50% 50%;
-      background:
-        radial-gradient(circle at 55% 46%, rgba(33,122,87,.56), transparent 16%),
-        radial-gradient(circle at 38% 46%, rgba(35,104,197,.36), transparent 21%),
-        radial-gradient(circle at 66% 58%, rgba(255,255,255,.42), transparent 24%);
-      filter: blur(9px);
-      opacity: calc(.24 + var(--film) * .006);
-      transform: rotate(-8deg);
+    .callout-photo {
+      height: 150px;
     }
 
-    .metal-plate {
-      position: absolute;
-      left: 42px;
-      right: 52px;
-      bottom: 30px;
-      height: 86px;
-      border-radius: 7px;
-      transform: perspective(560px) rotateX(54deg) rotateZ(-4deg);
-      background:
-        linear-gradient(90deg, rgba(255,255,255,.22), transparent 22%),
-        linear-gradient(180deg, rgba(255,255,255,.2), transparent 50%),
-        linear-gradient(90deg, #6f7c7e, #a5aaa2 46%, #526165);
-      box-shadow: 0 24px 38px rgba(0,0,0,.28);
+    .source-line {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 850;
     }
 
-    .paint-strip {
-      position: absolute;
-      left: 20%;
-      right: 8%;
-      top: 18px;
-      height: calc(20px + var(--film) * .45px);
-      border-radius: 999px;
-      background: linear-gradient(90deg, #1b674b, #2e83b9 48%, #f4f0df);
-      opacity: .9;
-      box-shadow: 0 0 18px rgba(33,122,87,.4);
+    .result-photo {
+      height: 184px;
+      margin-bottom: 10px;
     }
 
-    .scratch-lines {
+    .result-photo::after,
+    .hero-photo::after,
+    .callout-photo::after {
+      content: "";
       position: absolute;
-      inset: 14px 18px;
-      opacity: calc(.16 + var(--scuff) * .006);
-      background:
-        repeating-linear-gradient(-14deg, transparent 0 9px, rgba(255,255,255,.34) 9px 10px);
-      mix-blend-mode: screen;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(180deg, rgba(255,255,255,0), rgba(0,0,0,.22));
     }
 
     .callout-stack {
@@ -380,75 +343,6 @@
       margin: 0 0 8px;
       font-size: 14px;
       letter-spacing: 0;
-    }
-
-    .layer-diagram {
-      height: 124px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      overflow: hidden;
-      display: grid;
-      align-content: end;
-      background:
-        radial-gradient(circle at 22% 26%, rgba(255,255,255,.72), transparent 20%),
-        #ece7dc;
-    }
-
-    .layer {
-      display: grid;
-      place-items: center;
-      color: #fff;
-      font-size: 12px;
-      font-weight: 950;
-      text-shadow: 0 1px 2px rgba(0,0,0,.32);
-    }
-
-    .layer.clear { height: 18px; background: rgba(255,255,255,.46); color: #283238; text-shadow: none; }
-    .layer.color { height: calc(16px + var(--film) * .24px); background: linear-gradient(90deg, #1f7a55, #327ec0); }
-    .layer.primer { height: 18px; background: #c69255; }
-    .layer.metal { height: 34px; background: linear-gradient(90deg, #828b8d, #c0c1b8, #6c7779); }
-
-    .molecule-view {
-      height: 134px;
-      position: relative;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      overflow: hidden;
-      background: linear-gradient(180deg, #f3eee4 0 45%, #818b8e 45% 100%);
-    }
-
-    .rough-surface {
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 58px;
-      height: 32px;
-      background:
-        linear-gradient(135deg, transparent 0 12px, rgba(0,0,0,.18) 12px 13px, transparent 13px 25px),
-        linear-gradient(180deg, #a6aaa6, #6e797c);
-      clip-path: polygon(0 42%, 7% 32%, 14% 48%, 22% 25%, 32% 55%, 43% 34%, 52% 47%, 60% 24%, 72% 56%, 84% 34%, 100% 44%, 100% 100%, 0 100%);
-    }
-
-    .paint-finger {
-      position: absolute;
-      top: 28px;
-      width: 18px;
-      height: calc(30px + var(--scuff) * .28px);
-      border-radius: 999px;
-      background: linear-gradient(180deg, #1f7a55, #2b8cc6);
-      opacity: .8;
-      box-shadow: 0 0 12px rgba(31,122,85,.32);
-      animation: gripPulse 2.8s ease-in-out infinite;
-    }
-
-    .paint-finger:nth-child(1) { left: 18%; animation-delay: .1s; }
-    .paint-finger:nth-child(2) { left: 36%; animation-delay: .4s; }
-    .paint-finger:nth-child(3) { left: 55%; animation-delay: .7s; }
-    .paint-finger:nth-child(4) { left: 75%; animation-delay: 1s; }
-
-    @keyframes gripPulse {
-      0%, 100% { transform: translateY(-2px); }
-      50% { transform: translateY(5px); }
     }
 
     .sim-grid {
@@ -549,6 +443,12 @@
       font-weight: 850;
     }
 
+    .lesson-image {
+      grid-column: 1 / -1;
+      height: 116px;
+      margin-top: 8px;
+    }
+
     .side-panel {
       padding: 12px;
       display: grid;
@@ -610,6 +510,16 @@
       border-radius: var(--radius);
       background: rgba(255,255,255,.72);
       font-weight: 900;
+    }
+
+    .feedback img {
+      display: block;
+      width: 100%;
+      max-height: 142px;
+      object-fit: cover;
+      border-radius: var(--radius);
+      margin-top: 8px;
+      border: 1px solid rgba(124, 116, 101, .25);
     }
 
     .next-button,
@@ -708,9 +618,6 @@
       .lesson-grid,
       .score-grid { grid-template-columns: 1fr; }
       .control-row { grid-template-columns: 82px 1fr 62px; }
-      .paint-photo { min-height: 190px; }
-      .spray-gun { transform: rotate(-12deg) scale(.78); transform-origin: top right; }
-      .spray-cloud { width: 160px; right: 92px; }
     }
   </style>
 </head>
@@ -761,40 +668,36 @@
                 <p>油・水・サビ・ツルツル面があると、服がすべってはがれる。</p>
               </div>
 
-              <div class="paint-photo" aria-label="塗装の完成イメージ">
-                <div class="spray-gun">
-                  <span class="gun-cup"></span>
-                  <span class="gun-body"></span>
-                  <span class="gun-nozzle"></span>
-                </div>
-                <span class="spray-cloud"></span>
-                <span class="metal-plate">
-                  <span class="paint-strip"></span>
-                  <span class="scratch-lines"></span>
-                </span>
-              </div>
+              <figure class="real-photo hero-photo" aria-label="塗装作業の実写真">
+                <img src="./assets/spray-finishing-workbench-real.jpg" alt="スプレーガンで部品を塗装している実写真">
+                <figcaption class="photo-label">
+                  <span>まず見る場所：吹いた塗料が表面に乗る瞬間</span>
+                  <small>下地が悪いと、この膜があとで浮く。</small>
+                </figcaption>
+              </figure>
             </div>
 
             <div class="callout-stack">
               <section class="mini-panel">
                 <h4>塗膜の層</h4>
-                <div class="layer-diagram" aria-label="塗装の層">
-                  <span class="layer clear">クリア</span>
-                  <span class="layer color">色</span>
-                  <span class="layer primer">プライマー</span>
-                  <span class="layer metal">金属</span>
-                </div>
+                <figure class="real-photo callout-photo" aria-label="塗膜断面の実画像">
+                  <img src="./assets/coating-cross-section-real.png" alt="塗膜の断面を顕微鏡で見た実画像">
+                  <figcaption class="photo-label">
+                    <span>薄い膜が何層にも重なる</span>
+                  </figcaption>
+                </figure>
+                <p class="source-line">実画像：KEYENCE coating inspection sample</p>
               </section>
 
               <section class="mini-panel">
                 <h4>足付けでつかまる</h4>
-                <div class="molecule-view" aria-label="足付けと密着のイメージ">
-                  <span class="paint-finger"></span>
-                  <span class="paint-finger"></span>
-                  <span class="paint-finger"></span>
-                  <span class="paint-finger"></span>
-                  <span class="rough-surface"></span>
-                </div>
+                <figure class="real-photo callout-photo" aria-label="表面の細かい世界">
+                  <img src="./assets/coating-micro-cross-section-real.png" alt="塗膜の細かい断面を拡大した実画像">
+                  <figcaption class="photo-label">
+                    <span>小さい段差を見る</span>
+                  </figcaption>
+                </figure>
+                <p class="source-line">実画像：MDPI Coatings cross-section figure</p>
               </section>
             </div>
           </div>
@@ -833,12 +736,13 @@
 
           <article class="card">
             <h3>結果イメージ</h3>
-            <div class="layer-diagram" aria-label="条件で変わる塗膜">
-              <span class="layer clear">表面</span>
-              <span class="layer color">塗膜</span>
-              <span class="layer primer">下塗り</span>
-              <span class="layer metal">下地</span>
-            </div>
+            <figure class="real-photo result-photo" aria-label="条件で変わる塗膜の実画像">
+              <img id="simImage" src="./assets/coating-cross-section-real.png" alt="塗膜断面の実画像">
+              <figcaption class="photo-label">
+                <span id="simCaption">膜が下地へつながって見える</span>
+                <small id="simSubCaption">脱脂・足付け・乾燥をそろえる。</small>
+              </figcaption>
+            </figure>
             <p>
               脱脂と足付けが弱いと、塗料は金属に入る場所が少ない。
               乾燥が弱いと、触る前に中がまだやわらかい。
@@ -855,6 +759,9 @@
                 <h4>定義（ていぎ：言葉の意味）</h4>
                 <p>塗装は、金属を守る薄い膜を作る加工。</p>
               </div>
+              <figure class="real-photo lesson-image">
+                <img src="./assets/spray-finishing-workbench-real.jpg" alt="部品へ塗料を吹いている実写真">
+              </figure>
             </article>
             <article class="lesson-bit">
               <span class="dot" style="background:var(--green)"></span>
@@ -862,6 +769,9 @@
                 <h4>しくみ</h4>
                 <p>脱脂で油を取り、足付けで小さいひっかかりを作り、塗料がそこへ入る。</p>
               </div>
+              <figure class="real-photo lesson-image">
+                <img src="./assets/coating-cross-section-real.png" alt="塗膜と下地の断面を見た実画像">
+              </figure>
             </article>
             <article class="lesson-bit">
               <span class="dot" style="background:var(--yellow)"></span>
@@ -869,6 +779,9 @@
                 <h4>なぜ</h4>
                 <p>分子（ぶんし：小さい粒）の近くまで見ると、油は塗料と金属の間にあるラップみたいな邪魔物。</p>
               </div>
+              <figure class="real-photo lesson-image">
+                <img src="./assets/coating-micro-cross-section-real.png" alt="塗膜を細かく見た実画像">
+              </figure>
             </article>
             <article class="lesson-bit">
               <span class="dot" style="background:var(--red)"></span>
@@ -876,6 +789,9 @@
                 <h4>注意</h4>
                 <p>厚く塗れば強い、ではない。厚すぎると中が乾きにくく、あとで割れやすい。</p>
               </div>
+              <figure class="real-photo lesson-image">
+                <img src="./assets/peeling-rust-real.jpg" alt="塗装が剥がれた金属の実写真">
+              </figure>
             </article>
             <article class="lesson-bit">
               <span class="dot" style="background:var(--violet)"></span>
@@ -883,6 +799,9 @@
                 <h4>設計判断</h4>
                 <p>剥がれが怖い場所は、塗る前に材質・下地処理・角の丸み・水のたまりを先に見る。</p>
               </div>
+              <figure class="real-photo lesson-image">
+                <img src="./assets/peeling-rust-real.jpg" alt="サビと塗装剥がれの実写真">
+              </figure>
             </article>
             <article class="lesson-bit">
               <span class="dot" style="background:#17303a"></span>
@@ -890,6 +809,9 @@
                 <h4>発明家視点</h4>
                 <p>表面の小さい世界が見えると、塗装だけでなく接着・コーティング・防錆も設計できる。</p>
               </div>
+              <figure class="real-photo lesson-image">
+                <img src="./assets/coating-micro-cross-section-real.png" alt="膜の厚みを細かく見る実画像">
+              </figure>
             </article>
           </div>
         </section>
@@ -942,7 +864,7 @@
       ["dry", "dryValue", "--dry"]
     ];
 
-    const stateKey = "painting-foundation-v1";
+    const stateKey = "painting-foundation-v2";
     const saved = JSON.parse(localStorage.getItem(stateKey) || "{}");
 
     function saveState() {
@@ -975,6 +897,21 @@
       else if (values.film > 82) hint = "厚塗り注意";
       else if (values.dry < 45) hint = "乾燥時間を待つ";
       document.getElementById("designHint").textContent = hint;
+
+      const simImage = document.getElementById("simImage");
+      const simCaption = document.getElementById("simCaption");
+      const simSubCaption = document.getElementById("simSubCaption");
+      if (adhesion < 55) {
+        simImage.src = "./assets/peeling-rust-real.jpg";
+        simImage.alt = "塗装が剥がれてサビが出た実写真";
+        simCaption.textContent = "弱い条件では膜が浮く";
+        simSubCaption.textContent = "油・水・足付け不足が先に疑う場所。";
+      } else {
+        simImage.src = "./assets/coating-cross-section-real.png";
+        simImage.alt = "塗膜断面の実画像";
+        simCaption.textContent = "膜が下地へつながって見える";
+        simSubCaption.textContent = "脱脂・足付け・乾燥をそろえる。";
+      }
     }
 
     const quizzes = [
@@ -982,19 +919,25 @@
         q: "Q. 塗装がはがれやすい原因は？",
         a: ["油や水が下に残っている", "色がきれいすぎる", "乾いたあとに見るから"],
         correct: 0,
-        why: "油や水があると、塗料が金属に直接つかまれない。"
+        why: "油や水があると、塗料が金属に直接つかまれない。",
+        image: "./assets/peeling-rust-real.jpg",
+        alt: "塗装が剥がれた金属の実写真"
       },
       {
         q: "Q. 足付けは何のため？",
-        a: ["小さいひっかかりを作る", "金属を冷やす", "塗料を薄める"],
-        correct: 0,
-        why: "小さいキズに塗料が入り、機械的につかまる場所が増える。"
+        a: ["金属を冷やす", "小さいひっかかりを作る", "塗料を薄める"],
+        correct: 1,
+        why: "小さいキズに塗料が入り、機械的につかまる場所が増える。",
+        image: "./assets/coating-micro-cross-section-real.png",
+        alt: "塗膜を細かく見た実画像"
       },
       {
         q: "Q. 厚く塗りすぎると何が起きやすい？",
-        a: ["中が乾きにくい", "必ず強くなる", "金属が軽くなる"],
-        correct: 0,
-        why: "外だけ乾いても中がやわらかいと、あとで割れやすい。"
+        a: ["必ず強くなる", "金属が軽くなる", "中が乾きにくい"],
+        correct: 2,
+        why: "外だけ乾いても中がやわらかいと、あとで割れやすい。",
+        image: "./assets/coating-cross-section-real.png",
+        alt: "塗膜の断面を見た実画像"
       }
     ];
 
@@ -1007,7 +950,7 @@
       const quiz = quizzes[quizIndex % quizzes.length];
       questionEl.textContent = quiz.q;
       choicesEl.innerHTML = "";
-      feedbackEl.textContent = "答えると理由が出る。";
+      feedbackEl.textContent = "答えると理由と実画像が出る。";
       quiz.a.forEach((text, index) => {
         const button = document.createElement("button");
         button.className = "choice";
@@ -1017,7 +960,13 @@
             child.classList.toggle("correct", i === quiz.correct);
             child.classList.toggle("wrong", i === index && index !== quiz.correct);
           });
-          feedbackEl.textContent = index === quiz.correct ? "正解。" + quiz.why : "惜しい。" + quiz.why;
+          feedbackEl.innerHTML = "";
+          const message = document.createElement("div");
+          message.textContent = (index === quiz.correct ? "正解。" : "惜しい。") + quiz.why;
+          const image = document.createElement("img");
+          image.src = quiz.image;
+          image.alt = quiz.alt;
+          feedbackEl.append(message, image);
           document.querySelectorAll(".review-check")[2].checked = true;
           updateReview();
           saveState();
