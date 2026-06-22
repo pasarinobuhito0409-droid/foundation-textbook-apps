@@ -40,6 +40,7 @@
         repeating-linear-gradient(90deg, rgba(80,70,50,0.025) 0 1px, transparent 1px 10px),
         var(--bg);
       line-height: 1.7;
+      overflow-x: hidden;
     }
 
     button, input {
@@ -56,7 +57,7 @@
       position: sticky;
       top: 0;
       z-index: 10;
-      margin: 0 -20px 18px;
+      margin: 0 0 18px;
       padding: 12px 20px;
       background: rgba(245, 242, 236, 0.92);
       border-bottom: 1px solid rgba(120, 111, 95, 0.22);
@@ -130,6 +131,7 @@
       font-size: clamp(34px, 6vw, 72px);
       line-height: 1.02;
       letter-spacing: 0;
+      overflow-wrap: anywhere;
     }
 
     .lead {
@@ -182,6 +184,36 @@
       overflow: hidden;
     }
 
+    .experiment-real {
+      margin: 0;
+      background: #111820;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .experiment-real img,
+    .real-card img,
+    .quiz-image,
+    .review-visual img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .experiment-real img {
+      aspect-ratio: 16 / 9;
+      object-fit: contain;
+      background: #111820;
+    }
+
+    .experiment-real figcaption {
+      padding: 10px 14px 12px;
+      color: #f8fafc;
+      font-size: 14px;
+      line-height: 1.5;
+      font-weight: 800;
+      background: rgba(15, 23, 42, 0.92);
+    }
+
     .experiment-header {
       display: flex;
       align-items: center;
@@ -224,12 +256,27 @@
 
     .beam-area {
       position: relative;
-      height: 250px;
+      height: auto;
+      aspect-ratio: 16 / 9;
       border-radius: 6px;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,0.7), rgba(235,231,223,0.5));
+      background: #111820;
       border: 1px dashed rgba(100, 92, 78, 0.28);
       overflow: hidden;
+    }
+
+    .beam-photo {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: saturate(0.94) brightness(0.92);
+    }
+
+    .beam-svg,
+    .clamp,
+    .heat-zone {
+      display: none;
     }
 
     .clamp {
@@ -334,8 +381,9 @@
       border-radius: 999px;
       background: rgba(255, 253, 248, 0.88);
       border: 1px solid var(--line);
-      color: var(--muted);
+      color: #0f172a;
       font-size: 12px;
+      font-weight: 800;
       white-space: nowrap;
     }
 
@@ -721,6 +769,44 @@
       50% { filter: saturate(1.45) brightness(1.05); }
     }
 
+    .real-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin: 2px 0 18px;
+    }
+
+    .real-card {
+      margin: 0;
+      border: 1px solid rgba(120, 111, 95, 0.24);
+      border-radius: var(--radius);
+      background: rgba(255, 253, 248, 0.82);
+      overflow: hidden;
+    }
+
+    .real-card.primary {
+      grid-column: 1 / -1;
+    }
+
+    .real-card img {
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+    }
+
+    .real-card figcaption {
+      padding: 10px 12px 12px;
+      color: #344144;
+      font-weight: 800;
+    }
+
+    .real-card figcaption span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
     .diagram-block {
       margin: 18px 0 0;
       padding: 16px;
@@ -864,6 +950,14 @@
 
     .answer.show {
       display: block;
+    }
+
+    .quiz-image {
+      margin-top: 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
     }
 
     .save-row {
@@ -1073,35 +1167,19 @@
     }
 
     .review-visual {
-      display: grid;
-      grid-template-columns: 80px 1fr 56px;
-      align-items: center;
-      gap: 10px;
-      min-height: 92px;
+      display: block;
+      min-height: 180px;
       margin: 12px 0;
-      padding: 10px;
       border: 1px dashed rgba(100, 92, 78, 0.28);
       border-radius: var(--radius);
       background: linear-gradient(180deg, rgba(255,255,255,0.74), rgba(229,238,239,0.72));
+      overflow: hidden;
     }
 
-    .review-visual .v-clamp {
-      height: 70px;
-      border-radius: 5px;
-      background: linear-gradient(90deg, #2d3436, #5e6971);
-    }
-
-    .review-visual .v-beam {
-      height: 22px;
-      border-radius: 999px;
-      background: linear-gradient(180deg, #e7edf1, #8c9aa3 55%, #5b6870);
-      box-shadow: 0 12px 16px rgba(53, 62, 68, 0.18);
-    }
-
-    .review-visual .v-force {
-      color: var(--red);
-      font-weight: 800;
-      text-align: center;
+    .review-visual img {
+      height: 100%;
+      min-height: 180px;
+      object-fit: cover;
     }
 
     .install-note {
@@ -1145,7 +1223,7 @@
       }
 
       .topbar {
-        margin: 0 -14px 14px;
+        margin: 0 0 14px;
         padding: 10px 14px;
       }
 
@@ -1154,12 +1232,16 @@
       }
 
       .progress-pill {
-        min-width: 96px;
-        font-size: 13px;
+        display: none;
+      }
+
+      h1 {
+        font-size: 30px;
+        line-height: 1.12;
       }
 
       .lead {
-        font-size: 16px;
+        font-size: 15px;
       }
 
       .force-stage {
@@ -1168,7 +1250,7 @@
       }
 
       .beam-area {
-        height: 220px;
+        height: auto;
       }
 
       .meters {
@@ -1187,6 +1269,10 @@
       }
 
       .motion-lesson-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .real-grid {
         grid-template-columns: 1fr;
       }
 
@@ -1214,11 +1300,11 @@
   <main class="page">
     <section class="hero" id="top">
       <div class="hero-copy">
-        <p class="eyebrow">T01 今日の1テーマ</p>
-        <h1>力とは、物を動かしたり曲げたりする押し引き。</h1>
+        <p class="eyebrow">T02 今日の1テーマ</p>
+        <h1>固定とは、<br>動ける向きを<br>止めること。</h1>
         <p class="lead">
-          まずは「力」を数字の前に体でつかむ。
-          板金を指で押す場面から、CAE（しーえーいー：コンピューターで壊れやすさを試す道具）まで一本でつなぐ。
+          今日は「固定」を体でつかむ。
+          CAE（しーえーいー：コンピューターで壊れやすさを試す道具）は、固定の決め方で答えが変わる。
         </p>
         <div class="hero-actions">
           <button class="primary-action" data-scroll="#experiment">実験する</button>
@@ -1228,12 +1314,17 @@
       </div>
 
       <aside class="experiment-shell" id="experiment" aria-label="力の実験">
+        <figure class="experiment-real">
+          <img src="assets/t02-fix-real.png" alt="万力で金属板を固定し、右端へ荷重をかけると固定の近くに応力が集中する実写風教材画像">
+          <figcaption>まず見る所：赤が固定近くに集まる。</figcaption>
+        </figure>
         <div class="experiment-header">
-          <strong>手で押す実験</strong>
-          <span class="badge">保存つき</span>
+          <strong>固定を触る実験</strong>
+          <span class="badge">T02 保存つき</span>
         </div>
         <div class="force-stage" id="stage">
           <div class="beam-area" id="beamArea">
+            <img class="beam-photo" src="assets/t02-fix-real.png" alt="固定された金属板に荷重をかける実験画像">
             <div class="clamp" aria-hidden="true"></div>
             <div class="heat-zone" id="heatZone" aria-hidden="true"></div>
             <svg class="beam-svg" viewBox="0 0 600 250" preserveAspectRatio="none" aria-hidden="true">
@@ -1294,13 +1385,13 @@
         細かい地図はあとで増やす。
       </p>
       <div class="progress-board">
-        <article class="progress-item now">
-          <strong>🟦➡️ T01 力とは何か</strong>
+        <article class="progress-item">
+          <strong>✅ <s>T01 力とは何か</s></strong>
           <p>押す、引く、曲げるの元になる考え。</p>
         </article>
-        <article class="progress-item">
-          <strong>⬜ T02 固定とは何か</strong>
-          <p>動けない場所ほど負担が集まる。</p>
+        <article class="progress-item now">
+          <strong>🟦➡️ T02 固定とは何か</strong>
+          <p>動ける向きを止めると、そこが力を受け止める。</p>
         </article>
         <article class="progress-item">
           <strong>⬜ T03 CAEの見方</strong>
@@ -1313,110 +1404,91 @@
       <h2 id="lessonTitle">今日の教科書</h2>
       <p class="section-intro">
         1回で覚えることは1つ。
-        力は「物を変えようとする押し引き」。
+        固定は「動ける向きを止めること」。
       </p>
 
       <div class="lesson-grid">
         <article class="lesson-main">
-          <div class="motion-lesson" aria-label="力の動く図解">
-            <div class="motion-lesson-head">
-              <span>見て覚える</span>
-              <span>力が物を変える</span>
-            </div>
-            <div class="motion-lesson-grid">
-              <div class="motion-card">
-                <strong>動かす</strong>
-                <div class="motion-scene" aria-hidden="true">
-                  <div class="motion-hand"></div>
-                  <div class="motion-dot"></div>
-                </div>
-              </div>
-              <div class="motion-card">
-                <strong>止める</strong>
-                <div class="motion-scene" aria-hidden="true">
-                  <div class="motion-wall"></div>
-                  <div class="motion-stop-dot"></div>
-                </div>
-              </div>
-              <div class="motion-card">
-                <strong>曲げる</strong>
-                <div class="motion-scene" aria-hidden="true">
-                  <div class="motion-clamp-small"></div>
-                  <div class="motion-beam"></div>
-                  <div class="motion-force">↓</div>
-                </div>
-              </div>
-              <div class="motion-card">
-                <strong>へこませる</strong>
-                <div class="motion-scene" aria-hidden="true">
-                  <div class="motion-press"></div>
-                  <div class="motion-plate"></div>
-                </div>
-              </div>
-              <div class="motion-card">
-                <strong>CAEで見る</strong>
-                <div class="motion-scene" aria-hidden="true">
-                  <div class="motion-cae-clamp"></div>
-                  <div class="motion-cae-plate"></div>
-                  <div class="motion-note">赤=つらい</div>
-                </div>
-              </div>
-            </div>
+          <div class="real-grid" aria-label="固定をリアル画像で見る">
+            <figure class="real-card primary">
+              <img src="assets/t02-fix-real.png" alt="万力で金属板を固定して荷重をかけると固定近くに応力が集中する画像">
+              <figcaption>
+                固定した端は動けないので、そこで力を受け止める。
+                <span>まず見る場所：万力のすぐ横の赤い部分。</span>
+              </figcaption>
+            </figure>
+            <figure class="real-card">
+              <img src="assets/t02-bolt-fixed-real.png" alt="ボルトでブラケットを固定し、力を受け止める実例画像">
+              <figcaption>
+                ボルト固定は、動ける向きを止める。
+                <span>棚や治具でよく出る固定。</span>
+              </figcaption>
+            </figure>
+            <figure class="real-card">
+              <img src="assets/t02-ng-slip-real.png" alt="固定不足で金属板がずれて結果がずれるNG画像">
+              <figcaption>
+                固定不足だと、部品がずれて結果もずれる。
+                <span>CAEでも現物でも危ない見方。</span>
+              </figcaption>
+            </figure>
+            <figure class="real-card">
+              <img src="assets/t02-cae-screen-real.png" alt="CAE画面で固定条件と荷重により応力集中が出る画像">
+              <figcaption>
+                CAEは固定条件で答えが変わる。
+                <span>赤だけでなく、固定と荷重を見る。</span>
+              </figcaption>
+            </figure>
           </div>
 
           <div class="icon-line">
             <span>🔵</span>
             <div>
               <b>定義（ていぎ：言葉の意味）</b>
-              <p>力は、物を動かす、止める、曲げる、へこませる働き。</p>
+              <p>固定は、部品が動ける向きを止める条件。</p>
             </div>
           </div>
           <div class="icon-line">
             <span>🟢</span>
             <div>
               <b>しくみ</b>
-              <p>押す力が大きいほど、板は大きく曲がる。端で固定すると、固定の近くに負担が集まる。</p>
+              <p>固定された場所は動けないので、入ってきた力をそこで受け止める。</p>
             </div>
           </div>
           <div class="icon-line">
             <span>🟡</span>
             <div>
               <b>なぜ</b>
-              <p>板は押された場所だけでなく、固定されて動けない場所でも踏んばるから。</p>
+              <p>力は部品の中を通って、最後に動けない場所へ集まるから。</p>
             </div>
           </div>
           <div class="icon-line">
             <span>🔴</span>
             <div>
               <b>注意</b>
-              <p>CAEの赤色だけを見て終わると危ない。どこを固定し、どこに力を入れたかを見る。</p>
+              <p>現物で動く場所をCAEで固定すると、本当はない踏んばりを作ってしまう。</p>
             </div>
           </div>
           <div class="icon-line">
             <span>🟣</span>
             <div>
               <b>設計判断</b>
-              <p>強くしたいときは、板を厚くする前に、曲げ・リブ（りぶ：三角のつっかえ板）・固定位置を考える。</p>
+              <p>「どこを止めるか」を先に決めてから、応力（おうりょく：材料の中のつらさ）を見る。</p>
             </div>
           </div>
           <div class="icon-line">
             <span>⚫</span>
             <div>
               <b>発明家視点</b>
-              <p>力の通り道が見えると、軽くて強い形を自分で作れる。</p>
+              <p>固定を変えるだけで、軽くて強い形の答えが変わる。</p>
             </div>
           </div>
 
           <div class="diagram-block">
             <div class="diagram-title">
-              <span>頭の中の絵</span>
-              <span>固定の近くがつらい</span>
+              <span>今日の一言</span>
+              <span>固定は、力の出口</span>
             </div>
-            <div class="mini-diagram">
-              <div class="mini-clamp"></div>
-              <div class="mini-beam"></div>
-              <div class="mini-note">押す力↓</div>
-            </div>
+            <p>日常の例なら、壁にねじ止めした棚。棚に本を置くと、最後はねじの場所が踏んばる。</p>
           </div>
         </article>
 
@@ -1425,15 +1497,15 @@
           <div class="checklist">
             <label class="check">
               <input type="checkbox" data-progress="experiment">
-              <span>実験で、力を大きくした。</span>
+              <span>固定された端を画像で見た。</span>
             </label>
             <label class="check">
               <input type="checkbox" data-progress="position">
-              <span>押す位置を変えて、曲がり方を見た。</span>
+              <span>押す位置を変えて、固定近くのつらさを見た。</span>
             </label>
             <label class="check">
               <input type="checkbox" data-progress="lesson">
-              <span>固定の近くがつらい理由を言える。</span>
+              <span>固定は動ける向きを止めること、と言える。</span>
             </label>
             <label class="check">
               <input type="checkbox" data-progress="quiz">
@@ -1458,33 +1530,42 @@
       <div class="quiz-panel">
         <div class="quiz-list">
           <div class="question" data-question="q1">
-            <p>Q1. 力とは何？</p>
+            <p>Q1. 設計でいう固定とは何？</p>
             <div class="choices">
-              <button class="choice" data-correct="true">物を動かしたり曲げたりする押し引き</button>
-              <button class="choice">色を変えるだけのもの</button>
-              <button class="choice">図面にだけ出る記号</button>
+              <button class="choice" data-correct="true">動ける向きを止める条件</button>
+              <button class="choice">部品を赤く塗ること</button>
+              <button class="choice">重さをゼロにすること</button>
             </div>
-            <div class="answer">答え：物を動かしたり曲げたりする押し引き。なぜなら、押すと板の形や動きが変わるから。</div>
+            <div class="answer">
+              答え：動ける向きを止める条件。ボルト固定なら、部品がずれないように力を受け止める。
+              <img class="quiz-image" src="assets/t02-bolt-fixed-real.png" alt="ボルトで固定されたブラケットが力を受け止める画像">
+            </div>
           </div>
 
           <div class="question" data-question="q2">
-            <p>Q2. 固定の近くがつらいのはなぜ？</p>
+            <p>Q2. 固定不足だと何が危ない？</p>
             <div class="choices">
-              <button class="choice">そこだけ色が濃いから</button>
-              <button class="choice" data-correct="true">動けない場所が、力に対して踏んばるから</button>
-              <button class="choice">板が必ず折れる場所だから</button>
+              <button class="choice">見た目が少し悪くなるだけ</button>
+              <button class="choice" data-correct="true">部品がずれて、結果もズレる</button>
+              <button class="choice">応力が必ずゼロになる</button>
             </div>
-            <div class="answer">答え：固定は動けないので、そこで踏んばる。日常例なら、ドアのちょうつがい近くに負担が集まる感じ。</div>
+            <div class="answer">
+              答え：部品がずれて、結果もズレる。現物でもCAEでも、固定が甘いと「本当の力の流れ」が見えない。
+              <img class="quiz-image" src="assets/t02-ng-slip-real.png" alt="固定不足で金属板がずれるNG画像">
+            </div>
           </div>
 
           <div class="question" data-question="q3">
-            <p>Q3. CAEで最初に見るべきものは？</p>
+            <p>Q3. CAEで赤を見る前に確認するものは？</p>
             <div class="choices">
-              <button class="choice" data-correct="true">固定・力・赤い場所</button>
+              <button class="choice" data-correct="true">固定条件・荷重・材料</button>
               <button class="choice">きれいな色だけ</button>
               <button class="choice">計算時間だけ</button>
             </div>
-            <div class="answer">答え：固定・力・赤い場所。赤は「ここが弱そう」という候補で、原因を見る必要がある。</div>
+            <div class="answer">
+              答え：固定条件・荷重・材料。赤は結果で、原因は条件の中にある。
+              <img class="quiz-image" src="assets/t02-cae-screen-real.png" alt="CAE画面で固定条件と荷重により赤い応力集中が出る画像">
+            </div>
           </div>
         </div>
       </div>
@@ -1561,11 +1642,9 @@
               <strong id="reviewModeLabel">今日の復習</strong>
               <span id="reviewKindLabel">想起（しょうき：思い出す問題）</span>
               <div class="review-visual" aria-hidden="true">
-                <div class="v-clamp"></div>
-                <div class="v-beam"></div>
-                <div class="v-force">力↓</div>
+                <img src="assets/t02-cae-screen-real.png" alt="CAE画面で固定条件と荷重と応力集中を見る復習画像">
               </div>
-              <h3 id="reviewQuestionText">力とは何？</h3>
+              <h3 id="reviewQuestionText">固定とは何？</h3>
               <div class="review-choices" id="reviewChoices"></div>
               <div class="review-feedback" id="reviewFeedback"></div>
             </div>
@@ -1589,27 +1668,27 @@
       <div class="night-review">
         <article class="review-card">
           <strong>1. 再問</strong>
-          <p>力とは何？</p>
+          <p>固定とは何？</p>
         </article>
         <article class="review-card">
           <strong>2. 答え</strong>
-          <p>物を動かす、止める、曲げる押し引き。</p>
+          <p>動ける向きを止めて、力を受け止める条件。</p>
         </article>
         <article class="review-card">
           <strong>3. 発明へのつながり</strong>
-          <p>力の通り道が見えると、軽くて強い形を作れる。</p>
+          <p>固定を変えるだけで、軽くて強い形の答えが変わる。</p>
         </article>
       </div>
     </section>
 
     <p class="footer-note">
-      GPT Image 2指定のリアル画像は、APIキー設定後にこのページへ差し込む前提。
-      この試作は、まずマウスとスマホ操作で体に入る形を優先している。
+      リアル画像は、Codex内蔵の image_gen（画像生成）で作成済み。
+      このページは、見て、触って、答えて、固定の考えを体に入れる。
     </p>
   </main>
 
   <script>
-    const storageKey = "miwa-mechanics-cae-foundation-v1";
+    const storageKey = "miwa-mechanics-cae-foundation-v2";
 
     const state = {
       force: 50,
@@ -1617,9 +1696,9 @@
       progress: {},
       quiz: {},
       review: {
-        topic: "force",
+        topic: "fix",
         mode: "due",
-        currentId: "",
+        currentId: "fix-meaning",
         answered: {},
         correct: 0,
         wrong: 0
@@ -1806,9 +1885,9 @@
         if (!saved) return;
         Object.assign(state, saved);
         state.review = {
-          topic: "force",
+          topic: "fix",
           mode: "due",
-          currentId: "",
+          currentId: "fix-meaning",
           answered: {},
           correct: 0,
           wrong: 0,
@@ -1894,7 +1973,7 @@
     function pickReviewQuestion() {
       const candidates = getReviewCandidates();
       const currentIndex = candidates.findIndex((item) => item.id === state.review.currentId);
-      const next = candidates[(currentIndex + 1 + candidates.length) % candidates.length] || questionBank[0];
+      const next = candidates[(currentIndex + 1 + candidates.length) % candidates.length] || questionBank.find((item) => item.id === "fix-meaning") || questionBank[0];
       state.review.currentId = next.id;
       return next;
     }
@@ -1970,7 +2049,7 @@
         button.addEventListener("click", () => {
           state.review.topic = button.dataset.topic;
           state.review.mode = "due";
-          const first = getReviewCandidates()[0] || questionBank[0];
+          const first = getReviewCandidates()[0] || questionBank.find((item) => item.id === "fix-meaning") || questionBank[0];
           state.review.currentId = first.id;
           saveState();
           renderReviewQuestion(first);
@@ -2001,10 +2080,11 @@
         state.review.answered = {};
         state.review.correct = 0;
         state.review.wrong = 0;
-        state.review.currentId = questionBank[0].id;
+        state.review.topic = "fix";
+        state.review.currentId = "fix-meaning";
         saveState();
         updateProgress();
-        renderReviewQuestion(questionBank[0]);
+        renderReviewQuestion(questionBank.find((item) => item.id === "fix-meaning") || questionBank[0]);
       });
     }
 
@@ -2110,9 +2190,9 @@
         state.progress = {};
         state.quiz = {};
         state.review = {
-          topic: "force",
+          topic: "fix",
           mode: "due",
-          currentId: questionBank[0].id,
+          currentId: "fix-meaning",
           answered: {},
           correct: 0,
           wrong: 0
@@ -2125,7 +2205,7 @@
         });
         updateExperiment();
         updateProgress();
-        renderReviewQuestion(questionBank[0]);
+        renderReviewQuestion(questionBank.find((item) => item.id === "fix-meaning") || questionBank[0]);
         saveState();
       });
     }
@@ -2152,7 +2232,7 @@
     }
 
     loadState();
-    if (!state.review.currentId) state.review.currentId = questionBank[0].id;
+    if (!state.review.currentId) state.review.currentId = "fix-meaning";
     bindExperiment();
     bindProgress();
     bindQuiz();

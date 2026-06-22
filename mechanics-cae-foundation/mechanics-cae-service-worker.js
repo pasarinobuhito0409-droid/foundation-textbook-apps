@@ -1,10 +1,14 @@
-const CACHE_NAME = "mechanics-cae-foundation-v2";
+const CACHE_NAME = "mechanics-cae-foundation-v3";
 
 const APP_SHELL = [
   "./",
   "./mechanics-cae-foundation-textbook.html",
   "./mechanics-cae-manifest.webmanifest",
-  "./mechanics-cae-icon.svg"
+  "./mechanics-cae-icon.svg",
+  "./assets/t02-fix-real.png",
+  "./assets/t02-bolt-fixed-real.png",
+  "./assets/t02-ng-slip-real.png",
+  "./assets/t02-cae-screen-real.png"
 ];
 
 self.addEventListener("install", (event) => {
