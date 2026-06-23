@@ -280,7 +280,7 @@
 
     .meter-fill {
       height: 100%;
-      width: 40%;
+      width: 60%;
       background: linear-gradient(90deg, var(--green), var(--blue));
     }
 
@@ -1942,6 +1942,162 @@
       box-shadow: inset 0 0 0 1px rgba(36, 122, 83, 0.28);
     }
 
+    .e03-hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(340px, 0.92fr);
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .real-photo-panel,
+    .e03-touch-panel,
+    .e03-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .real-photo-panel {
+      margin: 0;
+      max-width: 100%;
+    }
+
+    .real-photo-panel img,
+    .e03-card img,
+    .e03-state-image {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      background: #10191c;
+    }
+
+    .real-photo-panel figcaption,
+    .e03-card-body,
+    .e03-touch-body {
+      padding: 14px;
+    }
+
+    .e03-memory {
+      display: grid;
+      gap: 12px;
+      align-content: start;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, #fff, #f6faf8);
+    }
+
+    .e03-memory strong {
+      font-size: 22px;
+      line-height: 1.35;
+    }
+
+    .e03-memory ul {
+      margin: 0;
+      padding-left: 1.2em;
+      color: var(--muted);
+    }
+
+    .e03-card-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(190px, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+      max-width: 100%;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .e03-card {
+      min-width: 190px;
+      box-shadow: 0 10px 22px rgba(20, 34, 40, 0.06);
+    }
+
+    .e03-card h3 {
+      margin: 0 0 6px;
+      font-size: 18px;
+    }
+
+    .e03-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .e03-touch-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 0.86fr) minmax(360px, 1.14fr);
+      gap: 18px;
+      align-items: stretch;
+      margin-top: 18px;
+    }
+
+    .e03-touch-panel {
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+
+    .e03-state-wrap {
+      position: relative;
+      min-height: 280px;
+      background: #10191c;
+    }
+
+    .e03-state-badge {
+      position: absolute;
+      left: 14px;
+      top: 14px;
+      z-index: 2;
+      padding: 8px 12px;
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.92);
+      color: var(--ink);
+      font-weight: 900;
+      box-shadow: 0 10px 22px rgba(20, 34, 40, 0.18);
+    }
+
+    .e03-state-badge.danger {
+      background: #fff0ed;
+      color: var(--red);
+    }
+
+    .e03-state-badge.caution {
+      background: var(--soft-yellow);
+      color: var(--yellow);
+    }
+
+    .e03-touch-body h3 {
+      margin: 0 0 8px;
+      font-size: 22px;
+    }
+
+    .e03-touch-body p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .e03-summary {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .quiz-feedback-image {
+      display: block;
+      width: 100%;
+      max-height: 260px;
+      margin-top: 10px;
+      object-fit: cover;
+      border: 1px solid rgba(75, 99, 101, 0.2);
+      border-radius: var(--radius);
+      background: #10191c;
+    }
+
     .cae-map {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2291,7 +2447,9 @@
       .lesson-layout,
       .deck-shell,
       .review-workspace,
-      .review-stats {
+      .review-stats,
+      .e03-hero-grid,
+      .e03-touch-layout {
         grid-template-columns: 1fr;
       }
 
@@ -2330,6 +2488,7 @@
       .toc-tools,
       .e02-layout,
       .e02-summary,
+      .e03-summary,
       .judgment-strip,
       .cae-map {
         grid-template-columns: 1fr;
@@ -2725,7 +2884,7 @@
         </p>
         <div class="hero-actions">
           <a class="pill-button primary" href="#study-deck" data-deck-jump="toc">目次へ戻る</a>
-          <a class="pill-button" href="#study-deck" data-deck-jump="e02">今日のE02を触る</a>
+          <a class="pill-button" href="#study-deck" data-deck-jump="e03">今日のE03を触る</a>
           <a class="pill-button" href="#study-deck" data-deck-jump="memo">朝10分だけやる</a>
         </div>
       </div>
@@ -2743,8 +2902,8 @@
           <h2 id="progress-title">目次と今ここ</h2>
           <p>この教科書は、上から読めば分かる順番にしています。迷ったらここへ戻ります。</p>
         </div>
-        <div class="progress-meter" aria-label="進捗 2/5">
-          <div class="meter-label"><span>朝勉強版</span><span>2 / 5</span></div>
+        <div class="progress-meter" aria-label="進捗 3/5">
+          <div class="meter-label"><span>朝勉強版</span><span>3 / 5</span></div>
           <div class="meter-track"><div class="meter-fill"></div></div>
         </div>
       </div>
@@ -2778,19 +2937,25 @@
               </a>
             </li>
             <li>
-              <a href="#quiz">
+              <a href="#e03-heat">
                 <span class="step-num">4</span>
+                <span><strong>E03 なぜ線が熱くなるのか</strong>写真を切り替えて、安全・注意・危険を体で覚える。</span>
+              </a>
+            </li>
+            <li>
+              <a href="#quiz">
+                <span class="step-num">5</span>
                 <span><strong>ミニテスト</strong>読んだ内容を、すぐタップで確認する。</span>
               </a>
             </li>
             <li>
               <a href="#review-app">
-                <span class="step-num">5</span>
+                <span class="step-num">6</span>
                 <span><strong>復習アプリ</strong>今日、弱点、テーマ別で戻れるようにする。</span>
               </a>
             </li>
           </ol>
-          <p class="book-note" id="tocProgressText">今日は E02 を読んで、電流が増える条件を覚える。</p>
+          <p class="book-note" id="tocProgressText">今日は E03 を読んで、線が熱くなる理由を画像で覚える。</p>
 
           <div class="toc-tools" aria-label="目次内の学習入口">
             <a class="toc-tool-card" href="#morning-mode">
@@ -2819,14 +2984,14 @@
               <span class="chapter-code">E01</span>
               <span><strong>電気って何が動いてるの？</strong>流れを見る入口。<em class="chapter-state done" id="tocE01State">完了</em></span>
             </a>
-            <a class="chapter-row current" href="#e02-lab" data-toc-topic="e02">
+            <a class="chapter-row done" href="#e02-lab" data-toc-topic="e02">
               <span class="chapter-code">E02</span>
-              <span><strong>電圧・電流・抵抗</strong>つまみで体感する章。<em class="chapter-state current" id="tocE02State">今ここ</em></span>
+              <span><strong>電圧・電流・抵抗</strong>つまみで体感する章。<em class="chapter-state done" id="tocE02State">完了</em></span>
             </a>
-            <div class="chapter-row next">
+            <a class="chapter-row current" href="#e03-heat" data-toc-topic="e03">
               <span class="chapter-code">E03</span>
-              <span><strong>なぜ線が熱くなるのか</strong>次に追加する章。<em class="chapter-state next">次</em></span>
-            </div>
+              <span><strong>なぜ線が熱くなるのか</strong>写真が切り替わる章。<em class="chapter-state current" id="tocE03State">今ここ</em></span>
+            </a>
             <div class="chapter-row">
               <span class="chapter-code">E04</span>
               <span><strong>電源容量と余裕</strong>これから貯める章。<em class="chapter-state">未学習</em></span>
@@ -2860,7 +3025,7 @@
             </button>
             <button class="routine-check" type="button" data-routine="touch">
               <strong>3分 触る</strong>
-              <span>E02のつまみで、電圧・電流・抵抗を動かす。</span>
+              <span>E03の画像切替で、安全・注意・危険を見る。</span>
             </button>
             <button class="routine-check" type="button" data-routine="quiz">
               <strong>3分 解く</strong>
@@ -2873,7 +3038,7 @@
           </div>
 
           <div class="morning-actions">
-            <a class="pill-button primary" href="#e02-lab">E02実験へ</a>
+            <a class="pill-button primary" href="#e03-heat">E03実験へ</a>
             <a class="pill-button" href="#review-app">復習へ</a>
             <button class="pill-button" type="button" id="routineResetButton">朝10分をリセット</button>
           </div>
@@ -2881,12 +3046,12 @@
 
         <article class="morning-card">
           <h3>今日の1テーマ</h3>
-          <p>電圧・電流・抵抗を、暗記ではなく「つまみで変わるもの」として覚えます。</p>
+          <p>線の発熱を、「危ない」だけではなく「なぜ熱になるか」で覚えます。</p>
 
           <div class="mini-route">
-            <div><strong>電圧</strong><br>電気を押す力。水道でいう水圧。</div>
-            <div><strong>電流</strong><br>実際に流れる量。多すぎると熱が出る。</div>
-            <div><strong>抵抗</strong><br>流れにくさ。細い道や詰まりに近い。</div>
+            <div><strong>電流</strong><br>線の中を流れる量。多すぎると熱が増える。</div>
+            <div><strong>線の太さ</strong><br>通り道の広さ。細いほど余裕が少ない。</div>
+            <div><strong>端子</strong><br>線を止める場所。ゆるいとそこが熱くなる。</div>
           </div>
 
           <label for="inventMemo"><strong>発明メモ</strong></label>
@@ -3204,6 +3369,137 @@
       </div>
     </section>
 
+    <section class="band" id="e03-heat" aria-labelledby="e03-title" data-slide-section data-tab="e03" data-slide-title="E03 線が熱くなる理由">
+      <div class="section-head">
+        <div>
+          <h2 id="e03-title">E03 なぜ線が熱くなるのか</h2>
+          <p>今日の結論は、電流が多いほど、細い線やゆるい端子で熱が出やすい、です。</p>
+        </div>
+      </div>
+
+      <div class="e03-hero-grid">
+        <figure class="real-photo-panel">
+          <img src="electrical-e03-preview-real.png" alt="E03の完成イメージ。制御盤の配線でOKとNGの発熱状態を比べる教材画面">
+          <figcaption>
+            最初に見るのは、部品名ではなく「どこが熱くなっているか」です。
+          </figcaption>
+        </figure>
+
+        <article class="e03-memory">
+          <strong>3秒で覚えること</strong>
+          <p>線は道路と同じです。通り道が細いのに、電気がたくさん通ると、線の中でぶつかりが増えて熱になります。</p>
+          <ul>
+            <li>電流（でんりゅう：電気が流れる量）が大きい。</li>
+            <li>線が細い、長い、端子がゆるい。</li>
+            <li>エネルギーが熱に変わり、被覆や端子が傷みます。</li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="e03-card-grid" aria-label="E03の説明カード">
+        <article class="e03-card">
+          <img src="electrical-e03-wire-safe-real.png" alt="安全な配線。太さに余裕があり温度上昇が少ない制御盤配線">
+          <div class="e03-card-body">
+            <h3>🔵 定義</h3>
+            <p>発熱は、電気の力が線の中で熱に変わること。</p>
+          </div>
+        </article>
+
+        <article class="e03-card">
+          <img src="electrical-e03-micro-real.png" alt="銅線の中で電子が金属の粒にぶつかり熱になるミクロ画像">
+          <div class="e03-card-body">
+            <h3>🟢 しくみ</h3>
+            <p>電子（でんし：電気を運ぶ小さな粒）が金属の粒にぶつかり、熱になります。</p>
+          </div>
+        </article>
+
+        <article class="e03-card">
+          <img src="electrical-e03-wire-caution-real.png" alt="注意状態の配線。細い線と端子付近が少し熱を持つ">
+          <div class="e03-card-body">
+            <h3>🟡 なぜ</h3>
+            <p>細い道に人が多いと混むように、細い線に電流が多いとぶつかりが増えます。</p>
+          </div>
+        </article>
+
+        <article class="e03-card">
+          <img src="electrical-e03-wire-danger-real.png" alt="危険状態の端子。過電流で端子付近が高温になっている">
+          <div class="e03-card-body">
+            <h3>🔴 注意</h3>
+            <p>端子がゆるい所は、そこだけ通りにくくなり、局所的に熱くなります。</p>
+          </div>
+        </article>
+
+        <article class="e03-card">
+          <img src="electrical-e03-ok-ng-real.png" alt="OKとNGの配線比較。太い短い配線と細い長い配線の違い">
+          <div class="e03-card-body">
+            <h3>🟣 設計判断</h3>
+            <p>線を太くする、短くする、端子を締める、電流を下げる、を先に考えます。</p>
+          </div>
+        </article>
+      </div>
+
+      <div class="e03-touch-layout">
+        <article class="e03-touch-panel">
+          <div class="e03-touch-body">
+            <h3>触って分かる：画像が変わる発熱実験</h3>
+            <p>電流を増やす。線を細くする。端子をゆるくする。すると右の写真が安全、注意、危険に切り替わります。</p>
+
+            <div class="slider-row">
+              <label class="slider-label" for="e03CurrentSlider">
+                <span>電流（流れる量）</span>
+                <span id="e03CurrentLabel">8A</span>
+              </label>
+              <input id="e03CurrentSlider" type="range" min="2" max="20" value="8" step="1">
+            </div>
+
+            <div class="slider-row">
+              <label class="slider-label" for="e03WireSlider">
+                <span>線の太さ（通り道）</span>
+                <span id="e03WireLabel">3.5mm²</span>
+              </label>
+              <input id="e03WireSlider" type="range" min="1.25" max="8" value="3.5" step="0.25">
+            </div>
+
+            <div class="toggle-row">
+              <button class="toggle-button" type="button" id="e03LooseButton" aria-pressed="false">端子：しっかり</button>
+              <button class="toggle-button" type="button" id="e03BreakerButton" aria-pressed="true">ブレーカー：余裕あり</button>
+            </div>
+
+            <div class="e03-summary">
+              <div class="readout-card">
+                <strong>熱の目安</strong>
+                <span id="e03HeatReadout">低い</span>
+              </div>
+              <div class="readout-card">
+                <strong>画像状態</strong>
+                <span id="e03StateReadout">OK</span>
+              </div>
+              <div class="readout-card">
+                <strong>設計判断</strong>
+                <span id="e03JudgeReadout">余裕あり</span>
+              </div>
+            </div>
+
+            <div class="done-line">
+              <button class="pill-button primary" type="button" id="e03CompleteButton">E03を完了にする</button>
+              <span class="status-text" id="e03CompleteStatus">未完了</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="e03-touch-panel">
+          <div class="e03-state-wrap">
+            <img class="e03-state-image" id="e03StateImage" src="electrical-e03-wire-safe-real.png" alt="E03発熱実験の状態画像">
+            <div class="e03-state-badge" id="e03StateBadge">OK：余裕あり</div>
+          </div>
+          <div class="e03-touch-body">
+            <h3 id="e03StateTitle">安全な配線</h3>
+            <p id="e03StateText">線の太さに対して電流が少ないので、温度上昇は小さい状態です。</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
     <section class="band" id="map" aria-labelledby="map-title" data-slide-section data-tab="e02" data-slide-title="CAEとの対応">
       <div class="section-head">
         <div>
@@ -3266,12 +3562,7 @@
           </div>
           <div class="quiz-feedback">
             正解は「電源が来ているか」。条件の入口がないと、後ろの現象は起きません。
-            <div class="feedback-visual" aria-hidden="true">
-              <div class="source-block">電源</div>
-              <div class="visual-wire"></div>
-              <div class="load-block">モーター</div>
-              <div class="signal-dot"></div>
-            </div>
+            <img class="quiz-feedback-image" src="electrical-design-e01-control-panel.png" alt="制御盤の電源から配線、負荷までを追う確認画像">
           </div>
         </article>
 
@@ -3285,12 +3576,7 @@
           </div>
           <div class="quiz-feedback">
             正解は「流れる量が線に対して多い」。電流が多いほど熱の問題が出やすくなります。
-            <div class="feedback-visual" aria-hidden="true">
-              <div class="source-block">多い</div>
-              <div class="visual-wire"></div>
-              <div class="load-block">細い線</div>
-              <div class="heat-waves"></div>
-            </div>
+            <img class="quiz-feedback-image" src="electrical-e03-quiz-real.png" alt="細い線に大きな電流が流れて端子付近が発熱する確認画像">
           </div>
         </article>
 
@@ -3304,12 +3590,21 @@
           </div>
           <div class="quiz-feedback">
             正解は「条件から現象を予想して判断すること」。この教材の中心です。
-            <div class="feedback-visual" aria-hidden="true">
-              <div class="source-block">条件</div>
-              <div class="visual-wire"></div>
-              <div class="judge-block">判断</div>
-              <div class="check-ring"></div>
-            </div>
+            <img class="quiz-feedback-image" src="electrical-e03-ok-ng-real.png" alt="OK配線とNG配線を比べ、条件から発熱を判断する画像">
+          </div>
+        </article>
+
+        <article class="quiz-panel" data-answer="b">
+          <h3>Q4</h3>
+          <p class="quiz-question">端子がゆるいと、なぜそこだけ熱くなりやすい？</p>
+          <div class="quiz-options">
+            <button class="quiz-button" type="button" data-choice="a">電気が休憩するから</button>
+            <button class="quiz-button" type="button" data-choice="b">接触が悪くなり、通りにくい場所になるから</button>
+            <button class="quiz-button" type="button" data-choice="c">線の色が変わるから</button>
+          </div>
+          <div class="quiz-feedback">
+            正解は「接触が悪くなり、通りにくい場所になるから」。通りにくい場所では電気のエネルギーが熱に変わりやすいです。
+            <img class="quiz-feedback-image" src="electrical-e03-wire-danger-real.png" alt="端子のゆるみや過電流で端子付近が高温になる確認画像">
           </div>
         </article>
       </div>
@@ -3471,6 +3766,7 @@
       intro: "はじめに",
       e01: "E01",
       e02: "E02",
+      e03: "E03",
       quiz: "問題",
       review: "復習",
       memo: "朝10分"
@@ -3696,11 +3992,14 @@
     const e02CompleteStatus = document.querySelector("#e02CompleteStatus");
     const e02StorageKey = "electrical_design_textbook_e02_complete";
     const e01StorageKey = "electrical_design_textbook_e01_complete";
+    const e03StorageKey = "electrical_design_textbook_e03_complete";
     const tocProgressText = document.querySelector("#tocProgressText");
     const tocE01Row = document.querySelector('[data-toc-topic="e01"]');
     const tocE02Row = document.querySelector('[data-toc-topic="e02"]');
+    const tocE03Row = document.querySelector('[data-toc-topic="e03"]');
     const tocE01State = document.querySelector("#tocE01State");
     const tocE02State = document.querySelector("#tocE02State");
+    const tocE03State = document.querySelector("#tocE03State");
 
     function setTocState(row, stateEl, mode, text) {
       if (!row || !stateEl) return;
@@ -3714,14 +4013,16 @@
     }
 
     function renderTocProgress() {
-      const e01Done = localStorage.getItem(e01StorageKey) === "true";
-      const e02Done = localStorage.getItem(e02StorageKey) === "true";
+      const e01Done = localStorage.getItem(e01StorageKey) !== "false";
+      const e02Done = localStorage.getItem(e02StorageKey) !== "false";
+      const e03Done = localStorage.getItem(e03StorageKey) === "true";
       setTocState(tocE01Row, tocE01State, e01Done ? "done" : "current", e01Done ? "完了" : "学習中");
-      setTocState(tocE02Row, tocE02State, e02Done ? "done" : "current", e02Done ? "完了" : "今ここ");
+      setTocState(tocE02Row, tocE02State, e02Done ? "done" : "current", e02Done ? "完了" : "学習中");
+      setTocState(tocE03Row, tocE03State, e03Done ? "done" : "current", e03Done ? "完了" : "今ここ");
       if (tocProgressText) {
-        tocProgressText.textContent = e02Done
-          ? "E02まで完了。次は E03 なぜ線が熱くなるのかへ進む。"
-          : "今日は E02 を読んで、電流が増える条件を覚える。";
+        tocProgressText.textContent = e03Done
+          ? "E03まで完了。次は E04 電源容量と余裕へ進む。"
+          : "今日は E03 を読んで、線が熱くなる理由を画像で覚える。";
       }
     }
 
@@ -3754,7 +4055,7 @@
     }
 
     function renderE02Complete() {
-      const done = localStorage.getItem(e02StorageKey) === "true";
+      const done = localStorage.getItem(e02StorageKey) !== "false";
       e02CompleteStatus.textContent = done ? "完了済み" : "未完了";
       e02CompleteButton.textContent = done ? "E02完了を取り消す" : "E02を完了にする";
       renderTocProgress();
@@ -3765,8 +4066,8 @@
     });
 
     e02CompleteButton.addEventListener("click", () => {
-      const done = localStorage.getItem(e02StorageKey) === "true";
-      localStorage.setItem(e02StorageKey, String(!done));
+      const done = localStorage.getItem(e02StorageKey) !== "false";
+      localStorage.setItem(e02StorageKey, done ? "false" : "true");
       renderE02Complete();
     });
 
@@ -3774,10 +4075,115 @@
     renderOhm();
     renderE02Complete();
 
+    const e03CurrentSlider = document.querySelector("#e03CurrentSlider");
+    const e03WireSlider = document.querySelector("#e03WireSlider");
+    const e03LooseButton = document.querySelector("#e03LooseButton");
+    const e03BreakerButton = document.querySelector("#e03BreakerButton");
+    const e03CurrentLabel = document.querySelector("#e03CurrentLabel");
+    const e03WireLabel = document.querySelector("#e03WireLabel");
+    const e03HeatReadout = document.querySelector("#e03HeatReadout");
+    const e03StateReadout = document.querySelector("#e03StateReadout");
+    const e03JudgeReadout = document.querySelector("#e03JudgeReadout");
+    const e03StateImage = document.querySelector("#e03StateImage");
+    const e03StateBadge = document.querySelector("#e03StateBadge");
+    const e03StateTitle = document.querySelector("#e03StateTitle");
+    const e03StateText = document.querySelector("#e03StateText");
+    const e03CompleteButton = document.querySelector("#e03CompleteButton");
+    const e03CompleteStatus = document.querySelector("#e03CompleteStatus");
+
+    function renderE03HeatLab() {
+      if (!e03CurrentSlider || !e03WireSlider) return;
+      const current = Number(e03CurrentSlider.value);
+      const wire = Number(e03WireSlider.value);
+      const loose = e03LooseButton.getAttribute("aria-pressed") === "true";
+      const breakerLoose = e03BreakerButton.getAttribute("aria-pressed") !== "true";
+      const ratio = current / wire;
+      const risk = ratio + (loose ? 2.2 : 0) + (breakerLoose ? 0.9 : 0);
+
+      const state = risk > 5.8
+        ? {
+            mode: "danger",
+            img: "electrical-e03-wire-danger-real.png",
+            label: "危険：すぐ見直す",
+            heat: "高い",
+            readout: "NG",
+            judge: "線・端子・容量を見直す",
+            title: "危険な発熱",
+            text: "線の太さや端子の状態に対して、電流が多すぎます。ここは火災や停止の原因になります。"
+          }
+        : risk > 3.8
+          ? {
+              mode: "caution",
+              img: "electrical-e03-wire-caution-real.png",
+              label: "注意：余裕が少ない",
+              heat: "注意",
+              readout: "注意",
+              judge: "余裕を増やす",
+              title: "注意が必要な配線",
+              text: "今すぐ壊れるとは限りませんが、温度上昇が出やすい条件です。太い線や短い経路を考えます。"
+            }
+          : {
+              mode: "ok",
+              img: "electrical-e03-wire-safe-real.png",
+              label: "OK：余裕あり",
+              heat: "低い",
+              readout: "OK",
+              judge: "余裕あり",
+              title: "安全な配線",
+              text: "線の太さに対して電流が少ないので、温度上昇は小さい状態です。"
+            };
+
+      e03CurrentLabel.textContent = `${current}A`;
+      e03WireLabel.textContent = `${wire.toFixed(2)}mm²`;
+      e03LooseButton.textContent = loose ? "端子：ゆるい" : "端子：しっかり";
+      e03BreakerButton.textContent = breakerLoose ? "ブレーカー：余裕なし" : "ブレーカー：余裕あり";
+      e03HeatReadout.textContent = state.heat;
+      e03StateReadout.textContent = state.readout;
+      e03JudgeReadout.textContent = state.judge;
+      e03StateImage.src = state.img;
+      e03StateImage.alt = `E03発熱実験の${state.label}画像`;
+      e03StateBadge.textContent = state.label;
+      e03StateBadge.classList.toggle("danger", state.mode === "danger");
+      e03StateBadge.classList.toggle("caution", state.mode === "caution");
+      e03StateTitle.textContent = state.title;
+      e03StateText.textContent = state.text;
+    }
+
+    function renderE03Complete() {
+      if (!e03CompleteButton) return;
+      const done = localStorage.getItem(e03StorageKey) === "true";
+      e03CompleteStatus.textContent = done ? "完了済み" : "未完了";
+      e03CompleteButton.textContent = done ? "E03完了を取り消す" : "E03を完了にする";
+      renderTocProgress();
+    }
+
+    [e03CurrentSlider, e03WireSlider].forEach((slider) => {
+      slider?.addEventListener("input", renderE03HeatLab);
+    });
+
+    e03LooseButton?.addEventListener("click", () => {
+      togglePressed(e03LooseButton);
+      renderE03HeatLab();
+    });
+
+    e03BreakerButton?.addEventListener("click", () => {
+      togglePressed(e03BreakerButton);
+      renderE03HeatLab();
+    });
+
+    e03CompleteButton?.addEventListener("click", () => {
+      const done = localStorage.getItem(e03StorageKey) === "true";
+      localStorage.setItem(e03StorageKey, String(!done));
+      renderE03Complete();
+    });
+
+    renderE03HeatLab();
+    renderE03Complete();
+
     const elecTopics = [
       { id: "power", code: "E01", title: "電源", short: "電気の入口" },
       { id: "ohm", code: "E02", title: "電圧・電流・抵抗", short: "押す力と通りにくさ" },
-      { id: "wire", code: "E03", title: "配線", short: "電気の通り道" },
+      { id: "wire", code: "E03", title: "線と熱", short: "発熱する理由" },
       { id: "sensor", code: "E04", title: "センサー", short: "状態を知らせる" },
       { id: "motor", code: "E05", title: "モーター", short: "電気を動きに変える" },
       { id: "heat", code: "E06", title: "熱", short: "電流が多い時の危険" },
@@ -3791,6 +4197,8 @@
       elecQ("ohm-2", "ohm", "判断（はんだん：決める）", "電圧を上げて抵抗を下げると、何に注意する？", ["電流と発熱", "部品名の長さ", "盤の色"], 0, "電流が増えすぎると、線や部品が熱くなるから。", "狭い道に車をたくさん流すと渋滞と熱気が出る。", "発明装置で止まらない安全回路を考える入口になる。"),
       elecQ("wire-1", "wire", "定義（ていぎ）", "配線とは何？", ["電気の通り道", "部品の値段", "盤の色"], 0, "電源から負荷まで電気を運ぶ道だから。", "道路があるから車が目的地へ行ける。", "通り道を設計できると、装置全体を組める。"),
       elecQ("wire-2", "wire", "因果説明（いんがせつめい）", "細い線に大きな電流を流すと何が起きやすい？", ["熱くなる", "軽くなる", "透明になる"], 0, "流れにくい場所で電気のエネルギーが熱に変わりやすい。", "細いストローで大量の水を吸うと苦しい。", "発熱を読めると、安全な機械を作れる。"),
+      elecQ("wire-3", "wire", "判別（はんべつ：見分ける）", "E03で安全側に直す一番基本は？", ["線を太くする、端子を締める", "線の色を派手にする", "盤の名前を変える"], 0, "通り道を広くして、接触を良くすると、熱に変わる場所が減るから。", "混む道路は道を広げると流れやすい。", "小さい発明装置でも、配線の余裕を見れば止まりにくくなる。"),
+      elecQ("wire-4", "wire", "適用（てきよう：使う）", "端子がゆるい時、熱くなりやすい理由は？", ["接触が悪く、通りにくい場所になる", "電気が消える", "線が短くなる"], 0, "端子の当たり面が少ないと、そこだけ抵抗が増えて熱になりやすいから。", "靴ひもがゆるいと力がうまく伝わらない感じ。", "接触を見る力は、センサー不良やモーター停止の原因探しにも効く。"),
       elecQ("sensor-1", "sensor", "定義", "センサーの役割は？", ["機械の状態を知らせる", "電源を重くする", "線を太くする"], 0, "物がある、近づいた、温度が上がったなどを信号にする。", "玄関ライトの人感センサーは人を見つける。", "状態を取れると、自動で動く発明に近づく。"),
       elecQ("sensor-2", "sensor", "適用（てきよう）", "センサー信号が来ない時に見ることは？", ["検出条件と配線", "盤の塗装", "ネジのメーカー"], 0, "そもそも検出しているか、信号が通っているかを見る。", "インターホンが鳴らない時、ボタンと線を見る感じ。", "信号の流れを読めると制御が分かる。"),
       elecQ("motor-1", "motor", "定義", "モーターは何をする部品？", ["電気を動きに変える", "電気を絵にする", "線を短くする"], 0, "電気エネルギーで回転や動きを作る。", "扇風機は電気で羽を回す。", "動きを作れると発明品が機械になる。"),
@@ -3903,6 +4311,14 @@
       });
     }
 
+    function elecReviewImage(item) {
+      if (item.id.includes("wire-4")) return "electrical-e03-wire-danger-real.png";
+      if (item.topic === "wire") return "electrical-e03-ok-ng-real.png";
+      if (item.topic === "heat") return "electrical-e03-quiz-real.png";
+      if (item.topic === "ohm") return "electrical-e03-wire-caution-real.png";
+      return "electrical-design-e01-control-panel.png";
+    }
+
     function answerElecReview(item, index, button) {
       const correct = index === item.answer;
       elecChoices.querySelectorAll(".review-choice").forEach((choice, choiceIndex) => {
@@ -3918,6 +4334,7 @@
         <b>なぜ：</b>${item.why}<br>
         <b>日常の例：</b>${item.daily}<br>
         <b>発明へのつながり：</b>${item.invention}
+        <img class="quiz-feedback-image" src="${elecReviewImage(item)}" alt="復習問題の理解を助けるリアル画像">
       `;
       elecAnswer.classList.add("show");
       saveElecReview();
