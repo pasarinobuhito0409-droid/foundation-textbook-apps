@@ -2003,29 +2003,105 @@
 
     .e03-card-grid {
       display: grid;
-      grid-template-columns: repeat(5, minmax(190px, 1fr));
-      gap: 12px;
+      grid-template-columns: 1fr;
+      gap: 18px;
       margin-top: 18px;
       max-width: 100%;
-      overflow-x: auto;
-      padding-bottom: 4px;
     }
 
     .e03-card {
-      min-width: 190px;
+      min-width: 0;
       box-shadow: 0 10px 22px rgba(20, 34, 40, 0.06);
+    }
+
+    .e03-linked-card {
+      display: grid;
+      grid-template-columns: minmax(420px, 1.08fr) minmax(320px, 0.92fr);
+      min-height: 330px;
+    }
+
+    .e03-linked-card.wide {
+      grid-template-columns: minmax(420px, 1.08fr) minmax(320px, 0.92fr);
+    }
+
+    .e03-linked-photo {
+      position: relative;
+      min-height: 330px;
+      overflow: hidden;
+      background: #10191c;
+    }
+
+    .e03-linked-photo img {
+      height: 100%;
+      min-height: 330px;
+      aspect-ratio: auto;
+    }
+
+    .photo-point {
+      position: absolute;
+      left: var(--x);
+      top: var(--y);
+      z-index: 3;
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+      padding: 7px 9px;
+      border: 2px solid #fff;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--point-color, var(--blue)) 86%, #10191c);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 900;
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.28);
+      transform: translate(-50%, -50%);
+      white-space: nowrap;
+    }
+
+    .photo-point::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 100%;
+      width: 2px;
+      height: 34px;
+      background: #fff;
+      transform: translateX(-50%);
+      opacity: 0.82;
+    }
+
+    .e03-card-body {
+      display: grid;
+      gap: 10px;
+      align-content: center;
     }
 
     .e03-card h3 {
       margin: 0 0 6px;
-      font-size: 18px;
+      font-size: 22px;
     }
 
     .e03-card p {
       margin: 0;
       color: var(--muted);
-      font-size: 14px;
+      font-size: 15px;
       line-height: 1.65;
+    }
+
+    .e03-photo-link {
+      display: grid;
+      gap: 6px;
+      padding: 12px;
+      border: 1px solid color-mix(in srgb, var(--point-color, var(--blue)) 34%, var(--line));
+      border-radius: var(--radius);
+      background: color-mix(in srgb, var(--point-color, var(--blue)) 10%, #fff);
+      color: var(--ink);
+      font-weight: 800;
+    }
+
+    .e03-photo-link span {
+      color: var(--point-color, var(--blue));
+      font-size: 13px;
+      font-weight: 900;
     }
 
     .e03-touch-layout {
@@ -2520,6 +2596,11 @@
         grid-template-columns: 1fr;
       }
 
+      .e03-card-grid {
+        grid-template-columns: 1fr;
+        overflow-x: visible;
+      }
+
       .topbar-inner {
         flex-direction: column;
         align-items: flex-start;
@@ -2649,6 +2730,27 @@
 
       .e03-card {
         min-width: 0;
+      }
+
+      .e03-linked-card,
+      .e03-linked-card.wide {
+        grid-template-columns: 1fr;
+        min-height: 0;
+      }
+
+      .e03-linked-photo,
+      .e03-linked-photo img {
+        min-height: 220px;
+      }
+
+      .photo-point {
+        max-width: 74%;
+        font-size: 12px;
+        white-space: normal;
+      }
+
+      .photo-point::after {
+        height: 22px;
       }
 
       .quick-nav {
@@ -3473,43 +3575,79 @@
       </div>
 
       <div class="e03-card-grid" aria-label="E03の説明カード">
-        <article class="e03-card">
-          <img src="electrical-e03-wire-safe-real.png" alt="安全な配線。太さに余裕があり温度上昇が少ない制御盤配線">
+        <article class="e03-card e03-linked-card">
+          <div class="e03-linked-photo">
+            <img src="electrical-e03-wire-safe-real.png" alt="安全な配線。太さに余裕があり温度上昇が少ない制御盤配線">
+            <span class="photo-point" style="--x: 78%; --y: 48%; --point-color: var(--blue);">① 低い温度</span>
+          </div>
           <div class="e03-card-body">
             <h3>🔵 定義</h3>
             <p>発熱は、電気の力が線の中で熱に変わること。</p>
+            <div class="e03-photo-link" style="--point-color: var(--blue);">
+              <span>写真とつながる所</span>
+              ① 温度が低いと、配線や端子はまだ落ち着いています。
+            </div>
           </div>
         </article>
 
-        <article class="e03-card">
-          <img src="electrical-e03-micro-real.png" alt="銅線の中で電子が金属の粒にぶつかり熱になるミクロ画像">
+        <article class="e03-card e03-linked-card">
+          <div class="e03-linked-photo">
+            <img src="electrical-e03-micro-real.png" alt="銅線の中で電子が金属の粒にぶつかり熱になるミクロ画像">
+            <span class="photo-point" style="--x: 62%; --y: 44%; --point-color: var(--green);">② ぶつかる</span>
+          </div>
           <div class="e03-card-body">
             <h3>🟢 しくみ</h3>
             <p>電子（でんし：電気を運ぶ小さな粒）が金属の粒にぶつかり、熱になります。</p>
+            <div class="e03-photo-link" style="--point-color: var(--green);">
+              <span>写真とつながる所</span>
+              ② 光っている粒の場所が、ぶつかりが熱に変わるイメージです。
+            </div>
           </div>
         </article>
 
-        <article class="e03-card">
-          <img src="electrical-e03-wire-caution-real.png" alt="注意状態の配線。細い線と端子付近が少し熱を持つ">
+        <article class="e03-card e03-linked-card">
+          <div class="e03-linked-photo">
+            <img src="electrical-e03-wire-caution-real.png" alt="注意状態の配線。細い線と端子付近が少し熱を持つ">
+            <span class="photo-point" style="--x: 71%; --y: 56%; --point-color: var(--yellow);">③ ここが熱い</span>
+          </div>
           <div class="e03-card-body">
             <h3>🟡 なぜ</h3>
             <p>細い道に人が多いと混むように、細い線に電流が多いとぶつかりが増えます。</p>
+            <div class="e03-photo-link" style="--point-color: var(--yellow);">
+              <span>写真とつながる所</span>
+              ③ 赤くなった端子付近は、電気が通りにくくて熱が集まる所です。
+            </div>
           </div>
         </article>
 
-        <article class="e03-card">
-          <img src="electrical-e03-wire-danger-real.png" alt="危険状態の端子。過電流で端子付近が高温になっている">
+        <article class="e03-card e03-linked-card">
+          <div class="e03-linked-photo">
+            <img src="electrical-e03-wire-danger-real.png" alt="危険状態の端子。過電流で端子付近が高温になっている">
+            <span class="photo-point" style="--x: 75%; --y: 42%; --point-color: var(--red);">④ 120℃</span>
+          </div>
           <div class="e03-card-body">
             <h3>🔴 注意</h3>
             <p>端子がゆるい所は、そこだけ通りにくくなり、局所的に熱くなります。</p>
+            <div class="e03-photo-link" style="--point-color: var(--red);">
+              <span>写真とつながる所</span>
+              ④ 温度が高くなると、被覆や端子が傷む危険が出ます。
+            </div>
           </div>
         </article>
 
-        <article class="e03-card">
-          <img src="electrical-e03-ok-ng-real.png" alt="OKとNGの配線比較。太い短い配線と細い長い配線の違い">
+        <article class="e03-card e03-linked-card wide">
+          <div class="e03-linked-photo">
+            <img src="electrical-e03-ok-ng-real.png" alt="OKとNGの配線比較。太い短い配線と細い長い配線の違い">
+            <span class="photo-point" style="--x: 24%; --y: 28%; --point-color: var(--green);">⑤ OK</span>
+            <span class="photo-point" style="--x: 74%; --y: 28%; --point-color: var(--red);">⑥ NG</span>
+          </div>
           <div class="e03-card-body">
             <h3>🟣 設計判断</h3>
             <p>線を太くする、短くする、端子を締める、電流を下げる、を先に考えます。</p>
+            <div class="e03-photo-link" style="--point-color: var(--purple);">
+              <span>写真とつながる所</span>
+              ⑤ OKは太く短く、⑥ NGは細く長くなりやすい配線です。
+            </div>
           </div>
         </article>
       </div>
