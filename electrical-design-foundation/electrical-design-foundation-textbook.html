@@ -2044,14 +2044,58 @@
     .e03-state-wrap {
       position: relative;
       min-height: 280px;
+      overflow: hidden;
       background: #10191c;
+    }
+
+    .e03-heat-stack {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      min-height: 280px;
+      background: #10191c;
+    }
+
+    .e03-state-image {
+      position: absolute;
+      inset: 0;
+      height: 100%;
+      opacity: var(--state-alpha, 0);
+      transition: opacity 180ms linear, filter 180ms linear, transform 180ms linear;
+    }
+
+    .e03-state-image.safe {
+      --state-alpha: var(--safe-alpha, 1);
+    }
+
+    .e03-state-image.caution {
+      --state-alpha: var(--caution-alpha, 0);
+      filter: saturate(calc(1 + var(--heat-level, 0) * 0.28)) contrast(calc(1 + var(--heat-level, 0) * 0.08));
+    }
+
+    .e03-state-image.danger {
+      --state-alpha: var(--danger-alpha, 0);
+      filter: saturate(calc(1 + var(--heat-level, 0) * 0.45)) contrast(calc(1 + var(--heat-level, 0) * 0.12));
+      transform: scale(calc(1 + var(--heat-level, 0) * 0.012));
+    }
+
+    .e03-heat-motion {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: calc(var(--heat-level, 0) * 0.8);
+      background:
+        radial-gradient(circle at 59% 42%, rgba(255, 107, 42, 0.48), transparent 0 16%),
+        radial-gradient(circle at 64% 48%, rgba(255, 201, 76, 0.34), transparent 0 18%);
+      mix-blend-mode: screen;
+      animation: heatBreath 1.2s ease-in-out infinite;
     }
 
     .e03-state-badge {
       position: absolute;
       left: 14px;
       top: 14px;
-      z-index: 2;
+      z-index: 4;
       padding: 8px 12px;
       border-radius: var(--radius);
       background: rgba(255, 255, 255, 0.92);
@@ -2085,6 +2129,29 @@
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 10px;
       margin-top: 14px;
+    }
+
+    .e03-motion-bar {
+      position: relative;
+      height: 12px;
+      margin-top: 14px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #4f8bd6, #58be77, #e0b444, #d94d3d);
+    }
+
+    .e03-motion-marker {
+      position: absolute;
+      top: 50%;
+      left: calc(var(--heat-level, 0) * 100%);
+      width: 20px;
+      height: 20px;
+      border: 3px solid #fff;
+      border-radius: 999px;
+      background: #172126;
+      box-shadow: 0 4px 12px rgba(20, 34, 40, 0.22);
+      transform: translate(-50%, -50%);
+      transition: left 180ms linear;
     }
 
     .quiz-feedback-image {
@@ -3450,8 +3517,8 @@
       <div class="e03-touch-layout">
         <article class="e03-touch-panel">
           <div class="e03-touch-body">
-            <h3>触って分かる：画像が変わる発熱実験</h3>
-            <p>電流を増やす。線を細くする。端子をゆるくする。すると右の写真が安全、注意、危険に切り替わります。</p>
+            <h3>触って分かる：動画みたいに熱が育つ実験</h3>
+            <p>電流を増やす。線を細くする。端子をゆるくする。すると右の写真が、常温から発熱へじわっと変わります。</p>
 
             <div class="slider-row">
               <label class="slider-label" for="e03CurrentSlider">
@@ -3472,6 +3539,11 @@
             <div class="toggle-row">
               <button class="toggle-button" type="button" id="e03LooseButton" aria-pressed="false">端子：しっかり</button>
               <button class="toggle-button" type="button" id="e03BreakerButton" aria-pressed="true">ブレーカー：余裕あり</button>
+            </div>
+
+            <div class="done-line">
+              <button class="pill-button" type="button" id="e03PlayButton">動画みたいに見る</button>
+              <span class="status-text" id="e03MotionText">つまみを動かすと写真がじわっと変わる</span>
             </div>
 
             <div class="e03-summary">
@@ -3498,12 +3570,20 @@
 
         <article class="e03-touch-panel">
           <div class="e03-state-wrap">
-            <img class="e03-state-image" id="e03StateImage" src="electrical-e03-wire-safe-real.png" alt="E03発熱実験の状態画像">
+            <div class="e03-heat-stack" id="e03HeatStack" aria-label="E03発熱実験のリアルタイム変化画像">
+              <img class="e03-state-image safe" src="electrical-e03-wire-safe-real.png" alt="安全な配線のリアル画像">
+              <img class="e03-state-image caution" src="electrical-e03-wire-caution-real.png" alt="注意状態の配線のリアル画像">
+              <img class="e03-state-image danger" src="electrical-e03-wire-danger-real.png" alt="危険な発熱配線のリアル画像">
+              <div class="e03-heat-motion" aria-hidden="true"></div>
+            </div>
             <div class="e03-state-badge" id="e03StateBadge">OK：余裕あり</div>
           </div>
           <div class="e03-touch-body">
             <h3 id="e03StateTitle">安全な配線</h3>
             <p id="e03StateText">線の太さに対して電流が少ないので、温度上昇は小さい状態です。</p>
+            <div class="e03-motion-bar" aria-hidden="true">
+              <span class="e03-motion-marker" id="e03MotionMarker"></span>
+            </div>
           </div>
         </article>
       </div>
@@ -4093,12 +4173,33 @@
     const e03HeatReadout = document.querySelector("#e03HeatReadout");
     const e03StateReadout = document.querySelector("#e03StateReadout");
     const e03JudgeReadout = document.querySelector("#e03JudgeReadout");
-    const e03StateImage = document.querySelector("#e03StateImage");
+    const e03HeatStack = document.querySelector("#e03HeatStack");
+    const e03MotionMarker = document.querySelector("#e03MotionMarker");
+    const e03PlayButton = document.querySelector("#e03PlayButton");
+    const e03MotionText = document.querySelector("#e03MotionText");
     const e03StateBadge = document.querySelector("#e03StateBadge");
     const e03StateTitle = document.querySelector("#e03StateTitle");
     const e03StateText = document.querySelector("#e03StateText");
     const e03CompleteButton = document.querySelector("#e03CompleteButton");
     const e03CompleteStatus = document.querySelector("#e03CompleteStatus");
+    let e03PlayTimer = null;
+
+    function clamp01(value) {
+      return Math.max(0, Math.min(1, value));
+    }
+
+    function smoothStep(edge0, edge1, value) {
+      const x = clamp01((value - edge0) / (edge1 - edge0));
+      return x * x * (3 - 2 * x);
+    }
+
+    function stopE03Playback() {
+      if (!e03PlayTimer) return;
+      clearInterval(e03PlayTimer);
+      e03PlayTimer = null;
+      if (e03PlayButton) e03PlayButton.textContent = "動画みたいに見る";
+      if (e03MotionText) e03MotionText.textContent = "つまみを動かすと写真がじわっと変わる";
+    }
 
     function renderE03HeatLab() {
       if (!e03CurrentSlider || !e03WireSlider) return;
@@ -4108,6 +4209,10 @@
       const breakerLoose = e03BreakerButton.getAttribute("aria-pressed") !== "true";
       const ratio = current / wire;
       const risk = ratio + (loose ? 2.2 : 0) + (breakerLoose ? 0.9 : 0);
+      const heatLevel = clamp01((risk - 2.2) / 4.4);
+      const safeAlpha = 1 - smoothStep(0.18, 0.48, heatLevel);
+      const dangerAlpha = smoothStep(0.56, 0.9, heatLevel);
+      const cautionAlpha = clamp01(smoothStep(0.08, 0.48, heatLevel) - smoothStep(0.6, 0.98, heatLevel));
 
       const state = risk > 5.8
         ? {
@@ -4149,13 +4254,23 @@
       e03HeatReadout.textContent = state.heat;
       e03StateReadout.textContent = state.readout;
       e03JudgeReadout.textContent = state.judge;
-      e03StateImage.src = state.img;
-      e03StateImage.alt = `E03発熱実験の${state.label}画像`;
+      e03HeatStack?.style.setProperty("--heat-level", heatLevel.toFixed(3));
+      e03HeatStack?.style.setProperty("--safe-alpha", safeAlpha.toFixed(3));
+      e03HeatStack?.style.setProperty("--caution-alpha", cautionAlpha.toFixed(3));
+      e03HeatStack?.style.setProperty("--danger-alpha", dangerAlpha.toFixed(3));
+      e03MotionMarker?.parentElement?.style.setProperty("--heat-level", heatLevel.toFixed(3));
       e03StateBadge.textContent = state.label;
       e03StateBadge.classList.toggle("danger", state.mode === "danger");
       e03StateBadge.classList.toggle("caution", state.mode === "caution");
       e03StateTitle.textContent = state.title;
       e03StateText.textContent = state.text;
+      if (!e03PlayTimer && e03MotionText) {
+        e03MotionText.textContent = heatLevel > 0.72
+          ? "赤みが増えて危険域に近い"
+          : heatLevel > 0.36
+            ? "写真の温かさがじわっと増えている"
+            : "つまみを動かすと写真がじわっと変わる";
+      }
     }
 
     function renderE03Complete() {
@@ -4167,17 +4282,39 @@
     }
 
     [e03CurrentSlider, e03WireSlider].forEach((slider) => {
-      slider?.addEventListener("input", renderE03HeatLab);
+      slider?.addEventListener("input", () => {
+        stopE03Playback();
+        renderE03HeatLab();
+      });
     });
 
     e03LooseButton?.addEventListener("click", () => {
+      stopE03Playback();
       togglePressed(e03LooseButton);
       renderE03HeatLab();
     });
 
     e03BreakerButton?.addEventListener("click", () => {
+      stopE03Playback();
       togglePressed(e03BreakerButton);
       renderE03HeatLab();
+    });
+
+    e03PlayButton?.addEventListener("click", () => {
+      if (e03PlayTimer) {
+        stopE03Playback();
+        return;
+      }
+      let direction = 1;
+      e03PlayButton.textContent = "停止";
+      if (e03MotionText) e03MotionText.textContent = "自動で熱が育つ様子を再生中";
+      e03PlayTimer = setInterval(() => {
+        const next = Number(e03CurrentSlider.value) + direction;
+        if (next >= Number(e03CurrentSlider.max)) direction = -1;
+        if (next <= Number(e03CurrentSlider.min)) direction = 1;
+        e03CurrentSlider.value = String(Math.max(Number(e03CurrentSlider.min), Math.min(Number(e03CurrentSlider.max), next)));
+        renderE03HeatLab();
+      }, 130);
     });
 
     e03CompleteButton?.addEventListener("click", () => {
