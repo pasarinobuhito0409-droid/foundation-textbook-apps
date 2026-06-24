@@ -5,21 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>機械設計 基礎アプリ</title>
   <link rel="manifest" href="mechanical-design-manifest.webmanifest">
-  <meta name="theme-color" content="#14532d">
+  <meta name="theme-color" content="#0f5132">
   <style>
     :root {
       color-scheme: light;
-      --bg: #f4f4ef;
-      --paper: #fffef8;
-      --ink: #182026;
-      --muted: #637076;
-      --line: #d8d5cb;
-      --green: #14532d;
-      --blue: #1d4ed8;
-      --red: #c2410c;
-      --yellow: #a16207;
-      --violet: #6d28d9;
-      --shadow: 0 16px 34px rgba(35, 40, 35, 0.12);
+      --bg: #efeee8;
+      --paper: #fffdfa;
+      --panel: #f7f6f0;
+      --ink: #172027;
+      --muted: #637074;
+      --line: #dad6ca;
+      --blue: #2266c9;
+      --green: #0f6b3f;
+      --red: #d04444;
+      --amber: #d39a2d;
+      --violet: #6b56cf;
+      --shadow: 0 18px 40px rgba(28, 31, 28, .13);
       --radius: 8px;
       font-family: "Yu Gothic", "Hiragino Sans", "Meiryo", system-ui, sans-serif;
     }
@@ -30,40 +31,49 @@
       margin: 0;
       color: var(--ink);
       background:
-        linear-gradient(180deg, rgba(255,255,255,.72), rgba(255,255,255,.26)),
-        repeating-linear-gradient(90deg, rgba(30, 45, 38, .026) 0 1px, transparent 1px 12px),
+        linear-gradient(180deg, rgba(255,255,255,.62), rgba(255,255,255,.28)),
+        repeating-linear-gradient(90deg, rgba(40,48,42,.024) 0 1px, transparent 1px 12px),
         var(--bg);
-      line-height: 1.7;
+      line-height: 1.65;
     }
 
-    button, input { font: inherit; }
+    button, input, textarea { font: inherit; }
     button { cursor: pointer; }
 
     .topbar {
       position: sticky;
       top: 0;
-      z-index: 20;
-      background: rgba(244,244,239,.94);
-      border-bottom: 1px solid rgba(75, 84, 70, .2);
-      backdrop-filter: blur(12px);
+      z-index: 30;
+      border-bottom: 1px solid rgba(92, 88, 76, .2);
+      background: rgba(239, 238, 232, .94);
+      backdrop-filter: blur(14px);
     }
 
     .topbar-inner,
     .page {
-      width: min(1180px, calc(100% - 28px));
+      width: min(1280px, calc(100% - 28px));
       margin: 0 auto;
     }
 
     .topbar-inner {
-      min-height: 68px;
+      min-height: 62px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 14px;
     }
 
-    .brand strong { display: block; font-size: 18px; line-height: 1.25; }
-    .brand span { display: block; color: var(--muted); font-size: 13px; }
+    .brand strong {
+      display: block;
+      font-size: 18px;
+      line-height: 1.2;
+    }
+
+    .brand span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+    }
 
     .quick-nav {
       display: flex;
@@ -73,476 +83,648 @@
     }
 
     .nav-button,
+    .rail-button,
     .primary-button,
     .ghost-button,
     .choice-button,
-    .topic-button {
-      min-height: 42px;
+    .mini-button,
+    .topic-pill {
+      min-height: 40px;
       border: 1px solid var(--line);
       border-radius: var(--radius);
       background: var(--paper);
       color: var(--ink);
+      text-decoration: none;
     }
 
     .nav-button {
+      display: inline-flex;
+      align-items: center;
       padding: 8px 12px;
-      text-decoration: none;
       font-size: 14px;
     }
 
-    .primary-button {
-      border-color: transparent;
-      background: var(--ink);
-      color: white;
-      padding: 10px 14px;
-      box-shadow: 0 10px 22px rgba(24,32,38,.18);
-    }
+    .page { padding: 18px 0 44px; }
 
-    .ghost-button { padding: 10px 14px; }
-
-    .hero {
+    .app-shell {
       display: grid;
-      grid-template-columns: minmax(0, .98fr) minmax(340px, 1.02fr);
-      gap: 28px;
-      align-items: center;
-      min-height: calc(100vh - 86px);
-      padding: 34px 0 42px;
+      grid-template-columns: 124px minmax(0, 1fr) minmax(282px, 330px);
+      gap: 14px;
+      align-items: stretch;
+      min-height: calc(100vh - 98px);
     }
 
-    .eyebrow { margin: 0 0 10px; color: var(--green); font-weight: 800; }
-    h1, h2, h3 { letter-spacing: 0; }
-    h1 { margin: 0; font-size: clamp(38px, 6vw, 70px); line-height: 1.04; }
-    .lead { margin: 18px 0 0; max-width: 720px; color: #2f3d42; font-size: 18px; }
-    .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
-
-    .design-stage {
+    .side-rail,
+    .main-stage,
+    .right-stack,
+    .card {
       border: 1px solid var(--line);
       border-radius: var(--radius);
-      background: rgba(255,254,248,.86);
-      box-shadow: var(--shadow);
-      overflow: hidden;
+      background: rgba(255, 253, 250, .9);
+      box-shadow: 0 10px 22px rgba(48, 45, 38, .06);
     }
 
-    .stage-head {
+    .side-rail {
+      display: grid;
+      align-content: start;
+      gap: 10px;
+      padding: 12px;
+    }
+
+    .code-badge {
+      display: grid;
+      place-items: center;
+      min-height: 52px;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, #2775d6, #1558bb);
+      color: #fff;
+      font-size: 19px;
+      font-weight: 900;
+      box-shadow: 0 12px 22px rgba(34,102,201,.22);
+    }
+
+    .rail-button {
+      display: grid;
+      grid-template-columns: 24px 1fr;
+      align-items: center;
+      gap: 8px;
+      min-height: 50px;
+      padding: 8px 9px;
+      text-align: left;
+      font-size: 13px;
+      background: rgba(255,255,255,.76);
+    }
+
+    .rail-button span:first-child {
+      display: grid;
+      place-items: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      background: rgba(34,102,201,.1);
+      color: #1558bb;
+      font-size: 13px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .rail-button.active {
+      border-color: rgba(34,102,201,.62);
+      background: rgba(34,102,201,.1);
+      font-weight: 900;
+    }
+
+    .main-stage {
+      overflow: hidden;
+      display: grid;
+      align-content: start;
+    }
+
+    .lesson-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: start;
+      padding: 16px 18px 12px;
+      border-bottom: 1px solid rgba(92,88,76,.16);
+    }
+
+    .lesson-head h1 {
+      margin: 0 0 5px;
+      font-size: clamp(25px, 3.4vw, 42px);
+      line-height: 1.12;
+      letter-spacing: 0;
+    }
+
+    .lesson-head p {
+      margin: 0;
+      color: #39464a;
+      font-size: 14px;
+    }
+
+    .progress-pill {
+      min-width: 142px;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.78);
+      font-size: 12px;
+    }
+
+    .progress-line {
+      height: 8px;
+      margin-top: 6px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #dfddd5;
+    }
+
+    .progress-line span {
+      display: block;
+      width: 68%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #35a269, #0f6b3f);
+    }
+
+    .visual-grid {
+      display: grid;
+      grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+      gap: 12px;
+      padding: 14px 18px;
+    }
+
+    .real-card {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #101514;
+    }
+
+    .real-card-head {
       display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 9px 11px;
+      background: rgba(255,255,255,.95);
+      font-weight: 900;
+    }
+
+    .photo-window {
+      position: relative;
+      min-height: 310px;
+      overflow: hidden;
+      background: #111;
+    }
+
+    .photo-window img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-height: 310px;
+      object-fit: cover;
+    }
+
+    .part-photo img { object-position: 23% 50%; transform: scale(1.02); }
+    .drawing-photo img { object-position: 67% 52%; transform: scale(1.06); }
+
+    .photo-chip,
+    .pin {
+      position: absolute;
+      border: 1px solid rgba(255,255,255,.76);
+      border-radius: 999px;
+      background: rgba(255,253,250,.9);
+      box-shadow: 0 10px 24px rgba(0,0,0,.16);
+      font-weight: 900;
+      backdrop-filter: blur(8px);
+    }
+
+    .photo-chip {
+      left: 12px;
+      bottom: 12px;
+      padding: 8px 11px;
+      color: var(--blue);
+    }
+
+    .pin {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 42px;
+      min-height: 36px;
+      padding: 6px 9px;
+      color: #172027;
+      font-size: 13px;
+      opacity: .22;
+      transform: translateY(7px);
+      transition: opacity .18s ease, transform .18s ease, background .18s ease;
+    }
+
+    .pin.on {
+      opacity: 1;
+      transform: translateY(0);
+      background: rgba(255,253,250,.96);
+    }
+
+    .pin-shape { left: 12%; top: 18%; }
+    .pin-size { left: 48%; top: 24%; }
+    .pin-hole { right: 12%; top: 37%; }
+    .pin-bend { right: 10%; bottom: 18%; }
+
+    .touch-panel {
+      display: grid;
+      grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
+      gap: 12px;
+      padding: 0 18px 14px;
+    }
+
+    .frame-card {
+      grid-column: 1 / -1;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.84);
+      padding: 12px;
+    }
+
+    .frame-head {
+      display: flex;
+      align-items: center;
       justify-content: space-between;
       gap: 10px;
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--line);
+      margin-bottom: 10px;
     }
 
-    .scene {
-      padding: 18px;
-      min-height: 360px;
-      background: linear-gradient(180deg, rgba(255,255,255,.88), rgba(235,238,232,.76));
+    .frame-head h2 {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.25;
+      letter-spacing: 0;
     }
 
-    .stage-photo {
+    .frame-viewer {
       position: relative;
       overflow: hidden;
-      border: 1px solid rgba(90, 82, 68, .22);
+      border: 1px solid var(--line);
       border-radius: var(--radius);
       background: #111;
     }
 
-    .stage-photo img,
-    .md02-photo img {
+    .frame-viewer img {
       display: block;
       width: 100%;
-      height: auto;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
     }
 
-    .stage-badge,
-    .md02-pin,
-    .md02-status-badge {
+    .frame-caption {
       position: absolute;
-      border: 1px solid rgba(255,255,255,.72);
+      left: 12px;
+      bottom: 12px;
+      max-width: min(520px, calc(100% - 24px));
+      padding: 9px 12px;
+      border: 1px solid rgba(255,255,255,.76);
       border-radius: 999px;
-      background: rgba(255, 254, 248, .88);
-      color: #142033;
+      background: rgba(255,253,250,.92);
+      font-weight: 900;
       box-shadow: 0 10px 24px rgba(0,0,0,.16);
+    }
+
+    .frame-controls {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .control-card,
+    .result-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.8);
+      padding: 14px;
+    }
+
+    .control-card h2,
+    .result-card h2,
+    .side-card h2 {
+      margin: 0 0 10px;
+      font-size: 20px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    .slider-row {
+      display: grid;
+      grid-template-columns: 82px minmax(0, 1fr) 58px;
+      gap: 10px;
+      align-items: center;
+      margin: 10px 0;
+      font-size: 14px;
       font-weight: 800;
-      backdrop-filter: blur(8px);
     }
 
-    .stage-badge {
-      left: 14px;
-      top: 14px;
-      padding: 8px 12px;
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--blue);
     }
 
-    .meter-grid {
+    .judge-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+      gap: 8px;
       margin-top: 12px;
     }
 
-    .meter {
-      padding: 10px;
+    .judge {
+      min-height: 62px;
+      padding: 9px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(34,102,201,.24);
+      background: rgba(34,102,201,.08);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .result-photo {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 54px;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .small-photo {
+      position: relative;
+      overflow: hidden;
+      min-height: 138px;
       border: 1px solid var(--line);
       border-radius: var(--radius);
-      background: rgba(255,255,255,.7);
+      background: #111;
     }
 
-    .meter span { color: var(--muted); font-size: 12px; }
-    .meter strong { display: block; font-size: 20px; line-height: 1.15; }
-
-    .section {
-      padding: 44px 0;
-      border-top: 1px solid rgba(75, 84, 70, .2);
+    .small-photo img {
+      display: block;
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      object-position: 55% 50%;
     }
 
-    .section h2 {
-      margin: 0 0 14px;
-      font-size: clamp(24px, 3vw, 38px);
+    .info-heat {
+      display: grid;
+      align-content: space-between;
+      height: 152px;
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .heat-bar {
+      width: 18px;
+      min-height: 92px;
+      margin: 0 auto;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #df4343, #d6a22e, #47aa70, #2d74d9);
+    }
+
+    .result-message {
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(34,102,201,.08), rgba(15,107,63,.08));
+    }
+
+    .result-message strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 18px;
+    }
+
+    .right-stack {
+      display: grid;
+      gap: 12px;
+      align-content: start;
+      padding: 12px;
+      background: rgba(255,253,250,.72);
+    }
+
+    .side-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.84);
+      padding: 13px;
+    }
+
+    .memo {
+      min-height: 132px;
+      width: 100%;
+      resize: vertical;
+      border: 1px solid #dfc995;
+      border-radius: var(--radius);
+      background: #fff8df;
+      padding: 10px;
+      color: #362f21;
+    }
+
+    .quiz-question {
+      margin: 0 0 10px;
+      font-weight: 900;
+    }
+
+    .choices {
+      display: grid;
+      gap: 8px;
+    }
+
+    .choice-button {
+      padding: 10px;
+      text-align: left;
+      background: #fff;
+    }
+
+    .choice-button.correct {
+      border-color: rgba(15,107,63,.6);
+      background: rgba(15,107,63,.08);
+    }
+
+    .choice-button.wrong {
+      border-color: rgba(208,68,68,.62);
+      background: rgba(208,68,68,.08);
+    }
+
+    .feedback {
+      display: none;
+      margin-top: 9px;
+      padding: 10px;
+      border-left: 4px solid var(--green);
+      background: rgba(15,107,63,.07);
+      font-size: 14px;
+    }
+
+    .feedback.show { display: block; }
+
+    .primary-button,
+    .ghost-button,
+    .mini-button {
+      padding: 9px 12px;
+      font-weight: 900;
+    }
+
+    .primary-button {
+      border-color: transparent;
+      background: var(--blue);
+      color: #fff;
+      box-shadow: 0 10px 22px rgba(34,102,201,.22);
+    }
+
+    .mini-button {
+      min-height: 36px;
+      background: rgba(255,255,255,.82);
+      font-size: 13px;
+    }
+
+    .review-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .check-row {
+      display: grid;
+      grid-template-columns: 24px 1fr;
+      gap: 8px;
+      align-items: start;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .topic-strip {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+      padding: 0 18px 18px;
+    }
+
+    .topic-pill {
+      display: grid;
+      gap: 2px;
+      padding: 9px;
+      text-align: left;
+      background: rgba(255,255,255,.8);
+    }
+
+    .topic-pill.active {
+      border-color: rgba(15,107,63,.58);
+      background: rgba(15,107,63,.08);
+    }
+
+    .topic-pill strong { font-size: 13px; }
+    .topic-pill span { color: var(--muted); font-size: 11px; }
+
+    .book-flow {
+      width: min(1280px, calc(100% - 28px));
+      margin: 16px auto 0;
+      display: grid;
+      gap: 12px;
+    }
+
+    .book-flow h2 {
+      margin: 0;
+      font-size: clamp(25px, 3vw, 36px);
+      letter-spacing: 0;
       line-height: 1.15;
     }
 
-    .section-intro {
-      max-width: 850px;
-      margin: 0 0 22px;
-      color: #2f3d42;
-      font-size: 17px;
-    }
-
-    .grid-3,
-    .topic-grid {
+    .book-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 12px;
     }
 
-    .card,
-    .lesson-panel,
-    .review-panel {
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: var(--paper);
-      box-shadow: 0 10px 18px rgba(52,47,39,.06);
-    }
-
-    .card { padding: 14px; min-height: 128px; }
-    .card strong { display: block; margin-bottom: 6px; }
-    .card p { margin: 0; color: var(--muted); font-size: 14px; }
-
-    .lesson-layout {
-      display: grid;
-      grid-template-columns: minmax(260px, 360px) minmax(0, 1fr);
-      gap: 16px;
-      align-items: start;
-    }
-
-    .topic-list {
-      display: grid;
-      gap: 8px;
-    }
-
-    .topic-button {
-      width: 100%;
-      text-align: left;
-      padding: 10px;
-      background: rgba(255,255,255,.75);
-    }
-
-    .topic-button.active {
-      border-color: rgba(20,83,45,.7);
-      background: rgba(20,83,45,.08);
-    }
-
-    .topic-button strong,
-    .topic-button span { display: block; }
-    .topic-button span { color: var(--muted); font-size: 13px; }
-
-    .lesson-panel { padding: 18px; }
-
-    .icon-line {
-      display: grid;
-      grid-template-columns: 28px minmax(0, 1fr);
-      gap: 10px;
-      padding: 12px 0;
-      border-bottom: 1px solid rgba(90,82,68,.16);
-    }
-
-    .icon-line:last-child { border-bottom: 0; }
-    .icon-line b { display: block; margin-bottom: 3px; }
-    .icon-line p { margin: 0; color: #334044; }
-
-    .md02-touch {
-      margin-top: 16px;
-      padding-top: 16px;
-      border-top: 1px solid rgba(90,82,68,.16);
-    }
-
-    .md02-touch h4 {
-      margin: 0 0 8px;
-      font-size: clamp(20px, 2.6vw, 28px);
-      line-height: 1.25;
-    }
-
-    .md02-touch > p {
-      margin: 0 0 12px;
-      color: #334044;
-    }
-
-    .md02-touch-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.18fr) minmax(260px, .82fr);
-      gap: 14px;
-      align-items: stretch;
-    }
-
-    .md02-photo {
-      position: relative;
-      overflow: hidden;
-      min-height: 320px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: #111;
-    }
-
-    .md02-photo img {
-      height: 100%;
-      min-height: 320px;
-      object-fit: cover;
-    }
-
-    .md02-photo::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(circle at 31% 40%, rgba(29,78,216, calc(.06 * var(--md02-step, 0))) 0 14%, transparent 26%),
-        radial-gradient(circle at 64% 42%, rgba(20,83,45, calc(.08 * var(--md02-step, 0))) 0 19%, transparent 31%),
-        linear-gradient(90deg, rgba(0,0,0,.08), transparent 34%, rgba(255,255,255,.04));
-      pointer-events: none;
-      transition: background .22s ease;
-    }
-
-    .md02-pin {
-      padding: 7px 10px;
-      font-size: 13px;
-      opacity: .18;
-      transform: translateY(8px);
-      transition: opacity .22s ease, transform .22s ease;
-    }
-
-    .md02-pin.on {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .pin-part { left: 8%; top: 11%; }
-    .pin-outline { left: 45%; top: 18%; }
-    .pin-size { right: 13%; top: 28%; }
-    .pin-tolerance { right: 9%; bottom: 22%; }
-    .pin-material { left: 8%; bottom: 10%; }
-
-    .md02-panel {
-      display: grid;
-      gap: 10px;
-      align-content: start;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: rgba(255,255,255,.78);
+    .book-card {
+      min-height: 132px;
       padding: 14px;
-    }
-
-    .md02-status {
-      position: relative;
-      min-height: 138px;
-      padding: 14px;
+      border: 1px solid var(--line);
       border-radius: var(--radius);
-      background: linear-gradient(180deg, rgba(20,83,45,.08), rgba(29,78,216,.08));
+      background: rgba(255,253,250,.9);
+      box-shadow: 0 10px 22px rgba(48,45,38,.06);
     }
 
-    .md02-status-badge {
-      right: 12px;
-      top: 12px;
-      padding: 6px 10px;
-      color: var(--green);
+    .book-card strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 17px;
     }
 
-    .md02-status h5 {
-      margin: 0 0 8px;
-      padding-right: 96px;
-      font-size: 20px;
-      line-height: 1.25;
-    }
-
-    .md02-status p {
+    .book-card p {
       margin: 0;
       color: #334044;
     }
 
-    .md02-controls {
-      display: grid;
-      gap: 10px;
+    @media (max-width: 1080px) {
+      .app-shell {
+        grid-template-columns: 104px minmax(0, 1fr);
+      }
+
+      .right-stack {
+        grid-column: 2;
+        grid-template-columns: repeat(3, 1fr);
+      }
     }
 
-    .md02-controls label {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      font-weight: 800;
-    }
+    @media (max-width: 760px) {
+      .topbar-inner {
+        min-height: 58px;
+        align-items: flex-start;
+        padding: 9px 0;
+      }
 
-    .md02-controls input[type="range"] {
-      width: 100%;
-      accent-color: var(--green);
-    }
+      .brand strong { font-size: 18px; }
+      .brand span { font-size: 12px; }
+      .nav-button { min-height: 36px; padding: 6px 9px; }
 
-    .md02-step-buttons {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
+      .page { width: min(100% - 16px, 520px); padding-top: 10px; }
 
-    .md02-step-buttons button {
-      min-height: 42px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: #fff;
-    }
+      .app-shell {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        min-height: 0;
+      }
 
-    .md02-chip-list {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-    }
+      .side-rail {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 8px;
+        padding: 10px;
+        overflow-x: auto;
+      }
 
-    .md02-chip {
-      min-height: 58px;
-      padding: 9px;
-      border: 1px solid rgba(20,83,45,.22);
-      border-radius: var(--radius);
-      background: rgba(20,83,45,.07);
-      font-weight: 800;
-      font-size: 13px;
-      line-height: 1.35;
-    }
+      .code-badge { min-height: 42px; font-size: 16px; }
+      .rail-button {
+        min-height: 42px;
+        grid-template-columns: 1fr;
+        justify-items: center;
+        gap: 4px;
+        padding: 7px 6px;
+        text-align: center;
+      }
+      .rail-button span:first-child {
+        width: 26px;
+        height: 24px;
+        font-size: 12px;
+      }
+      .rail-button span:last-child { font-size: 11px; }
 
-    .md02-okng {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 12px;
-    }
+      .lesson-head,
+      .visual-grid,
+      .touch-panel {
+        grid-template-columns: 1fr;
+        padding-left: 12px;
+        padding-right: 12px;
+      }
 
-    .md02-okng div {
-      padding: 10px;
-      border-radius: var(--radius);
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,.76);
-    }
-
-    .md02-okng strong { display: block; margin-bottom: 4px; }
-    .md02-okng .ok { color: var(--green); }
-    .md02-okng .ng { color: var(--red); }
-
-    .review-layout {
-      display: grid;
-      grid-template-columns: minmax(260px, 340px) minmax(0, 1fr);
-      gap: 16px;
-      align-items: start;
-    }
-
-    .review-panel { padding: 16px; }
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-
-    .stat {
-      padding: 10px;
-      min-height: 76px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: rgba(255,255,255,.72);
-    }
-
-    .stat span { color: var(--muted); font-size: 12px; }
-    .stat strong { display: block; margin-top: 4px; font-size: 22px; line-height: 1.15; }
-
-    .review-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-
-    .question-box {
-      padding: 16px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: linear-gradient(180deg, rgba(255,255,255,.85), rgba(238,241,235,.74));
-    }
-
-    .question-box h3 {
-      margin: 8px 0 12px;
-      font-size: clamp(21px, 3vw, 30px);
-      line-height: 1.25;
-    }
-
-    .question-meta { color: var(--muted); font-size: 13px; }
-    .choices { display: grid; gap: 8px; }
-    .choice-button { min-height: 44px; padding: 10px; text-align: left; background: #fff; }
-    .choice-button.correct { border-color: rgba(36,122,83,.7); background: rgba(36,122,83,.08); }
-    .choice-button.wrong { border-color: rgba(194,65,12,.55); background: rgba(194,65,12,.07); }
-
-    .feedback {
-      display: none;
-      margin-top: 12px;
-      padding: 12px;
-      border-left: 4px solid var(--green);
-      background: rgba(20,83,45,.07);
-    }
-
-    .feedback.show { display: block; }
-
-    .append-note {
-      margin: 16px 0 0;
-      padding: 12px;
-      border: 1px dashed rgba(20,83,45,.35);
-      border-radius: var(--radius);
-      color: var(--muted);
-      background: rgba(255,255,255,.66);
-      font-size: 14px;
-    }
-
-    @media (max-width: 900px) {
-      .hero,
-      .grid-3,
-      .topic-grid,
-      .lesson-layout,
-      .review-layout,
-      .md02-touch-grid,
-      .stats {
+      .lesson-head h1 { font-size: 28px; }
+      .progress-pill { width: 100%; }
+      .photo-window,
+      .photo-window img { min-height: 230px; }
+      .touch-panel { padding-bottom: 12px; }
+      .result-photo { grid-template-columns: 1fr; }
+      .info-heat { display: none; }
+      .judge-grid,
+      .topic-strip,
+      .right-stack,
+      .book-grid {
         grid-template-columns: 1fr;
       }
 
-      .hero { min-height: 0; }
-    }
-
-    @media (max-width: 620px) {
-      .topbar-inner { align-items: flex-start; padding: 10px 0; }
-      .quick-nav { justify-content: flex-start; }
-      .nav-button { min-height: 36px; padding: 6px 10px; font-size: 13px; }
-      .brand strong { font-size: 17px; }
-      .brand span { font-size: 12px; }
-      h1 { font-size: 34px; line-height: 1.08; }
-      .lead { font-size: 16px; }
-      .scene { min-height: 300px; padding: 12px; }
-      .meter-grid { grid-template-columns: 1fr; }
-      .md02-chip-list,
-      .md02-okng,
-      .md02-step-buttons { grid-template-columns: 1fr; }
-      .md02-pin { font-size: 12px; }
-      .pin-size { right: 5%; }
-      .pin-tolerance { right: 5%; bottom: 16%; }
+      .right-stack { grid-column: auto; }
+      .slider-row { grid-template-columns: 1fr; gap: 4px; }
+      .frame-head,
+      .frame-controls {
+        grid-template-columns: 1fr;
+        align-items: stretch;
+      }
+      .frame-head { display: grid; }
+      .book-flow { width: min(100% - 16px, 520px); }
     }
   </style>
 </head>
@@ -555,280 +737,256 @@
       </div>
       <nav class="quick-nav" aria-label="ページ内メニュー">
         <a class="nav-button" href="#lesson">教科書</a>
-        <a class="nav-button" href="#review">復習</a>
-        <a class="nav-button" href="#roadmap">地図</a>
+        <a class="nav-button" href="#quiz">テスト</a>
+        <a class="nav-button" href="#memo">メモ</a>
+        <a class="nav-button" href="#book-flow">本文</a>
       </nav>
     </div>
   </header>
 
-  <main class="page">
-    <section class="hero">
-      <div>
-        <p class="eyebrow">MD02 今日の1テーマ</p>
-        <h1>図面は、同じ物を作るための指示書。</h1>
-        <p class="lead">
-          実物の形だけでは、作る人に寸法も基準も伝わらない。
-          写真、図面、寸法がつながると、頭の中の形を現場で作れる形にできる。
-        </p>
-        <div class="hero-actions">
-          <a class="primary-button" href="#lesson">今日の教科書</a>
-          <a class="ghost-button" href="#review">すぐ復習</a>
-        </div>
-      </div>
+  <main class="page" id="lesson">
+    <section class="app-shell" aria-label="MD02 図面とは何か">
+      <aside class="side-rail" aria-label="学習メニュー">
+        <div class="code-badge">MD02</div>
+        <button class="rail-button active" type="button" data-jump="#lesson"><span>目</span><span>目次</span></button>
+        <button class="rail-button" type="button" data-jump="#why"><span>理</span><span>なぜ?</span></button>
+        <button class="rail-button" type="button" data-jump="#touch"><span>触</span><span>触る</span></button>
+        <button class="rail-button" type="button" data-jump="#memo"><span>メ</span><span>メモ</span></button>
+        <button class="rail-button" type="button" data-jump="#quiz"><span>問</span><span>テスト</span></button>
+        <button class="rail-button" type="button" data-jump="#review"><span>復</span><span>復習</span></button>
+      </aside>
 
-      <aside class="design-stage" aria-label="機械設計の見える化">
-        <div class="stage-head">
-          <strong>実物から図面へ</strong>
-          <span>形 → 寸法 → 作る指示</span>
-        </div>
-        <div class="scene">
-          <div class="stage-photo">
-            <img src="assets/md02-bracket-drawing-real.png" alt="金属ブラケットと図面とノギスが置かれた作業机">
-            <span class="stage-badge">部品と図面を同時に見る</span>
+      <article class="main-stage">
+        <div class="lesson-head">
+          <div>
+            <h1>MD02 図面とは何か</h1>
+            <p>図面は、部品の形・大きさ・基準・指示を、作る人へ正確に渡すための共通言語です。</p>
           </div>
-          <div class="meter-grid">
-            <div class="meter"><span>見る順番</span><strong>実物</strong></div>
-            <div class="meter"><span>次に見る</span><strong>寸法</strong></div>
-            <div class="meter"><span>最後に見る</span><strong>指示</strong></div>
+          <div class="progress-pill">
+            学習の進み具合
+            <div class="progress-line"><span></span></div>
+            68%
           </div>
         </div>
+
+        <div class="visual-grid">
+          <section class="real-card" aria-label="部品写真">
+            <div class="real-card-head">
+              <span>部品写真</span>
+              <span>実物を見る</span>
+            </div>
+            <div class="photo-window part-photo">
+              <img src="assets/md02-bracket-drawing-real.png" alt="金属ブラケットの実物写真">
+              <span class="photo-chip">穴・曲げ・板厚を見る</span>
+            </div>
+          </section>
+
+          <section class="real-card" aria-label="図面写真">
+            <div class="real-card-head">
+              <span>図面</span>
+              <span>寸法を読む</span>
+            </div>
+            <div class="photo-window drawing-photo" id="drawingPhoto">
+              <img src="assets/md02-bracket-drawing-real.png" alt="ブラケットの図面と寸法">
+              <span class="pin pin-shape on" data-pin="shape">形</span>
+              <span class="pin pin-size on" data-pin="size">寸法</span>
+              <span class="pin pin-hole" data-pin="hole">穴</span>
+              <span class="pin pin-bend" data-pin="bend">曲げ</span>
+            </div>
+          </section>
+        </div>
+
+        <div class="touch-panel" id="touch">
+          <section class="frame-card" aria-label="20枚フレームで見る図面化">
+            <div class="frame-head">
+              <h2>20枚フレーム：写真が指示書に変わる</h2>
+              <button class="primary-button" id="framePlay" type="button">再生</button>
+            </div>
+            <div class="frame-viewer">
+              <img id="frameImage" src="assets/md02-frames/frame-10.jpg" alt="20枚フレームで写真から図面指示へ変わる様子">
+              <span class="frame-caption" id="frameCaption">10 / 20　図面に寸法が見えてくる</span>
+            </div>
+            <div class="frame-controls">
+              <input id="frameRange" type="range" min="1" max="20" value="10">
+              <button class="ghost-button" id="frameReset" type="button">最初へ</button>
+            </div>
+          </section>
+
+          <section class="control-card">
+            <h2>触って理解する</h2>
+            <div class="slider-row">
+              <label for="infoRange">寸法の量</label>
+              <input id="infoRange" type="range" min="1" max="5" value="3">
+              <strong id="infoValue">3 / 5</strong>
+            </div>
+            <div class="slider-row">
+              <label for="standardRange">基準の数</label>
+              <input id="standardRange" type="range" min="1" max="5" value="2">
+              <strong id="standardValue">2 / 5</strong>
+            </div>
+            <div class="slider-row">
+              <label for="noteRange">指示の明確さ</label>
+              <input id="noteRange" type="range" min="1" max="5" value="4">
+              <strong id="noteValue">4 / 5</strong>
+            </div>
+            <div class="judge-grid">
+              <div class="judge" id="riskText">作れる度: 中</div>
+              <div class="judge" id="missText">迷い: 少し</div>
+              <div class="judge" id="lookText">見る順: 写真→図面</div>
+            </div>
+          </section>
+
+          <section class="result-card" id="why">
+            <h2>結果イメージ</h2>
+            <div class="result-photo">
+              <div class="small-photo">
+                <img src="assets/md02-bracket-drawing-real.png" alt="図面とブラケットを見比べる写真">
+              </div>
+              <div class="info-heat" aria-hidden="true">
+                <span>明確</span>
+                <span class="heat-bar"></span>
+                <span>不足</span>
+              </div>
+            </div>
+            <div class="result-message">
+              <strong id="resultTitle">寸法が増えるほど、同じ物に近づく</strong>
+              <span id="resultBody">写真は形を見せる。図面は作るための数字と基準を渡します。</span>
+            </div>
+          </section>
+        </div>
+
+        <div class="topic-strip" id="roadmap" aria-label="基礎の地図">
+          <button class="topic-pill" type="button" data-topic="purpose"><strong>MD01 目的</strong><span>何のためか</span></button>
+          <button class="topic-pill active" type="button" data-topic="drawing"><strong>MD02 図面</strong><span>指示書</span></button>
+          <button class="topic-pill" type="button" data-topic="material"><strong>MD03 材料</strong><span>性格を決める</span></button>
+          <button class="topic-pill" type="button" data-topic="process"><strong>MD04 加工</strong><span>作れる形</span></button>
+          <button class="topic-pill" type="button" data-topic="screw"><strong>MD05 ねじ</strong><span>外せる固定</span></button>
+          <button class="topic-pill" type="button" data-topic="tolerance"><strong>MD06 公差</strong><span>ズレの範囲</span></button>
+        </div>
+      </article>
+
+      <aside class="right-stack">
+        <section class="side-card" id="memo">
+          <h2>なぜ? メモ</h2>
+          <textarea class="memo" id="memoText" placeholder="例：なぜ写真だけでは作れない?&#10;穴の位置はどこを基準にする?"></textarea>
+        </section>
+
+        <section class="side-card" id="quiz">
+          <h2>テストに挑戦</h2>
+          <p class="quiz-question" id="quizQuestion"></p>
+          <div class="choices" id="choices"></div>
+          <div class="feedback" id="feedback"></div>
+          <div style="display:flex; gap:8px; margin-top:10px;">
+            <button class="primary-button" id="nextQuestion" type="button">次の問題へ</button>
+            <button class="ghost-button" id="resetQuiz" type="button">リセット</button>
+          </div>
+        </section>
+
+        <section class="side-card" id="review">
+          <h2>復習の進み具合</h2>
+          <div class="review-list">
+            <label class="check-row"><input type="checkbox" checked> 実物を見た</label>
+            <label class="check-row"><input type="checkbox" checked> 図面を見た</label>
+            <label class="check-row"><input type="checkbox"> スライダーを触った</label>
+            <label class="check-row"><input type="checkbox"> テストを解いた</label>
+          </div>
+        </section>
       </aside>
     </section>
 
-    <section class="section" id="roadmap" aria-labelledby="roadmap-title">
-      <h2 id="roadmap-title">基礎の地図</h2>
-      <p class="section-intro">
-        まずは機械設計の土台を、この順番で積む。
-        新しい内容はこの地図に足していく。
-      </p>
-      <div class="grid-3">
-        <article class="card"><strong>1. 目的</strong><p>何を支え、何を動かし、何を守るか。</p></article>
-        <article class="card"><strong>2. 力</strong><p>押す、引く、曲げる、ねじる、ぶつかる。</p></article>
-        <article class="card"><strong>3. 形</strong><p>板、箱、軸、ブラケット、リブ、穴。</p></article>
-        <article class="card"><strong>4. 材料</strong><p>鉄、アルミ、樹脂。強さと作りやすさ。</p></article>
-        <article class="card"><strong>5. 加工</strong><p>切る、曲げる、削る、溶接、組立。</p></article>
-        <article class="card"><strong>6. 図面</strong><p>他人が同じ物を作れる指示書。</p></article>
-      </div>
-    </section>
-
-    <section class="section" id="lesson" aria-labelledby="lesson-title">
-      <h2 id="lesson-title">今日の教科書</h2>
-      <p class="section-intro">
-        1回で覚えることは1つ。
-        今日は「実物の形を、誰でも作れる指示に変える」こと。
-      </p>
-
-      <div class="lesson-layout">
-        <nav class="topic-list" id="topicList" aria-label="機械設計テーマ"></nav>
-        <article class="lesson-panel" id="lessonPanel"></article>
-      </div>
-    </section>
-
-    <section class="section" id="review" aria-labelledby="review-title">
-      <h2 id="review-title">いつでも復習</h2>
-      <p class="section-intro">
-        仕事前に毎回HTMLを作らなくていい。
-        このアプリの中に問題を貯めて、今日の復習・弱点だけ・テーマ別で出す。
-      </p>
-
-      <div class="review-layout">
-        <aside class="topic-list" id="reviewTopicList" aria-label="復習テーマ"></aside>
-        <div class="review-panel">
-          <div class="stats">
-            <div class="stat"><span>復習済み</span><strong id="answeredCount">0問</strong></div>
-            <div class="stat"><span>正解率</span><strong id="rateText">0%</strong></div>
-            <div class="stat"><span>今のテーマ</span><strong id="topicText">目的</strong></div>
-          </div>
-          <div class="review-actions">
-            <button class="primary-button" id="dueButton">今日の復習</button>
-            <button class="ghost-button" id="weakButton">弱点だけ</button>
-            <button class="ghost-button" id="installButton" hidden>ホーム画面に追加</button>
-          </div>
-          <div class="question-box">
-            <span class="question-meta" id="kindText">想起（しょうき：思い出す）</span>
-            <h3 id="questionText"></h3>
-            <div class="choices" id="choices"></div>
-            <div class="feedback" id="feedback"></div>
-          </div>
-          <div class="hero-actions">
-            <button class="ghost-button" id="nextButton">次の問題</button>
-            <button class="ghost-button" id="resetButton">復習だけリセット</button>
-          </div>
-          <p class="append-note">
-            追加方針：新しい授業は `topics` に足す。新しい問題は `questionBank` に足す。
-            古い内容は消さず、カードとして残す。
-          </p>
-        </div>
+    <section class="book-flow" id="book-flow" aria-label="スクロール式の教科書本文">
+      <h2>スクロール教科書：MD02 図面とは何か</h2>
+      <div class="book-grid">
+        <article class="book-card">
+          <strong>🔵 定義（ていぎ：言葉の意味）</strong>
+          <p>図面は、誰が見ても同じ物を作れるようにする指示書。</p>
+        </article>
+        <article class="book-card">
+          <strong>🟢 しくみ</strong>
+          <p>形、寸法（すんぽう：長さ）、公差（こうさ：許せるズレ）、材料を伝える。</p>
+        </article>
+        <article class="book-card">
+          <strong>🟡 なぜ</strong>
+          <p>写真だけでは、穴の位置や板厚を作る人が正確に測れないから。</p>
+        </article>
+        <article class="book-card">
+          <strong>🔴 注意</strong>
+          <p>寸法が足りない図面は、現場が想像で作ることになる。</p>
+        </article>
+        <article class="book-card">
+          <strong>🟣 設計判断</strong>
+          <p>重要な穴、曲げ、当たる面ほど、寸法と基準をはっきりさせる。</p>
+        </article>
+        <article class="book-card">
+          <strong>⚫ 発明家視点</strong>
+          <p>図面化できる発明は、自分以外の人にも作ってもらえる発明になる。</p>
+        </article>
       </div>
     </section>
   </main>
 
   <script>
-    const storageKey = "miwa-mechanical-design-foundation-v2";
+    const storageKey = "miwa-mechanical-design-foundation-v4";
 
-    const topics = [
+    const questions = [
       {
-        id: "purpose",
-        code: "MD01",
-        title: "機械設計とは何か",
-        short: "目的を形に変える",
-        lines: [
-          ["🔵", "定義（ていぎ：言葉の意味）", "機械設計は、目的を満たす形を考え、作れる指示にする仕事。"],
-          ["🟢", "しくみ", "目的を見る。力を見る。形を決める。材料と加工を選ぶ。図面にする。"],
-          ["🟡", "なぜ", "形だけ先に決めると、強さ・作りやすさ・組立で失敗しやすい。"],
-          ["🔴", "注意", "かっこいい形より先に、何を支えるか、どこに力が入るかを見る。"],
-          ["🟣", "設計判断", "板を厚くする前に、曲げ、リブ、固定、荷重の向きを見る。"],
-          ["⚫", "発明家視点", "目的から形へ変換できると、まだ世の中にない道具を作れる。"]
-        ]
+        id: "drawing-1",
+        q: "図面とは何?",
+        choices: ["同じ物を作るための指示書", "かっこいい絵", "材料の値段表"],
+        answer: 0,
+        why: "形、寸法、材料、基準を作る人へ渡すから。",
+        daily: "料理のレシピに近い。写真だけより、量と手順が大事。"
       },
       {
-        id: "drawing",
-        code: "MD02",
-        title: "図面とは何か",
-        short: "作る人への指示書",
-        lines: [
-          ["🔵", "定義（ていぎ：言葉の意味）", "図面は、誰が見ても同じ物を作れるようにする指示書。"],
-          ["🟢", "しくみ", "形、寸法（すんぽう：長さや大きさ）、公差（こうさ：許してよいズレ）、材料を伝える。"],
-          ["🟡", "なぜ", "実物写真だけでは、穴の位置や板厚を作る人が正確に測れないから。"],
-          ["🔴", "注意", "寸法が足りない図面は、現場が想像で作ることになる。"],
-          ["🟣", "設計判断", "重要な穴、曲げ、当たる面ほど、寸法と基準をはっきりさせる。"],
-          ["⚫", "発明家視点", "図面化できる発明は、自分以外の人にも作ってもらえる発明になる。"]
-        ],
-        touch: true
+        id: "drawing-2",
+        q: "写真だけで足りない情報は?",
+        choices: ["穴の正確な位置や大きさ", "机の色", "写真の明るさだけ"],
+        answer: 0,
+        why: "写真では何mmで作るか、どこを基準にするかが決まらないから。",
+        daily: "棚の写真だけでは、板を何cmで切るか分からない感じ。"
       },
       {
-        id: "material",
-        code: "MD03",
-        title: "材料",
-        short: "強さと作りやすさ",
-        lines: [
-          ["🔵", "定義", "材料は、部品の性格を決める元。鉄、アルミ、樹脂など。"],
-          ["🟢", "しくみ", "強い、軽い、曲げやすい、削りやすい、錆びにくい、値段が違う。"],
-          ["🟡", "なぜ", "同じ形でも材料が違うと、重さ、強さ、加工性が変わる。"],
-          ["🔴", "注意", "強い材料がいつも正解ではない。重い、加工しにくい、高いことがある。"],
-          ["🟣", "設計判断", "荷重、環境、加工方法、コストを見て選ぶ。"],
-          ["⚫", "発明家視点", "材料を選べると、同じアイデアを軽くも安くもできる。"]
-        ]
-      },
-      {
-        id: "process",
-        code: "MD04",
-        title: "加工",
-        short: "作れる形にする",
-        lines: [
-          ["🔵", "定義", "加工は、材料を切る、曲げる、削る、溶接するなどして形にすること。"],
-          ["🟢", "しくみ", "加工方法によって、得意な形、苦手な形、必要な寸法が変わる。"],
-          ["🟡", "なぜ", "作れない形は、CAD上では存在しても現場では困る。"],
-          ["🔴", "注意", "小さすぎる穴、近すぎる曲げ、工具が入らない形は失敗しやすい。"],
-          ["🟣", "設計判断", "最初から加工方法を想像しながら形を決める。"],
-          ["⚫", "発明家視点", "加工を知るほど、作れる発明の範囲が広がる。"]
-        ]
-      },
-      {
-        id: "screw",
-        code: "MD05",
-        title: "ねじ",
-        short: "外せる固定",
-        lines: [
-          ["🔵", "定義", "ねじは、部品を締めて固定し、必要なら外せる部品。"],
-          ["🟢", "しくみ", "軸力（じくりょく：締め付ける力）で部品同士を押さえる。"],
-          ["🟡", "なぜ", "摩擦が増えるので、部品がずれにくくなる。"],
-          ["🔴", "注意", "ねじはせん断だけで受けると危ないことがある。締結面で受ける考えが大事。"],
-          ["🟣", "設計判断", "サイズ、本数、配置、締め付け方向、工具スペースを見る。"],
-          ["⚫", "発明家視点", "外せる構造にできると、修理できる発明になる。"]
-        ]
-      },
-      {
-        id: "tolerance",
-        code: "MD06",
-        title: "公差",
-        short: "ズレを許す範囲",
-        lines: [
-          ["🔵", "定義", "公差（こうさ）は、寸法が少しズレてもよい範囲。"],
-          ["🟢", "しくみ", "加工品は完全に同じ寸法にはならない。だから許せる範囲を決める。"],
-          ["🟡", "なぜ", "全部を厳しくすると高くなる。ゆるすぎると組み立たない。"],
-          ["🔴", "注意", "重要ではない場所まで厳しくすると、現場とコストがつらくなる。"],
-          ["🟣", "設計判断", "動く場所、はまる場所、基準になる場所だけ厳しくする。"],
-          ["⚫", "発明家視点", "公差を使えると、試作品から量産へ進める。"]
-        ]
-      }
-    ];
-
-    const questionBank = [
-      q("purpose-1", "purpose", "想起（しょうき：思い出す）", "機械設計を一言で言うと？", ["目的を形に変える仕事", "色を決める仕事", "部品名を暗記する仕事"], 0, "目的を満たす形を考えて、作れる指示にするから。", "棚を作る時も、何を置くかが先。", "目的から形へ変えられると、発明を現物にできる。"),
-      q("purpose-2", "purpose", "順番", "形を決める前に見るものは？", ["目的と力", "塗装色だけ", "ファイル名"], 0, "何を支えるか、どこに力が入るかで形が変わる。", "傘は雨を防ぐ目的があるから広がった形になる。", "目的を見る力は、ゼロから道具を作る核になる。"),
-      q("drawing-1", "drawing", "定義（ていぎ）", "図面とは何？", ["同じ物を作るための指示書", "かっこいい絵", "材料の値段表"], 0, "形、寸法、材料などを作る人へ伝えるから。", "料理のレシピに近い。", "図面化できる発明は人に作ってもらえる。"),
-      q("drawing-2", "drawing", "注意", "寸法が足りない図面で起きることは？", ["現場が想像で作る", "必ず安くなる", "材料が強くなる"], 0, "必要な寸法がないと、作る側が判断するしかない。", "地図に目的地が書いていない状態。", "伝える力はチームで発明する力になる。"),
-      q("drawing-3", "drawing", "判別（はんべつ：見分ける）", "実物写真だけで足りない情報は？", ["穴の正確な位置や大きさ", "机の色", "写真の明るさだけ"], 0, "写真は雰囲気は分かるが、何ミリで作るかまでは決まらない。", "ケーキの写真だけでは、砂糖の量が分からない感じ。", "見た目を指示に変える力があると、発明を他人に再現してもらえる。"),
-      q("material-1", "material", "判別（はんべつ）", "強い材料がいつも正解ではない理由は？", ["重い、高い、加工しにくいことがある", "必ず透明だから", "図面に書けないから"], 0, "設計は強さだけでなく、重さ、値段、作りやすさを見る。", "分厚い鉄板の机は強いが重すぎる。", "材料を選べると、発明を軽くできる。"),
-      q("material-2", "material", "適用（てきよう）", "軽さを優先したい時に候補になる材料は？", ["アルミや樹脂", "鉛だけ", "水だけ"], 0, "鉄より軽い材料を選ぶと軽量化しやすい。", "自転車で軽いフレームを選ぶ感じ。", "軽い発明は持ち運びやすくなる。"),
-      q("process-1", "process", "想起", "加工とは何？", ["材料を切る、曲げる、削るなどして形にすること", "完成品を眺めること", "名前を決めること"], 0, "材料を実際の形へ変える作業だから。", "紙を切って箱にするのも加工のイメージ。", "加工を知ると作れる発明になる。"),
-      q("process-2", "process", "注意", "CADでは見えるけど現場で困る形は？", ["工具が入らない形", "説明が短い形", "色が地味な形"], 0, "削る、曲げる、締める道具が入らないと作業できない。", "狭すぎる隙間にドライバーが入らない感じ。", "現場を想像できる設計者は強い。"),
-      q("screw-1", "screw", "定義", "ねじの大きな特徴は？", ["固定できて外せる", "必ず溶ける", "電気を作る"], 0, "締めて固定し、必要なら外せるから。", "電池カバーのねじは外して修理できる。", "外せる発明は修理しやすい。"),
-      q("screw-2", "screw", "しくみ", "ねじが部品を固定する主な力は？", ["締め付ける力", "色の力", "音の力"], 0, "締めると部品同士を押さえつけ、ずれにくくなる。", "手で紙を強く押さえると動きにくい。", "締結を分かると、分解できる機械が作れる。"),
-      q("tolerance-1", "tolerance", "定義", "公差とは何？", ["寸法のズレを許す範囲", "部品の色", "工具の名前"], 0, "加工品は完全に同じ寸法にならないので、許す範囲を決める。", "服のサイズに少し幅がある感じ。", "公差を使えると量産を考えられる。"),
-      q("tolerance-2", "tolerance", "設計判断", "全部の公差を厳しくするとどうなる？", ["コストや加工がつらくなる", "必ず軽くなる", "図面が消える"], 0, "厳しい寸法ほど加工と検査が大変になる。", "全部を特注サイズにすると高くなる。", "大事な場所だけ厳しくできると設計が上手くなる。")
-    ];
-
-    function q(id, topic, kind, question, choices, answer, why, daily, invention) {
-      return { id, topic, kind, question, choices, answer, why, daily, invention };
-    }
-
-    const md02Steps = [
-      {
-        label: "写真だけ",
-        title: "まだ、同じ物は作れない",
-        text: "実物の形は見える。でも穴の位置、板厚、曲げ寸法が分からない。",
-        badge: "見るだけ"
-      },
-      {
-        label: "外形",
-        title: "形の輪郭が伝わる",
-        text: "ブラケットの立ち上がり、曲げ、穴の大まかな場所が分かる。",
-        badge: "形"
-      },
-      {
-        label: "寸法",
-        title: "作る大きさが決まる",
-        text: "50mm、20mmのような寸法が入ると、加工する人が同じ位置に穴を開けられる。",
-        badge: "寸法"
-      },
-      {
-        label: "公差と材料",
-        title: "品質と作り方がそろう",
-        text: "公差、材料、板厚があると、どれくらいズレてもよいか、何で作るかが分かる。",
-        badge: "品質"
-      },
-      {
-        label: "完成図面",
-        title: "誰が見ても同じ部品に近づく",
-        text: "形、寸法、材料、基準がそろうと、頭の中の部品が現場の指示書になる。",
-        badge: "指示書"
+        id: "drawing-3",
+        q: "寸法が足りない図面で起きることは?",
+        choices: ["現場が想像で作る", "必ず安くなる", "材料が強くなる"],
+        answer: 0,
+        why: "必要な数字がないと、作る側が判断するしかないから。",
+        daily: "地図に目的地が書いていない状態。"
       }
     ];
 
     const state = {
-      topic: "drawing",
-      reviewMode: "due",
-      currentQuestion: "",
+      info: 3,
+      standard: 2,
+      note: 4,
+      frame: 10,
+      currentQuestion: 0,
       answered: {},
-      correct: 0,
-      wrong: 0,
-      md02Step: 2
+      memo: ""
     };
 
-    const topicList = document.querySelector("#topicList");
-    const reviewTopicList = document.querySelector("#reviewTopicList");
-    const lessonPanel = document.querySelector("#lessonPanel");
-    const answeredCount = document.querySelector("#answeredCount");
-    const rateText = document.querySelector("#rateText");
-    const topicText = document.querySelector("#topicText");
-    const kindText = document.querySelector("#kindText");
-    const questionText = document.querySelector("#questionText");
-    const choices = document.querySelector("#choices");
-    const feedback = document.querySelector("#feedback");
-    const installButton = document.querySelector("#installButton");
-    let deferredInstallPrompt = null;
+    const frameCaptions = [
+      "写真を見る",
+      "実物の穴を探す",
+      "曲げの形を見る",
+      "図面側へ目を移す",
+      "輪郭が見える",
+      "穴の中心を見る",
+      "穴の数を見る",
+      "曲げRを見る",
+      "寸法線を見る",
+      "図面に寸法が見えてくる",
+      "50mmを読む",
+      "20mmを読む",
+      "穴径を読む",
+      "板厚を読む",
+      "基準をそろえる",
+      "公差を意識する",
+      "材料を意識する",
+      "加工者が迷いにくくなる",
+      "同じ部品に近づく",
+      "指示書になる"
+    ];
 
     function loadState() {
       try {
@@ -843,234 +1001,147 @@
       localStorage.setItem(storageKey, JSON.stringify(state));
     }
 
-    function currentTopic() {
-      return topics.find((topic) => topic.id === state.topic) || topics[0];
+    function score() {
+      return Number(state.info) + Number(state.standard) + Number(state.note);
     }
 
-    function renderTopics() {
-      const html = topics.map((topic) => `
-        <button class="topic-button ${topic.id === state.topic ? "active" : ""}" data-topic="${topic.id}" type="button">
-          <strong>${topic.code} ${topic.title}</strong>
-          <span>${topic.short}</span>
-        </button>
-      `).join("");
-      topicList.innerHTML = html;
-      reviewTopicList.innerHTML = html;
-      document.querySelectorAll(".topic-button").forEach((button) => {
-        button.addEventListener("click", () => {
-          state.topic = button.dataset.topic;
-          state.reviewMode = "due";
-          state.currentQuestion = firstQuestionForTopic(state.topic).id;
-          saveState();
-          renderAll();
+    function updateTouch() {
+      const total = score();
+      const clear = total >= 12;
+      const mid = total >= 8;
+      document.querySelector("#infoValue").textContent = `${state.info} / 5`;
+      document.querySelector("#standardValue").textContent = `${state.standard} / 5`;
+      document.querySelector("#noteValue").textContent = `${state.note} / 5`;
+      document.querySelector("#riskText").textContent = clear ? "作れる度: 高" : mid ? "作れる度: 中" : "作れる度: 低";
+      document.querySelector("#missText").textContent = clear ? "迷い: 少ない" : mid ? "迷い: 少し" : "迷い: 多い";
+      document.querySelector("#lookText").textContent = Number(state.info) >= 4 ? "見る順: 図面中心" : "見る順: 写真→図面";
+      document.querySelector("#resultTitle").textContent = clear ? "誰が見ても同じ部品に近づく" : mid ? "大事な場所は作れる" : "まだ現場が迷う";
+      document.querySelector("#resultBody").textContent = clear
+        ? "形、寸法、公差、材料がそろうと、頭の中の部品が現場の指示書になります。"
+        : mid
+          ? "主要な寸法は伝わるが、穴や曲げの基準が足りないと確認が必要です。"
+          : "写真だけに近い状態です。作る人が穴位置や板厚を想像することになります。";
+      document.querySelector('[data-pin="hole"]').classList.toggle("on", Number(state.info) >= 4);
+      document.querySelector('[data-pin="bend"]').classList.toggle("on", Number(state.standard) >= 3);
+      saveState();
+    }
+
+    let frameTimer = null;
+
+    function framePath(number) {
+      return `assets/md02-frames/frame-${String(number).padStart(2, "0")}.jpg`;
+    }
+
+    function setFrame(number) {
+      const next = Math.max(1, Math.min(20, Number(number) || 1));
+      state.frame = next;
+      document.querySelector("#frameRange").value = String(next);
+      document.querySelector("#frameImage").src = framePath(next);
+      document.querySelector("#frameCaption").textContent = `${next} / 20　${frameCaptions[next - 1]}`;
+      saveState();
+    }
+
+    function bindFrames() {
+      const range = document.querySelector("#frameRange");
+      const play = document.querySelector("#framePlay");
+      const reset = document.querySelector("#frameReset");
+      range.value = String(state.frame);
+      range.addEventListener("input", () => setFrame(range.value));
+      reset.addEventListener("click", () => setFrame(1));
+      play.addEventListener("click", () => {
+        if (frameTimer) {
+          clearInterval(frameTimer);
+          frameTimer = null;
+          play.textContent = "再生";
+          return;
+        }
+        play.textContent = "停止";
+        frameTimer = setInterval(() => {
+          const next = state.frame >= 20 ? 1 : state.frame + 1;
+          setFrame(next);
+          if (next === 20) {
+            clearInterval(frameTimer);
+            frameTimer = null;
+            play.textContent = "再生";
+          }
+        }, 120);
+      });
+      setFrame(state.frame);
+    }
+
+    function bindTouch() {
+      [
+        ["infoRange", "info"],
+        ["standardRange", "standard"],
+        ["noteRange", "note"]
+      ].forEach(([id, key]) => {
+        const input = document.querySelector(`#${id}`);
+        input.value = state[key];
+        input.addEventListener("input", () => {
+          state[key] = Number(input.value);
+          updateTouch();
         });
       });
     }
 
-    function renderLesson() {
-      const topic = currentTopic();
-      lessonPanel.innerHTML = `
-        <h3>${topic.code} ${topic.title}</h3>
-        ${topic.lines.map(([icon, title, body]) => `
-          <div class="icon-line">
-            <span>${icon}</span>
-            <div>
-              <b>${title}</b>
-              <p>${body}</p>
-            </div>
-          </div>
-        `).join("")}
-        ${topic.touch ? renderMd02Touch() : ""}
-      `;
-      if (topic.touch) bindMd02Touch();
-    }
-
-    function renderMd02Touch() {
-      const step = Math.max(0, Math.min(md02Steps.length - 1, Number(state.md02Step) || 0));
-      const current = md02Steps[step];
-      return `
-        <section class="md02-touch" aria-label="触って分かる図面の役割">
-          <h4>触って分かる：写真が指示書に変わる</h4>
-          <p>
-            スライダーを動かすと、見る場所と説明が同時に変わります。
-            図面は「見た目」を「作れる情報」に変える道具です。
-          </p>
-          <div class="md02-touch-grid">
-            <div class="md02-photo" id="md02Photo" style="--md02-step:${step}">
-              <img src="assets/md02-bracket-drawing-real.png" alt="金属ブラケット、図面、ノギスが写ったリアルな作業机">
-              <span class="md02-pin pin-part on">1 実物</span>
-              <span class="md02-pin pin-outline ${step >= 1 ? "on" : ""}">2 形</span>
-              <span class="md02-pin pin-size ${step >= 2 ? "on" : ""}">3 寸法</span>
-              <span class="md02-pin pin-tolerance ${step >= 3 ? "on" : ""}">4 公差</span>
-              <span class="md02-pin pin-material ${step >= 3 ? "on" : ""}">5 材料</span>
-            </div>
-            <div class="md02-panel">
-              <div class="md02-status">
-                <span class="md02-status-badge">${current.badge}</span>
-                <h5>${current.title}</h5>
-                <p>${current.text}</p>
-              </div>
-              <div class="md02-controls">
-                <label for="md02Range">
-                  <span>図面の情報量</span>
-                  <strong id="md02StepText">${step + 1} / ${md02Steps.length}</strong>
-                </label>
-                <input id="md02Range" type="range" min="0" max="${md02Steps.length - 1}" step="1" value="${step}">
-                <div class="md02-step-buttons">
-                  <button type="button" id="md02Prev">前へ</button>
-                  <button type="button" id="md02Play">流れを見る</button>
-                </div>
-              </div>
-              <div class="md02-chip-list">
-                <div class="md02-chip">1 実物<br>形は見える</div>
-                <div class="md02-chip">2 寸法<br>何mmか決まる</div>
-                <div class="md02-chip">3 指示<br>作る人に伝わる</div>
-              </div>
-            </div>
-          </div>
-          <div class="md02-okng">
-            <div>
-              <strong class="ok">OK：寸法がそろった図面</strong>
-              <p>穴の位置、板厚、曲げの大きさを作る人が迷わない。</p>
-            </div>
-            <div>
-              <strong class="ng">NG：写真だけ・寸法不足</strong>
-              <p>見た目は分かるが、現場が想像で作ることになる。</p>
-            </div>
-          </div>
-        </section>
-      `;
-    }
-
-    let md02Timer = null;
-
-    function setMd02Step(step) {
-      state.md02Step = Math.max(0, Math.min(md02Steps.length - 1, step));
-      saveState();
-      renderLesson();
-    }
-
-    function bindMd02Touch() {
-      const range = document.querySelector("#md02Range");
-      const prev = document.querySelector("#md02Prev");
-      const play = document.querySelector("#md02Play");
-      if (!range || !prev || !play) return;
-      range.addEventListener("input", () => setMd02Step(Number(range.value)));
-      prev.addEventListener("click", () => setMd02Step((Number(state.md02Step) || 0) - 1));
-      play.addEventListener("click", () => {
-        if (md02Timer) {
-          clearInterval(md02Timer);
-          md02Timer = null;
-          play.textContent = "流れを見る";
-          return;
-        }
-        play.textContent = "停止";
-        md02Timer = setInterval(() => {
-          const next = ((Number(state.md02Step) || 0) + 1) % md02Steps.length;
-          setMd02Step(next);
-          if (next === md02Steps.length - 1) {
-            clearInterval(md02Timer);
-            md02Timer = null;
-          }
-        }, 900);
-      });
-    }
-
-    function firstQuestionForTopic(topicId) {
-      return questionBank.find((item) => item.topic === topicId) || questionBank[0];
-    }
-
-    function reviewCandidates() {
-      const byTopic = questionBank.filter((item) => item.topic === state.topic);
-      if (state.reviewMode === "weak") {
-        const weak = questionBank.filter((item) => state.answered[item.id] === "wrong");
-        return weak.length ? weak : byTopic;
-      }
-      const fresh = byTopic.filter((item) => !state.answered[item.id]);
-      return fresh.length ? fresh : byTopic;
-    }
-
-    function currentQuestion() {
-      return questionBank.find((item) => item.id === state.currentQuestion) || firstQuestionForTopic(state.topic);
-    }
-
-    function nextQuestion() {
-      const list = reviewCandidates();
-      const index = list.findIndex((item) => item.id === state.currentQuestion);
-      const next = list[(index + 1 + list.length) % list.length] || questionBank[0];
-      state.currentQuestion = next.id;
-      saveState();
-      renderQuestion();
-    }
-
-    function renderQuestion() {
-      const item = currentQuestion();
-      const attempts = state.correct + state.wrong;
-      const rate = attempts ? Math.round((state.correct / attempts) * 100) : 0;
-      answeredCount.textContent = `${Object.keys(state.answered).length}問`;
-      rateText.textContent = `${rate}%`;
-      topicText.textContent = currentTopic().title;
-      kindText.textContent = item.kind;
-      questionText.textContent = item.question;
+    function renderQuiz() {
+      const item = questions[state.currentQuestion % questions.length];
+      document.querySelector("#quizQuestion").textContent = `Q. ${item.q}`;
+      const choices = document.querySelector("#choices");
+      const feedback = document.querySelector("#feedback");
       feedback.classList.remove("show");
       feedback.innerHTML = "";
       choices.innerHTML = "";
-
       item.choices.forEach((choice, index) => {
         const button = document.createElement("button");
-        button.className = "choice-button";
         button.type = "button";
+        button.className = "choice-button";
         button.textContent = choice;
-        button.addEventListener("click", () => answer(item, index, button));
+        button.addEventListener("click", () => {
+          const correct = index === item.answer;
+          choices.querySelectorAll(".choice-button").forEach((node, nodeIndex) => {
+            node.classList.toggle("correct", nodeIndex === item.answer);
+            node.classList.toggle("wrong", node === button && !correct);
+          });
+          state.answered[item.id] = correct ? "correct" : "wrong";
+          feedback.innerHTML = `
+            <b>答え：</b>${item.choices[item.answer]}<br>
+            <b>なぜ：</b>${item.why}<br>
+            <b>日常の例：</b>${item.daily}<br>
+            <b>発明へのつながり：</b>図面で伝えられると、自分以外の人にも発明を作ってもらえます。
+          `;
+          feedback.classList.add("show");
+          saveState();
+        });
         choices.appendChild(button);
       });
     }
 
-    function answer(item, index, button) {
-      const correct = index === item.answer;
-      choices.querySelectorAll(".choice-button").forEach((choice, choiceIndex) => {
-        choice.classList.toggle("correct", choiceIndex === item.answer);
-        choice.classList.toggle("wrong", choice === button && !correct);
-      });
-      state.answered[item.id] = correct ? "correct" : "wrong";
-      if (correct) state.correct += 1;
-      if (!correct) state.wrong += 1;
-      feedback.innerHTML = `
-        <b>再問：</b>${item.question}<br>
-        <b>答え：</b>${item.choices[item.answer]}<br>
-        <b>なぜ：</b>${item.why}<br>
-        <b>日常の例：</b>${item.daily}<br>
-        <b>発明へのつながり：</b>${item.invention}
-      `;
-      feedback.classList.add("show");
-      saveState();
-      renderQuestionStatsOnly();
-    }
-
-    function renderQuestionStatsOnly() {
-      const attempts = state.correct + state.wrong;
-      const rate = attempts ? Math.round((state.correct / attempts) * 100) : 0;
-      answeredCount.textContent = `${Object.keys(state.answered).length}問`;
-      rateText.textContent = `${rate}%`;
-    }
-
     function bindControls() {
-      document.querySelector("#dueButton").addEventListener("click", () => {
-        state.reviewMode = "due";
-        nextQuestion();
+      document.querySelectorAll("[data-jump]").forEach((button) => {
+        button.addEventListener("click", () => {
+          document.querySelector(button.dataset.jump)?.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
       });
-      document.querySelector("#weakButton").addEventListener("click", () => {
-        state.reviewMode = "weak";
-        nextQuestion();
-      });
-      document.querySelector("#nextButton").addEventListener("click", nextQuestion);
-      document.querySelector("#resetButton").addEventListener("click", () => {
-        state.answered = {};
-        state.correct = 0;
-        state.wrong = 0;
-        state.currentQuestion = firstQuestionForTopic(state.topic).id;
+
+      document.querySelector("#nextQuestion").addEventListener("click", () => {
+        state.currentQuestion = (state.currentQuestion + 1) % questions.length;
         saveState();
-        renderQuestion();
+        renderQuiz();
+      });
+
+      document.querySelector("#resetQuiz").addEventListener("click", () => {
+        state.answered = {};
+        state.currentQuestion = 0;
+        saveState();
+        renderQuiz();
+      });
+
+      const memo = document.querySelector("#memoText");
+      memo.value = state.memo || "";
+      memo.addEventListener("input", () => {
+        state.memo = memo.value;
+        saveState();
       });
     }
 
@@ -1078,31 +1149,15 @@
       if ("serviceWorker" in navigator && location.protocol !== "file:") {
         navigator.serviceWorker.register("mechanical-design-service-worker.js");
       }
-      window.addEventListener("beforeinstallprompt", (event) => {
-        event.preventDefault();
-        deferredInstallPrompt = event;
-        installButton.hidden = false;
-      });
-      installButton.addEventListener("click", async () => {
-        if (!deferredInstallPrompt) return;
-        deferredInstallPrompt.prompt();
-        await deferredInstallPrompt.userChoice;
-        deferredInstallPrompt = null;
-        installButton.hidden = true;
-      });
-    }
-
-    function renderAll() {
-      renderTopics();
-      renderLesson();
-      renderQuestion();
     }
 
     loadState();
-    if (!state.currentQuestion) state.currentQuestion = firstQuestionForTopic(state.topic).id;
+    bindFrames();
+    bindTouch();
     bindControls();
+    updateTouch();
+    renderQuiz();
     registerPwa();
-    renderAll();
   </script>
 </body>
 </html>
