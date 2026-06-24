@@ -1,10 +1,11 @@
-const CACHE_NAME = "mechanical-design-foundation-v1";
+const CACHE_NAME = "mechanical-design-foundation-v2";
 
 const APP_SHELL = [
   "./",
   "./mechanical-design-foundation-textbook.html",
   "./mechanical-design-manifest.webmanifest",
-  "./mechanical-design-icon.svg"
+  "./mechanical-design-icon.svg",
+  "./assets/md02-bracket-drawing-real.png"
 ];
 
 self.addEventListener("install", (event) => {

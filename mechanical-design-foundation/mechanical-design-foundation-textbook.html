@@ -137,86 +137,38 @@
       background: linear-gradient(180deg, rgba(255,255,255,.88), rgba(235,238,232,.76));
     }
 
-    .machine-sketch {
+    .stage-photo {
       position: relative;
-      height: 245px;
-      border: 1px dashed rgba(90, 82, 68, .28);
-      border-radius: var(--radius);
       overflow: hidden;
-      background: linear-gradient(180deg, rgba(255,255,255,.8), rgba(224,232,230,.7));
+      border: 1px solid rgba(90, 82, 68, .22);
+      border-radius: var(--radius);
+      background: #111;
     }
 
-    .base-plate {
-      position: absolute;
-      left: 12%;
-      right: 12%;
-      bottom: 48px;
-      height: 34px;
-      border-radius: 7px;
-      background: linear-gradient(180deg, #cfd8dc, #6b7b83);
-      box-shadow: 0 18px 24px rgba(42,50,54,.2);
+    .stage-photo img,
+    .md02-photo img {
+      display: block;
+      width: 100%;
+      height: auto;
     }
 
-    .bracket-left,
-    .bracket-right {
+    .stage-badge,
+    .md02-pin,
+    .md02-status-badge {
       position: absolute;
-      bottom: 82px;
-      width: 64px;
-      height: 118px;
-      border-radius: 7px;
-      background: linear-gradient(90deg, #2f3b42, #778891);
-    }
-
-    .bracket-left { left: 20%; }
-    .bracket-right { right: 20%; }
-
-    .shaft {
-      position: absolute;
-      left: 19%;
-      right: 19%;
-      top: 94px;
-      height: 28px;
+      border: 1px solid rgba(255,255,255,.72);
       border-radius: 999px;
-      background: linear-gradient(180deg, #eef4f6, #8a9aa2 58%, #5e6d75);
-    }
-
-    .load-mark {
-      position: absolute;
-      left: 50%;
-      top: 34px;
-      width: 5px;
-      height: 64px;
-      background: var(--red);
-      border-radius: 999px;
-      animation: loadPulse 1.7s ease-in-out infinite;
-    }
-
-    .load-mark::after {
-      content: "荷重↓";
-      position: absolute;
-      left: 12px;
-      top: 16px;
-      color: var(--red);
+      background: rgba(255, 254, 248, .88);
+      color: #142033;
+      box-shadow: 0 10px 24px rgba(0,0,0,.16);
       font-weight: 800;
-      white-space: nowrap;
+      backdrop-filter: blur(8px);
     }
 
-    .hole {
-      position: absolute;
-      bottom: 58px;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: #243039;
-      box-shadow: inset 0 2px 3px rgba(0,0,0,.35);
-    }
-
-    .hole.a { left: 30%; }
-    .hole.b { right: 30%; }
-
-    @keyframes loadPulse {
-      0%,100% { transform: translateY(0); opacity: .58; }
-      50% { transform: translateY(24px); opacity: 1; }
+    .stage-badge {
+      left: 14px;
+      top: 14px;
+      padding: 8px 12px;
     }
 
     .meter-grid {
@@ -316,6 +268,178 @@
     .icon-line b { display: block; margin-bottom: 3px; }
     .icon-line p { margin: 0; color: #334044; }
 
+    .md02-touch {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(90,82,68,.16);
+    }
+
+    .md02-touch h4 {
+      margin: 0 0 8px;
+      font-size: clamp(20px, 2.6vw, 28px);
+      line-height: 1.25;
+    }
+
+    .md02-touch > p {
+      margin: 0 0 12px;
+      color: #334044;
+    }
+
+    .md02-touch-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.18fr) minmax(260px, .82fr);
+      gap: 14px;
+      align-items: stretch;
+    }
+
+    .md02-photo {
+      position: relative;
+      overflow: hidden;
+      min-height: 320px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #111;
+    }
+
+    .md02-photo img {
+      height: 100%;
+      min-height: 320px;
+      object-fit: cover;
+    }
+
+    .md02-photo::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 31% 40%, rgba(29,78,216, calc(.06 * var(--md02-step, 0))) 0 14%, transparent 26%),
+        radial-gradient(circle at 64% 42%, rgba(20,83,45, calc(.08 * var(--md02-step, 0))) 0 19%, transparent 31%),
+        linear-gradient(90deg, rgba(0,0,0,.08), transparent 34%, rgba(255,255,255,.04));
+      pointer-events: none;
+      transition: background .22s ease;
+    }
+
+    .md02-pin {
+      padding: 7px 10px;
+      font-size: 13px;
+      opacity: .18;
+      transform: translateY(8px);
+      transition: opacity .22s ease, transform .22s ease;
+    }
+
+    .md02-pin.on {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .pin-part { left: 8%; top: 11%; }
+    .pin-outline { left: 45%; top: 18%; }
+    .pin-size { right: 13%; top: 28%; }
+    .pin-tolerance { right: 9%; bottom: 22%; }
+    .pin-material { left: 8%; bottom: 10%; }
+
+    .md02-panel {
+      display: grid;
+      gap: 10px;
+      align-content: start;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.78);
+      padding: 14px;
+    }
+
+    .md02-status {
+      position: relative;
+      min-height: 138px;
+      padding: 14px;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(20,83,45,.08), rgba(29,78,216,.08));
+    }
+
+    .md02-status-badge {
+      right: 12px;
+      top: 12px;
+      padding: 6px 10px;
+      color: var(--green);
+    }
+
+    .md02-status h5 {
+      margin: 0 0 8px;
+      padding-right: 96px;
+      font-size: 20px;
+      line-height: 1.25;
+    }
+
+    .md02-status p {
+      margin: 0;
+      color: #334044;
+    }
+
+    .md02-controls {
+      display: grid;
+      gap: 10px;
+    }
+
+    .md02-controls label {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      font-weight: 800;
+    }
+
+    .md02-controls input[type="range"] {
+      width: 100%;
+      accent-color: var(--green);
+    }
+
+    .md02-step-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .md02-step-buttons button {
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .md02-chip-list {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .md02-chip {
+      min-height: 58px;
+      padding: 9px;
+      border: 1px solid rgba(20,83,45,.22);
+      border-radius: var(--radius);
+      background: rgba(20,83,45,.07);
+      font-weight: 800;
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .md02-okng {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .md02-okng div {
+      padding: 10px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.76);
+    }
+
+    .md02-okng strong { display: block; margin-bottom: 4px; }
+    .md02-okng .ok { color: var(--green); }
+    .md02-okng .ng { color: var(--red); }
+
     .review-layout {
       display: grid;
       grid-template-columns: minmax(260px, 340px) minmax(0, 1fr);
@@ -395,6 +519,7 @@
       .topic-grid,
       .lesson-layout,
       .review-layout,
+      .md02-touch-grid,
       .stats {
         grid-template-columns: 1fr;
       }
@@ -405,9 +530,19 @@
     @media (max-width: 620px) {
       .topbar-inner { align-items: flex-start; padding: 10px 0; }
       .quick-nav { justify-content: flex-start; }
+      .nav-button { min-height: 36px; padding: 6px 10px; font-size: 13px; }
+      .brand strong { font-size: 17px; }
+      .brand span { font-size: 12px; }
+      h1 { font-size: 34px; line-height: 1.08; }
+      .lead { font-size: 16px; }
       .scene { min-height: 300px; padding: 12px; }
-      .machine-sketch { height: 220px; }
       .meter-grid { grid-template-columns: 1fr; }
+      .md02-chip-list,
+      .md02-okng,
+      .md02-step-buttons { grid-template-columns: 1fr; }
+      .md02-pin { font-size: 12px; }
+      .pin-size { right: 5%; }
+      .pin-tolerance { right: 5%; bottom: 16%; }
     }
   </style>
 </head>
@@ -416,7 +551,7 @@
     <div class="topbar-inner">
       <div class="brand">
         <strong>機械設計 基礎アプリ</strong>
-        <span>三輪さん専用 / 追加して育てるPWA教科書</span>
+        <span>三輪さん専用PWA</span>
       </div>
       <nav class="quick-nav" aria-label="ページ内メニュー">
         <a class="nav-button" href="#lesson">教科書</a>
@@ -429,11 +564,11 @@
   <main class="page">
     <section class="hero">
       <div>
-        <p class="eyebrow">MD01 今日の1テーマ</p>
-        <h1>機械設計は、目的を形に変える仕事。</h1>
+        <p class="eyebrow">MD02 今日の1テーマ</p>
+        <h1>図面は、同じ物を作るための指示書。</h1>
         <p class="lead">
-          部品名を覚える前に、何のために作るか、どこに力が入るか、どう作るかを見る。
-          ここを固めると、図面・材料・加工・組立・CAEが一本につながる。
+          実物の形だけでは、作る人に寸法も基準も伝わらない。
+          写真、図面、寸法がつながると、頭の中の形を現場で作れる形にできる。
         </p>
         <div class="hero-actions">
           <a class="primary-button" href="#lesson">今日の教科書</a>
@@ -443,23 +578,18 @@
 
       <aside class="design-stage" aria-label="機械設計の見える化">
         <div class="stage-head">
-          <strong>頭の中の設計</strong>
-          <span>目的 → 力 → 形 → 作り方</span>
+          <strong>実物から図面へ</strong>
+          <span>形 → 寸法 → 作る指示</span>
         </div>
         <div class="scene">
-          <div class="machine-sketch" aria-hidden="true">
-            <div class="base-plate"></div>
-            <div class="bracket-left"></div>
-            <div class="bracket-right"></div>
-            <div class="shaft"></div>
-            <div class="load-mark"></div>
-            <div class="hole a"></div>
-            <div class="hole b"></div>
+          <div class="stage-photo">
+            <img src="assets/md02-bracket-drawing-real.png" alt="金属ブラケットと図面とノギスが置かれた作業机">
+            <span class="stage-badge">部品と図面を同時に見る</span>
           </div>
           <div class="meter-grid">
-            <div class="meter"><span>見る順番</span><strong>目的</strong></div>
-            <div class="meter"><span>次に見る</span><strong>力</strong></div>
-            <div class="meter"><span>最後に決める</span><strong>形</strong></div>
+            <div class="meter"><span>見る順番</span><strong>実物</strong></div>
+            <div class="meter"><span>次に見る</span><strong>寸法</strong></div>
+            <div class="meter"><span>最後に見る</span><strong>指示</strong></div>
           </div>
         </div>
       </aside>
@@ -485,7 +615,7 @@
       <h2 id="lesson-title">今日の教科書</h2>
       <p class="section-intro">
         1回で覚えることは1つ。
-        機械設計は「目的を、力に耐える形へ変える」こと。
+        今日は「実物の形を、誰でも作れる指示に変える」こと。
       </p>
 
       <div class="lesson-layout">
@@ -534,7 +664,7 @@
   </main>
 
   <script>
-    const storageKey = "miwa-mechanical-design-foundation-v1";
+    const storageKey = "miwa-mechanical-design-foundation-v2";
 
     const topics = [
       {
@@ -557,13 +687,14 @@
         title: "図面とは何か",
         short: "作る人への指示書",
         lines: [
-          ["🔵", "定義", "図面は、誰が見ても同じ物を作れるようにする指示書。"],
-          ["🟢", "しくみ", "形、寸法、公差、材料、表面処理、数量を伝える。"],
-          ["🟡", "なぜ", "頭の中の形だけでは、加工する人に正確に伝わらない。"],
+          ["🔵", "定義（ていぎ：言葉の意味）", "図面は、誰が見ても同じ物を作れるようにする指示書。"],
+          ["🟢", "しくみ", "形、寸法（すんぽう：長さや大きさ）、公差（こうさ：許してよいズレ）、材料を伝える。"],
+          ["🟡", "なぜ", "実物写真だけでは、穴の位置や板厚を作る人が正確に測れないから。"],
           ["🔴", "注意", "寸法が足りない図面は、現場が想像で作ることになる。"],
-          ["🟣", "設計判断", "重要な場所ほど、寸法と基準をはっきりさせる。"],
-          ["⚫", "発明家視点", "図面化できる発明は、人に作ってもらえる発明になる。"]
-        ]
+          ["🟣", "設計判断", "重要な穴、曲げ、当たる面ほど、寸法と基準をはっきりさせる。"],
+          ["⚫", "発明家視点", "図面化できる発明は、自分以外の人にも作ってもらえる発明になる。"]
+        ],
+        touch: true
       },
       {
         id: "material",
@@ -628,6 +759,7 @@
       q("purpose-2", "purpose", "順番", "形を決める前に見るものは？", ["目的と力", "塗装色だけ", "ファイル名"], 0, "何を支えるか、どこに力が入るかで形が変わる。", "傘は雨を防ぐ目的があるから広がった形になる。", "目的を見る力は、ゼロから道具を作る核になる。"),
       q("drawing-1", "drawing", "定義（ていぎ）", "図面とは何？", ["同じ物を作るための指示書", "かっこいい絵", "材料の値段表"], 0, "形、寸法、材料などを作る人へ伝えるから。", "料理のレシピに近い。", "図面化できる発明は人に作ってもらえる。"),
       q("drawing-2", "drawing", "注意", "寸法が足りない図面で起きることは？", ["現場が想像で作る", "必ず安くなる", "材料が強くなる"], 0, "必要な寸法がないと、作る側が判断するしかない。", "地図に目的地が書いていない状態。", "伝える力はチームで発明する力になる。"),
+      q("drawing-3", "drawing", "判別（はんべつ：見分ける）", "実物写真だけで足りない情報は？", ["穴の正確な位置や大きさ", "机の色", "写真の明るさだけ"], 0, "写真は雰囲気は分かるが、何ミリで作るかまでは決まらない。", "ケーキの写真だけでは、砂糖の量が分からない感じ。", "見た目を指示に変える力があると、発明を他人に再現してもらえる。"),
       q("material-1", "material", "判別（はんべつ）", "強い材料がいつも正解ではない理由は？", ["重い、高い、加工しにくいことがある", "必ず透明だから", "図面に書けないから"], 0, "設計は強さだけでなく、重さ、値段、作りやすさを見る。", "分厚い鉄板の机は強いが重すぎる。", "材料を選べると、発明を軽くできる。"),
       q("material-2", "material", "適用（てきよう）", "軽さを優先したい時に候補になる材料は？", ["アルミや樹脂", "鉛だけ", "水だけ"], 0, "鉄より軽い材料を選ぶと軽量化しやすい。", "自転車で軽いフレームを選ぶ感じ。", "軽い発明は持ち運びやすくなる。"),
       q("process-1", "process", "想起", "加工とは何？", ["材料を切る、曲げる、削るなどして形にすること", "完成品を眺めること", "名前を決めること"], 0, "材料を実際の形へ変える作業だから。", "紙を切って箱にするのも加工のイメージ。", "加工を知ると作れる発明になる。"),
@@ -642,13 +774,47 @@
       return { id, topic, kind, question, choices, answer, why, daily, invention };
     }
 
+    const md02Steps = [
+      {
+        label: "写真だけ",
+        title: "まだ、同じ物は作れない",
+        text: "実物の形は見える。でも穴の位置、板厚、曲げ寸法が分からない。",
+        badge: "見るだけ"
+      },
+      {
+        label: "外形",
+        title: "形の輪郭が伝わる",
+        text: "ブラケットの立ち上がり、曲げ、穴の大まかな場所が分かる。",
+        badge: "形"
+      },
+      {
+        label: "寸法",
+        title: "作る大きさが決まる",
+        text: "50mm、20mmのような寸法が入ると、加工する人が同じ位置に穴を開けられる。",
+        badge: "寸法"
+      },
+      {
+        label: "公差と材料",
+        title: "品質と作り方がそろう",
+        text: "公差、材料、板厚があると、どれくらいズレてもよいか、何で作るかが分かる。",
+        badge: "品質"
+      },
+      {
+        label: "完成図面",
+        title: "誰が見ても同じ部品に近づく",
+        text: "形、寸法、材料、基準がそろうと、頭の中の部品が現場の指示書になる。",
+        badge: "指示書"
+      }
+    ];
+
     const state = {
-      topic: "purpose",
+      topic: "drawing",
       reviewMode: "due",
       currentQuestion: "",
       answered: {},
       correct: 0,
-      wrong: 0
+      wrong: 0,
+      md02Step: 2
     };
 
     const topicList = document.querySelector("#topicList");
@@ -714,7 +880,100 @@
             </div>
           </div>
         `).join("")}
+        ${topic.touch ? renderMd02Touch() : ""}
       `;
+      if (topic.touch) bindMd02Touch();
+    }
+
+    function renderMd02Touch() {
+      const step = Math.max(0, Math.min(md02Steps.length - 1, Number(state.md02Step) || 0));
+      const current = md02Steps[step];
+      return `
+        <section class="md02-touch" aria-label="触って分かる図面の役割">
+          <h4>触って分かる：写真が指示書に変わる</h4>
+          <p>
+            スライダーを動かすと、見る場所と説明が同時に変わります。
+            図面は「見た目」を「作れる情報」に変える道具です。
+          </p>
+          <div class="md02-touch-grid">
+            <div class="md02-photo" id="md02Photo" style="--md02-step:${step}">
+              <img src="assets/md02-bracket-drawing-real.png" alt="金属ブラケット、図面、ノギスが写ったリアルな作業机">
+              <span class="md02-pin pin-part on">1 実物</span>
+              <span class="md02-pin pin-outline ${step >= 1 ? "on" : ""}">2 形</span>
+              <span class="md02-pin pin-size ${step >= 2 ? "on" : ""}">3 寸法</span>
+              <span class="md02-pin pin-tolerance ${step >= 3 ? "on" : ""}">4 公差</span>
+              <span class="md02-pin pin-material ${step >= 3 ? "on" : ""}">5 材料</span>
+            </div>
+            <div class="md02-panel">
+              <div class="md02-status">
+                <span class="md02-status-badge">${current.badge}</span>
+                <h5>${current.title}</h5>
+                <p>${current.text}</p>
+              </div>
+              <div class="md02-controls">
+                <label for="md02Range">
+                  <span>図面の情報量</span>
+                  <strong id="md02StepText">${step + 1} / ${md02Steps.length}</strong>
+                </label>
+                <input id="md02Range" type="range" min="0" max="${md02Steps.length - 1}" step="1" value="${step}">
+                <div class="md02-step-buttons">
+                  <button type="button" id="md02Prev">前へ</button>
+                  <button type="button" id="md02Play">流れを見る</button>
+                </div>
+              </div>
+              <div class="md02-chip-list">
+                <div class="md02-chip">1 実物<br>形は見える</div>
+                <div class="md02-chip">2 寸法<br>何mmか決まる</div>
+                <div class="md02-chip">3 指示<br>作る人に伝わる</div>
+              </div>
+            </div>
+          </div>
+          <div class="md02-okng">
+            <div>
+              <strong class="ok">OK：寸法がそろった図面</strong>
+              <p>穴の位置、板厚、曲げの大きさを作る人が迷わない。</p>
+            </div>
+            <div>
+              <strong class="ng">NG：写真だけ・寸法不足</strong>
+              <p>見た目は分かるが、現場が想像で作ることになる。</p>
+            </div>
+          </div>
+        </section>
+      `;
+    }
+
+    let md02Timer = null;
+
+    function setMd02Step(step) {
+      state.md02Step = Math.max(0, Math.min(md02Steps.length - 1, step));
+      saveState();
+      renderLesson();
+    }
+
+    function bindMd02Touch() {
+      const range = document.querySelector("#md02Range");
+      const prev = document.querySelector("#md02Prev");
+      const play = document.querySelector("#md02Play");
+      if (!range || !prev || !play) return;
+      range.addEventListener("input", () => setMd02Step(Number(range.value)));
+      prev.addEventListener("click", () => setMd02Step((Number(state.md02Step) || 0) - 1));
+      play.addEventListener("click", () => {
+        if (md02Timer) {
+          clearInterval(md02Timer);
+          md02Timer = null;
+          play.textContent = "流れを見る";
+          return;
+        }
+        play.textContent = "停止";
+        md02Timer = setInterval(() => {
+          const next = ((Number(state.md02Step) || 0) + 1) % md02Steps.length;
+          setMd02Step(next);
+          if (next === md02Steps.length - 1) {
+            clearInterval(md02Timer);
+            md02Timer = null;
+          }
+        }, 900);
+      });
     }
 
     function firstQuestionForTopic(topicId) {
