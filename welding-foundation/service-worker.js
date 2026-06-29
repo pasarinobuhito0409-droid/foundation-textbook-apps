@@ -1,4 +1,4 @@
-const CACHE_NAME = "welding-foundation-v3";
+﻿const CACHE_NAME = "welding-foundation-v4";
 const ASSETS = [
   "./",
   "./index.html",
@@ -7,6 +7,16 @@ const ASSETS = [
   "./welding-icon.svg",
   "./assets/w00-weld-bead.png",
   "./assets/w01-arc-real.png",
+  "./assets/w01-card-electrode-gap.jpg",
+  "./assets/w01-card-arc-bridge.jpg",
+  "./assets/w01-card-molten-pool.jpg",
+  "./assets/w01-card-heat-affected-zone.jpg",
+  "./assets/w01-card-definition-arc.jpg",
+  "./assets/w01-card-mechanism-gap.jpg",
+  "./assets/w01-card-energy-to-heat.jpg",
+  "./assets/w01-card-burn-through.jpg",
+  "./assets/w01-card-thick-part-heat-sink.jpg",
+  "./assets/w01-card-heat-pen-control.jpg",
   "./assets/w01-arc-frames/frame-01.jpg",
   "./assets/w01-arc-frames/frame-02.jpg",
   "./assets/w01-arc-frames/frame-03.jpg",
