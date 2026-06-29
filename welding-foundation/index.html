@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f4f1ea">
   <link rel="manifest" href="./manifest.webmanifest">
-  <title>溶接基礎 W00</title>
+  <title>溶接基礎 W01</title>
   <style>
     :root {
       color-scheme: light;
@@ -532,6 +532,154 @@
       background: #edf5ff;
     }
 
+    .session-card {
+      border: 1px solid rgba(124, 116, 101, .28);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.86);
+      padding: 14px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .session-title {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: start;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 10px;
+    }
+
+    .session-title h3 {
+      margin: 0;
+      font-size: clamp(20px, 3vw, 28px);
+      letter-spacing: 0;
+      line-height: 1.18;
+    }
+
+    .session-title p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-weight: 900;
+    }
+
+    .arc-frame {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #151515;
+      min-height: 420px;
+    }
+
+    .arc-frame img {
+      display: block;
+      width: 100%;
+      min-height: 420px;
+      object-fit: cover;
+    }
+
+    .arc-label {
+      position: absolute;
+      z-index: 2;
+      min-height: 32px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 9px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.88);
+      border: 1px solid rgba(255,255,255,.7);
+      color: #172026;
+      font-size: 12px;
+      font-weight: 950;
+      box-shadow: 0 10px 20px rgba(0,0,0,.18);
+    }
+
+    .arc-label.electrode { left: 14%; top: 24%; }
+    .arc-label.arc { left: 31%; top: 49%; }
+    .arc-label.pool { left: 39%; top: 58%; }
+    .arc-label.heat { left: 62%; top: 56%; }
+
+    .arc-caption {
+      position: absolute;
+      left: 14px;
+      bottom: 14px;
+      z-index: 2;
+      width: min(360px, calc(100% - 28px));
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.9);
+      padding: 10px 12px;
+      font-weight: 950;
+      color: #213037;
+    }
+
+    .arc-controls {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .ghost {
+      min-height: 40px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      color: var(--ink);
+      padding: 0 12px;
+      font-weight: 950;
+    }
+
+    .arc-read {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .arc-read div {
+      min-height: 54px;
+      padding: 9px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(215, 103, 47, .22);
+      background: #fff4eb;
+      color: #5a3323;
+      font-weight: 950;
+    }
+
+    .photo-teach {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .mini-test {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #f8fbff;
+      padding: 12px;
+    }
+
+    .mini-test h4 {
+      margin: 0 0 8px;
+      font-size: 17px;
+    }
+
+    .w01-choice {
+      width: 100%;
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fff;
+      margin: 6px 0;
+      text-align: left;
+      padding: 8px 10px;
+      font-weight: 900;
+    }
+
+    .w01-choice.correct { border-color: #5fb582; background: #eaf8ef; }
+    .w01-choice.wrong { border-color: #e39a93; background: #fff0ee; }
+
     .badge {
       display: inline-grid;
       place-items: center;
@@ -681,6 +829,11 @@
       .tool-grid {
         grid-template-columns: 1fr;
       }
+
+      .photo-teach,
+      .arc-read {
+        grid-template-columns: 1fr;
+      }
     }
 
     @media (max-width: 640px) {
@@ -733,6 +886,26 @@
       .visual-chip.cool { left: 12px; bottom: 108px; }
       .visual-chip.haz { right: 12px; top: 154px; }
 
+      .session-title,
+      .arc-controls {
+        grid-template-columns: 1fr;
+      }
+
+      .arc-frame,
+      .arc-frame img {
+        min-height: 360px;
+      }
+
+      .arc-label {
+        font-size: 11px;
+        padding: 5px 7px;
+      }
+
+      .arc-label.electrode { left: 8%; top: 18%; }
+      .arc-label.arc { left: 28%; top: 46%; }
+      .arc-label.pool { left: 35%; top: 57%; }
+      .arc-label.heat { left: 54%; top: 60%; }
+
       .side-visuals {
         width: min(100%, 300px);
         justify-self: end;
@@ -773,6 +946,7 @@
       <nav class="rail" aria-label="学習メニュー">
         <p class="rail-title">Wシリーズ</p>
         <button class="rail-button active" data-jump="#w00" type="button"><span>W00</span><span>入口</span></button>
+        <button class="rail-button" data-jump="#w01" type="button"><span>W01</span><span>アーク</span></button>
         <button class="rail-button" data-jump="#why" type="button"><span>熱</span><span>なぜ</span></button>
         <button class="rail-button" data-jump="#micro" type="button"><span>粒</span><span>分子</span></button>
         <button class="rail-button" data-jump="#touch" type="button"><span>触</span><span>触る</span></button>
@@ -791,6 +965,7 @@
 
         <div class="mobile-actions" aria-label="スマホ用メニュー">
           <a class="mobile-action" href="#why">熱を見る</a>
+          <a class="mobile-action" href="#w01">W01 アーク</a>
           <a class="mobile-action" href="#micro">分子を見る</a>
           <a class="mobile-action" href="#touch">触る</a>
           <a class="mobile-action" href="#memo">なぜ？メモ</a>
@@ -910,15 +1085,15 @@
         </section>
 
         <section class="roadmap" id="review">
-          <div class="road-row active">
+          <div class="road-row">
             <span class="badge">W00</span>
-            <strong>なぜ溶けてつながる？ ※いまここ</strong>
+            <strong>なぜ溶けてつながる？ ※完了</strong>
             <span>実物画像・触る・3問</span>
           </div>
-          <div class="road-row">
-            <span class="badge" style="background:#6f7b84;">W01</span>
+          <div class="road-row active">
+            <span class="badge">W01</span>
             <strong>アークとは何か</strong>
-            <span>電気と熱</span>
+            <span>電気と熱 ※いまここ</span>
           </div>
           <div class="road-row">
             <span class="badge" style="background:#6f7b84;">W02</span>
@@ -930,6 +1105,98 @@
             <strong>W00〜W04の5テーマ復習</strong>
             <span>自動で差し込む</span>
           </div>
+        </section>
+
+        <section class="session-card" id="w01" aria-label="W01 アークとは何か">
+          <div class="session-title">
+            <div>
+              <h3>W01 アークとは何か</h3>
+              <p>今日の1テーマは「電気の通り道が白青い光になり、金属を溶かす熱になる」。</p>
+            </div>
+            <span class="chapter-tag">次のセッション</span>
+          </div>
+
+          <article>
+            <div class="arc-frame">
+              <img id="w01Frame" src="./assets/w01-arc-frames/frame-10.jpg" alt="TIG溶接のアークと溶け池">
+              <span class="arc-label electrode">1 電極</span>
+              <span class="arc-label arc">2 アーク</span>
+              <span class="arc-label pool">3 溶け池</span>
+              <span class="arc-label heat">4 熱の道</span>
+              <div class="arc-caption" id="w01Caption">10 / 20　白青い光が熱になり、表面が溶け始める。</div>
+            </div>
+            <div class="arc-controls" style="margin-top:10px;">
+              <input id="w01Power" type="range" min="1" max="20" value="10" aria-label="アークの強さ">
+              <button class="primary" id="w01Play" type="button">再生</button>
+              <button class="ghost" id="w01Reset" type="button">最初へ</button>
+            </div>
+            <div class="arc-read" style="margin-top:10px;">
+              <div id="w01HeatRead">熱: ちょうど</div>
+              <div id="w01PoolRead">溶け池: 安定</div>
+              <div id="w01RiskRead">注意: 見やすい</div>
+            </div>
+          </article>
+
+          <section class="card">
+            <h3>写真と文章をつなげて読む</h3>
+            <div class="concept-list photo-teach">
+              <div class="concept-row">
+                <span class="concept-dot" style="background:#2368c5;"></span>
+                <p><strong>1 電極</strong>タングステン電極（でんきょく：電気が出入りする先端）は、金属に直接べったり付けず、少し離して使う。</p>
+              </div>
+              <div class="concept-row">
+                <span class="concept-dot" style="background:#d7672f;"></span>
+                <p><strong>2 アーク</strong>アークは、空気やガスの中を電気が飛ぶ道。白青い光に見えるけど、本質は強い熱の通り道。</p>
+              </div>
+              <div class="concept-row">
+                <span class="concept-dot" style="background:#d9ad42;"></span>
+                <p><strong>3 溶け池</strong>溶け池（とけいけ：金属が液体みたいに溶けた場所）が小さく安定すると、きれいなビードになる。</p>
+              </div>
+              <div class="concept-row">
+                <span class="concept-dot" style="background:#c83d34;"></span>
+                <p><strong>4 熱の道</strong>熱は線の上だけでなく、母材（もざい：元の金属）の中へも広がる。ここがひずみの入口になる。</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="card">
+            <h3>今日の説明</h3>
+            <div class="concept-list">
+              <div class="concept-row">
+                <span class="concept-dot" style="background:#2368c5;"></span>
+                <p><strong>定義（ていぎ：言葉の意味）</strong>アークは、電気が空間を飛ぶときにできる高温の光と熱。</p>
+              </div>
+              <div class="concept-row">
+                <span class="concept-dot" style="background:#d7672f;"></span>
+                <p><strong>しくみ</strong>電極と母材の間に電圧（でんあつ：電気を押す力）がかかり、電気の道ができる。</p>
+              </div>
+              <div class="concept-row">
+                <span class="concept-dot" style="background:#d9ad42;"></span>
+                <p><strong>なぜ</strong>電気の粒が金属やガスにぶつかり、エネルギー（動かす力）が熱へ変わるから。</p>
+              </div>
+              <div class="concept-row">
+                <span class="concept-dot" style="background:#c83d34;"></span>
+                <p><strong>注意</strong>強すぎると穴あきや焼けすぎ。弱すぎると溶け込みが浅く、くっついたように見えて弱い。</p>
+              </div>
+              <div class="concept-row">
+                <span class="concept-dot" style="background:#6750bb;"></span>
+                <p><strong>設計判断</strong>板厚、電流、移動速度、熱が逃げる大きな部品かを見る。</p>
+              </div>
+              <div class="concept-row">
+                <span class="concept-dot" style="background:#183241;"></span>
+                <p><strong>発明家視点</strong>アークを「熱のペン」として見られると、必要な場所だけを強くつなぐ形を考えられる。</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="mini-test" aria-label="W01ミニテスト">
+            <h4>W01 ミニテスト</h4>
+            <p style="margin:0 0 8px;font-weight:900;">Q. アークの正体に一番近いものは？</p>
+            <button class="w01-choice" data-ok="true" type="button">電気が空間を飛んでできる高温の熱の道</button>
+            <button class="w01-choice" data-ok="false" type="button">金属を冷やすための風</button>
+            <button class="w01-choice" data-ok="false" type="button">見た目だけの光で、熱とは関係ないもの</button>
+            <div class="feedback" id="w01Feedback">選ぶと答えが出る。</div>
+          </section>
         </section>
       </section>
 
@@ -976,7 +1243,7 @@
   <script>
     const $ = (selector, root = document) => root.querySelector(selector);
     const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
-    const storageKey = "welding-foundation-w00";
+    const storageKey = "welding-foundation-w01";
     const state = JSON.parse(localStorage.getItem(storageKey) || "{}");
     const saveState = () => localStorage.setItem(storageKey, JSON.stringify(state));
 
@@ -1018,6 +1285,88 @@
     }
 
     [current, speed, gap, push].forEach(input => input.addEventListener("input", updateSimulation));
+
+    const w01Captions = [
+      "アークが弱く、表面だけが少し温まる。",
+      "光が出始めるが、溶け池はまだ小さい。",
+      "熱の道が少し見え始める。",
+      "電極の先に白青い光が集まる。",
+      "母材の表面がやわらかくなる。",
+      "小さな溶け池ができ始める。",
+      "熱が横へ逃げる様子が見える。",
+      "アークが安定し、金属が局所的に溶ける。",
+      "溶け池が見やすくなる。",
+      "白青い光が熱になり、表面が溶け始める。",
+      "熱の道が右へ伸びる。",
+      "溶け池が安定し、ビードの入口になる。",
+      "熱が強くなり、母材への広がりも増える。",
+      "強いアークで溶け込みが深くなる。",
+      "熱の影響範囲が広がる。",
+      "電流が高く、溶け池が大きくなる。",
+      "ビードは太くなるが、ひずみリスクも上がる。",
+      "熱が入りすぎる入口。",
+      "穴あきや焼けすぎに注意する状態。",
+      "強すぎるアーク。熱の道を制御する必要がある。"
+    ];
+
+    let w01Timer = null;
+
+    function w01FramePath(number) {
+      return `./assets/w01-arc-frames/frame-${String(number).padStart(2, "0")}.jpg`;
+    }
+
+    function setW01Frame(number) {
+      const value = Math.max(1, Math.min(20, Number(number) || 1));
+      const image = $("#w01Frame");
+      const slider = $("#w01Power");
+      image.src = w01FramePath(value);
+      slider.value = String(value);
+      $("#w01Caption").textContent = `${value} / 20　${w01Captions[value - 1]}`;
+      $("#w01HeatRead").textContent = value < 7 ? "熱: 弱い" : value < 15 ? "熱: ちょうど" : "熱: 強い";
+      $("#w01PoolRead").textContent = value < 6 ? "溶け池: 小さい" : value < 16 ? "溶け池: 安定" : "溶け池: 大きい";
+      $("#w01RiskRead").textContent = value < 7 ? "注意: 溶け込み浅い" : value < 15 ? "注意: 見やすい" : "注意: 焼けすぎ";
+      state.w01Touched = true;
+      state.w01Frame = value;
+      saveState();
+      updateProgress();
+    }
+
+    $("#w01Power").addEventListener("input", event => setW01Frame(event.target.value));
+    $("#w01Reset").addEventListener("click", () => {
+      clearInterval(w01Timer);
+      w01Timer = null;
+      $("#w01Play").textContent = "再生";
+      setW01Frame(1);
+    });
+    $("#w01Play").addEventListener("click", () => {
+      if (w01Timer) {
+        clearInterval(w01Timer);
+        w01Timer = null;
+        $("#w01Play").textContent = "再生";
+        return;
+      }
+      $("#w01Play").textContent = "停止";
+      w01Timer = setInterval(() => {
+        const next = Number($("#w01Power").value) >= 20 ? 1 : Number($("#w01Power").value) + 1;
+        setW01Frame(next);
+      }, 260);
+    });
+
+    $$(".w01-choice").forEach(button => {
+      button.addEventListener("click", () => {
+        const ok = button.dataset.ok === "true";
+        $$(".w01-choice").forEach(item => {
+          item.classList.toggle("correct", item.dataset.ok === "true");
+          item.classList.toggle("wrong", item === button && !ok);
+        });
+        $("#w01Feedback").textContent = ok
+          ? "正解。アークは、電気が空間を飛んでできる高温の熱の道。"
+          : "惜しい。アークはただの光ではなく、金属を溶かす熱の道。";
+        state.w01Quiz = true;
+        saveState();
+        updateProgress();
+      });
+    });
 
     $("#memoBox").value = state.memo || $("#memoBox").value;
     $("#memoBox").addEventListener("input", event => {
@@ -1122,8 +1471,8 @@
     });
 
     function updateProgress() {
-      const checks = [state.image, state.sliderTouched || state.slider, state.quizDone].filter(Boolean).length;
-      const percent = Math.max(34, Math.round((checks / 3) * 100));
+      const checks = [state.image, state.sliderTouched || state.slider, state.quizDone, state.w01Touched, state.w01Quiz].filter(Boolean).length;
+      const percent = Math.max(24, Math.round((checks / 5) * 100));
       $("#progressText").textContent = `${percent}%`;
       $("#progressBar").style.setProperty("--p", `${percent}%`);
       if (state.sliderTouched) {
@@ -1138,6 +1487,7 @@
     window.addEventListener("load", () => {
       state.image = true;
       updateSimulation();
+      setW01Frame(state.w01Frame || 10);
       renderQuiz();
       updateProgress();
     });
