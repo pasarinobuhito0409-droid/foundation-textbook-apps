@@ -1,4 +1,4 @@
-const CACHE_NAME = "welding-foundation-v2";
+const CACHE_NAME = "welding-foundation-v3";
 const ASSETS = [
   "./",
   "./index.html",

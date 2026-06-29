@@ -653,6 +653,54 @@
       gap: 10px;
     }
 
+    .image-concept {
+      align-content: start;
+    }
+
+    .image-concept .card-photo {
+      grid-column: 1 / -1;
+      position: relative;
+      margin: 0 0 2px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid rgba(24, 32, 38, .12);
+      background: #111;
+    }
+
+    .image-concept .card-photo img {
+      display: block;
+      width: 100%;
+      height: 136px;
+      object-fit: cover;
+      filter: contrast(1.04) saturate(1.06);
+    }
+
+    .photo-teach .image-concept .card-photo img {
+      height: 152px;
+    }
+
+    .image-concept .card-photo figcaption {
+      position: absolute;
+      left: 8px;
+      right: 8px;
+      bottom: 8px;
+      padding: 6px 8px;
+      border-radius: 8px;
+      background: rgba(255,255,255,.88);
+      color: #182026;
+      font-size: 12px;
+      font-weight: 950;
+      line-height: 1.45;
+    }
+
+    .card-photo.electrode img { object-position: 20% 18%; }
+    .card-photo.arc-core img { object-position: 34% 58%; }
+    .card-photo.pool-focus img { object-position: 47% 62%; }
+    .card-photo.heat-path img { object-position: 72% 62%; }
+    .card-photo.safe-arc img { object-position: 40% 58%; }
+    .card-photo.strong-arc img { object-position: 56% 58%; }
+    .card-photo.wide-heat img { object-position: 70% 62%; }
+
     .mini-test {
       border: 1px solid var(--line);
       border-radius: var(--radius);
@@ -1140,19 +1188,35 @@
           <section class="card">
             <h3>写真と文章をつなげて読む</h3>
             <div class="concept-list photo-teach">
-              <div class="concept-row">
+              <div class="concept-row image-concept">
+                <figure class="card-photo electrode">
+                  <img src="./assets/w01-arc-frames/frame-08.jpg" alt="タングステン電極の先端と母材のすき間">
+                  <figcaption>見る場所: 1 電極。先端は母材にべったり付けない。</figcaption>
+                </figure>
                 <span class="concept-dot" style="background:#2368c5;"></span>
                 <p><strong>1 電極</strong>タングステン電極（でんきょく：電気が出入りする先端）は、金属に直接べったり付けず、少し離して使う。</p>
               </div>
-              <div class="concept-row">
+              <div class="concept-row image-concept">
+                <figure class="card-photo arc-core">
+                  <img src="./assets/w01-arc-frames/frame-12.jpg" alt="白青いアークが電極と母材の間に出ている">
+                  <figcaption>見る場所: 2 アーク。白青い光が熱の通り道。</figcaption>
+                </figure>
                 <span class="concept-dot" style="background:#d7672f;"></span>
                 <p><strong>2 アーク</strong>アークは、空気やガスの中を電気が飛ぶ道。白青い光に見えるけど、本質は強い熱の通り道。</p>
               </div>
-              <div class="concept-row">
+              <div class="concept-row image-concept">
+                <figure class="card-photo pool-focus">
+                  <img src="./assets/w01-arc-frames/frame-14.jpg" alt="アークの直下に小さな溶け池ができている">
+                  <figcaption>見る場所: 3 溶け池。光の下で金属が液体みたいになる。</figcaption>
+                </figure>
                 <span class="concept-dot" style="background:#d9ad42;"></span>
                 <p><strong>3 溶け池</strong>溶け池（とけいけ：金属が液体みたいに溶けた場所）が小さく安定すると、きれいなビードになる。</p>
               </div>
-              <div class="concept-row">
+              <div class="concept-row image-concept">
+                <figure class="card-photo heat-path">
+                  <img src="./assets/w01-arc-frames/frame-20.jpg" alt="アークから右側へ熱の色が広がっている">
+                  <figcaption>見る場所: 4 熱の道。光の先から母材の中へ熱が逃げる。</figcaption>
+                </figure>
                 <span class="concept-dot" style="background:#c83d34;"></span>
                 <p><strong>4 熱の道</strong>熱は線の上だけでなく、母材（もざい：元の金属）の中へも広がる。ここがひずみの入口になる。</p>
               </div>
@@ -1162,27 +1226,51 @@
           <section class="card">
             <h3>今日の説明</h3>
             <div class="concept-list">
-              <div class="concept-row">
+              <div class="concept-row image-concept">
+                <figure class="card-photo arc-core">
+                  <img src="./assets/w01-arc-frames/frame-10.jpg" alt="TIG溶接のアークの白青い光">
+                  <figcaption>定義: この白青い光と熱がアーク。</figcaption>
+                </figure>
                 <span class="concept-dot" style="background:#2368c5;"></span>
                 <p><strong>定義（ていぎ：言葉の意味）</strong>アークは、電気が空間を飛ぶときにできる高温の光と熱。</p>
               </div>
-              <div class="concept-row">
+              <div class="concept-row image-concept">
+                <figure class="card-photo electrode">
+                  <img src="./assets/w01-arc-frames/frame-09.jpg" alt="電極と母材の間にすき間がありアークが出る">
+                  <figcaption>しくみ: 電極と母材のすき間に電気の道ができる。</figcaption>
+                </figure>
                 <span class="concept-dot" style="background:#d7672f;"></span>
                 <p><strong>しくみ</strong>電極と母材の間に電圧（でんあつ：電気を押す力）がかかり、電気の道ができる。</p>
               </div>
-              <div class="concept-row">
+              <div class="concept-row image-concept">
+                <figure class="card-photo pool-focus">
+                  <img src="./assets/w01-arc-frames/frame-13.jpg" alt="金属の表面がアークの熱で溶け始めている">
+                  <figcaption>なぜ: 電気のエネルギーが熱に変わり、表面が溶ける。</figcaption>
+                </figure>
                 <span class="concept-dot" style="background:#d9ad42;"></span>
                 <p><strong>なぜ</strong>電気の粒が金属やガスにぶつかり、エネルギー（動かす力）が熱へ変わるから。</p>
               </div>
-              <div class="concept-row">
+              <div class="concept-row image-concept">
+                <figure class="card-photo strong-arc">
+                  <img src="./assets/w01-arc-frames/frame-20.jpg" alt="強すぎるアークで熱が大きく広がっている">
+                  <figcaption>注意: 強すぎると焼けすぎ、穴あき、ひずみにつながる。</figcaption>
+                </figure>
                 <span class="concept-dot" style="background:#c83d34;"></span>
                 <p><strong>注意</strong>強すぎると穴あきや焼けすぎ。弱すぎると溶け込みが浅く、くっついたように見えて弱い。</p>
               </div>
-              <div class="concept-row">
+              <div class="concept-row image-concept">
+                <figure class="card-photo wide-heat">
+                  <img src="./assets/w01-arc-frames/frame-16.jpg" alt="アークの熱が母材の中へ広がっている">
+                  <figcaption>設計判断: 熱が逃げる大きな部品ほど条件を変える。</figcaption>
+                </figure>
                 <span class="concept-dot" style="background:#6750bb;"></span>
                 <p><strong>設計判断</strong>板厚、電流、移動速度、熱が逃げる大きな部品かを見る。</p>
               </div>
-              <div class="concept-row">
+              <div class="concept-row image-concept">
+                <figure class="card-photo safe-arc">
+                  <img src="./assets/w01-arc-frames/frame-11.jpg" alt="安定したアークが必要な場所だけを加熱している">
+                  <figcaption>発明家視点: 熱のペンで、必要な場所だけを狙う。</figcaption>
+                </figure>
                 <span class="concept-dot" style="background:#183241;"></span>
                 <p><strong>発明家視点</strong>アークを「熱のペン」として見られると、必要な場所だけを強くつなぐ形を考えられる。</p>
               </div>
