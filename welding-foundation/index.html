@@ -125,16 +125,30 @@
       background: #fff;
       color: var(--ink);
       display: grid;
-      grid-template-columns: 42px 1fr;
+      grid-template-columns: 34px minmax(0, 1fr);
       align-items: center;
-      gap: 8px;
-      padding: 8px 10px;
+      gap: 6px;
+      padding: 8px;
       text-align: left;
       font-weight: 900;
+      overflow: hidden;
     }
 
     .rail-button span {
+      display: block;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
       white-space: nowrap;
+    }
+
+    .rail-button span:first-child {
+      font-size: 15px;
+    }
+
+    .rail-button span:last-child {
+      font-size: 13px;
+      text-align: center;
     }
 
     .rail-button.active {
@@ -528,8 +542,26 @@
     }
 
     .road-row.active {
-      border-color: rgba(35, 104, 197, .34);
-      background: #edf5ff;
+      border-color: rgba(35, 104, 197, .58);
+      background: linear-gradient(90deg, #e7f2ff, #fffaf1);
+      box-shadow: inset 5px 0 0 var(--blue);
+    }
+
+    .road-row.active strong::before {
+      content: "➡ ";
+      color: var(--orange);
+      font-weight: 950;
+    }
+
+    .now-marker {
+      justify-self: end;
+      border-radius: 999px;
+      background: var(--orange);
+      color: white;
+      padding: 5px 10px;
+      font-size: 13px;
+      font-weight: 950;
+      white-space: nowrap;
     }
 
     .session-card {
@@ -1141,7 +1173,7 @@
           <div class="road-row active">
             <span class="badge">W01</span>
             <strong>アークとは何か</strong>
-            <span>電気と熱 ※いまここ</span>
+            <span class="now-marker">➡ いまここ：電気と熱</span>
           </div>
           <div class="road-row">
             <span class="badge" style="background:#6f7b84;">W02</span>
@@ -1166,15 +1198,15 @@
 
           <article>
             <div class="arc-frame">
-              <img id="w01Frame" src="./assets/w01-arc-frames/frame-10.jpg" alt="TIG溶接のアークと溶け池">
+              <img id="w01Frame" src="./assets/w01-arc-smooth-frames/frame-030.jpg" alt="TIG溶接のアークと溶け池">
               <span class="arc-label electrode">1 電極</span>
               <span class="arc-label arc">2 アーク</span>
               <span class="arc-label pool">3 溶け池</span>
               <span class="arc-label heat">4 熱の道</span>
-              <div class="arc-caption" id="w01Caption">10 / 20　白青い光が熱になり、表面が溶け始める。</div>
+              <div class="arc-caption" id="w01Caption">30 / 60　白青い光が熱になり、表面が溶け始める。</div>
             </div>
             <div class="arc-controls" style="margin-top:10px;">
-              <input id="w01Power" type="range" min="1" max="20" value="10" aria-label="アークの強さ">
+              <input id="w01Power" type="range" min="1" max="60" value="30" aria-label="アークの強さ">
               <button class="primary" id="w01Play" type="button">再生</button>
               <button class="ghost" id="w01Reset" type="button">最初へ</button>
             </div>
@@ -1398,21 +1430,23 @@
     ];
 
     let w01Timer = null;
+    const W01_FRAME_COUNT = 60;
 
     function w01FramePath(number) {
-      return `./assets/w01-arc-frames/frame-${String(number).padStart(2, "0")}.jpg`;
+      return `./assets/w01-arc-smooth-frames/frame-${String(number).padStart(3, "0")}.jpg`;
     }
 
     function setW01Frame(number) {
-      const value = Math.max(1, Math.min(20, Number(number) || 1));
+      const value = Math.max(1, Math.min(W01_FRAME_COUNT, Number(number) || 1));
+      const captionIndex = Math.round(((value - 1) / (W01_FRAME_COUNT - 1)) * (w01Captions.length - 1));
       const image = $("#w01Frame");
       const slider = $("#w01Power");
       image.src = w01FramePath(value);
       slider.value = String(value);
-      $("#w01Caption").textContent = `${value} / 20　${w01Captions[value - 1]}`;
-      $("#w01HeatRead").textContent = value < 7 ? "熱: 弱い" : value < 15 ? "熱: ちょうど" : "熱: 強い";
-      $("#w01PoolRead").textContent = value < 6 ? "溶け池: 小さい" : value < 16 ? "溶け池: 安定" : "溶け池: 大きい";
-      $("#w01RiskRead").textContent = value < 7 ? "注意: 溶け込み浅い" : value < 15 ? "注意: 見やすい" : "注意: 焼けすぎ";
+      $("#w01Caption").textContent = `${value} / ${W01_FRAME_COUNT}　${w01Captions[captionIndex]}`;
+      $("#w01HeatRead").textContent = value < 20 ? "熱: 弱い" : value < 45 ? "熱: ちょうど" : "熱: 強い";
+      $("#w01PoolRead").textContent = value < 18 ? "溶け池: 小さい" : value < 48 ? "溶け池: 安定" : "溶け池: 大きい";
+      $("#w01RiskRead").textContent = value < 20 ? "注意: 溶け込み浅い" : value < 45 ? "注意: 見やすい" : "注意: 焼けすぎ";
       state.w01Touched = true;
       state.w01Frame = value;
       saveState();
@@ -1435,9 +1469,9 @@
       }
       $("#w01Play").textContent = "停止";
       w01Timer = setInterval(() => {
-        const next = Number($("#w01Power").value) >= 20 ? 1 : Number($("#w01Power").value) + 1;
+        const next = Number($("#w01Power").value) >= W01_FRAME_COUNT ? 1 : Number($("#w01Power").value) + 1;
         setW01Frame(next);
-      }, 260);
+      }, 90);
     });
 
     $$(".w01-choice").forEach(button => {
@@ -1575,7 +1609,9 @@
     window.addEventListener("load", () => {
       state.image = true;
       updateSimulation();
-      setW01Frame(state.w01Frame || 10);
+      const savedFrame = Number(state.w01Frame) || 30;
+      const migratedFrame = savedFrame <= 20 ? Math.round(((savedFrame - 1) / 19) * (W01_FRAME_COUNT - 1)) + 1 : savedFrame;
+      setW01Frame(migratedFrame);
       renderQuiz();
       updateProgress();
     });

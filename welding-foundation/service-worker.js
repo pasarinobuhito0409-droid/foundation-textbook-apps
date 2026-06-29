@@ -1,4 +1,12 @@
-﻿const CACHE_NAME = "welding-foundation-v4";
+const CACHE_NAME = "welding-foundation-v5";
+const W01_BASE_FRAMES = Array.from(
+  { length: 20 },
+  (_, index) => `./assets/w01-arc-frames/frame-${String(index + 1).padStart(2, "0")}.jpg`
+);
+const W01_SMOOTH_FRAMES = Array.from(
+  { length: 60 },
+  (_, index) => `./assets/w01-arc-smooth-frames/frame-${String(index + 1).padStart(3, "0")}.jpg`
+);
 const ASSETS = [
   "./",
   "./index.html",
@@ -17,26 +25,8 @@ const ASSETS = [
   "./assets/w01-card-burn-through.jpg",
   "./assets/w01-card-thick-part-heat-sink.jpg",
   "./assets/w01-card-heat-pen-control.jpg",
-  "./assets/w01-arc-frames/frame-01.jpg",
-  "./assets/w01-arc-frames/frame-02.jpg",
-  "./assets/w01-arc-frames/frame-03.jpg",
-  "./assets/w01-arc-frames/frame-04.jpg",
-  "./assets/w01-arc-frames/frame-05.jpg",
-  "./assets/w01-arc-frames/frame-06.jpg",
-  "./assets/w01-arc-frames/frame-07.jpg",
-  "./assets/w01-arc-frames/frame-08.jpg",
-  "./assets/w01-arc-frames/frame-09.jpg",
-  "./assets/w01-arc-frames/frame-10.jpg",
-  "./assets/w01-arc-frames/frame-11.jpg",
-  "./assets/w01-arc-frames/frame-12.jpg",
-  "./assets/w01-arc-frames/frame-13.jpg",
-  "./assets/w01-arc-frames/frame-14.jpg",
-  "./assets/w01-arc-frames/frame-15.jpg",
-  "./assets/w01-arc-frames/frame-16.jpg",
-  "./assets/w01-arc-frames/frame-17.jpg",
-  "./assets/w01-arc-frames/frame-18.jpg",
-  "./assets/w01-arc-frames/frame-19.jpg",
-  "./assets/w01-arc-frames/frame-20.jpg",
+  ...W01_BASE_FRAMES,
+  ...W01_SMOOTH_FRAMES,
   "./assets/welding-app-preview.png"
 ];
 
