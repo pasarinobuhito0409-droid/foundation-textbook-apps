@@ -1,4 +1,4 @@
-const CACHE_NAME = "electrical-design-foundation-v11";
+const CACHE_NAME = "electrical-design-foundation-v12";
 
 const APP_SHELL = [
   "./",
@@ -12,7 +12,18 @@ const APP_SHELL = [
   "./electrical-e03-wire-danger-real.png",
   "./electrical-e03-micro-real.png",
   "./electrical-e03-ok-ng-real.png",
-  "./electrical-e03-quiz-real.png"
+  "./electrical-e03-quiz-real.png",
+  "./electrical-e04-preview-real.png",
+  "./electrical-e04-workbench-real.png",
+  "./electrical-e04-panel-real.png",
+  "./electrical-e04-power-real.png",
+  "./electrical-e04-load-real.png",
+  "./electrical-e04-inrush-real.png",
+  "./electrical-e04-margin-real.png",
+  "./electrical-e04-quiz-real.png",
+  "./electrical-e04-safe-real.png",
+  "./electrical-e04-caution-real.png",
+  "./electrical-e04-danger-real.png"
 ];
 
 self.addEventListener("install", (event) => {
