@@ -3,70 +3,77 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f4f0e8">
+  <meta name="theme-color" content="#f5f2ec">
   <link rel="manifest" href="./manifest.webmanifest">
-  <title>SolidWorks基礎 SW01</title>
+  <title>SOLIDWORKS 中級 形づくり教科書</title>
   <style>
     :root {
       color-scheme: light;
-      --bg: #ede8dd;
-      --paper: #fffdf7;
+      --bg: #f1eee7;
+      --paper: #fffdf8;
       --ink: #142026;
-      --muted: #657073;
-      --line: #d8d1c4;
-      --blue: #1f64bd;
-      --blue-dark: #134684;
-      --green: #1e7d56;
-      --red: #c33a35;
-      --yellow: #d2a33c;
-      --violet: #6654ba;
-      --panel: rgba(255, 253, 247, .93);
-      --shadow: 0 20px 48px rgba(34, 29, 22, .14);
+      --muted: #647174;
+      --line: #d7d0c4;
+      --blue: #2368c5;
+      --blue-soft: #e8f1ff;
+      --green: #1f7a59;
+      --green-soft: #e7f6ee;
+      --amber: #b36a1c;
+      --amber-soft: #fff0dc;
+      --red: #b9423c;
+      --red-soft: #fff0ef;
+      --violet: #6657b8;
+      --shadow: 0 18px 46px rgba(25, 24, 20, .13);
       --radius: 8px;
       font-family: "Yu Gothic", "Hiragino Sans", Meiryo, system-ui, sans-serif;
     }
 
     * { box-sizing: border-box; min-width: 0; }
     html { scroll-behavior: smooth; }
-
     body {
       margin: 0;
       color: var(--ink);
       background:
-        linear-gradient(180deg, rgba(255,255,255,.82), rgba(255,255,255,.2)),
-        repeating-linear-gradient(90deg, rgba(20,32,38,.026) 0 1px, transparent 1px 12px),
+        linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.34)),
+        repeating-linear-gradient(90deg, rgba(18,28,34,.025) 0 1px, transparent 1px 12px),
         var(--bg);
       line-height: 1.65;
       overflow-wrap: anywhere;
+      overflow-x: hidden;
     }
 
     button, input, textarea { font: inherit; }
     button { cursor: pointer; }
+    a { color: inherit; }
 
     .app {
       width: min(1280px, calc(100% - 28px));
       margin: 0 auto;
-      padding: 18px 0 36px;
+      padding: 16px 0 38px;
     }
 
     .topbar {
       min-height: 58px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      gap: 12px;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
       margin-bottom: 10px;
     }
 
+    .brand { min-width: 0; }
+
     .brand h1 {
       margin: 0;
-      font-size: clamp(24px, 4vw, 40px);
-      line-height: 1.1;
+      font-size: clamp(24px, 3vw, 36px);
+      line-height: 1.12;
       letter-spacing: 0;
+      overflow-wrap: anywhere;
     }
 
     .brand p {
-      margin: 5px 0 0;
+      margin: 4px 0 0;
       color: var(--muted);
       font-size: 14px;
       font-weight: 800;
@@ -77,28 +84,28 @@
       padding: 0 16px;
       border: 1px solid var(--line);
       border-radius: 999px;
-      background: rgba(255,255,255,.82);
-      color: var(--ink);
-      box-shadow: 0 10px 22px rgba(34, 29, 22, .08);
+      background: rgba(255,255,255,.88);
+      box-shadow: 0 10px 22px rgba(25,24,20,.08);
       font-weight: 900;
     }
 
     .layout {
       display: grid;
-      grid-template-columns: 110px minmax(0, 1fr) 310px;
+      grid-template-columns: 124px minmax(0, 1fr) 318px;
       gap: 12px;
       align-items: start;
     }
 
     .rail,
-    .poster,
-    .side,
-    .card {
-      border: 1px solid rgba(122, 113, 98, .3);
+    .panel,
+    .lesson,
+    .side-card,
+    .chapter-row,
+    .photo-card {
+      border: 1px solid rgba(120,111,98,.32);
       border-radius: var(--radius);
-      background: var(--panel);
+      background: rgba(255,253,248,.96);
       box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
     }
 
     .rail {
@@ -106,570 +113,632 @@
       top: 12px;
       padding: 10px;
       display: grid;
-      gap: 9px;
+      gap: 8px;
     }
 
     .rail-title {
-      margin: 0 0 2px;
+      margin: 0;
       color: var(--muted);
       font-size: 12px;
       font-weight: 900;
     }
 
     .rail a {
-      min-height: 48px;
+      min-height: 50px;
       border: 1px solid var(--line);
       border-radius: var(--radius);
       background: #fff;
       color: var(--ink);
       display: grid;
-      place-items: center;
-      padding: 6px;
-      text-align: center;
+      grid-template-columns: 1fr auto;
+      gap: 6px;
+      align-items: center;
+      padding: 8px;
+      text-align: left;
       text-decoration: none;
       font-weight: 950;
-      line-height: 1.25;
+      line-height: 1.2;
+    }
+
+    .rail a small {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 900;
     }
 
     .rail a.active {
       color: #fff;
       background: linear-gradient(180deg, #2f75d4, #1b5aa9);
       border-color: transparent;
-      box-shadow: 0 12px 24px rgba(31,100,189,.24);
     }
 
-    .main {
-      display: grid;
-      gap: 12px;
-    }
+    .rail a.active small { color: rgba(255,255,255,.86); }
 
-    .poster {
+    .main { display: grid; gap: 12px; }
+
+    .panel {
       overflow: hidden;
-      padding: 12px;
       background: #fffdf8;
     }
 
-    .poster-head {
-      padding: 10px 12px 12px;
-      border: 2px solid var(--blue);
-      border-radius: var(--radius);
-      text-align: center;
-      background:
-        linear-gradient(180deg, rgba(240,247,255,.94), rgba(255,255,255,.98));
+    .cover {
+      position: relative;
+      min-height: 520px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(280px, .85fr);
+      gap: 0;
     }
 
-    .poster-head h2 {
-      margin: 0;
-      color: #0f4e98;
-      font-size: clamp(28px, 4.5vw, 48px);
+    .cover-media {
+      position: relative;
+      min-height: 520px;
+      background: #101820;
+      overflow: hidden;
+    }
+
+    .cover-media img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .cover-caption {
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      bottom: 16px;
+      display: grid;
+      gap: 8px;
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .caption-chip {
+      min-height: 58px;
+      padding: 10px;
+      border: 1px solid rgba(255,255,255,.55);
+      border-radius: var(--radius);
+      background: rgba(255,253,248,.9);
+      backdrop-filter: blur(10px);
+      font-weight: 950;
+      line-height: 1.35;
+    }
+
+    .caption-chip span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .cover-text {
+      display: grid;
+      align-content: center;
+      gap: 16px;
+      padding: 24px;
+    }
+
+    .badge {
+      display: inline-grid;
+      place-items: center;
+      width: fit-content;
+      min-height: 32px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: var(--blue);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 950;
+    }
+
+    h2, h3, p { margin-top: 0; }
+    h2 {
+      margin-bottom: 8px;
+      font-size: clamp(28px, 4vw, 54px);
       line-height: 1.08;
       letter-spacing: 0;
     }
 
-    .poster-head h2 span {
-      display: block;
+    h2 span { display: block; }
+
+    h3 {
+      margin-bottom: 8px;
+      font-size: clamp(22px, 2.4vw, 30px);
+      line-height: 1.2;
+      letter-spacing: 0;
     }
 
-    .poster-head p {
-      margin: 8px 0 0;
-      font-size: clamp(14px, 1.8vw, 18px);
-      font-weight: 950;
+    .lead {
+      color: var(--muted);
+      font-size: 17px;
+      font-weight: 850;
     }
 
-    .poster-grid {
-      display: grid;
-      grid-template-columns: 1.05fr .95fr;
-      gap: 9px;
-      margin-top: 9px;
+    .primary-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
-    .info-box,
-    .step,
-    .why-box,
-    .okng,
-    .tip {
-      border: 2px solid #2368c5;
+    .btn {
+      min-height: 44px;
+      border: 1px solid var(--line);
       border-radius: var(--radius);
       background: #fff;
-      overflow: hidden;
+      color: var(--ink);
+      padding: 0 14px;
+      font-weight: 950;
+      text-decoration: none;
+      display: inline-grid;
+      place-items: center;
     }
 
-    .box-title {
-      min-height: 30px;
-      display: grid;
-      place-items: center;
-      padding: 4px 10px;
+    .btn.primary {
+      border-color: transparent;
       background: var(--blue);
       color: #fff;
-      font-weight: 950;
-      line-height: 1.25;
     }
 
-    .media {
+    .lesson {
+      padding: 14px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .lesson-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      gap: 12px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 10px;
+    }
+
+    .lesson-head p {
+      margin-bottom: 0;
+      color: var(--muted);
+      font-weight: 850;
+    }
+
+    .mini-map {
+      display: grid;
+      gap: 8px;
+    }
+
+    .chapter-row {
+      box-shadow: none;
+      min-height: 52px;
+      display: grid;
+      grid-template-columns: 76px 1fr auto;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      text-decoration: none;
+    }
+
+    .chapter-row.active {
+      border-color: #8cb7ef;
+      background: var(--blue-soft);
+    }
+
+    .chapter-code {
+      min-height: 32px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: #6d7780;
+      color: #fff;
+      font-weight: 950;
+    }
+
+    .chapter-row.active .chapter-code { background: var(--blue); }
+    .chapter-title { font-weight: 950; }
+    .chapter-note { color: var(--muted); font-size: 13px; font-weight: 850; }
+
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .photo-card {
+      overflow: hidden;
+      box-shadow: none;
+    }
+
+    .photo-card figure,
+    .stage-figure {
       position: relative;
       margin: 0;
-      background: #111b22;
+      background: #101820;
       overflow: hidden;
     }
 
-    .media img {
-      display: block;
+    .photo-card figure { height: 246px; }
+
+    .photo-card img,
+    .stage-figure img {
       width: 100%;
       height: 100%;
+      display: block;
       object-fit: cover;
     }
 
-    .hero-media { height: 276px; }
-    .small-media { height: 146px; }
-    .wide-media { height: 178px; }
+    .photo-body {
+      padding: 12px;
+      display: grid;
+      gap: 8px;
+    }
 
-    .caption {
+    .photo-body p {
+      margin: 0;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .look-label {
       position: absolute;
-      left: 10px;
-      bottom: 10px;
-      max-width: calc(100% - 20px);
+      left: 12px;
+      bottom: 12px;
+      max-width: calc(100% - 24px);
       padding: 8px 10px;
-      border: 1px solid rgba(255,255,255,.55);
       border-radius: var(--radius);
-      background: rgba(255,253,247,.88);
+      background: rgba(255,253,248,.92);
       color: var(--ink);
+      border: 1px solid rgba(255,255,255,.7);
       font-weight: 950;
       backdrop-filter: blur(10px);
     }
 
-    .label {
+    .callout {
       position: absolute;
-      display: inline-grid;
-      gap: 2px;
-      min-width: 88px;
-      padding: 7px 9px;
-      border-radius: var(--radius);
-      background: rgba(255,253,247,.9);
-      border: 1px solid rgba(255,255,255,.65);
-      color: var(--ink);
+      min-width: 42px;
+      min-height: 34px;
+      display: grid;
+      place-items: center;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: rgba(255,253,248,.9);
+      border: 2px solid var(--blue);
+      color: var(--blue);
       font-weight: 950;
-      box-shadow: 0 12px 24px rgba(0,0,0,.12);
+      box-shadow: 0 10px 22px rgba(16,24,32,.16);
     }
 
-    .label small {
+    .arrow {
+      position: absolute;
+      width: 4px;
+      height: 82px;
+      border-radius: 999px;
+      background: var(--blue);
+      transform-origin: center;
+      box-shadow: 0 0 0 7px rgba(35,104,197,.12);
+    }
+
+    .arrow::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: -13px;
+      width: 0;
+      height: 0;
+      transform: translateX(-50%);
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-top: 16px solid var(--blue);
+    }
+
+    .stage {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(300px, .9fr);
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .stage-figure {
+      min-height: 450px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+    }
+
+    .stage-figure img {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity .55s ease;
+    }
+
+    .stage-figure img.active { opacity: 1; }
+
+    .stage-hud {
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      bottom: 14px;
+      display: grid;
+      gap: 8px;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+    }
+
+    .stage-message {
+      padding: 12px;
+      border-radius: var(--radius);
+      background: rgba(255,253,248,.92);
+      border: 1px solid rgba(255,255,255,.72);
+      backdrop-filter: blur(10px);
+      font-weight: 950;
+    }
+
+    .stage-count {
+      min-height: 44px;
+      min-width: 84px;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius);
+      background: rgba(20,32,38,.86);
+      color: #fff;
+      font-weight: 950;
+    }
+
+    .touch-panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      padding: 14px;
+      display: grid;
+      gap: 12px;
+      align-content: start;
+    }
+
+    .stage-tabs {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+    }
+
+    .stage-tab {
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      font-size: 13px;
+      font-weight: 950;
+    }
+
+    .stage-tab.active {
+      border-color: var(--blue);
+      background: var(--blue-soft);
+      color: var(--blue);
+    }
+
+    .range-row {
+      display: grid;
+      gap: 8px;
+    }
+
+    input[type="range"] { width: 100%; accent-color: var(--blue); }
+
+    .decision-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .decision {
+      min-height: 78px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 10px;
+      background: #fbfaf6;
+    }
+
+    .decision span {
+      display: block;
       color: var(--muted);
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 900;
     }
 
-    .label.blue { color: var(--blue-dark); }
-    .label.red { color: var(--red); }
-    .label.green { color: var(--green); }
-    .label.one { left: 14px; top: 14px; }
-    .label.two { right: 14px; top: 14px; }
-    .label.three { right: 14px; bottom: 14px; }
+    .decision strong { font-size: 17px; }
 
-    .tools {
+    .explain-grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .explain {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 12px;
+      background: #fff;
+    }
+
+    .explain strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 16px;
+    }
+
+    .explain p {
+      margin: 0;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .quiz {
+      display: grid;
+      gap: 10px;
+    }
+
+    .quiz-meta {
+      color: var(--amber);
+      font-weight: 950;
+    }
+
+    .choices {
+      display: grid;
       gap: 8px;
+    }
+
+    .choice {
+      min-height: 48px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      text-align: left;
       padding: 10px;
       font-weight: 900;
     }
 
-    .tool {
-      min-height: 48px;
-      display: grid;
-      grid-template-columns: 34px 1fr;
-      align-items: center;
-      gap: 8px;
-      border: 1px solid var(--line);
+    .choice.correct { border-color: #88c6a9; background: var(--green-soft); color: var(--green); }
+    .choice.wrong { border-color: #e1a49f; background: var(--red-soft); color: var(--red); }
+
+    .answer-box {
+      min-height: 84px;
       border-radius: var(--radius);
-      padding: 8px;
-      background: #f7f9fb;
-    }
-
-    .tool-mark {
-      width: 30px;
-      height: 30px;
-      display: grid;
-      place-items: center;
-      border-radius: 50%;
-      color: #fff;
-      background: var(--blue);
-      font-weight: 950;
-    }
-
-    .step-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 9px;
-      margin-top: 9px;
-    }
-
-    .step-head {
-      min-height: 42px;
-      display: grid;
-      grid-template-columns: 34px 1fr;
-      align-items: center;
-      gap: 8px;
-      padding: 7px 9px;
-      border-bottom: 1px solid #c9d7ee;
-      font-weight: 950;
-    }
-
-    .num {
-      width: 30px;
-      height: 30px;
-      display: grid;
-      place-items: center;
-      border-radius: 50%;
-      color: #fff;
-      background: var(--blue);
-      font-weight: 950;
-    }
-
-    .step p,
-    .why-box p,
-    .okng p,
-    .tip p {
-      margin: 0;
-      padding: 9px 10px 11px;
-      font-weight: 850;
-      color: #344249;
-    }
-
-    .bottom-grid {
-      display: grid;
-      grid-template-columns: 1.15fr .85fr .9fr;
-      gap: 9px;
-      margin-top: 9px;
-    }
-
-    .okng-inner {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      padding: 9px;
-    }
-
-    .okng-card {
       border: 1px solid var(--line);
-      border-radius: var(--radius);
-      overflow: hidden;
-      background: #fff;
-      text-align: center;
-      font-weight: 950;
-    }
-
-    .ok { color: var(--green); }
-    .ng { color: var(--red); }
-
-    .tip {
-      grid-column: 1 / -1;
-      margin-top: 9px;
-      border-color: #1d5ca9;
-      background: #eff6ff;
-      text-align: center;
-      font-size: clamp(17px, 2vw, 22px);
-      font-weight: 950;
-    }
-
-    .mobile-tabs {
-      display: none;
-      gap: 8px;
-      overflow-x: auto;
-      padding-bottom: 2px;
-    }
-
-    .mobile-tabs a {
-      min-height: 42px;
-      padding: 0 12px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: #fff;
-      color: inherit;
-      text-decoration: none;
-      white-space: nowrap;
-      display: inline-grid;
-      place-items: center;
-      font-weight: 950;
-    }
-
-    .card {
-      padding: 14px;
-    }
-
-    .card h3 {
-      margin: 0 0 10px;
-      font-size: 20px;
-      line-height: 1.25;
-      letter-spacing: 0;
-    }
-
-    .lesson-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-    }
-
-    .lesson-bit {
-      min-height: 118px;
-      display: grid;
-      grid-template-columns: 18px 1fr;
-      gap: 10px;
+      background: #f8fafc;
       padding: 12px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: #fffdf8;
-    }
-
-    .dot {
-      width: 14px;
-      height: 14px;
-      margin-top: 6px;
-      border-radius: 50%;
-      background: var(--blue);
-      box-shadow: 0 0 0 4px rgba(255,255,255,.85);
-    }
-
-    .lesson-bit h4 {
-      margin: 0 0 6px;
-      font-size: 16px;
-    }
-
-    .lesson-bit p {
-      margin: 0;
-      color: #354349;
       font-weight: 850;
-    }
-
-    .sim {
-      display: grid;
-      grid-template-columns: minmax(0, .95fr) minmax(280px, 1.05fr);
-      gap: 12px;
-    }
-
-    .control-row {
-      display: grid;
-      grid-template-columns: 112px 1fr 84px;
-      align-items: center;
-      gap: 10px;
-      margin: 12px 0;
-      font-weight: 950;
-    }
-
-    input[type="range"] {
-      width: 100%;
-      accent-color: var(--blue);
-    }
-
-    .value {
-      min-height: 34px;
-      display: grid;
-      place-items: center;
-      border-radius: 999px;
-      background: #eee9de;
-      font-weight: 950;
-    }
-
-    .score-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .score {
-      min-height: 72px;
-      border: 1px solid #c8d7ed;
-      border-radius: var(--radius);
-      background: #eef5ff;
-      padding: 9px;
-      font-weight: 950;
-    }
-
-    .score span {
-      display: block;
-      color: var(--muted);
-      font-size: 12px;
-      margin-bottom: 3px;
-    }
-
-    .road {
-      display: grid;
-      gap: 8px;
-    }
-
-    .road-row {
-      min-height: 54px;
-      display: grid;
-      grid-template-columns: 64px 1fr;
-      align-items: center;
-      gap: 10px;
-      padding: 9px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: #fffdf8;
-      font-weight: 900;
-    }
-
-    .road-code {
-      min-height: 34px;
-      display: grid;
-      place-items: center;
-      border-radius: var(--radius);
-      color: #fff;
-      background: var(--blue);
-      font-weight: 950;
     }
 
     .side {
       position: sticky;
       top: 12px;
-      padding: 12px;
       display: grid;
       gap: 12px;
     }
 
-    .side h3 {
-      margin: 0 0 9px;
+    .side-card {
+      padding: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    .side-card h3 {
       font-size: 18px;
+      margin-bottom: 8px;
     }
 
-    textarea {
+    .memo {
       width: 100%;
-      min-height: 150px;
-      resize: vertical;
-      border: 1px solid #dfc88c;
+      min-height: 132px;
+      border: 1px solid #dfbd77;
       border-radius: var(--radius);
-      padding: 12px;
-      background:
-        repeating-linear-gradient(180deg, #fff8e7 0 34px, #ead8ad 35px),
-        #fff8e7;
-      color: var(--ink);
-      line-height: 1.55;
-    }
-
-    .quiz {
-      border: 1px solid #9abbe8;
-      border-radius: var(--radius);
-      background: #eef6ff;
-      padding: 12px;
-    }
-
-    .quiz-count {
-      display: inline-grid;
-      place-items: center;
-      min-height: 28px;
-      padding: 0 10px;
-      border-radius: 999px;
-      background: #dcecff;
-      color: #254563;
-      font-size: 13px;
-      font-weight: 950;
-    }
-
-    .question {
-      margin: 8px 0;
-      font-weight: 950;
-    }
-
-    .choice {
-      width: 100%;
-      min-height: 42px;
-      border: 1px solid #bfd3ec;
-      border-radius: var(--radius);
-      background: #fff;
-      margin: 6px 0;
-      padding: 8px 10px;
-      text-align: left;
-      font-weight: 900;
-    }
-
-    .choice.correct { background: #ddf4e5; border-color: #68b987; }
-    .choice.wrong { background: #ffe5e1; border-color: #db857b; }
-
-    .feedback {
-      min-height: 42px;
-      margin-top: 8px;
+      background: #fff8e8;
       padding: 10px;
-      border-radius: var(--radius);
-      background: rgba(255,255,255,.76);
-      font-weight: 900;
-    }
-
-    .feedback img {
-      display: block;
-      width: 100%;
-      max-height: 144px;
-      object-fit: cover;
-      border: 1px solid rgba(122, 113, 98, .25);
-      border-radius: var(--radius);
-      margin-top: 8px;
-    }
-
-    .primary {
-      width: 100%;
-      min-height: 42px;
-      border: 0;
-      border-radius: var(--radius);
-      background: var(--blue);
-      color: #fff;
-      margin-top: 8px;
-      font-weight: 950;
-    }
-
-    .review {
-      padding: 12px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: #fffdf8;
+      resize: vertical;
+      font-weight: 850;
     }
 
     .progress-line {
-      height: 10px;
+      height: 12px;
       border-radius: 999px;
+      background: #e3ded2;
       overflow: hidden;
-      background: #e5e0d5;
-      margin: 8px 0 10px;
     }
 
-    .progress-fill {
+    .progress-line span {
+      display: block;
       height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, #217a57, #6ac287);
-      transition: width .2s ease;
+      width: 0;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--green), var(--blue));
+      transition: width .3s ease;
     }
 
-    .check-row {
-      display: flex;
-      align-items: center;
+    .checklist {
+      display: grid;
       gap: 8px;
-      margin: 8px 0;
       font-weight: 900;
+    }
+
+    .checklist label {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 8px;
+      align-items: start;
+    }
+
+    .source-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .source-list a {
+      min-height: 38px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 8px;
+      background: #fff;
+      text-decoration: none;
+      font-weight: 900;
+    }
+
+    .footer-note {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 850;
     }
 
     @media (max-width: 1080px) {
       .layout { grid-template-columns: 1fr; }
-      .rail { display: none; }
-      .mobile-tabs { display: flex; }
-      .side { position: static; }
-      .poster-grid,
-      .bottom-grid,
-      .sim { grid-template-columns: 1fr; }
+      .rail {
+        position: static;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+      .rail-title { grid-column: 1 / -1; }
+      .side { position: static; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .cover, .stage { grid-template-columns: 1fr; }
+      .cover-media, .stage-figure { min-height: 420px; }
     }
 
     @media (max-width: 720px) {
-      .app { width: min(100% - 18px, 430px); padding-top: 10px; }
+      .app { width: min(100% - 18px, 1280px); padding-top: 10px; }
       .topbar { align-items: start; }
+      .brand h1 {
+        font-size: 22px;
+        line-height: 1.15;
+        max-width: calc(100vw - 18px);
+        word-break: break-all;
+      }
+      .brand p {
+        font-size: 12px;
+        max-width: calc(100vw - 18px);
+      }
       .install { display: none; }
-      .poster { padding: 8px; }
-      .poster-head h2 { font-size: 31px; }
-      .hero-media { height: 232px; }
-      .small-media,
-      .wide-media { height: 132px; }
-      .step-grid,
-      .lesson-grid,
-      .score-grid,
-      .okng-inner { grid-template-columns: 1fr; }
-      .control-row { grid-template-columns: 92px 1fr 70px; gap: 7px; }
-      .label { font-size: 12px; min-width: 72px; }
+      .rail {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 7px;
+      }
+      .rail a {
+        min-height: 46px;
+        font-size: 14px;
+      }
+      .cover { min-height: auto; }
+      .cover-media { min-height: 300px; }
+      .cover-media img { object-position: 42% center; }
+      .cover-text { padding: 16px; }
+      .cover-caption {
+        position: static;
+        grid-template-columns: 1fr;
+        padding: 10px;
+        background: #fff;
+      }
+      .photo-grid, .explain-grid, .side, .decision-grid { grid-template-columns: 1fr; }
+      .photo-card figure { height: 218px; }
+      .stage-figure { min-height: 360px; }
+      .stage-tabs { grid-template-columns: repeat(2, 1fr); }
+      .chapter-row { grid-template-columns: 68px 1fr; }
+      .chapter-note { grid-column: 2; }
+      .stage-hud { grid-template-columns: 1fr; }
+      h2 {
+        font-size: 27px;
+        line-height: 1.18;
+        overflow-wrap: anywhere;
+        word-break: keep-all;
+      }
     }
   </style>
 </head>
@@ -677,476 +746,604 @@
   <div class="app">
     <header class="topbar">
       <div class="brand">
-        <h1>SolidWorks基礎教科書</h1>
-        <p>三輪さん専用。見て、触って、問題で戻れる1ページPWA。</p>
+        <h1>SOLIDWORKS 中級 形づくり教科書</h1>
+        <p>スケッチから押し出し・押し出しカットで部品にする</p>
       </div>
-      <button class="install" id="installButton" hidden>ホーム画面に追加</button>
+      <button class="install" id="installBtn" type="button">ホーム画面に追加</button>
     </header>
 
     <div class="layout">
       <nav class="rail" aria-label="学習メニュー">
-        <p class="rail-title">SWシリーズ</p>
-        <a class="active" href="#poster">SW01<br>全体</a>
-        <a href="#lesson">なぜ</a>
-        <a href="#touch">触る</a>
-        <a href="#road">次へ</a>
-        <a href="#memo">メモ</a>
-        <a href="#quiz">テスト</a>
+        <p class="rail-title">中級ロード</p>
+        <a class="active" href="#cover">入口 <small>SW-M01</small></a>
+        <a href="#map">目次 <small>全体</small></a>
+        <a href="#lesson">学ぶ <small>写真連動</small></a>
+        <a href="#touch">触る <small>実験</small></a>
+        <a href="#quiz">テスト <small>6問</small></a>
+        <a href="#review">復習 <small>記録</small></a>
       </nav>
 
       <main class="main">
-        <section class="poster" id="poster">
-          <div class="poster-head">
-            <h2><span>SolidWorks基礎</span><span>スケッチから部品へ</span></h2>
-            <p>線を描く → 寸法で固定する → 押し出して立体にする</p>
-          </div>
-
-          <div class="mobile-tabs" aria-label="スマホ用メニュー">
-            <a href="#poster">SW01</a>
-            <a href="#lesson">なぜ</a>
-            <a href="#touch">触る</a>
-            <a href="#memo">メモ</a>
-            <a href="#quiz">テスト</a>
-          </div>
-
-          <div class="poster-grid">
-            <article class="info-box">
-              <div class="box-title">SolidWorksとは？</div>
-              <figure class="media hero-media">
-                <img src="./assets/solidworks-hero-real.png" alt="CAD画面と機械部品が並んだ作業机">
-                <span class="label one blue">スケッチ<small>線の下書き</small></span>
-                <span class="label two green">押し出し<small>厚みを出す</small></span>
-                <span class="label three red">部品<small>3Dになる</small></span>
-                <figcaption class="caption">頭の中の形を、画面の手順として残す道具。</figcaption>
-              </figure>
-            </article>
-
-            <article class="info-box">
-              <div class="box-title">準備するもの</div>
-              <div class="tools">
-                <div class="tool"><span class="tool-mark">1</span><span>新規部品ファイル</span></div>
-                <div class="tool"><span class="tool-mark">2</span><span>正面・上面・右側面</span></div>
-                <div class="tool"><span class="tool-mark">3</span><span>スケッチ</span></div>
-                <div class="tool"><span class="tool-mark">4</span><span>スマート寸法</span></div>
-                <div class="tool"><span class="tool-mark">5</span><span>押し出し</span></div>
-                <div class="tool"><span class="tool-mark">6</span><span>フィーチャーツリー</span></div>
-              </div>
-              <figure class="media small-media">
-                <img src="./assets/sw01-feature-tree-real.png" alt="CAD画面のフィーチャーツリーと完成部品">
-                <figcaption class="caption">作った順番が左に残る。</figcaption>
-              </figure>
-            </article>
-          </div>
-
-          <div class="step-grid">
-            <article class="step">
-              <div class="step-head"><span class="num">1</span><span>新規部品を開く</span></div>
-              <figure class="media small-media">
-                <img src="./assets/solidworks-hero-real.png" alt="CAD画面と作業机">
-              </figure>
-              <p>まず「部品」を作る部屋に入る。</p>
-            </article>
-
-            <article class="step">
-              <div class="step-head"><span class="num">2</span><span>面を選んで線を描く</span></div>
-              <figure class="media small-media">
-                <img src="./assets/sw01-sketch-real.png" alt="寸法つきのスケッチ画面">
-              </figure>
-              <p>紙に下書きするように、2Dの形を作る。</p>
-            </article>
-
-            <article class="step">
-              <div class="step-head"><span class="num">3</span><span>寸法で動きを止める</span></div>
-              <figure class="media small-media">
-                <img src="./assets/sw01-underdefined-real.png" alt="未定義スケッチのCAD画面">
-              </figure>
-              <p>数字を入れて、勝手に動かない形にする。</p>
-            </article>
-
-            <article class="step">
-              <div class="step-head"><span class="num">4</span><span>押し出して厚みを出す</span></div>
-              <figure class="media small-media">
-                <img src="./assets/sw01-extrude-real.png" alt="押し出し操作のCAD画面">
-              </figure>
-              <p>薄い線の形に、奥行きをつける。</p>
-            </article>
-
-            <article class="step">
-              <div class="step-head"><span class="num">5</span><span>穴や丸みを足す</span></div>
-              <figure class="media small-media">
-                <img src="./assets/sw01-feature-tree-real.png" alt="穴と丸みがある3D部品">
-              </figure>
-              <p>あとから加工の順番を積み上げる。</p>
-            </article>
-
-            <article class="step">
-              <div class="step-head"><span class="num">6</span><span>履歴を見て確認</span></div>
-              <figure class="media small-media">
-                <img src="./assets/sw01-feature-tree-real.png" alt="フィーチャーツリーが表示されたCAD画面">
-              </figure>
-              <p>左の木を見れば、作り方を戻れる。</p>
-            </article>
-          </div>
-
-          <div class="bottom-grid">
-            <article class="why-box">
-              <div class="box-title">なぜこの順番なの？</div>
-              <figure class="media wide-media">
-                <img src="./assets/sw01-extrude-real.png" alt="スケッチから押し出して3DになるCAD画面">
-                <figcaption class="caption">線が決まるから、立体も決まる。</figcaption>
-              </figure>
-              <p>形の土台はスケッチ。土台がぐらぐらなら、押し出した部品も後で崩れやすい。</p>
-            </article>
-
-            <article class="okng">
-              <div class="box-title">良い例 / 悪い例</div>
-              <div class="okng-inner">
-                <div class="okng-card">
-                  <figure class="media small-media">
-                    <img src="./assets/sw01-sketch-real.png" alt="寸法で固定されたスケッチ">
-                  </figure>
-                  <p class="ok">OK<br>寸法で止まる</p>
-                </div>
-                <div class="okng-card">
-                  <figure class="media small-media">
-                    <img src="./assets/sw01-underdefined-real.png" alt="未定義のスケッチ">
-                  </figure>
-                  <p class="ng">NG<br>線が動く</p>
-                </div>
-              </div>
-            </article>
-
-            <article class="why-box">
-              <div class="box-title">注意</div>
-              <p>青い線だけで終わらない。</p>
-              <p>寸法と関係を入れて、黒い線に近づける。</p>
-              <p>穴、丸み、ミラーは、土台のあとに積む。</p>
-            </article>
-          </div>
-
-          <div class="tip">
-            <p>最初のコツ：形を急がず、スケッチを先にしっかり止める。</p>
-          </div>
-        </section>
-
-        <section class="card" id="lesson">
-          <h3>今日の説明：なぜスケッチが大事か</h3>
-          <div class="lesson-grid">
-            <article class="lesson-bit">
-              <span class="dot" style="background:var(--blue)"></span>
-              <div>
-                <h4>定義（ていぎ：言葉の意味）</h4>
-                <p>スケッチは、3D部品の下書き。紙に輪郭を描くのと同じ。</p>
-              </div>
-            </article>
-
-            <article class="lesson-bit">
-              <span class="dot" style="background:var(--green)"></span>
-              <div>
-                <h4>しくみ</h4>
-                <p>寸法（すんぽう：長さの数字）と拘束（こうそく：動かない約束）で線を固定する。</p>
-              </div>
-            </article>
-
-            <article class="lesson-bit">
-              <span class="dot" style="background:var(--yellow)"></span>
-              <div>
-                <h4>なぜ</h4>
-                <p>下書きが動くと、押し出した立体もあとで別の形に変わるから。</p>
-              </div>
-            </article>
-
-            <article class="lesson-bit">
-              <span class="dot" style="background:var(--red)"></span>
-              <div>
-                <h4>注意</h4>
-                <p>未定義（みていぎ：まだ動ける状態）のまま進むと、修正で形がズレる。</p>
-              </div>
-            </article>
-
-            <article class="lesson-bit">
-              <span class="dot" style="background:var(--violet)"></span>
-              <div>
-                <h4>設計判断</h4>
-                <p>先に大きな形。次に穴。最後に丸み。これが壊れにくい順番。</p>
-              </div>
-            </article>
-
-            <article class="lesson-bit">
-              <span class="dot" style="background:#17303a"></span>
-              <div>
-                <h4>発明家視点</h4>
-                <p>作り方を残せると、あとで寸法を変えて別の発明へ育てられる。</p>
-              </div>
-            </article>
-          </div>
-        </section>
-
-        <section class="card sim" id="touch">
-          <div>
-            <h3>触って理解する：形が決まる条件</h3>
-
-            <label class="control-row">
-              <span>寸法固定</span>
-              <input id="dimension" type="range" min="0" max="100" value="70">
-              <span class="value" id="dimensionValue">70%</span>
-            </label>
-
-            <label class="control-row">
-              <span>拘束</span>
-              <input id="relation" type="range" min="0" max="100" value="58">
-              <span class="value" id="relationValue">58%</span>
-            </label>
-
-            <label class="control-row">
-              <span>押し出し量</span>
-              <input id="depth" type="range" min="5" max="80" value="20">
-              <span class="value" id="depthValue">20mm</span>
-            </label>
-
-            <div class="score-grid">
-              <div class="score"><span>スケッチ状態</span><strong id="sketchState">少し動く</strong></div>
-              <div class="score"><span>部品の安定</span><strong id="partState">中</strong></div>
-              <div class="score"><span>次に見る</span><strong id="nextHint">寸法を増やす</strong></div>
+        <section class="panel cover" id="cover">
+          <figure class="cover-media">
+            <img src="./assets/sw-mid-completion-preview-real.png" alt="SOLIDWORKS中級教科書の完成イメージ">
+            <div class="cover-caption">
+              <div class="caption-chip"><span>最初に見る</span>どの面から作るか</div>
+              <div class="caption-chip"><span>次に触る</span>押し出し方向と深さ</div>
+              <div class="caption-chip"><span>最後に判断</span>壊れにくい作る順番</div>
+            </div>
+          </figure>
+          <div class="cover-text">
+            <span class="badge">SW-M01 いまここ</span>
+            <div>
+              <h2><span>絵を描く前に、</span><span>作る順番を決める。</span></h2>
+              <p class="lead">
+                今日のゴールは、スケッチを「絵」ではなく、あとで直せる部品の土台として見ること。
+              </p>
+            </div>
+            <div class="primary-actions">
+              <a class="btn primary" href="#touch">触って始める</a>
+              <a class="btn" href="#map">目次を見る</a>
             </div>
           </div>
-
-          <figure class="media hero-media" aria-label="シミュレーター結果">
-            <img id="simImage" src="./assets/sw01-sketch-real.png" alt="寸法つきスケッチのCAD画面">
-            <figcaption class="caption" id="simCaption">寸法と拘束が増えるほど、形は動きにくくなる。</figcaption>
-          </figure>
         </section>
 
-        <section class="card" id="road">
-          <h3>この先の進み方</h3>
-          <div class="road">
-            <div class="road-row"><span class="road-code">SW01</span><span>スケッチ → 押し出し → 部品 ※今日</span></div>
-            <div class="road-row"><span class="road-code">SW02</span><span>完全定義（かんぜんていぎ：線が全部止まる状態）</span></div>
-            <div class="road-row"><span class="road-code">SW03</span><span>フィーチャーツリー（作った順番の履歴）</span></div>
-            <div class="road-row"><span class="road-code">SW04</span><span>穴、フィレット、ミラーの順番</span></div>
-            <div class="road-row"><span class="road-code">復習</span><span>SW01〜SW05で自動復習</span></div>
+        <section class="lesson" id="map">
+          <div class="lesson-head">
+            <div>
+              <h3>中級ロード</h3>
+              <p>初級操作はいったん飛ばして、つまずきやすい設計判断から学ぶ。</p>
+            </div>
+            <span class="badge">基礎初級は後回し</span>
           </div>
+
+          <div class="mini-map">
+            <a class="chapter-row active" href="#lesson">
+              <span class="chapter-code">SW-M01</span>
+              <span>
+                <span class="chapter-title">スケッチから部品化</span><br>
+                <span class="chapter-note">基準面、押し出し、カット、設計意図</span>
+              </span>
+              <span class="chapter-note">今日</span>
+            </a>
+            <a class="chapter-row" href="#review">
+              <span class="chapter-code">SW-M02</span>
+              <span>
+                <span class="chapter-title">壊れにくいスケッチ</span><br>
+                <span class="chapter-note">拘束、寸法、完全定義、左右対称</span>
+              </span>
+              <span class="chapter-note">次</span>
+            </a>
+            <a class="chapter-row" href="#review">
+              <span class="chapter-code">SW-M03</span>
+              <span>
+                <span class="chapter-title">カットと穴の考え方</span><br>
+                <span class="chapter-note">貫通、途中まで、方向反転、基準面</span>
+              </span>
+              <span class="chapter-note">予定</span>
+            </a>
+            <a class="chapter-row" href="#review">
+              <span class="chapter-code">復習</span>
+              <span>
+                <span class="chapter-title">5テーマ復習</span><br>
+                <span class="chapter-note">SW-M01〜SW-M05がたまったら自動で復習</span>
+              </span>
+              <span class="chapter-note">自動</span>
+            </a>
+          </div>
+        </section>
+
+        <section class="lesson" id="lesson">
+          <div class="lesson-head">
+            <div>
+              <h3>写真と文章をつなげて読む</h3>
+              <p>画像の番号を見てから、同じ番号の説明を読む。</p>
+            </div>
+            <span class="badge">見る順番つき</span>
+          </div>
+
+          <div class="photo-grid">
+            <article class="photo-card">
+              <figure>
+                <img src="./assets/sw01-feature-tree-real.png" alt="基準面とフィーチャー順のSOLIDWORKS画面">
+                <span class="callout" style="left: 12%; top: 32%;">1</span>
+                <span class="callout" style="left: 15%; top: 53%;">5</span>
+                <span class="look-label">1 基準面。5 作る順番。</span>
+              </figure>
+              <div class="photo-body">
+                <strong>1 基準面（きじゅんめん）</strong>
+                <p>最初の面で、部品の向きが決まる。ここを間違えると、あとで図面や修正がつらくなる。</p>
+              </div>
+            </article>
+
+            <article class="photo-card">
+              <figure>
+                <img src="./assets/sw01-sketch-real.png" alt="完全定義に近いスケッチのSOLIDWORKS画面">
+                <span class="callout" style="left: 48%; top: 43%;">2</span>
+                <span class="look-label">2 スケッチ。寸法と拘束で動きを止める。</span>
+              </figure>
+              <div class="photo-body">
+                <strong>2 スケッチ（形の下書き）</strong>
+                <p>線を描くだけでは弱い。寸法と拘束（こうそく：点や線の動きを止める決まり）で形を決める。</p>
+              </div>
+            </article>
+
+            <article class="photo-card">
+              <figure>
+                <img src="./assets/sw01-extrude-real.png" alt="押し出し操作中のSOLIDWORKS画面">
+                <span class="callout" style="left: 61%; top: 48%;">3</span>
+                <span class="arrow" style="left: 63%; top: 43%; transform: rotate(90deg);"></span>
+                <span class="look-label">3 押し出し。絵に厚みをつける。</span>
+              </figure>
+              <div class="photo-body">
+                <strong>3 押し出し（厚みをつける命令）</strong>
+                <p>大事なのはボタンではなく、どの方向に、どこまで伸ばすか。ここが設計判断になる。</p>
+              </div>
+            </article>
+
+            <article class="photo-card">
+              <figure>
+                <img src="./assets/sw01-underdefined-real.png" alt="未定義スケッチのSOLIDWORKS画面">
+                <span class="callout" style="left: 80%; top: 20%;">NG</span>
+                <span class="look-label">未定義。寸法変更で形が逃げる。</span>
+              </figure>
+              <div class="photo-body">
+                <strong>4 注意：未定義（みていぎ）</strong>
+                <p>青い線が動ける状態だと、寸法を変えた時に形が勝手にずれる。まず動きを止める。</p>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="lesson" id="touch">
+          <div class="lesson-head">
+            <div>
+              <h3>触って分かる：部品化シミュレーター</h3>
+              <p>スライダーを動かすと、実画像が切り替わって作る順番が見える。</p>
+            </div>
+            <button class="btn primary" id="playBtn" type="button">再生</button>
+          </div>
+
+          <div class="stage">
+            <figure class="stage-figure" aria-live="polite">
+              <img class="active" data-stage-img="0" src="./assets/sw01-feature-tree-real.png" alt="基準面と作る順番">
+              <img data-stage-img="1" src="./assets/sw01-sketch-real.png" alt="スケッチ">
+              <img data-stage-img="2" src="./assets/sw01-extrude-real.png" alt="押し出し">
+              <img data-stage-img="3" src="./assets/sw01-extrude-real.png" alt="押し出しカットの考え方">
+              <img data-stage-img="4" src="./assets/sw01-feature-tree-real.png" alt="設計意図">
+              <span class="callout" id="stageCallout" style="left: 56%; top: 36%;">1</span>
+              <span class="arrow" id="stageArrow" style="left: 64%; top: 42%; transform: rotate(90deg);"></span>
+              <div class="stage-hud">
+                <div class="stage-message" id="stageText">1 基準面。最初にどの面へスケッチするかで部品の向きが決まる。</div>
+                <div class="stage-count" id="stageCount">1 / 5</div>
+              </div>
+            </figure>
+
+            <div class="touch-panel">
+              <div>
+                <h3>操作する場所</h3>
+                <p class="lead">スケッチを作る前に、作る順番を頭の中で決める。</p>
+              </div>
+
+              <div class="stage-tabs" id="stageTabs"></div>
+
+              <label class="range-row">
+                <strong>作る順番</strong>
+                <input id="stageRange" type="range" min="0" max="4" step="1" value="0">
+              </label>
+
+              <div class="decision-grid">
+                <div class="decision">
+                  <span>今の判断</span>
+                  <strong id="decisionMain">基準面を選ぶ</strong>
+                </div>
+                <div class="decision">
+                  <span>失敗すると</span>
+                  <strong id="decisionRisk">向きが後でつらい</strong>
+                </div>
+                <div class="decision">
+                  <span>見るところ</span>
+                  <strong id="decisionLook">Front / Top / Right</strong>
+                </div>
+                <div class="decision">
+                  <span>覚える一言</span>
+                  <strong id="decisionRule">絵の前に面</strong>
+                </div>
+              </div>
+
+              <button class="btn" id="completeTouch" type="button">SW-M01 触った</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="lesson">
+          <div class="lesson-head">
+            <div>
+              <h3>今日の説明</h3>
+              <p>専門用語を、実務で使う判断に変える。</p>
+            </div>
+          </div>
+          <div class="explain-grid">
+            <article class="explain">
+              <strong>定義（ていぎ）</strong>
+              <p>フィーチャーは、形を作る1手。押し出しもカットもフィーチャー。</p>
+            </article>
+            <article class="explain">
+              <strong>しくみ</strong>
+              <p>スケッチが断面になり、押し出しが奥行きを作り、カットが材料を削る。</p>
+            </article>
+            <article class="explain">
+              <strong>なぜ</strong>
+              <p>3D部品は、平面の絵を順番に積み上げてできるから。</p>
+            </article>
+            <article class="explain">
+              <strong>注意</strong>
+              <p>フィレットや面取りを早く入れすぎると、後の変更でエラーが出やすい。</p>
+            </article>
+            <article class="explain">
+              <strong>設計判断</strong>
+              <p>最初の面、完全定義、終端条件、カット方向を先に見る。</p>
+            </article>
+            <article class="explain">
+              <strong>発明家視点</strong>
+              <p>作る順番が見えると、軽くて強くて直しやすい形を自分で作れる。</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="lesson" id="quiz">
+          <div class="lesson-head">
+            <div>
+              <h3>SW-M01 ミニテスト</h3>
+              <p>押すだけで答えと理由が出る。</p>
+            </div>
+            <span class="badge" id="quizScore">0 / 6</span>
+          </div>
+          <div class="quiz">
+            <div class="quiz-meta" id="quizMeta">Q1 / 6</div>
+            <h3 id="quizQuestion">読み込み中</h3>
+            <div class="choices" id="choices"></div>
+            <div class="answer-box" id="answerBox">選ぶと答えが出る。</div>
+            <div class="primary-actions">
+              <button class="btn" id="prevQuiz" type="button">前の問題</button>
+              <button class="btn primary" id="nextQuiz" type="button">次の問題へ</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="lesson" id="review">
+          <div class="lesson-head">
+            <div>
+              <h3>夜5分復習</h3>
+              <p>寝る前に、この3つだけ思い出す。</p>
+            </div>
+          </div>
+          <div class="explain-grid">
+            <article class="explain">
+              <strong>1. 最初に決めるものは？</strong>
+              <p>基準面。どの面にスケッチするか。</p>
+            </article>
+            <article class="explain">
+              <strong>2. 押し出しで決めるものは？</strong>
+              <p>方向と終端条件（どこで止めるか）。</p>
+            </article>
+            <article class="explain">
+              <strong>3. カットで見るものは？</strong>
+              <p>削る方向と、貫通するか途中で止めるか。</p>
+            </article>
+          </div>
+          <p class="footer-note">
+            次は SW-M02「壊れにくいスケッチ」。拘束、寸法、完全定義を深掘りする。
+          </p>
         </section>
       </main>
 
-      <aside class="side">
-        <section id="memo">
+      <aside class="side" aria-label="復習とメモ">
+        <section class="side-card">
           <h3>なぜ？メモ</h3>
-          <textarea id="memoBox" placeholder="例：なぜ青い線だと危ない？&#10;例：押し出しの前に何を確認する？"></textarea>
+          <textarea class="memo" id="memo" placeholder="例：なぜ最初の面が大事？&#10;なぜフィレットは最後？"></textarea>
         </section>
 
-        <section class="quiz" id="quiz">
-          <h3>テストに挑戦</h3>
-          <span class="quiz-count" id="quizCount">1 / 3</span>
-          <p class="question" id="quizQuestion"></p>
-          <div id="choices"></div>
-          <div class="feedback" id="feedback">答えると、理由と画像が出る。</div>
-          <button class="primary" id="nextQuestion" type="button">次の問題へ</button>
+        <section class="side-card">
+          <h3>今日の進み具合</h3>
+          <div class="progress-line" aria-hidden="true"><span id="progressBar"></span></div>
+          <p><strong id="progressText">0%</strong></p>
+          <div class="checklist">
+            <label><input type="checkbox" data-check="image"> 実画像を見た</label>
+            <label><input type="checkbox" data-check="touch"> シミュレーターを触った</label>
+            <label><input type="checkbox" data-check="quiz"> テストを解いた</label>
+          </div>
         </section>
 
-        <section class="review">
-          <h3>復習の進み具合</h3>
-          <strong id="reviewPercent">0%</strong>
-          <div class="progress-line"><div class="progress-fill" id="reviewFill"></div></div>
-          <label class="check-row"><input type="checkbox" class="review-check"> 完成ポスターを見た</label>
-          <label class="check-row"><input type="checkbox" class="review-check"> スライダーを触った</label>
-          <label class="check-row"><input type="checkbox" class="review-check"> テストを解いた</label>
-          <label class="check-row"><input type="checkbox" class="review-check"> なぜ？メモを書いた</label>
-          <button class="primary" id="resetProgress" type="button">今日だけリセット</button>
+        <section class="side-card">
+          <h3>公式根拠</h3>
+          <div class="source-list">
+            <a href="https://help.solidworks.com/2024/english/SolidWorks/sldworks/c_Where_to_Start_a_Sketch.htm?id=28.0.7">Where to Start a Sketch</a>
+            <a href="https://help.solidworks.com/2024/english/SolidWorks/sldworks/t_creating_an_extrude_feature.htm?id=23.6.19.0">Creating an Extrude Feature</a>
+            <a href="https://help.solidworks.com/2024/english/SolidWorks/sldworks/c_end_condition_extrude.htm?id=23.6.19.2">End Condition Extrude</a>
+            <a href="https://help.solidworks.com/2024/english/SolidWorks/sldworks/c_cuts.htm?id=23.6.15">Cuts</a>
+          </div>
         </section>
       </aside>
     </div>
   </div>
 
   <script>
-    const storageKey = "solidworks-foundation-sw01-v1";
-    const saved = JSON.parse(localStorage.getItem(storageKey) || "{}");
-    const sliders = [
-      ["dimension", "dimensionValue"],
-      ["relation", "relationValue"],
-      ["depth", "depthValue"]
-    ];
-
-    let quizIndex = Number(saved.quizIndex || 0);
-
-    const quizzes = [
+    const cacheKey = "solidworks-mid-m01-v1";
+    const stages = [
       {
-        q: "Q1. スケッチを先に固定する理由は？",
-        choices: ["あとで形が勝手に動かないようにする", "見た目を派手にする", "保存を早くする"],
-        correct: 0,
-        why: "正解。スケッチは部品の土台。土台が動くと、押し出した形も変わる。",
-        image: "./assets/sw01-underdefined-real.png",
-        alt: "未定義スケッチのCAD画面"
+        title: "基準面",
+        text: "1 基準面。最初にどの面へスケッチするかで部品の向きが決まる。",
+        main: "基準面を選ぶ",
+        risk: "向きが後でつらい",
+        look: "Front / Top / Right",
+        rule: "絵の前に面",
+        callout: "1",
+        calloutStyle: ["12%", "32%"],
+        arrowStyle: ["64%", "42%", "90deg"]
       },
       {
-        q: "Q2. 押し出しは何をしている？",
-        choices: ["線を消している", "2Dの形に厚みを出している", "穴だけを作っている"],
-        correct: 1,
-        why: "正解。押し出しは、紙の形を箱みたいに厚くする操作。",
-        image: "./assets/sw01-extrude-real.png",
-        alt: "押し出し操作のCAD画面"
+        title: "スケッチ",
+        text: "2 スケッチ。線を描いたら、寸法と拘束で動けない形にする。",
+        main: "完全定義へ近づける",
+        risk: "形が勝手に逃げる",
+        look: "青い線と寸法",
+        rule: "線は動きを止める",
+        callout: "2",
+        calloutStyle: ["48%", "43%"],
+        arrowStyle: ["48%", "50%", "0deg"]
       },
       {
-        q: "Q3. フィーチャーツリーは何を見る場所？",
-        choices: ["材料の値段", "パソコンの性能", "作った順番と修正場所"],
-        correct: 2,
-        why: "正解。左の履歴を見ると、どこで形を作ったか戻って直せる。",
-        image: "./assets/sw01-feature-tree-real.png",
-        alt: "フィーチャーツリーのCAD画面"
+        title: "押し出し",
+        text: "3 押し出し。スケッチの断面に厚みをつけて、最初のかたまりを作る。",
+        main: "方向と深さを決める",
+        risk: "厚みが逆へ出る",
+        look: "矢印と数値",
+        rule: "絵に厚み",
+        callout: "3",
+        calloutStyle: ["61%", "48%"],
+        arrowStyle: ["64%", "42%", "90deg"]
+      },
+      {
+        title: "押し出しカット",
+        text: "4 押し出しカット。削る方向と、どこまで削るかを決める。",
+        main: "削る先を決める",
+        risk: "穴が浅い・逆に削る",
+        look: "方向反転と終端条件",
+        rule: "削る道を見る",
+        callout: "4",
+        calloutStyle: ["72%", "54%"],
+        arrowStyle: ["72%", "50%", "0deg"]
+      },
+      {
+        title: "設計意図",
+        text: "5 設計意図。あとで寸法を変えても、狙った形のまま動くように順番を作る。",
+        main: "作る順番を整理",
+        risk: "修正でエラーが出る",
+        look: "フィーチャー順",
+        rule: "角丸は後ろ",
+        callout: "5",
+        calloutStyle: ["15%", "53%"],
+        arrowStyle: ["34%", "54%", "90deg"]
       }
     ];
 
-    function saveState() {
-      const data = {
-        memo: document.getElementById("memoBox").value,
-        sliders: Object.fromEntries(sliders.map(([id]) => [id, document.getElementById(id).value])),
-        checks: [...document.querySelectorAll(".review-check")].map(input => input.checked),
-        quizIndex
-      };
-      localStorage.setItem(storageKey, JSON.stringify(data));
-    }
-
-    function updateSim() {
-      const dimension = Number(document.getElementById("dimension").value);
-      const relation = Number(document.getElementById("relation").value);
-      const depth = Number(document.getElementById("depth").value);
-      document.getElementById("dimensionValue").textContent = dimension + "%";
-      document.getElementById("relationValue").textContent = relation + "%";
-      document.getElementById("depthValue").textContent = depth + "mm";
-
-      const lockScore = Math.round(dimension * .55 + relation * .45);
-      const simImage = document.getElementById("simImage");
-      const simCaption = document.getElementById("simCaption");
-      const sketchState = document.getElementById("sketchState");
-      const partState = document.getElementById("partState");
-      const nextHint = document.getElementById("nextHint");
-
-      if (lockScore < 46) {
-        simImage.src = "./assets/sw01-underdefined-real.png";
-        simImage.alt = "未定義スケッチのCAD画面";
-        simCaption.textContent = "線がまだ動ける。ここで進むと、あとで形がズレやすい。";
-        sketchState.textContent = "動きやすい";
-        partState.textContent = "低";
-        nextHint.textContent = "寸法を入れる";
-      } else if (depth > 45) {
-        simImage.src = "./assets/sw01-extrude-real.png";
-        simImage.alt = "押し出し操作のCAD画面";
-        simCaption.textContent = "押し出し量が大きい。スケッチが固まっているか先に見る。";
-        sketchState.textContent = "だいたい固定";
-        partState.textContent = "中";
-        nextHint.textContent = "履歴を見る";
-      } else {
-        simImage.src = "./assets/sw01-sketch-real.png";
-        simImage.alt = "寸法つきスケッチのCAD画面";
-        simCaption.textContent = "寸法と拘束が増えるほど、形は動きにくくなる。";
-        sketchState.textContent = lockScore > 78 ? "固定できた" : "少し動く";
-        partState.textContent = lockScore > 78 ? "高" : "中";
-        nextHint.textContent = lockScore > 78 ? "押し出す" : "拘束を増やす";
+    const quiz = [
+      {
+        q: "最初に決めると後が楽になるものは？",
+        choices: ["基準面", "色", "ファイル名"],
+        answer: 0,
+        explain: "答えは基準面。最初のスケッチ面で、部品の向きと後の見え方が決まる。"
+      },
+      {
+        q: "スケッチで青い線が残る時、何が起きやすい？",
+        choices: ["形が動く", "必ず軽くなる", "押し出せない色になる"],
+        answer: 0,
+        explain: "青い線はまだ動けることが多い。寸法変更で形が逃げる原因になる。"
+      },
+      {
+        q: "押し出しで見るべきものは？",
+        choices: ["方向と終端条件", "画面の明るさ", "マウスの色"],
+        answer: 0,
+        explain: "押し出しは厚みを作る命令。どの方向へ、どこまで伸ばすかが本体。"
+      },
+      {
+        q: "押し出しカットは何をする命令？",
+        choices: ["材料を足す", "材料を削る", "名前を変える"],
+        answer: 1,
+        explain: "押し出しカットは、スケッチの形で材料を削る命令。穴や溝に使う。"
+      },
+      {
+        q: "フィレットや面取りは、基本どのタイミングが安全？",
+        choices: ["最初", "最後の方", "スケッチ前"],
+        answer: 1,
+        explain: "角丸や面取りは後ろが安全。早すぎると、前の形を直した時に壊れやすい。"
+      },
+      {
+        q: "設計意図とは？",
+        choices: ["見た目のかっこよさだけ", "後で直しても狙い通り動く考え", "保存場所の名前"],
+        answer: 1,
+        explain: "設計意図は、寸法変更や修正に強い作り方の考え。中級の中心になる。"
       }
+    ];
 
-      document.querySelectorAll(".review-check")[1].checked = true;
-      updateReview();
-      saveState();
-    }
+    const state = JSON.parse(localStorage.getItem(cacheKey) || "{}");
+    let currentStage = state.stage || 0;
+    let currentQuiz = state.quizIndex || 0;
+    let quizAnswered = state.quizAnswered || {};
+    let playTimer = null;
 
-    function renderQuiz() {
-      const quiz = quizzes[quizIndex % quizzes.length];
-      document.getElementById("quizCount").textContent = `${quizIndex + 1} / ${quizzes.length}`;
-      document.getElementById("quizQuestion").textContent = quiz.q;
+    const save = () => {
+      localStorage.setItem(cacheKey, JSON.stringify({
+        stage: currentStage,
+        quizIndex: currentQuiz,
+        quizAnswered,
+        checks: getChecks(),
+        memo: document.getElementById("memo").value
+      }));
+    };
+
+    const getChecks = () => {
+      const checks = {};
+      document.querySelectorAll("[data-check]").forEach((box) => checks[box.dataset.check] = box.checked);
+      return checks;
+    };
+
+    const setChecks = () => {
+      const checks = state.checks || {};
+      document.querySelectorAll("[data-check]").forEach((box) => {
+        box.checked = Boolean(checks[box.dataset.check]);
+        box.addEventListener("change", () => { updateProgress(); save(); });
+      });
+    };
+
+    const updateProgress = () => {
+      const checks = getChecks();
+      const quizDone = Object.keys(quizAnswered).length === quiz.length;
+      if (quizDone) {
+        const quizBox = document.querySelector("[data-check='quiz']");
+        quizBox.checked = true;
+        checks.quiz = true;
+      }
+      const count = Object.values(checks).filter(Boolean).length;
+      const percent = Math.round((count / 3) * 100);
+      document.getElementById("progressBar").style.width = `${percent}%`;
+      document.getElementById("progressText").textContent = `${percent}%`;
+    };
+
+    const renderTabs = () => {
+      const tabs = document.getElementById("stageTabs");
+      tabs.innerHTML = "";
+      stages.forEach((stage, index) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "stage-tab";
+        btn.textContent = `${index + 1} ${stage.title}`;
+        btn.addEventListener("click", () => setStage(index));
+        tabs.appendChild(btn);
+      });
+    };
+
+    const setStage = (index) => {
+      currentStage = Math.max(0, Math.min(stages.length - 1, index));
+      const stage = stages[currentStage];
+      document.querySelectorAll("[data-stage-img]").forEach((img) => {
+        img.classList.toggle("active", Number(img.dataset.stageImg) === currentStage);
+      });
+      document.querySelectorAll(".stage-tab").forEach((btn, i) => btn.classList.toggle("active", i === currentStage));
+      document.getElementById("stageRange").value = currentStage;
+      document.getElementById("stageText").textContent = stage.text;
+      document.getElementById("stageCount").textContent = `${currentStage + 1} / ${stages.length}`;
+      document.getElementById("decisionMain").textContent = stage.main;
+      document.getElementById("decisionRisk").textContent = stage.risk;
+      document.getElementById("decisionLook").textContent = stage.look;
+      document.getElementById("decisionRule").textContent = stage.rule;
+      const callout = document.getElementById("stageCallout");
+      callout.textContent = stage.callout;
+      callout.style.left = stage.calloutStyle[0];
+      callout.style.top = stage.calloutStyle[1];
+      const arrow = document.getElementById("stageArrow");
+      arrow.style.left = stage.arrowStyle[0];
+      arrow.style.top = stage.arrowStyle[1];
+      arrow.style.transform = `rotate(${stage.arrowStyle[2]})`;
+      if (currentStage > 0) document.querySelector("[data-check='image']").checked = true;
+      updateProgress();
+      save();
+    };
+
+    const renderQuiz = () => {
+      const item = quiz[currentQuiz];
+      document.getElementById("quizMeta").textContent = `Q${currentQuiz + 1} / ${quiz.length}`;
+      document.getElementById("quizQuestion").textContent = item.q;
       const choices = document.getElementById("choices");
-      const feedback = document.getElementById("feedback");
       choices.innerHTML = "";
-      feedback.textContent = "答えると、理由と画像が出る。";
-
-      quiz.choices.forEach((text, index) => {
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = "choice";
-        button.textContent = text;
-        button.addEventListener("click", () => {
-          [...choices.children].forEach((child, i) => {
-            child.classList.toggle("correct", i === quiz.correct);
-            child.classList.toggle("wrong", i === index && index !== quiz.correct);
-          });
-          feedback.innerHTML = "";
-          const message = document.createElement("div");
-          message.textContent = (index === quiz.correct ? "正解。 " : "惜しい。 ") + quiz.why;
-          const image = document.createElement("img");
-          image.src = quiz.image;
-          image.alt = quiz.alt;
-          feedback.append(message, image);
-          document.querySelectorAll(".review-check")[2].checked = true;
-          updateReview();
-          saveState();
-        });
-        choices.appendChild(button);
+      item.choices.forEach((choice, index) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "choice";
+        btn.textContent = choice;
+        btn.addEventListener("click", () => answerQuiz(index));
+        choices.appendChild(btn);
       });
-    }
+      document.getElementById("answerBox").textContent = "選ぶと答えが出る。";
+      if (quizAnswered[currentQuiz] !== undefined) answerQuiz(quizAnswered[currentQuiz], true);
+      updateQuizScore();
+      save();
+    };
 
-    function updateReview() {
-      const checks = [...document.querySelectorAll(".review-check")];
-      const done = checks.filter(input => input.checked).length;
-      const percent = Math.round(done / checks.length * 100);
-      document.getElementById("reviewPercent").textContent = percent + "%";
-      document.getElementById("reviewFill").style.width = percent + "%";
-    }
-
-    sliders.forEach(([id]) => {
-      const input = document.getElementById(id);
-      if (saved.sliders && saved.sliders[id]) input.value = saved.sliders[id];
-      input.addEventListener("input", updateSim);
-    });
-
-    const memo = document.getElementById("memoBox");
-    memo.value = saved.memo || "";
-    memo.addEventListener("input", () => {
-      document.querySelectorAll(".review-check")[3].checked = memo.value.trim().length > 0;
-      updateReview();
-      saveState();
-    });
-
-    document.querySelectorAll(".review-check").forEach((input, index) => {
-      input.checked = saved.checks ? Boolean(saved.checks[index]) : index === 0;
-      input.addEventListener("change", () => {
-        updateReview();
-        saveState();
+    const answerQuiz = (index, silent = false) => {
+      const item = quiz[currentQuiz];
+      quizAnswered[currentQuiz] = index;
+      document.querySelectorAll(".choice").forEach((btn, i) => {
+        btn.classList.toggle("correct", i === item.answer);
+        btn.classList.toggle("wrong", i === index && i !== item.answer);
       });
+      const prefix = index === item.answer ? "正解。" : "惜しい。";
+      document.getElementById("answerBox").textContent = `${prefix} ${item.explain}`;
+      if (!silent) document.querySelector("[data-check='quiz']").checked = Object.keys(quizAnswered).length === quiz.length;
+      updateQuizScore();
+      updateProgress();
+      save();
+    };
+
+    const updateQuizScore = () => {
+      const correct = Object.entries(quizAnswered).filter(([qIndex, choiceIndex]) => quiz[Number(qIndex)].answer === choiceIndex).length;
+      document.getElementById("quizScore").textContent = `${correct} / ${quiz.length}`;
+    };
+
+    document.getElementById("stageRange").addEventListener("input", (event) => setStage(Number(event.target.value)));
+    document.getElementById("completeTouch").addEventListener("click", () => {
+      document.querySelector("[data-check='touch']").checked = true;
+      updateProgress();
+      save();
     });
 
-    document.getElementById("nextQuestion").addEventListener("click", () => {
-      quizIndex = (quizIndex + 1) % quizzes.length;
+    document.getElementById("playBtn").addEventListener("click", () => {
+      if (playTimer) {
+        clearInterval(playTimer);
+        playTimer = null;
+        document.getElementById("playBtn").textContent = "再生";
+        return;
+      }
+      document.getElementById("playBtn").textContent = "停止";
+      playTimer = setInterval(() => setStage((currentStage + 1) % stages.length), 1400);
+    });
+
+    document.getElementById("prevQuiz").addEventListener("click", () => {
+      currentQuiz = (currentQuiz + quiz.length - 1) % quiz.length;
       renderQuiz();
-      saveState();
     });
 
-    document.getElementById("resetProgress").addEventListener("click", () => {
-      document.querySelectorAll(".review-check").forEach(input => {
-        input.checked = false;
-      });
-      updateReview();
-      saveState();
+    document.getElementById("nextQuiz").addEventListener("click", () => {
+      currentQuiz = (currentQuiz + 1) % quiz.length;
+      renderQuiz();
     });
 
-    let installPrompt = null;
-    window.addEventListener("beforeinstallprompt", event => {
+    const memo = document.getElementById("memo");
+    memo.value = state.memo || "";
+    memo.addEventListener("input", save);
+
+    let deferredPrompt = null;
+    window.addEventListener("beforeinstallprompt", (event) => {
       event.preventDefault();
-      installPrompt = event;
-      const button = document.getElementById("installButton");
-      button.hidden = false;
-      button.addEventListener("click", async () => {
-        button.hidden = true;
-        await installPrompt.prompt();
-        installPrompt = null;
-      }, { once: true });
+      deferredPrompt = event;
+    });
+    document.getElementById("installBtn").addEventListener("click", async () => {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      await deferredPrompt.userChoice;
+      deferredPrompt = null;
     });
 
-    if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
-      navigator.serviceWorker.register("./service-worker.js");
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => navigator.serviceWorker.register("./service-worker.js"));
     }
 
-    updateSim();
+    renderTabs();
+    setChecks();
+    setStage(currentStage);
     renderQuiz();
-    updateReview();
+    updateProgress();
   </script>
 </body>
 </html>

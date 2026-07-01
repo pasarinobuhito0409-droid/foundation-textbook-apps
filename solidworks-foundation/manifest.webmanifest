@@ -1,10 +1,10 @@
 {
-  "name": "SolidWorks基礎教科書",
-  "short_name": "SW基礎",
+  "name": "SOLIDWORKS 中級 形づくり教科書",
+  "short_name": "SW中級",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#f4f0e8",
-  "theme_color": "#f4f0e8",
+  "background_color": "#f5f2ec",
+  "theme_color": "#f5f2ec",
   "icons": [
     {
       "src": "./solidworks-icon.png",

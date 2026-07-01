@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>基礎教科書アプリ</title>
+  <title>基礎教科書アプリ置き場</title>
   <style>
     :root {
       color-scheme: light;
@@ -23,7 +23,7 @@
       margin: 0;
       color: var(--ink);
       background:
-        linear-gradient(180deg, rgba(255,255,255,.72), rgba(255,255,255,.2)),
+        linear-gradient(180deg, rgba(255,255,255,.78), rgba(255,255,255,.26)),
         repeating-linear-gradient(90deg, rgba(30,45,38,.026) 0 1px, transparent 1px 12px),
         var(--bg);
       line-height: 1.7;
@@ -37,7 +37,7 @@
 
     h1 {
       margin: 0;
-      font-size: clamp(34px, 7vw, 68px);
+      font-size: clamp(32px, 6vw, 64px);
       line-height: 1.05;
       letter-spacing: 0;
     }
@@ -57,11 +57,11 @@
     }
 
     .app-card {
-      min-height: 232px;
+      min-height: 220px;
       padding: 18px;
       border: 1px solid var(--line);
       border-radius: var(--radius);
-      background: rgba(255,253,247,.92);
+      background: rgba(255,253,247,.94);
       box-shadow: var(--shadow);
       text-decoration: none;
       color: inherit;
@@ -109,7 +109,7 @@
       border: 1px dashed rgba(20, 83, 45, .35);
       border-radius: var(--radius);
       color: var(--muted);
-      background: rgba(255,255,255,.7);
+      background: rgba(255,255,255,.76);
       font-weight: 800;
     }
 
@@ -118,33 +118,25 @@
     }
 
     @media (max-width: 620px) {
-      main { width: min(100% - 18px, 430px); }
+      main { width: min(100% - 18px, 430px); padding-top: 22px; }
       .app-grid { grid-template-columns: 1fr; }
-      .app-card { min-height: 190px; }
+      .app-card { min-height: 184px; }
     }
   </style>
 </head>
 <body>
   <main>
-    <h1>基礎教科書アプリ</h1>
+    <h1>基礎教科書アプリ置き場</h1>
     <p class="lead">
-      仕事前に開いて、見て、触って、テストして、基礎を少しずつ固める入口。
-      新しい教科書はここへ追加して、前の内容も残す。
+      仕事前に開いて、見て、触って、テストして、少しずつ基礎を固める入口。
+      新しい教科書はここに追加して、前の内容も残す。
     </p>
 
     <div class="app-grid">
-      <a class="app-card" style="--accent:#2368c5" href="./sheet-metal-foundation/index.html">
+      <a class="app-card" style="--accent:#2368c5" href="./solidworks-foundation/index.html">
         <span>
-          <strong>板金基礎</strong>
-          <p>板厚、曲げR、穴位置、加工NGを実物図とシミュレーターで覚える。</p>
-        </span>
-        <span class="open">開く</span>
-      </a>
-
-      <a class="app-card" style="--accent:#d7672f" href="./welding-foundation/index.html">
-        <span>
-          <strong>溶接基礎</strong>
-          <p>熱で溶ける、冷えて固まる、2枚がつながる流れを実物画像で覚える。</p>
+          <strong>SOLIDWORKS 中級</strong>
+          <p>スケッチから押し出し・押し出しカットで部品にする。中級のつまずきから学ぶ。</p>
         </span>
         <span class="open">開く</span>
       </a>
@@ -152,15 +144,7 @@
       <a class="app-card" style="--accent:#1f7a55" href="./mechanical-design-foundation/mechanical-design-foundation-textbook.html">
         <span>
           <strong>機械設計基礎</strong>
-          <p>目的、図面、材料、加工、公差をリアル画像と復習問題で覚える。</p>
-        </span>
-        <span class="open">開く</span>
-      </a>
-
-      <a class="app-card" style="--accent:#7c3aed" href="./electrical-design-foundation/electrical-design-foundation-textbook.html">
-        <span>
-          <strong>電気設計基礎</strong>
-          <p>電圧、電流、抵抗、配線、制御盤を触れる教材で復習する。</p>
+          <p>目的、面、材料、加工、公差をリアル画像と復習問題で覚える。</p>
         </span>
         <span class="open">開く</span>
       </a>
@@ -168,7 +152,31 @@
       <a class="app-card" style="--accent:#b45309" href="./mechanics-cae-foundation/mechanics-cae-foundation-textbook.html">
         <span>
           <strong>力学とCAE</strong>
-          <p>力、固定、荷重、応力、変形を現物感覚とCAEにつなげる。</p>
+          <p>力、固定、荷重、応力、変形を設計判断につなげる。</p>
+        </span>
+        <span class="open">開く</span>
+      </a>
+
+      <a class="app-card" style="--accent:#7c3aed" href="./electrical-design-foundation/electrical-design-foundation-textbook.html">
+        <span>
+          <strong>電気設計基礎</strong>
+          <p>電圧、電流、抵抗、配線、制御盤を見て触って理解する。</p>
+        </span>
+        <span class="open">開く</span>
+      </a>
+
+      <a class="app-card" style="--accent:#d7672f" href="./welding-foundation/index.html">
+        <span>
+          <strong>溶接基礎</strong>
+          <p>熱、アーク、溶け池、ビードをリアル画像と動きで学ぶ。</p>
+        </span>
+        <span class="open">開く</span>
+      </a>
+
+      <a class="app-card" style="--accent:#1d7f72" href="./sheet-metal-foundation/index.html">
+        <span>
+          <strong>板金基礎</strong>
+          <p>板厚、曲げR、穴位置、加工NGを実物イメージで覚える。</p>
         </span>
         <span class="open">開く</span>
       </a>
@@ -176,15 +184,7 @@
       <a class="app-card" style="--accent:#217a57" href="./painting-foundation/index.html">
         <span>
           <strong>塗装基礎</strong>
-          <p>下地、脱脂、足付け、プライマー、塗膜、乾燥を触って学ぶ。なぜ塗装がはがれるかを見る。</p>
-        </span>
-        <span class="open">開く</span>
-      </a>
-
-      <a class="app-card" style="--accent:#1f64bd" href="./solidworks-foundation/index.html">
-        <span>
-          <strong>SolidWorks基礎</strong>
-          <p>スケッチ、寸法、拘束、押し出し、フィーチャーツリーをリアル画像のポスター教材で覚える。</p>
+          <p>下地、足付け、プライマー、塗膜、乾燥を順番で見る。</p>
         </span>
         <span class="open">開く</span>
       </a>
@@ -192,7 +192,7 @@
       <a class="app-card" style="--accent:#187f86" href="./skill-catalog/index.html">
         <span>
           <strong>スキル図鑑</strong>
-          <p>日本語の短い名前でスキルを探し、内部IDとのつながりを見る。</p>
+          <p>スキル、フック、ゲートを日本語で探すための整理棚。</p>
         </span>
         <span class="open">開く</span>
       </a>
