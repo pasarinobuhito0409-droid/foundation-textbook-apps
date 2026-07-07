@@ -2,372 +2,427 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f3efe7">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f4efe5">
+  <title>塗装3D基礎 P00</title>
   <link rel="manifest" href="./manifest.webmanifest">
-  <title>塗装基礎 P00</title>
   <style>
     :root {
-      color-scheme: light;
-      --bg: #eee9df;
-      --paper: #fffdf7;
-      --panel: #f8f5ee;
-      --ink: #182226;
-      --muted: #657073;
-      --line: #d9d1c2;
-      --blue: #2368c5;
-      --green: #217a57;
-      --orange: #c85f2c;
-      --red: #c23b35;
-      --yellow: #d2a73d;
-      --violet: #6654ba;
-      --shadow: 0 18px 46px rgba(45, 39, 31, .13);
-      --radius: 8px;
-      --degrease: 72;
-      --scuff: 58;
-      --film: 48;
-      --dry: 62;
-      font-family: "Yu Gothic", "Hiragino Sans", Meiryo, system-ui, sans-serif;
+      --paper: #f4efe5;
+      --ink: #17212b;
+      --muted: #6b7280;
+      --line: rgba(24, 31, 42, .14);
+      --white: rgba(255, 255, 255, .92);
+      --blue: #246dcf;
+      --blue-2: #dbeaff;
+      --green: #16825d;
+      --green-2: #dff5ea;
+      --gold: #c98b24;
+      --gold-2: #fff1d6;
+      --red: #cc4b4b;
+      --red-2: #ffe4df;
+      --shadow: 0 20px 48px rgba(28, 31, 36, .14);
+      font-family: "Yu Gothic", "YuGothic", "Hiragino Sans", "Meiryo", system-ui, sans-serif;
     }
 
-    * { box-sizing: border-box; min-width: 0; }
-    html { scroll-behavior: smooth; }
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--paper);
+      color: var(--ink);
+    }
 
     body {
       margin: 0;
-      color: var(--ink);
+      min-height: 100vh;
+      overflow-x: hidden;
       background:
-        linear-gradient(120deg, rgba(255,255,255,.72), rgba(255,255,255,.14)),
-        repeating-linear-gradient(90deg, rgba(24,34,38,.026) 0 1px, transparent 1px 12px),
-        var(--bg);
-      line-height: 1.65;
-      overflow-wrap: anywhere;
+        linear-gradient(90deg, rgba(39, 61, 90, .045) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(39, 61, 90, .035) 1px, transparent 1px),
+        var(--paper);
+      background-size: 22px 22px;
+      color: var(--ink);
     }
 
-    button, input, textarea { font: inherit; }
-    button { cursor: pointer; }
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
 
     .app-shell {
-      width: min(1260px, calc(100% - 28px));
+      width: min(1240px, 100%);
       margin: 0 auto;
-      padding: 18px 0 34px;
-    }
-
-    .topbar {
-      min-height: 64px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-
-    .brand h1 {
-      margin: 0;
-      font-size: clamp(26px, 4vw, 38px);
-      line-height: 1.08;
-      letter-spacing: 0;
-    }
-
-    .brand p {
-      margin: 6px 0 0;
-      color: var(--muted);
-      font-size: 14px;
-      font-weight: 900;
-    }
-
-    .install-button {
-      min-height: 42px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      padding: 0 16px;
-      background: rgba(255,255,255,.8);
-      color: var(--ink);
-      box-shadow: 0 10px 24px rgba(45, 39, 31, .08);
-      font-weight: 950;
-    }
-
-    .workbench {
+      padding: 18px 18px 28px;
       display: grid;
-      grid-template-columns: 126px minmax(0, 1fr) 324px;
-      gap: 12px;
-      align-items: start;
-    }
-
-    .rail,
-    .lesson,
-    .side-panel,
-    .card,
-    .stage-card {
-      border: 1px solid rgba(124, 116, 101, .28);
-      border-radius: var(--radius);
-      background: rgba(255, 253, 247, .91);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
+      grid-template-columns: 104px minmax(0, 1fr);
+      gap: 18px;
     }
 
     .rail {
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
       position: sticky;
-      top: 12px;
+      top: 14px;
+      align-self: start;
+      min-height: calc(100vh - 28px);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, .78);
+      box-shadow: 0 12px 28px rgba(23, 33, 43, .08);
+      padding: 12px;
+      display: grid;
+      gap: 10px;
+      align-content: start;
     }
 
     .rail-title {
-      margin: 0 0 2px;
-      color: var(--muted);
-      font-size: 13px;
-      font-weight: 950;
+      font-weight: 900;
+      line-height: 1.15;
+      letter-spacing: 0;
+      padding: 8px 6px 4px;
     }
 
-    .rail-button {
-      min-height: 54px;
-      width: 100%;
+    .rail-title small {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .rail-link {
+      min-height: 48px;
       border: 1px solid var(--line);
-      border-radius: var(--radius);
+      border-radius: 12px;
       background: #fff;
       color: var(--ink);
       display: grid;
-      grid-template-columns: 42px 1fr;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 10px;
-      text-align: left;
+      place-items: center;
       text-decoration: none;
-      font-weight: 950;
+      font-weight: 900;
+      line-height: 1.1;
+      box-shadow: 0 7px 18px rgba(23, 33, 43, .06);
     }
 
-    .rail-button span { white-space: nowrap; }
+    .rail-link span {
+      display: block;
+      font-size: 12px;
+      margin-top: 3px;
+      color: var(--muted);
+    }
 
-    .rail-button.active {
+    .rail-link.active {
+      background: linear-gradient(180deg, #2f7ee5, #1f63bd);
       color: #fff;
       border-color: transparent;
-      background: linear-gradient(180deg, #3d78c7, #245ea7);
-      box-shadow: 0 12px 24px rgba(35,104,197,.25);
     }
 
-    .lesson {
-      padding: 14px;
-      display: grid;
-      gap: 12px;
+    .rail-link.active span {
+      color: rgba(255, 255, 255, .82);
     }
 
-    .chapter-head {
+    .workbench {
+      min-width: 0;
+    }
+
+    .topbar {
       display: flex;
       justify-content: space-between;
-      gap: 12px;
-      border-bottom: 1px solid var(--line);
-      padding-bottom: 10px;
+      align-items: center;
+      gap: 14px;
+      margin: 2px 0 14px;
     }
 
-    .chapter-head h2 {
+    .topbar h1 {
       margin: 0;
-      font-size: clamp(21px, 3vw, 30px);
+      font-size: clamp(24px, 3vw, 38px);
       letter-spacing: 0;
+      line-height: 1.08;
     }
 
-    .chapter-head p {
-      margin: 5px 0 0;
+    .topbar p {
+      margin: 6px 0 0;
       color: var(--muted);
-      font-weight: 850;
+      font-weight: 800;
     }
 
-    .chapter-tag {
-      display: inline-grid;
-      place-items: center;
-      min-height: 34px;
-      padding: 0 13px;
-      border-radius: 999px;
-      color: #fff;
-      background: var(--blue);
-      font-weight: 950;
-      white-space: nowrap;
-    }
-
-    .mobile-actions {
-      display: none;
-      gap: 8px;
-      overflow-x: auto;
-      padding-bottom: 2px;
-    }
-
-    .mobile-action {
-      min-height: 42px;
-      padding: 0 12px;
+    .install-pill {
       border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: #fff;
-      display: inline-grid;
-      place-items: center;
-      color: inherit;
-      text-decoration: none;
+      border-radius: 999px;
+      background: var(--white);
+      padding: 12px 16px;
+      font-weight: 900;
       white-space: nowrap;
-      font-weight: 950;
+      box-shadow: 0 10px 24px rgba(23, 33, 43, .08);
     }
 
-    .stage-card {
-      position: relative;
-      min-height: 470px;
-      overflow: hidden;
-      background:
-        linear-gradient(90deg, rgba(255,253,247,.92) 0%, rgba(255,253,247,.62) 38%, rgba(16,22,24,.2) 100%),
-        url("./assets/spray-finishing-workbench-real.jpg") center / cover no-repeat;
-    }
-
-    .stage-card::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(90deg, rgba(255,253,247,.86) 0%, rgba(255,253,247,.28) 42%, rgba(255,253,247,.08) 100%),
-        linear-gradient(180deg, rgba(255,253,247,.02), rgba(255,253,247,.46));
-      pointer-events: none;
-    }
-
-    .stage-content {
-      position: relative;
-      z-index: 1;
-      min-height: 470px;
-      padding: 18px;
+    .study-grid {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 286px;
-      gap: 16px;
+      grid-template-columns: minmax(0, 1fr) 296px;
+      gap: 18px;
       align-items: start;
     }
 
-    .lesson-title {
-      width: min(520px, 100%);
-      padding: 16px;
-      border: 1px solid rgba(255,255,255,.48);
-      border-radius: var(--radius);
-      background: rgba(255,253,247,.82);
+    .main-flow,
+    .side-flow {
+      display: grid;
+      gap: 14px;
     }
 
-    .lesson-title h3 {
-      margin: 0;
-      font-size: clamp(22px, 3vw, 34px);
-      line-height: 1.22;
-      letter-spacing: 0;
-    }
+    .hero { order: 1; }
+    .three-lab { order: 2; }
+    .lesson-road { order: 3; }
+    .linked-photos { order: 4; }
+    .main-flow > .panel.pad:last-child { order: 5; }
 
-    .lesson-title p {
-      margin: 9px 0 0;
-      color: #344045;
-      font-weight: 900;
-    }
-
-    .real-photo {
-      position: relative;
-      margin: 0;
-      border: 1px solid rgba(255,255,255,.66);
-      border-radius: var(--radius);
+    .panel {
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, .9);
+      box-shadow: 0 14px 34px rgba(23, 33, 43, .08);
       overflow: hidden;
-      background: #12191c;
-      box-shadow: 0 18px 34px rgba(0,0,0,.2);
     }
 
-    .real-photo img {
-      display: block;
+    .panel.pad {
+      padding: 16px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, .78fr) minmax(300px, 1fr);
+      min-height: 268px;
+    }
+
+    .hero-copy {
+      padding: 22px;
+      display: grid;
+      align-content: center;
+      gap: 12px;
+      background: linear-gradient(135deg, #fcfaf5, #ecf4ff);
+    }
+
+    .tag {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 8px 12px;
+      color: #0f4d37;
+      background: var(--green-2);
+      font-weight: 900;
+      border: 1px solid rgba(22, 130, 93, .18);
+    }
+
+    .hero-copy h2 {
+      margin: 0;
+      font-size: clamp(26px, 4vw, 48px);
+      line-height: 1.05;
+      letter-spacing: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .hero-copy p {
+      margin: 0;
+      line-height: 1.8;
+      font-weight: 800;
+      color: #27323e;
+      overflow-wrap: anywhere;
+    }
+
+    .hero-proof {
+      min-height: 268px;
+      background: #101820;
+      position: relative;
+    }
+
+    .hero-proof img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
 
-    .hero-photo {
-      margin-top: 16px;
-      min-height: 252px;
-    }
-
-    .photo-label {
+    .hero-proof .caption {
       position: absolute;
-      left: 12px;
-      bottom: 12px;
-      display: inline-grid;
-      gap: 3px;
-      max-width: min(320px, calc(100% - 24px));
+      left: 14px;
+      bottom: 14px;
+      max-width: calc(100% - 28px);
+      border-radius: 12px;
       padding: 10px 12px;
-      border: 1px solid rgba(255,255,255,.55);
-      border-radius: var(--radius);
-      background: rgba(255,253,247,.88);
-      color: var(--ink);
-      font-weight: 950;
-      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, .88);
+      font-weight: 900;
+      box-shadow: 0 10px 22px rgba(0, 0, 0, .18);
     }
 
-    .photo-label small {
-      color: var(--muted);
+    .lesson-road {
+      display: grid;
+      gap: 8px;
+    }
+
+    .road-row {
+      display: grid;
+      grid-template-columns: 72px 1fr auto;
+      gap: 10px;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      padding: 10px 12px;
       font-weight: 900;
     }
 
-    .callout-photo {
-      height: 150px;
+    .road-row.active {
+      border-color: rgba(36, 109, 207, .65);
+      background: #eaf3ff;
+      box-shadow: 0 0 0 3px rgba(36, 109, 207, .1);
     }
 
-    .source-line {
-      margin: 7px 0 0;
-      color: var(--muted);
-      font-size: 11px;
-      font-weight: 850;
+    .road-code {
+      border-radius: 999px;
+      background: #6f7b87;
+      color: #fff;
+      text-align: center;
+      padding: 6px 10px;
+      font-weight: 900;
     }
 
-    .result-photo {
-      height: 184px;
-      margin-bottom: 10px;
+    .road-row.active .road-code {
+      background: var(--blue);
     }
 
-    .result-photo::after,
-    .hero-photo::after,
-    .callout-photo::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background: linear-gradient(180deg, rgba(255,255,255,0), rgba(0,0,0,.22));
+    .road-now {
+      color: var(--blue);
+      font-weight: 900;
     }
 
-    .callout-stack {
-      display: grid;
-      gap: 10px;
-    }
-
-    .mini-panel {
-      border: 1px solid rgba(124, 116, 101, .28);
-      border-radius: var(--radius);
-      background: rgba(255,253,247,.9);
-      padding: 12px;
-    }
-
-    .mini-panel h4 {
-      margin: 0 0 8px;
-      font-size: 14px;
-      letter-spacing: 0;
-    }
-
-    .sim-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 300px;
-      gap: 12px;
-    }
-
-    .card {
+    .three-lab {
       padding: 14px;
     }
 
-    .card h3 {
-      margin: 0 0 12px;
-      font-size: 18px;
+    .lab-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+
+    .lab-head h2,
+    .section-title {
+      margin: 0;
+      font-size: 22px;
       letter-spacing: 0;
     }
 
-    .control-row {
-      display: grid;
-      grid-template-columns: 96px 1fr 72px;
-      gap: 10px;
-      align-items: center;
-      margin: 13px 0;
+    .lab-head p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-weight: 800;
+      line-height: 1.6;
+    }
+
+    .status-chip {
+      border: 1px solid rgba(22, 130, 93, .22);
+      border-radius: 999px;
+      background: var(--green-2);
+      color: #0f4d37;
+      padding: 9px 12px;
       font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .lab-body {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 292px;
+      gap: 14px;
+    }
+
+    .scene-wrap {
+      position: relative;
+      min-height: 424px;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(17, 24, 39, .22);
+      background: linear-gradient(180deg, #132332, #080d12);
+    }
+
+    #paint3d {
+      width: 100%;
+      height: 100%;
+      min-height: 424px;
+      display: block;
+    }
+
+    .scene-labels {
+      pointer-events: none;
+      position: absolute;
+      inset: 12px;
+      display: grid;
+      align-content: start;
+      gap: 8px;
+    }
+
+    .scene-label-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .scene-label {
+      width: fit-content;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .86);
+      color: #18202b;
+      padding: 8px 11px;
+      font-weight: 900;
+      box-shadow: 0 10px 22px rgba(0, 0, 0, .18);
+    }
+
+    .scene-read {
+      position: absolute;
+      left: 14px;
+      bottom: 14px;
+      max-width: min(520px, calc(100% - 28px));
+      border-radius: 14px;
+      background: rgba(255, 255, 255, .88);
+      padding: 12px 14px;
+      font-weight: 900;
+      line-height: 1.55;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, .2);
+    }
+
+    .control-panel {
+      display: grid;
+      gap: 12px;
+    }
+
+    .control-card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      padding: 12px;
+    }
+
+    .control-label {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+      font-weight: 900;
+    }
+
+    .control-label span:last-child {
+      color: var(--blue);
     }
 
     input[type="range"] {
@@ -375,672 +430,1207 @@
       accent-color: var(--blue);
     }
 
-    .value-pill {
-      min-height: 34px;
-      display: grid;
-      place-items: center;
+    .meter {
+      height: 12px;
       border-radius: 999px;
-      background: #eee9de;
-      font-weight: 950;
+      background: #e5e7eb;
+      overflow: hidden;
+      border: 1px solid rgba(0, 0, 0, .08);
     }
 
-    .score-grid {
+    .meter > span {
+      display: block;
+      height: 100%;
+      width: 0;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #16a36d, #e1aa38, #d94b4b);
+      transition: width .25s ease;
+    }
+
+    .result-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 8px;
-      margin-top: 10px;
     }
 
-    .score {
-      min-height: 74px;
-      border: 1px solid #c8d7ed;
-      border-radius: var(--radius);
-      background: #eef5ff;
-      padding: 10px;
-      font-weight: 950;
-    }
-
-    .score span {
-      display: block;
-      color: var(--muted);
-      font-size: 12px;
-      margin-bottom: 3px;
-    }
-
-    .lesson-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-    }
-
-    .lesson-bit {
-      min-height: 120px;
+    .result-box {
       border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 14px;
-      background: #fffdf8;
+      border-radius: 12px;
+      background: #f8fafc;
+      padding: 10px;
+      min-height: 72px;
       display: grid;
-      grid-template-columns: 28px 1fr;
-      gap: 10px;
+      align-content: center;
+      gap: 4px;
     }
 
-    .dot {
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      margin-top: 4px;
-      box-shadow: inset 0 2px 4px rgba(255,255,255,.4);
+    .result-box small {
+      color: var(--muted);
+      font-weight: 900;
     }
 
-    .lesson-bit h4 {
-      margin: 0 0 6px;
-      font-size: 16px;
-    }
-
-    .lesson-bit p {
-      margin: 0;
-      color: #354349;
-      font-weight: 850;
-    }
-
-    .lesson-image {
-      grid-column: 1 / -1;
-      height: 116px;
-      margin-top: 8px;
-    }
-
-    .side-panel {
-      padding: 12px;
-      display: grid;
-      gap: 12px;
-      position: sticky;
-      top: 12px;
-    }
-
-    .memo-area {
-      width: 100%;
-      min-height: 160px;
-      resize: vertical;
-      border: 1px solid #e0c895;
-      border-radius: var(--radius);
-      padding: 12px;
-      background:
-        repeating-linear-gradient(180deg, #fff8e7 0 35px, #ead8ad 36px),
-        #fff8e7;
-      color: var(--ink);
-    }
-
-    .quiz-box {
-      border: 1px solid #9abbe8;
-      border-radius: var(--radius);
-      background: #eef6ff;
-      padding: 12px;
-    }
-
-    .quiz-box h3,
-    .review-box h3 {
-      margin: 0 0 10px;
+    .result-box strong {
       font-size: 17px;
     }
 
-    .quiz-question {
-      margin: 0 0 9px;
-      font-weight: 950;
+    .linked-photos {
+      padding: 16px;
+    }
+
+    .linked-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: end;
+      margin-bottom: 12px;
+    }
+
+    .linked-head p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-weight: 800;
+      line-height: 1.6;
+    }
+
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .photo-card {
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      overflow: hidden;
+      background: #fff;
+      display: grid;
+      grid-template-rows: 190px auto;
+    }
+
+    .photo-card figure {
+      margin: 0;
+      position: relative;
+      background: #111827;
+      overflow: hidden;
+    }
+
+    .photo-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .photo-card figcaption {
+      position: absolute;
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, .88);
+      padding: 8px 10px;
+      font-size: 13px;
+      font-weight: 900;
+      line-height: 1.45;
+    }
+
+    .photo-text {
+      padding: 12px;
+    }
+
+    .photo-text h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+
+    .photo-text p {
+      margin: 0;
+      line-height: 1.75;
+      font-weight: 800;
+    }
+
+    .explain-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .explain-card {
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: #fff;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 146px minmax(0, 1fr);
+      min-height: 156px;
+    }
+
+    .explain-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      background: #111827;
+    }
+
+    .explain-card div {
+      padding: 12px;
+    }
+
+    .explain-card h3 {
+      margin: 0 0 8px;
+      font-size: 17px;
+    }
+
+    .explain-card p {
+      margin: 0;
+      line-height: 1.75;
+      font-weight: 800;
+    }
+
+    .side-card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, .92);
+      padding: 14px;
+      box-shadow: 0 12px 28px rgba(23, 33, 43, .08);
+    }
+
+    .side-card h2 {
+      margin: 0 0 10px;
+      font-size: 19px;
+    }
+
+    .why-box,
+    .improve-box {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px;
+      font-weight: 900;
+      line-height: 1.65;
+      background: #f8fafc;
+    }
+
+    .why-box {
+      background: var(--gold-2);
+      border-color: rgba(201, 139, 36, .28);
+    }
+
+    .improve-box {
+      margin-top: 10px;
+      background: var(--green-2);
+      border-color: rgba(22, 130, 93, .22);
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 128px;
+      resize: vertical;
+      border: 1px solid rgba(201, 139, 36, .38);
+      border-radius: 12px;
+      padding: 12px;
+      background: #fffaf0;
+      line-height: 1.65;
+      font-weight: 800;
+    }
+
+    .primary-button,
+    .ghost-button {
+      width: 100%;
+      min-height: 48px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      font-weight: 900;
+    }
+
+    .primary-button {
+      background: var(--blue);
+      color: #fff;
+      box-shadow: 0 10px 22px rgba(36, 109, 207, .22);
+    }
+
+    .ghost-button {
+      background: #fff;
+      border-color: var(--line);
+      color: var(--ink);
+    }
+
+    .copy-status {
+      margin: 8px 0 0;
+      color: var(--green);
+      font-weight: 900;
+      min-height: 22px;
+    }
+
+    .quiz-count {
+      display: inline-flex;
+      border-radius: 999px;
+      padding: 6px 10px;
+      background: #f2dfd2;
+      font-weight: 900;
+      color: #7b3e22;
+      margin-bottom: 8px;
+    }
+
+    .choice-list {
+      display: grid;
+      gap: 8px;
+      margin: 12px 0;
     }
 
     .choice {
-      width: 100%;
-      min-height: 42px;
-      border: 1px solid #c8d7ed;
-      border-radius: var(--radius);
-      background: #fff;
-      margin: 6px 0;
-      text-align: left;
-      padding: 8px 10px;
-      font-weight: 900;
-    }
-
-    .choice.correct { background: #dbf3df; border-color: #6abf7f; }
-    .choice.wrong { background: #ffe4e0; border-color: #d77d72; }
-
-    .feedback {
-      min-height: 42px;
-      margin-top: 8px;
-      padding: 10px;
-      border-radius: var(--radius);
-      background: rgba(255,255,255,.72);
-      font-weight: 900;
-    }
-
-    .feedback img {
-      display: block;
-      width: 100%;
-      max-height: 142px;
-      object-fit: cover;
-      border-radius: var(--radius);
-      margin-top: 8px;
-      border: 1px solid rgba(124, 116, 101, .25);
-    }
-
-    .next-button,
-    .primary-button {
-      width: 100%;
-      min-height: 42px;
-      border: 0;
-      border-radius: var(--radius);
-      background: var(--blue);
-      color: #fff;
-      margin-top: 8px;
-      font-weight: 950;
-    }
-
-    .review-box {
-      padding: 12px;
+      min-height: 46px;
       border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: #fffdf8;
+      border-radius: 10px;
+      background: #fff;
+      padding: 10px;
+      text-align: left;
+      font-weight: 900;
     }
 
-    .progress-line {
-      height: 10px;
-      border-radius: 999px;
+    .choice.correct {
+      background: var(--green-2);
+      border-color: rgba(22, 130, 93, .35);
+    }
+
+    .choice.wrong {
+      background: var(--red-2);
+      border-color: rgba(204, 75, 75, .35);
+    }
+
+    .answer-panel {
+      display: none;
+      border-radius: 13px;
+      border: 1px solid var(--line);
+      background: #eef5ff;
       overflow: hidden;
-      background: #e3dfd5;
-      margin: 8px 0 10px;
+      margin-bottom: 10px;
     }
 
-    .progress-fill {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, #217a57, #67b77b);
-      transition: width .2s ease;
+    .answer-panel.show {
+      display: block;
+    }
+
+    .answer-panel img {
+      width: 100%;
+      max-height: 156px;
+      object-fit: cover;
+    }
+
+    .answer-panel p {
+      margin: 0;
+      padding: 10px 12px;
+      line-height: 1.65;
+      font-weight: 900;
+    }
+
+    .review-list {
+      display: grid;
+      gap: 8px;
     }
 
     .check-row {
       display: flex;
-      align-items: center;
       gap: 8px;
-      margin: 8px 0;
+      align-items: center;
       font-weight: 900;
     }
 
-    .chapter-road {
-      display: grid;
-      gap: 8px;
+    .progressbar {
+      height: 12px;
+      border-radius: 999px;
+      background: #e2ddd1;
+      overflow: hidden;
+      margin: 8px 0 12px;
     }
 
-    .road-row {
-      min-height: 52px;
-      display: grid;
-      grid-template-columns: 58px 1fr;
-      align-items: center;
-      gap: 10px;
-      padding: 9px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: #fffdf8;
-      font-weight: 900;
+    .progressbar span {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, #16825d, #56bc7b);
+      transition: width .25s ease;
     }
 
-    .road-code {
-      min-height: 34px;
-      display: grid;
-      place-items: center;
-      border-radius: var(--radius);
-      color: #fff;
-      background: var(--blue);
-      font-weight: 950;
+    .mobile-nav {
+      display: none;
     }
 
-    @media (max-width: 1060px) {
-      .workbench { grid-template-columns: 1fr; }
-      .rail { display: none; }
-      .side-panel { position: static; }
-      .mobile-actions { display: flex; }
-      .stage-content { grid-template-columns: 1fr; }
-      .callout-stack { grid-template-columns: repeat(2, 1fr); }
-      .sim-grid { grid-template-columns: 1fr; }
+    @media (max-width: 1040px) {
+      .app-shell {
+        grid-template-columns: 1fr;
+        padding: 12px;
+        width: 100%;
+        max-width: 100vw;
+        overflow: hidden;
+      }
+
+      .rail {
+        display: none;
+      }
+
+      .mobile-nav {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        width: 100%;
+        max-width: 100%;
+        padding: 8px 0;
+        background: rgba(244, 239, 229, .92);
+        backdrop-filter: blur(10px);
+      }
+
+      .mobile-nav a {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: #fff;
+        color: var(--ink);
+        text-decoration: none;
+        text-align: center;
+        padding: 9px 4px;
+        font-weight: 900;
+        font-size: 11px;
+      }
+
+      .study-grid,
+      .lab-body,
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .study-grid,
+      .main-flow,
+      .side-flow,
+      .hero,
+      .panel {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+      }
+
+      .workbench {
+        width: 100%;
+        max-width: calc(100vw - 24px);
+        overflow: hidden;
+      }
+
+      .side-flow {
+        grid-row: auto;
+      }
     }
 
     @media (max-width: 680px) {
-      .app-shell { width: min(100% - 18px, 430px); padding-top: 10px; }
-      .topbar { align-items: start; }
-      .brand p,
-      .chapter-head p { font-size: 13px; line-height: 1.55; }
-      .install-button { display: none; }
-      .lesson { padding: 10px; }
-      .chapter-head { display: grid; }
-      .chapter-tag { width: 100%; }
-      .stage-card,
-      .stage-content { min-height: 560px; }
-      .stage-content { padding: 12px; }
-      .callout-stack,
-      .lesson-grid,
-      .score-grid { grid-template-columns: 1fr; }
-      .control-row { grid-template-columns: 82px 1fr 62px; }
+      .topbar {
+        align-items: start;
+        flex-direction: column;
+        max-width: calc(100vw - 24px);
+      }
+
+      .install-pill {
+        width: 100%;
+        text-align: center;
+      }
+
+      .scene-wrap,
+      #paint3d {
+        min-height: 360px;
+      }
+
+      .hero-proof {
+        min-height: 0;
+        background: #f8fafc;
+      }
+
+      .hero-copy {
+        padding: 18px 14px;
+        min-width: 0;
+      }
+
+      .hero-copy p {
+        font-size: 15px;
+        line-height: 1.75;
+      }
+
+      .mobile-nav,
+      .topbar,
+      .study-grid,
+      .main-flow,
+      .side-flow,
+      .panel {
+        max-width: 366px;
+        margin-left: 0;
+        margin-right: 0;
+      }
+
+      .hero-copy h2 {
+        font-size: 24px;
+        line-height: 1.18;
+      }
+
+      .hero-proof img {
+        height: auto;
+        object-fit: contain;
+      }
+
+      .hero-proof .caption {
+        position: static;
+        margin: 8px;
+        max-width: none;
+      }
+
+      .photo-grid,
+      .explain-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .photo-card {
+        grid-template-rows: 218px auto;
+      }
+
+      .explain-card {
+        grid-template-columns: 1fr;
+      }
+
+      .explain-card img {
+        height: 190px;
+      }
+
+      .result-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .road-row {
+        grid-template-columns: 62px 1fr;
+      }
+
+      .road-row span:last-child {
+        grid-column: 2;
+      }
     }
   </style>
 </head>
 <body>
   <div class="app-shell">
-    <header class="topbar">
-      <div class="brand">
-        <h1>塗装基礎</h1>
-        <p>三輪さん専用 1ページ教科書。<br>塗る前で、結果の8割が決まる。</p>
+    <nav class="rail" aria-label="学習メニュー">
+      <div class="rail-title">塗装3D<small>Pシリーズ</small></div>
+      <a class="rail-link active" href="#top">P00<span>入口</span></a>
+      <a class="rail-link" href="#touch">触る<span>3D</span></a>
+      <a class="rail-link" href="#photos">写真<span>連動</span></a>
+      <a class="rail-link" href="#why">なぜ<span>改善</span></a>
+      <a class="rail-link" href="#memo">メモ<span>送る</span></a>
+      <a class="rail-link" href="#quiz">Q<span>テスト</span></a>
+    </nav>
+
+    <main class="workbench" id="top">
+      <div class="mobile-nav" aria-label="スマホ用メニュー">
+        <a href="#touch">3D</a>
+        <a href="#photos">写真</a>
+        <a href="#why">なぜ</a>
+        <a href="#memo">メモ</a>
+        <a href="#quiz">テスト</a>
       </div>
-      <button class="install-button" id="installButton" hidden>ホーム画面に追加</button>
-    </header>
 
-    <div class="workbench">
-      <nav class="rail" aria-label="学習メニュー">
-        <p class="rail-title">今日の入口</p>
-        <a class="rail-button active" href="#why"><span>🎨</span><span>P00</span></a>
-        <a class="rail-button" href="#sim"><span>☝</span><span>触る</span></a>
-        <a class="rail-button" href="#lesson"><span>🔬</span><span>なぜ</span></a>
-        <a class="rail-button" href="#memo"><span>📝</span><span>メモ</span></a>
-        <a class="rail-button" href="#quiz"><span>✅</span><span>テスト</span></a>
-        <a class="rail-button" href="#review"><span>↻</span><span>復習</span></a>
-      </nav>
+      <header class="topbar">
+        <div>
+          <h1>塗装3D基礎</h1>
+          <p>見えない密着を、断面と分子で見る朝の教科書。</p>
+        </div>
+        <div class="install-pill">PWA対応: 1タップ復習</div>
+      </header>
 
-      <main class="lesson">
-        <section class="chapter-head" aria-label="章の見出し">
-          <div>
-            <h2>P00 なぜ塗装ははがれる？</h2>
-            <p>最初は「色」ではなく、塗料が金属につかまる道を見る。</p>
-          </div>
-          <span class="chapter-tag">完成イメージから入る</span>
-        </section>
+      <div class="study-grid">
+        <div class="main-flow">
+          <section class="panel hero" aria-label="P00の入り口">
+            <div class="hero-copy">
+              <span class="tag">P00 なぜはがれる？</span>
+              <h2>塗料は、金属をつかめると強い。</h2>
+              <p>
+                間に油や水があると、塗料は金属を直接つかめません。<br>
+                だから端から浮き、割れ、はがれになります。
+              </p>
+            </div>
+            <div class="hero-proof">
+              <img src="./assets/paint-adhesion-ok-ng-real.png" alt="OKとNGの塗膜断面を比べるリアル図解">
+              <div class="caption">最初に見る場所: OKは金属へ密着。NGは油膜の上で浮く。</div>
+            </div>
+          </section>
 
-        <div class="mobile-actions" aria-label="スマホ用メニュー">
-          <a class="mobile-action" href="#why">P00</a>
-          <a class="mobile-action" href="#sim">触る</a>
-          <a class="mobile-action" href="#lesson">なぜ</a>
-          <a class="mobile-action" href="#memo">メモ</a>
-          <a class="mobile-action" href="#quiz">テスト</a>
-          <a class="mobile-action" href="#review">復習</a>
+          <section class="panel pad lesson-road" aria-label="進捗">
+            <div class="road-row active">
+              <span class="road-code">P00</span>
+              <span>なぜ塗装ははがれる？</span>
+              <span class="road-now">→ いまここ</span>
+            </div>
+            <div class="road-row">
+              <span class="road-code">P01</span>
+              <span>下地処理と足付け</span>
+              <span>油 / 水 / ザラザラ</span>
+            </div>
+            <div class="road-row">
+              <span class="road-code">P02</span>
+              <span>膜厚と乾燥</span>
+              <span>厚塗り / 乾燥不足</span>
+            </div>
+          </section>
+
+          <section class="panel three-lab" id="touch">
+            <div class="lab-head">
+              <div>
+                <h2>触って分かる: 塗膜断面3D</h2>
+                <p>脱脂、足付け、膜厚、乾燥を変えると、油膜・谷・膜・はがれが動きます。</p>
+              </div>
+              <div class="status-chip" id="statusChip">OK: 密着良好</div>
+            </div>
+
+            <div class="lab-body">
+              <div class="scene-wrap">
+                <canvas id="paint3d" aria-label="塗装断面の3D教材"></canvas>
+                <div class="scene-labels" aria-hidden="true">
+                  <div class="scene-label-row">
+                    <span class="scene-label">OK: 金属をつかむ</span>
+                    <span class="scene-label">NG: 油膜で浮く</span>
+                  </div>
+                  <span class="scene-label">つまんで回す</span>
+                </div>
+                <div class="scene-read" id="sceneRead">
+                  まず油膜を見る。油が少ないほど、塗料が金属へ近づく。
+                </div>
+              </div>
+
+              <div class="control-panel">
+                <div class="control-card">
+                  <label class="control-label" for="degrease">
+                    <span>脱脂（だっし）</span>
+                    <span id="degreaseValue">76%</span>
+                  </label>
+                  <input id="degrease" type="range" min="0" max="100" value="76">
+                </div>
+
+                <div class="control-card">
+                  <label class="control-label" for="scuff">
+                    <span>足付け（あしづけ）</span>
+                    <span id="scuffValue">68%</span>
+                  </label>
+                  <input id="scuff" type="range" min="0" max="100" value="68">
+                </div>
+
+                <div class="control-card">
+                  <label class="control-label" for="film">
+                    <span>膜厚（まくあつ）</span>
+                    <span id="filmValue">46%</span>
+                  </label>
+                  <input id="film" type="range" min="15" max="100" value="46">
+                </div>
+
+                <div class="control-card">
+                  <label class="control-label" for="dry">
+                    <span>乾燥（かんそう）</span>
+                    <span id="dryValue">72%</span>
+                  </label>
+                  <input id="dry" type="range" min="0" max="100" value="72">
+                </div>
+
+                <div class="control-card">
+                  <div class="control-label">
+                    <span>はがれリスク</span>
+                    <span id="riskValue">低い</span>
+                  </div>
+                  <div class="meter"><span id="riskMeter"></span></div>
+                </div>
+
+                <div class="result-grid">
+                  <div class="result-box">
+                    <small>油膜</small>
+                    <strong id="oilResult">少ない</strong>
+                  </div>
+                  <div class="result-box">
+                    <small>密着</small>
+                    <strong id="gripResult">強い</strong>
+                  </div>
+                  <div class="result-box">
+                    <small>乾燥</small>
+                    <strong id="dryResult">良い</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel linked-photos" id="photos">
+            <div class="linked-head">
+              <div>
+                <h2 class="section-title">写真と文章をつなげて読む</h2>
+                <p>番号の写真を見てから、下の短い文を読む。これで現場の映像と原理がつながります。</p>
+              </div>
+            </div>
+
+            <div class="photo-grid">
+              <article class="photo-card">
+                <figure>
+                  <img src="./assets/spray-finishing-workbench-real.jpg" alt="塗装作業台のリアル画像">
+                  <figcaption>見る場所: 1 脱脂。油と水を落として、金属を出す。</figcaption>
+                </figure>
+                <div class="photo-text">
+                  <h3>1 脱脂</h3>
+                  <p>脱脂は、油や水をどかす作業。塗料が金属へ触る入口を作ります。</p>
+                </div>
+              </article>
+
+              <article class="photo-card">
+                <figure>
+                  <img src="./assets/paint-surface-roughness-real.png" alt="足付けで表面に谷を作るリアル図解">
+                  <figcaption>見る場所: 2 足付け。小さい谷に塗料が入り込む。</figcaption>
+                </figure>
+                <div class="photo-text">
+                  <h3>2 足付け</h3>
+                  <p>足付けは、小さい山と谷を作ること。塗料が引っかかる場所になります。</p>
+                </div>
+              </article>
+
+              <article class="photo-card">
+                <figure>
+                  <img src="./assets/coating-cross-section-real.png" alt="塗膜断面のリアル画像">
+                  <figcaption>見る場所: 3 膜厚。厚すぎると中が乾きにくい。</figcaption>
+                </figure>
+                <div class="photo-text">
+                  <h3>3 膜厚</h3>
+                  <p>膜は厚いほど強いとは限りません。厚すぎると、中がやわらかく残ります。</p>
+                </div>
+              </article>
+
+              <article class="photo-card">
+                <figure>
+                  <img src="./assets/paint-drying-molecule-real.png" alt="塗装の乾燥と分子の動きを見せるリアル図解">
+                  <figcaption>見る場所: 4 乾燥。中の分子が動かなくなるまで待つ。</figcaption>
+                </figure>
+                <div class="photo-text">
+                  <h3>4 乾燥</h3>
+                  <p>乾燥は、水分や溶剤が抜けて、膜の中の分子が動きにくくなることです。</p>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section class="panel pad" aria-label="今日の説明">
+            <h2 class="section-title">今日の説明</h2>
+            <div class="explain-grid" style="margin-top: 12px;">
+              <article class="explain-card">
+                <img src="./assets/paint-adhesion-ok-ng-real.png" alt="塗料と金属の密着を示すリアル図解">
+                <div>
+                  <h3>定義（ていぎ）</h3>
+                  <p>密着は、塗料が金属をつかんで離れにくくなること。</p>
+                </div>
+              </article>
+
+              <article class="explain-card">
+                <img src="./assets/paint-surface-roughness-real.png" alt="足付けで塗料が引っかかるリアル図解">
+                <div>
+                  <h3>しくみ</h3>
+                  <p>谷に塗料が入り、乾いて固まる。小さいくさびのように止まります。</p>
+                </div>
+              </article>
+
+              <article class="explain-card">
+                <img src="./assets/peeling-rust-real.jpg" alt="塗膜がはがれてサビが出たリアル写真">
+                <div>
+                  <h3>なぜ</h3>
+                  <p>油や水が残ると、塗料は金属ではなく油をつかむ。だから弱い。</p>
+                </div>
+              </article>
+
+              <article class="explain-card">
+                <img src="./assets/coating-micro-cross-section-real.png" alt="塗膜の細かい断面を示すリアル画像">
+                <div>
+                  <h3>設計判断</h3>
+                  <p>先に見るのは色ではなく、下地、膜厚、乾燥時間、端の浮きです。</p>
+                </div>
+              </article>
+            </div>
+          </section>
         </div>
 
-        <article class="stage-card" id="why">
-          <div class="stage-content">
-            <div>
-              <div class="lesson-title">
-                <h3>塗装は、金属の上に薄い服を着せる加工。</h3>
-                <p>油・水・サビ・ツルツル面があると、服がすべってはがれる。</p>
-              </div>
-
-              <figure class="real-photo hero-photo" aria-label="塗装作業の実写真">
-                <img src="./assets/spray-finishing-workbench-real.jpg" alt="スプレーガンで部品を塗装している実写真">
-                <figcaption class="photo-label">
-                  <span>まず見る場所：吹いた塗料が表面に乗る瞬間</span>
-                  <small>下地が悪いと、この膜があとで浮く。</small>
-                </figcaption>
-              </figure>
+        <aside class="side-flow" aria-label="右側の学習パネル">
+          <section class="side-card" id="why">
+            <h2>なぜ？</h2>
+            <div class="why-box" id="whyBox">
+              油が少なく、谷があり、乾燥も足りています。塗料が金属をつかみやすい状態です。
             </div>
-
-            <div class="callout-stack">
-              <section class="mini-panel">
-                <h4>塗膜の層</h4>
-                <figure class="real-photo callout-photo" aria-label="塗膜断面の実画像">
-                  <img src="./assets/coating-cross-section-real.png" alt="塗膜の断面を顕微鏡で見た実画像">
-                  <figcaption class="photo-label">
-                    <span>薄い膜が何層にも重なる</span>
-                  </figcaption>
-                </figure>
-                <p class="source-line">実画像：KEYENCE coating inspection sample</p>
-              </section>
-
-              <section class="mini-panel">
-                <h4>足付けでつかまる</h4>
-                <figure class="real-photo callout-photo" aria-label="表面の細かい世界">
-                  <img src="./assets/coating-micro-cross-section-real.png" alt="塗膜の細かい断面を拡大した実画像">
-                  <figcaption class="photo-label">
-                    <span>小さい段差を見る</span>
-                  </figcaption>
-                </figure>
-                <p class="source-line">実画像：MDPI Coatings cross-section figure</p>
-              </section>
+            <div class="improve-box" id="improveBox">
+              この条件なら、端と穴まわりだけ追加で確認します。
             </div>
-          </div>
-        </article>
+          </section>
 
-        <section class="sim-grid" id="sim">
-          <article class="card">
-            <h3>触って理解する 塗装シミュレーター</h3>
-            <label class="control-row">
-              <span>脱脂</span>
-              <input id="degrease" type="range" min="0" max="100" value="72">
-              <span class="value-pill" id="degreaseValue">72%</span>
-            </label>
-            <label class="control-row">
-              <span>足付け</span>
-              <input id="scuff" type="range" min="0" max="100" value="58">
-              <span class="value-pill" id="scuffValue">58%</span>
-            </label>
-            <label class="control-row">
-              <span>塗膜</span>
-              <input id="film" type="range" min="10" max="100" value="48">
-              <span class="value-pill" id="filmValue">48%</span>
-            </label>
-            <label class="control-row">
-              <span>乾燥</span>
-              <input id="dry" type="range" min="0" max="100" value="62">
-              <span class="value-pill" id="dryValue">62%</span>
-            </label>
+          <section class="side-card" id="memo">
+            <h2>改善メモ</h2>
+            <textarea id="partnerMemo" aria-label="相棒に送る改善メモ">なぜはがれる？
+脱脂・足付け・膜厚・乾燥のどれが一番あやしい？</textarea>
+            <button class="primary-button" id="copyPartner" type="button">相棒に送る文をコピー</button>
+            <p class="copy-status" id="copyStatus"></p>
+          </section>
 
-            <div class="score-grid">
-              <div class="score"><span>密着</span><strong id="adhesionScore">良い</strong></div>
-              <div class="score"><span>はがれリスク</span><strong id="peelRisk">中</strong></div>
-              <div class="score"><span>設計判断</span><strong id="designHint">脱脂を先に見る</strong></div>
+          <section class="side-card" id="quiz">
+            <h2>テストに挑戦</h2>
+            <span class="quiz-count" id="quizCount">1 / 3</span>
+            <p class="quiz-question" id="quizQuestion">油が残るとなぜはがれやすい？</p>
+            <div class="choice-list" id="choiceList"></div>
+            <div class="answer-panel" id="answerPanel">
+              <img id="answerImage" src="./assets/paint-adhesion-ok-ng-real.png" alt="">
+              <p id="answerText"></p>
             </div>
-          </article>
+            <button class="primary-button" id="nextQuiz" type="button">次の問題へ</button>
+          </section>
 
-          <article class="card">
-            <h3>結果イメージ</h3>
-            <figure class="real-photo result-photo" aria-label="条件で変わる塗膜の実画像">
-              <img id="simImage" src="./assets/coating-cross-section-real.png" alt="塗膜断面の実画像">
-              <figcaption class="photo-label">
-                <span id="simCaption">膜が下地へつながって見える</span>
-                <small id="simSubCaption">脱脂・足付け・乾燥をそろえる。</small>
-              </figcaption>
-            </figure>
-            <p>
-              脱脂と足付けが弱いと、塗料は金属に入る場所が少ない。
-              乾燥が弱いと、触る前に中がまだやわらかい。
-            </p>
-          </article>
-        </section>
-
-        <section class="card" id="lesson">
-          <h3>今日の説明</h3>
-          <div class="lesson-grid">
-            <article class="lesson-bit">
-              <span class="dot" style="background:var(--blue)"></span>
-              <div>
-                <h4>定義（ていぎ：言葉の意味）</h4>
-                <p>塗装は、金属を守る薄い膜を作る加工。</p>
-              </div>
-              <figure class="real-photo lesson-image">
-                <img src="./assets/spray-finishing-workbench-real.jpg" alt="部品へ塗料を吹いている実写真">
-              </figure>
-            </article>
-            <article class="lesson-bit">
-              <span class="dot" style="background:var(--green)"></span>
-              <div>
-                <h4>しくみ</h4>
-                <p>脱脂で油を取り、足付けで小さいひっかかりを作り、塗料がそこへ入る。</p>
-              </div>
-              <figure class="real-photo lesson-image">
-                <img src="./assets/coating-cross-section-real.png" alt="塗膜と下地の断面を見た実画像">
-              </figure>
-            </article>
-            <article class="lesson-bit">
-              <span class="dot" style="background:var(--yellow)"></span>
-              <div>
-                <h4>なぜ</h4>
-                <p>分子（ぶんし：小さい粒）の近くまで見ると、油は塗料と金属の間にあるラップみたいな邪魔物。</p>
-              </div>
-              <figure class="real-photo lesson-image">
-                <img src="./assets/coating-micro-cross-section-real.png" alt="塗膜を細かく見た実画像">
-              </figure>
-            </article>
-            <article class="lesson-bit">
-              <span class="dot" style="background:var(--red)"></span>
-              <div>
-                <h4>注意</h4>
-                <p>厚く塗れば強い、ではない。厚すぎると中が乾きにくく、あとで割れやすい。</p>
-              </div>
-              <figure class="real-photo lesson-image">
-                <img src="./assets/peeling-rust-real.jpg" alt="塗装が剥がれた金属の実写真">
-              </figure>
-            </article>
-            <article class="lesson-bit">
-              <span class="dot" style="background:var(--violet)"></span>
-              <div>
-                <h4>設計判断</h4>
-                <p>剥がれが怖い場所は、塗る前に材質・下地処理・角の丸み・水のたまりを先に見る。</p>
-              </div>
-              <figure class="real-photo lesson-image">
-                <img src="./assets/peeling-rust-real.jpg" alt="サビと塗装剥がれの実写真">
-              </figure>
-            </article>
-            <article class="lesson-bit">
-              <span class="dot" style="background:#17303a"></span>
-              <div>
-                <h4>発明家視点</h4>
-                <p>表面の小さい世界が見えると、塗装だけでなく接着・コーティング・防錆も設計できる。</p>
-              </div>
-              <figure class="real-photo lesson-image">
-                <img src="./assets/coating-micro-cross-section-real.png" alt="膜の厚みを細かく見る実画像">
-              </figure>
-            </article>
-          </div>
-        </section>
-
-        <section class="card">
-          <h3>進む道</h3>
-          <div class="chapter-road">
-            <div class="road-row"><span class="road-code">P00</span><span>なぜ塗装ははがれる？ ※今日</span></div>
-            <div class="road-row"><span class="road-code">P01</span><span>脱脂と油膜。見えない汚れがなぜ邪魔か。</span></div>
-            <div class="road-row"><span class="road-code">P02</span><span>足付けと表面粗さ。ツルツルとなぜ違うか。</span></div>
-            <div class="road-row"><span class="road-code">P03</span><span>プライマー。金属と色をつなぐ接着役。</span></div>
-            <div class="road-row"><span class="road-code">P04</span><span>塗膜と乾燥。厚み・時間・割れの関係。</span></div>
-          </div>
-        </section>
-      </main>
-
-      <aside class="side-panel">
-        <section class="memo" id="memo">
-          <h3>なぜ？メモ</h3>
-          <textarea class="memo-area" id="whyMemo" placeholder="なぜ下地で決まる？&#10;なぜ油で密着しない？&#10;どうしたら現場で見分ける？"></textarea>
-        </section>
-
-        <section class="quiz-box" id="quiz">
-          <h3>テストに挑戦</h3>
-          <p class="quiz-question" id="quizQuestion"></p>
-          <div id="choices"></div>
-          <div class="feedback" id="feedback">答えると理由が出る。</div>
-          <button class="next-button" id="nextQuestion">次の問題へ</button>
-        </section>
-
-        <section class="review-box" id="review">
-          <h3>復習の進み具合</h3>
-          <strong id="reviewPercent">0%</strong>
-          <div class="progress-line"><div class="progress-fill" id="reviewFill"></div></div>
-          <label class="check-row"><input type="checkbox" class="review-check"> 完成イメージを見た</label>
-          <label class="check-row"><input type="checkbox" class="review-check"> スライダーを触った</label>
-          <label class="check-row"><input type="checkbox" class="review-check"> テストを解いた</label>
-          <label class="check-row"><input type="checkbox" class="review-check"> なぜ？メモを書いた</label>
-          <button class="primary-button" id="resetProgress">今日だけリセット</button>
-        </section>
-      </aside>
-    </div>
+          <section class="side-card" id="review">
+            <h2>復習の進み具合</h2>
+            <div class="progressbar"><span id="progressBar"></span></div>
+            <div class="review-list">
+              <label class="check-row"><input type="checkbox" id="check3d"> 3Dを触った</label>
+              <label class="check-row"><input type="checkbox" id="checkPhoto"> 写真を読んだ</label>
+              <label class="check-row"><input type="checkbox" id="checkQuiz"> テストを解いた</label>
+            </div>
+          </section>
+        </aside>
+      </div>
+    </main>
   </div>
 
-  <script>
-    const sliders = [
-      ["degrease", "degreaseValue", "--degrease"],
-      ["scuff", "scuffValue", "--scuff"],
-      ["film", "filmValue", "--film"],
-      ["dry", "dryValue", "--dry"]
-    ];
+  <script type="module">
+    import * as THREE from "./vendor/three.module.min.js";
 
-    const stateKey = "painting-foundation-v2";
-    const saved = JSON.parse(localStorage.getItem(stateKey) || "{}");
+    const STORAGE_KEY = "painting-3d-foundation-p00-v1";
+    const defaultState = {
+      degrease: 76,
+      scuff: 68,
+      film: 46,
+      dry: 72,
+      quizIndex: 0,
+      memo: "",
+      checks: { check3d: false, checkPhoto: false, checkQuiz: false }
+    };
 
-    function saveState() {
-      const data = {
-        memo: document.getElementById("whyMemo").value,
-        sliders: Object.fromEntries(sliders.map(([id]) => [id, document.getElementById(id).value])),
-        checks: [...document.querySelectorAll(".review-check")].map(input => input.checked),
-        quizIndex
-      };
-      localStorage.setItem(stateKey, JSON.stringify(data));
-    }
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+    const state = {
+      ...defaultState,
+      ...saved,
+      checks: { ...defaultState.checks, ...(saved.checks || {}) }
+    };
 
-    function updateSim() {
-      let values = {};
-      sliders.forEach(([id, labelId, cssVar]) => {
-        const input = document.getElementById(id);
-        const value = Number(input.value);
-        values[id] = value;
-        document.documentElement.style.setProperty(cssVar, value);
-        document.getElementById(labelId).textContent = value + "%";
-      });
-
-      const adhesion = Math.round(values.degrease * .38 + values.scuff * .34 + values.dry * .18 + (100 - Math.abs(values.film - 56)) * .10);
-      document.getElementById("adhesionScore").textContent = adhesion > 76 ? "強い" : adhesion > 54 ? "ふつう" : "弱い";
-      document.getElementById("peelRisk").textContent = adhesion > 76 ? "低い" : adhesion > 54 ? "中" : "高い";
-
-      let hint = "脱脂を先に見る";
-      if (values.degrease < 45) hint = "油を取る";
-      else if (values.scuff < 45) hint = "足付けを増やす";
-      else if (values.film > 82) hint = "厚塗り注意";
-      else if (values.dry < 45) hint = "乾燥時間を待つ";
-      document.getElementById("designHint").textContent = hint;
-
-      const simImage = document.getElementById("simImage");
-      const simCaption = document.getElementById("simCaption");
-      const simSubCaption = document.getElementById("simSubCaption");
-      if (adhesion < 55) {
-        simImage.src = "./assets/peeling-rust-real.jpg";
-        simImage.alt = "塗装が剥がれてサビが出た実写真";
-        simCaption.textContent = "弱い条件では膜が浮く";
-        simSubCaption.textContent = "油・水・足付け不足が先に疑う場所。";
-      } else {
-        simImage.src = "./assets/coating-cross-section-real.png";
-        simImage.alt = "塗膜断面の実画像";
-        simCaption.textContent = "膜が下地へつながって見える";
-        simSubCaption.textContent = "脱脂・足付け・乾燥をそろえる。";
-      }
-    }
+    const controls = ["degrease", "scuff", "film", "dry"];
+    const ui = Object.fromEntries([
+      "statusChip", "sceneRead", "riskValue", "riskMeter",
+      "oilResult", "gripResult", "dryResult", "whyBox", "improveBox",
+      "partnerMemo", "copyPartner", "copyStatus", "progressBar"
+    ].map(id => [id, document.getElementById(id)]));
 
     const quizzes = [
       {
-        q: "Q. 塗装がはがれやすい原因は？",
-        a: ["油や水が下に残っている", "色がきれいすぎる", "乾いたあとに見るから"],
+        q: "油が残るとなぜはがれやすい？",
+        choices: ["塗料が金属に直接触れない", "色が濃くなる", "乾燥が速くなる"],
         correct: 0,
-        why: "油や水があると、塗料が金属に直接つかまれない。",
-        image: "./assets/peeling-rust-real.jpg",
-        alt: "塗装が剥がれた金属の実写真"
+        image: "./assets/paint-adhesion-ok-ng-real.png",
+        alt: "油膜で塗膜が浮くリアル図解",
+        why: "油は金属と塗料の間に入る薄いじゃま板です。塗料が金属をつかめません。"
       },
       {
-        q: "Q. 足付けは何のため？",
-        a: ["金属を冷やす", "小さいひっかかりを作る", "塗料を薄める"],
-        correct: 1,
-        why: "小さいキズに塗料が入り、機械的につかまる場所が増える。",
-        image: "./assets/coating-micro-cross-section-real.png",
-        alt: "塗膜を細かく見た実画像"
+        q: "足付けは何を作る？",
+        choices: ["小さい山と谷", "強い磁石", "電気の道"],
+        correct: 0,
+        image: "./assets/paint-surface-roughness-real.png",
+        alt: "足付けで山と谷を作るリアル図解",
+        why: "小さい谷に塗料が入り、乾くと引っかかります。靴底の溝に土が入る感じです。"
       },
       {
-        q: "Q. 厚く塗りすぎると何が起きやすい？",
-        a: ["必ず強くなる", "金属が軽くなる", "中が乾きにくい"],
-        correct: 2,
-        why: "外だけ乾いても中がやわらかいと、あとで割れやすい。",
-        image: "./assets/coating-cross-section-real.png",
-        alt: "塗膜の断面を見た実画像"
+        q: "厚塗りしすぎると何が危ない？",
+        choices: ["中が乾きにくい", "金属が透明になる", "油が消える"],
+        correct: 0,
+        image: "./assets/paint-drying-molecule-real.png",
+        alt: "乾燥不足と乾燥OKのリアル図解",
+        why: "外だけ乾いても中がやわらかいと、あとで割れたり浮いたりします。"
       }
     ];
 
-    let quizIndex = Number(saved.quizIndex || 0);
-    const questionEl = document.getElementById("quizQuestion");
-    const choicesEl = document.getElementById("choices");
-    const feedbackEl = document.getElementById("feedback");
+    let quizIndex = Number(state.quizIndex || 0);
+    let quizAnswered = false;
+    const threeParts = {};
+    let scene, camera, renderer, root, clock, dragX = 0, isDragging = false, lastX = 0;
+
+    function clamp(value, min, max) {
+      return Math.max(min, Math.min(max, value));
+    }
+
+    function save() {
+      controls.forEach(id => state[id] = Number(document.getElementById(id).value));
+      state.quizIndex = quizIndex;
+      state.memo = ui.partnerMemo.value;
+      state.checks = {
+        check3d: document.getElementById("check3d").checked,
+        checkPhoto: document.getElementById("checkPhoto").checked,
+        checkQuiz: document.getElementById("checkQuiz").checked
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function compute() {
+      const degrease = Number(document.getElementById("degrease").value);
+      const scuff = Number(document.getElementById("scuff").value);
+      const film = Number(document.getElementById("film").value);
+      const dry = Number(document.getElementById("dry").value);
+      const oilRisk = 100 - degrease;
+      const smoothRisk = Math.max(0, 56 - scuff) * 1.1;
+      const tooRoughRisk = Math.max(0, scuff - 94) * .4;
+      const thickRisk = Math.max(0, film - 62) * .85;
+      const thinRisk = Math.max(0, 28 - film) * .45;
+      const dryRisk = 100 - dry;
+      const risk = clamp(oilRisk * .34 + smoothRisk * .32 + tooRoughRisk + thickRisk + thinRisk + dryRisk * .28, 0, 100);
+      return { degrease, scuff, film, dry, risk };
+    }
+
+    function words(data) {
+      const level = data.risk < 34 ? "ok" : data.risk < 66 ? "warn" : "ng";
+      const oil = data.degrease > 70 ? "少ない" : data.degrease > 42 ? "少し残る" : "多い";
+      const grip = data.scuff > 62 && data.degrease > 64 ? "強い" : data.scuff > 42 ? "ふつう" : "弱い";
+      const dry = data.dry > 70 ? "良い" : data.dry > 44 ? "途中" : "不足";
+      return { level, oil, grip, dry };
+    }
+
+    function updateUi() {
+      const data = compute();
+      const w = words(data);
+      document.getElementById("degreaseValue").textContent = `${data.degrease}%`;
+      document.getElementById("scuffValue").textContent = `${data.scuff}%`;
+      document.getElementById("filmValue").textContent = `${data.film}%`;
+      document.getElementById("dryValue").textContent = `${data.dry}%`;
+      ui.riskMeter.style.width = `${data.risk}%`;
+      ui.oilResult.textContent = w.oil;
+      ui.gripResult.textContent = w.grip;
+      ui.dryResult.textContent = w.dry;
+
+      if (w.level === "ok") {
+        ui.statusChip.textContent = "OK: 密着良好";
+        ui.statusChip.style.background = "var(--green-2)";
+        ui.statusChip.style.color = "#0f4d37";
+        ui.riskValue.textContent = "低い";
+        ui.sceneRead.textContent = "油膜が少なく、谷に塗料が入る。乾くと金属をつかみやすい。";
+        ui.whyBox.textContent = "油が少なく、足付けの谷があり、乾燥も足りています。塗料が金属を直接つかみやすい状態です。";
+        ui.improveBox.textContent = "この条件なら、端、穴まわり、角の膜厚だけ追加で見る。";
+      } else if (w.level === "warn") {
+        ui.statusChip.textContent = "注意: 条件を直す";
+        ui.statusChip.style.background = "var(--gold-2)";
+        ui.statusChip.style.color = "#7a4d0b";
+        ui.riskValue.textContent = "注意";
+        ui.sceneRead.textContent = "まだ油膜、浅い足付け、乾燥不足のどれかが残る。端から浮きやすい。";
+        ui.whyBox.textContent = "塗料が金属をつかむ前に、油膜か浅い谷がじゃまをしています。乾く前に厚い膜が動くこともあります。";
+        ui.improveBox.textContent = bestImprove(data);
+      } else {
+        ui.statusChip.textContent = "NG: はがれやすい";
+        ui.statusChip.style.background = "var(--red-2)";
+        ui.statusChip.style.color = "#8f2626";
+        ui.riskValue.textContent = "高い";
+        ui.sceneRead.textContent = "NG側を見る。油膜の上に膜が浮き、乾燥不足の膜が端からめくれる。";
+        ui.whyBox.textContent = "金属と塗料の間に、油、水、弱い下地があります。塗料は金属ではなく弱いものをつかむので、あとではがれます。";
+        ui.improveBox.textContent = bestImprove(data);
+      }
+      save();
+      updateThree(data);
+      updateProgress();
+    }
+
+    function bestImprove(data) {
+      const todo = [];
+      if (data.degrease < 70) todo.push("脱脂をやり直して、油と水を先に消す。");
+      if (data.scuff < 62) todo.push("足付けを増やして、小さい谷を作る。");
+      if (data.film > 62) todo.push("厚塗りを避けて、薄く重ねる。");
+      if (data.dry < 70) todo.push("乾燥時間を増やして、中まで固める。");
+      return todo[0] || "端と穴まわりだけ、浮きの始まりを確認する。";
+    }
+
+    function makeMaterial(color, options = {}) {
+      return new THREE.MeshStandardMaterial({
+        color,
+        roughness: options.roughness ?? .58,
+        metalness: options.metalness ?? 0,
+        transparent: options.transparent ?? false,
+        opacity: options.opacity ?? 1
+      });
+    }
+
+    function addBox(group, name, size, pos, material) {
+      const mesh = new THREE.Mesh(new THREE.BoxGeometry(...size), material);
+      mesh.position.set(...pos);
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      group.add(mesh);
+      if (name) threeParts[name] = mesh;
+      return mesh;
+    }
+
+    function createBlock(kind, x) {
+      const group = new THREE.Group();
+      group.position.x = x;
+      root.add(group);
+
+      const metal = makeMaterial(0x88939d, { metalness: .55, roughness: .36 });
+      const oil = makeMaterial(0xd79c32, { transparent: true, opacity: .25, roughness: .12 });
+      const primer = makeMaterial(0xb88743, { roughness: .42 });
+      const color = makeMaterial(kind === "ok" ? 0x218b72 : 0xc14f53, { roughness: .38 });
+      const clear = makeMaterial(0xf3f7fb, { transparent: true, opacity: .34, roughness: .08 });
+
+      addBox(group, `${kind}Metal`, [2.55, .28, 1.28], [0, 0, 0], metal);
+      addBox(group, `${kind}Oil`, [2.28, .045, 1.18], [0, .185, 0], oil);
+      addBox(group, `${kind}Primer`, [2.38, .12, 1.16], [0, .27, 0], primer);
+      addBox(group, `${kind}Color`, [2.38, .13, 1.16], [0, .40, 0], color);
+      addBox(group, `${kind}Clear`, [2.38, .07, 1.16], [0, .50, 0], clear);
+
+      const peaks = [];
+      for (let i = 0; i < 28; i += 1) {
+        const px = -1.08 + (i % 7) * .36;
+        const pz = -.45 + Math.floor(i / 7) * .3;
+        const peak = new THREE.Mesh(new THREE.ConeGeometry(.045, .11, 7), metal);
+        peak.position.set(px, .21, pz);
+        peak.rotation.x = Math.PI;
+        group.add(peak);
+        peaks.push(peak);
+      }
+      threeParts[`${kind}Peaks`] = peaks;
+
+      const particles = [];
+      const particleMat = makeMaterial(kind === "ok" ? 0x76f0c6 : 0xffd166, { roughness: .25 });
+      for (let i = 0; i < 18; i += 1) {
+        const p = new THREE.Mesh(new THREE.SphereGeometry(.035, 12, 12), particleMat);
+        p.position.set(-.95 + (i % 6) * .38, .64 + Math.floor(i / 6) * .07, -.42 + (i % 3) * .38);
+        group.add(p);
+        particles.push(p);
+      }
+      threeParts[`${kind}Particles`] = particles;
+
+      if (kind === "ng") {
+        const peelGroup = new THREE.Group();
+        peelGroup.position.set(.68, .62, 0);
+        group.add(peelGroup);
+        threeParts.peelGroup = peelGroup;
+        for (let i = 0; i < 6; i += 1) {
+          const seg = new THREE.Mesh(new THREE.BoxGeometry(.22, .055, 1.08), color);
+          seg.position.set(i * .18, i * .035, 0);
+          seg.rotation.z = -i * .075;
+          peelGroup.add(seg);
+        }
+      }
+
+      return group;
+    }
+
+    function initThree() {
+      const canvas = document.getElementById("paint3d");
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera(36, 1, .1, 100);
+      camera.position.set(0, 2.3, 6.4);
+      camera.lookAt(0, .35, 0);
+      renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.shadowMap.enabled = true;
+
+      const hemi = new THREE.HemisphereLight(0xffffff, 0x1f2937, 1.15);
+      scene.add(hemi);
+      const key = new THREE.DirectionalLight(0xffffff, 2.3);
+      key.position.set(2.5, 4.2, 3.2);
+      key.castShadow = true;
+      scene.add(key);
+      const fill = new THREE.PointLight(0x7dd3fc, 1.6, 8);
+      fill.position.set(-3, 2, 2);
+      scene.add(fill);
+
+      root = new THREE.Group();
+      root.rotation.x = -.16;
+      root.position.y = .55;
+      scene.add(root);
+      createBlock("ok", -1.55);
+      createBlock("ng", 1.55);
+
+      clock = new THREE.Clock();
+      const resize = () => {
+        const rect = canvas.parentElement.getBoundingClientRect();
+        renderer.setSize(rect.width, rect.height, false);
+        camera.aspect = rect.width / rect.height;
+        camera.lookAt(0, .35, 0);
+        camera.updateProjectionMatrix();
+      };
+      new ResizeObserver(resize).observe(canvas.parentElement);
+      resize();
+
+      canvas.addEventListener("pointerdown", event => {
+        isDragging = true;
+        lastX = event.clientX;
+        canvas.setPointerCapture(event.pointerId);
+        document.getElementById("check3d").checked = true;
+        save();
+        updateProgress();
+      });
+      canvas.addEventListener("pointermove", event => {
+        if (!isDragging) return;
+        dragX += (event.clientX - lastX) * .006;
+        lastX = event.clientX;
+      });
+      canvas.addEventListener("pointerup", () => isDragging = false);
+      canvas.addEventListener("pointercancel", () => isDragging = false);
+
+      animate();
+    }
+
+    function updateThree(data) {
+      if (!renderer) return;
+      const oilOpacity = clamp((100 - data.degrease) / 100, .03, .82);
+      const roughScale = .55 + data.scuff / 92;
+      const filmScale = .65 + data.film / 72;
+      const dryMove = (100 - data.dry) / 100;
+      const peel = data.risk / 100;
+
+      ["ok", "ng"].forEach(kind => {
+        const oil = threeParts[`${kind}Oil`];
+        oil.material.opacity = kind === "ok" ? oilOpacity * .45 : oilOpacity;
+        oil.scale.y = .65 + oilOpacity;
+        threeParts[`${kind}Primer`].scale.y = filmScale;
+        threeParts[`${kind}Color`].scale.y = filmScale;
+        threeParts[`${kind}Clear`].scale.y = .7 + filmScale * .45;
+        threeParts[`${kind}Peaks`].forEach((peak, index) => {
+          peak.scale.y = roughScale + Math.sin(index) * .08;
+        });
+        threeParts[`${kind}Particles`].forEach((particle, index) => {
+          particle.userData.dryMove = dryMove;
+          particle.userData.seed = index * .7;
+        });
+      });
+
+      if (threeParts.peelGroup) {
+        threeParts.peelGroup.rotation.z = -0.12 - peel * .72;
+        threeParts.peelGroup.position.y = .55 + peel * .32;
+      }
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+      const time = clock.getElapsedTime();
+      if (root) {
+        root.rotation.y = dragX + Math.sin(time * .42) * .08;
+      }
+      ["okParticles", "ngParticles"].forEach(key => {
+        (threeParts[key] || []).forEach((particle, index) => {
+          const move = particle.userData.dryMove ?? .2;
+          particle.position.y += Math.sin(time * (1.6 + move * 3) + index) * .0009 * (1 + move * 5);
+          particle.rotation.y += .014 + move * .026;
+        });
+      });
+      renderer.render(scene, camera);
+    }
 
     function renderQuiz() {
       const quiz = quizzes[quizIndex % quizzes.length];
-      questionEl.textContent = quiz.q;
-      choicesEl.innerHTML = "";
-      feedbackEl.textContent = "答えると理由と実画像が出る。";
-      quiz.a.forEach((text, index) => {
+      quizAnswered = false;
+      document.getElementById("quizCount").textContent = `${quizIndex + 1} / ${quizzes.length}`;
+      document.getElementById("quizQuestion").textContent = quiz.q;
+      const list = document.getElementById("choiceList");
+      const panel = document.getElementById("answerPanel");
+      list.innerHTML = "";
+      panel.classList.remove("show");
+      quiz.choices.forEach((choice, index) => {
         const button = document.createElement("button");
+        button.type = "button";
         button.className = "choice";
-        button.textContent = text;
-        button.addEventListener("click", () => {
-          [...choicesEl.children].forEach((child, i) => {
-            child.classList.toggle("correct", i === quiz.correct);
-            child.classList.toggle("wrong", i === index && index !== quiz.correct);
-          });
-          feedbackEl.innerHTML = "";
-          const message = document.createElement("div");
-          message.textContent = (index === quiz.correct ? "正解。" : "惜しい。") + quiz.why;
-          const image = document.createElement("img");
-          image.src = quiz.image;
-          image.alt = quiz.alt;
-          feedbackEl.append(message, image);
-          document.querySelectorAll(".review-check")[2].checked = true;
-          updateReview();
-          saveState();
-        });
-        choicesEl.appendChild(button);
+        button.textContent = choice;
+        button.addEventListener("click", () => answerQuiz(index));
+        list.appendChild(button);
       });
     }
 
-    function updateReview() {
-      const checks = [...document.querySelectorAll(".review-check")];
-      const done = checks.filter(input => input.checked).length;
-      const percent = Math.round(done / checks.length * 100);
-      document.getElementById("reviewPercent").textContent = percent + "%";
-      document.getElementById("reviewFill").style.width = percent + "%";
+    function answerQuiz(index) {
+      const quiz = quizzes[quizIndex % quizzes.length];
+      quizAnswered = true;
+      [...document.querySelectorAll(".choice")].forEach((button, i) => {
+        button.classList.toggle("correct", i === quiz.correct);
+        button.classList.toggle("wrong", i === index && index !== quiz.correct);
+      });
+      document.getElementById("answerImage").src = quiz.image;
+      document.getElementById("answerImage").alt = quiz.alt;
+      document.getElementById("answerText").textContent = `${index === quiz.correct ? "正解。" : "惜しい。"} ${quiz.why}`;
+      document.getElementById("answerPanel").classList.add("show");
+      document.getElementById("checkQuiz").checked = true;
+      save();
+      updateProgress();
     }
 
-    sliders.forEach(([id]) => {
+    function updateProgress() {
+      const count = ["check3d", "checkPhoto", "checkQuiz"].filter(id => document.getElementById(id).checked).length;
+      ui.progressBar.style.width = `${Math.round(count / 3 * 100)}%`;
+    }
+
+    function makePartnerText() {
+      const data = compute();
+      return [
+        "塗装3D教科書 P00メモ",
+        "",
+        `脱脂: ${data.degrease}%`,
+        `足付け: ${data.scuff}%`,
+        `膜厚: ${data.film}%`,
+        `乾燥: ${data.dry}%`,
+        `はがれリスク: ${Math.round(data.risk)}%`,
+        "",
+        `なぜ？: ${ui.whyBox.textContent}`,
+        "",
+        `改善: ${ui.improveBox.textContent}`,
+        "",
+        `俺のメモ: ${ui.partnerMemo.value.trim()}`
+      ].join("\n");
+    }
+
+    async function copyPartnerText() {
+      const text = makePartnerText();
+      try {
+        await navigator.clipboard.writeText(text);
+        ui.copyStatus.textContent = "コピーした。相棒にそのまま送れる。";
+      } catch {
+        window.prompt("この文章をコピー", text);
+        ui.copyStatus.textContent = "コピー用の文章を出した。";
+      }
+      save();
+    }
+
+    controls.forEach(id => {
       const input = document.getElementById(id);
-      if (saved.sliders && saved.sliders[id]) input.value = saved.sliders[id];
-      input.addEventListener("input", () => {
-        document.querySelectorAll(".review-check")[1].checked = true;
-        updateSim();
-        updateReview();
-        saveState();
-      });
+      input.value = state[id];
+      input.addEventListener("input", updateUi);
     });
 
-    document.getElementById("whyMemo").value = saved.memo || "";
-    document.getElementById("whyMemo").addEventListener("input", () => {
-      document.querySelectorAll(".review-check")[3].checked = document.getElementById("whyMemo").value.trim().length > 0;
-      updateReview();
-      saveState();
-    });
-
-    document.querySelectorAll(".review-check").forEach((input, index) => {
-      input.checked = saved.checks ? Boolean(saved.checks[index]) : index === 0;
-      input.addEventListener("change", () => {
-        updateReview();
-        saveState();
-      });
-    });
-
-    document.getElementById("nextQuestion").addEventListener("click", () => {
+    if (state.memo) ui.partnerMemo.value = state.memo;
+    ui.partnerMemo.addEventListener("input", save);
+    ui.copyPartner.addEventListener("click", copyPartnerText);
+    document.getElementById("nextQuiz").addEventListener("click", () => {
       quizIndex = (quizIndex + 1) % quizzes.length;
       renderQuiz();
-      saveState();
+      save();
     });
 
-    document.getElementById("resetProgress").addEventListener("click", () => {
-      document.querySelectorAll(".review-check").forEach(input => input.checked = false);
-      updateReview();
-      saveState();
+    ["check3d", "checkPhoto", "checkQuiz"].forEach(id => {
+      const el = document.getElementById(id);
+      el.checked = Boolean(state.checks[id]);
+      el.addEventListener("change", () => {
+        save();
+        updateProgress();
+      });
     });
 
-    let installPrompt = null;
-    window.addEventListener("beforeinstallprompt", event => {
-      event.preventDefault();
-      installPrompt = event;
-      const button = document.getElementById("installButton");
-      button.hidden = false;
-      button.addEventListener("click", async () => {
-        button.hidden = true;
-        await installPrompt.prompt();
-        installPrompt = null;
-      }, { once: true });
-    });
+    document.getElementById("photos").addEventListener("mouseenter", () => {
+      document.getElementById("checkPhoto").checked = true;
+      save();
+      updateProgress();
+    }, { once: true });
+
+    initThree();
+    renderQuiz();
+    updateUi();
 
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("./service-worker.js");
     }
-
-    updateSim();
-    renderQuiz();
-    updateReview();
   </script>
 </body>
 </html>
