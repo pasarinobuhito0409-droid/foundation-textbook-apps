@@ -37,11 +37,15 @@
       margin: 0;
       min-height: 100vh;
       overflow-x: hidden;
-      background:
-        linear-gradient(90deg, rgba(39, 61, 90, .045) 1px, transparent 1px),
-        linear-gradient(0deg, rgba(39, 61, 90, .035) 1px, transparent 1px),
-        var(--paper);
-      background-size: 22px 22px;
+      background-image:
+        linear-gradient(rgba(244, 239, 229, .88), rgba(244, 239, 229, .92)),
+        url("./assets/spray-finishing-workbench-real.jpg"),
+        linear-gradient(90deg, rgba(39, 61, 90, .055) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(39, 61, 90, .045) 1px, transparent 1px);
+      background-position: center, center, left top, left top;
+      background-size: auto, cover, 22px 22px, 22px 22px;
+      background-attachment: scroll, fixed, scroll, scroll;
+      background-color: var(--paper);
       color: var(--ink);
     }
 
@@ -61,7 +65,7 @@
     }
 
     .app-shell {
-      width: min(1240px, 100%);
+      width: min(1320px, 100%);
       margin: 0 auto;
       padding: 18px 18px 28px;
       display: grid;
@@ -76,8 +80,8 @@
       min-height: calc(100vh - 28px);
       border: 1px solid var(--line);
       border-radius: 18px;
-      background: rgba(255, 255, 255, .78);
-      box-shadow: 0 12px 28px rgba(23, 33, 43, .08);
+      background: linear-gradient(180deg, rgba(255, 255, 255, .9), rgba(238, 246, 255, .82));
+      box-shadow: 0 18px 36px rgba(23, 33, 43, .12);
       padding: 12px;
       display: grid;
       gap: 10px;
@@ -180,9 +184,10 @@
     .screen-nav {
       margin: 0 0 14px;
       border: 1px solid var(--line);
+      border-left: 5px solid var(--gold);
       border-radius: 18px;
-      background: rgba(255, 255, 255, .92);
-      box-shadow: 0 12px 28px rgba(23, 33, 43, .08);
+      background: linear-gradient(135deg, rgba(255, 255, 255, .96), rgba(232, 242, 255, .94));
+      box-shadow: 0 18px 36px rgba(23, 33, 43, .11);
       padding: 12px;
       display: grid;
       grid-template-columns: 96px minmax(0, 1fr) 96px;
@@ -252,8 +257,8 @@
       min-width: 0;
       border: 1px solid var(--line);
       border-radius: 18px;
-      background: rgba(255, 255, 255, .9);
-      box-shadow: 0 14px 34px rgba(23, 33, 43, .08);
+      background: rgba(255, 255, 255, .94);
+      box-shadow: 0 20px 44px rgba(23, 33, 43, .13);
       overflow: hidden;
     }
 
@@ -330,6 +335,9 @@
     .lesson-road {
       display: grid;
       gap: 8px;
+      background:
+        linear-gradient(rgba(255, 255, 255, .9), rgba(255, 255, 255, .82)),
+        url("./assets/spray-finishing-workbench-real.jpg") center / cover;
     }
 
     .road-row {
@@ -370,6 +378,7 @@
 
     .three-lab {
       padding: 14px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, .96), rgba(237, 247, 255, .93));
     }
 
     .lab-head {
@@ -412,17 +421,20 @@
 
     .scene-wrap {
       position: relative;
-      min-height: min(62vh, 620px);
+      min-height: min(68vh, 680px);
       border-radius: 16px;
       overflow: hidden;
       border: 1px solid rgba(17, 24, 39, .22);
       background: linear-gradient(180deg, #132332, #080d12);
+      box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, .08),
+        0 18px 38px rgba(23, 33, 43, .22);
     }
 
     #paint3d {
       width: 100%;
       height: 100%;
-      min-height: min(62vh, 620px);
+      min-height: min(68vh, 680px);
       display: block;
     }
 
@@ -471,8 +483,9 @@
 
     .control-card {
       border: 1px solid var(--line);
+      border-left: 4px solid var(--gold);
       border-radius: 14px;
-      background: #fff;
+      background: linear-gradient(180deg, #fff, #f8fbff);
       padding: 12px;
     }
 
@@ -566,29 +579,34 @@
       overflow: hidden;
       background: #fff;
       display: grid;
-      grid-template-rows: minmax(440px, 58vh) auto;
+      grid-template-rows: minmax(520px, 66vh) auto;
     }
 
     .photo-card figure {
       margin: 0;
       position: relative;
-      background: #111827;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      background: linear-gradient(180deg, #111827, #0b1119);
       overflow: hidden;
+      padding: 10px;
     }
 
     .photo-card img {
       width: 100%;
+      flex: 1 1 auto;
+      min-height: 0;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
+      object-position: center;
+      border-radius: 12px;
     }
 
     .photo-card figcaption {
-      position: absolute;
-      left: 10px;
-      right: 10px;
-      bottom: 10px;
+      position: static;
       border-radius: 10px;
-      background: rgba(255, 255, 255, .88);
+      background: rgba(255, 255, 255, .9);
       padding: 8px 10px;
       font-size: 13px;
       font-weight: 900;
@@ -620,15 +638,18 @@
       background: #fff;
       overflow: hidden;
       display: grid;
-      grid-template-columns: minmax(320px, 1fr) minmax(0, .85fr);
+      grid-template-columns: 1fr;
+      grid-template-rows: minmax(520px, 66vh) auto;
       min-height: calc(100vh - 190px);
     }
 
     .explain-card img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      background: #111827;
+      object-fit: contain;
+      object-position: center;
+      background: linear-gradient(180deg, #111827, #0b1119);
+      padding: 10px;
     }
 
     .explain-card div {
@@ -772,8 +793,9 @@
 
     .answer-panel img {
       width: 100%;
-      max-height: 156px;
-      object-fit: cover;
+      max-height: 220px;
+      object-fit: contain;
+      background: #111827;
     }
 
     .answer-panel p {
@@ -899,7 +921,7 @@
 
       .scene-wrap,
       #paint3d {
-        min-height: 360px;
+        min-height: 390px;
       }
 
       .hero-proof {
@@ -951,16 +973,17 @@
       }
 
       .photo-card {
-        grid-template-rows: minmax(330px, 48vh) auto;
+        grid-template-rows: minmax(360px, 54vh) auto;
       }
 
       .explain-card {
         grid-template-columns: 1fr;
+        grid-template-rows: minmax(360px, 54vh) auto;
         min-height: calc(100vh - 180px);
       }
 
       .explain-card img {
-        height: 330px;
+        height: 100%;
       }
 
       .screen-nav {
@@ -1512,9 +1535,9 @@
     function initThree() {
       const canvas = document.getElementById("paint3d");
       scene = new THREE.Scene();
-      camera = new THREE.PerspectiveCamera(36, 1, .1, 100);
-      camera.position.set(0, 2.3, 6.4);
-      camera.lookAt(0, .35, 0);
+      camera = new THREE.PerspectiveCamera(42, 1, .1, 100);
+      camera.position.set(0, 2.35, 7.3);
+      camera.lookAt(0, .45, 0);
       renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
       renderer.shadowMap.enabled = true;
@@ -1531,17 +1554,22 @@
 
       root = new THREE.Group();
       root.rotation.x = -.16;
-      root.position.y = .55;
+      root.position.y = .48;
+      root.scale.set(.94, .94, .94);
       scene.add(root);
-      createBlock("ok", -1.55);
-      createBlock("ng", 1.55);
+      createBlock("ok", -1.32);
+      createBlock("ng", 1.32);
 
       clock = new THREE.Clock();
       const resize = () => {
         const rect = canvas.parentElement.getBoundingClientRect();
+        const narrow = rect.width < 620;
         renderer.setSize(rect.width, rect.height, false);
+        camera.fov = narrow ? 45 : 42;
+        camera.position.set(0, narrow ? 2.25 : 2.35, narrow ? 8.2 : 7.3);
+        root.scale.set(narrow ? .82 : .94, narrow ? .82 : .94, narrow ? .82 : .94);
         camera.aspect = rect.width / rect.height;
-        camera.lookAt(0, .35, 0);
+        camera.lookAt(0, .45, 0);
         camera.updateProjectionMatrix();
       };
       new ResizeObserver(resize).observe(canvas.parentElement);

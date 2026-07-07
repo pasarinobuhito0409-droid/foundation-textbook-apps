@@ -1,4 +1,4 @@
-const CACHE_NAME = "painting-foundation-v4-one-screen";
+const CACHE_NAME = "painting-foundation-v5-visual-fit";
 const ASSETS = [
   "./",
   "./index.html",
