@@ -1811,7 +1811,11 @@
       }
       if (updateHash) history.replaceState(null, "", `#${slide.key}`);
       window.scrollTo(0, 0);
-      requestAnimationFrame(() => window.dispatchEvent(new Event("resize")));
+      requestAnimationFrame(() => {
+        window.scrollTo(0, 0);
+        window.dispatchEvent(new Event("resize"));
+      });
+      window.setTimeout(() => window.scrollTo(0, 0), 120);
     }
 
     prevSlide.addEventListener("click", () => showSlide(activeSlide - 1));

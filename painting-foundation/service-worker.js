@@ -1,4 +1,4 @@
-const CACHE_NAME = "painting-foundation-v5-visual-fit";
+const CACHE_NAME = "painting-foundation-v6-visual-fit-scroll";
 const ASSETS = [
   "./",
   "./index.html",
