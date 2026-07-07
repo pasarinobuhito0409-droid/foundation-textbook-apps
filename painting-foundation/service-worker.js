@@ -1,4 +1,4 @@
-const CACHE_NAME = "painting-foundation-v6-visual-fit-scroll";
+const CACHE_NAME = "painting-foundation-v7-in-scene-controls";
 const ASSETS = [
   "./",
   "./index.html",

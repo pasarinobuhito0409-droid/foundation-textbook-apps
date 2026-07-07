@@ -415,7 +415,7 @@
 
     .lab-body {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 292px;
+      grid-template-columns: minmax(0, 1fr);
       gap: 14px;
     }
 
@@ -436,6 +436,13 @@
       height: 100%;
       min-height: min(68vh, 680px);
       display: block;
+      touch-action: none;
+      cursor: grab;
+      user-select: none;
+    }
+
+    #paint3d:active {
+      cursor: grabbing;
     }
 
     .scene-labels {
@@ -466,7 +473,7 @@
     .scene-read {
       position: absolute;
       left: 14px;
-      bottom: 14px;
+      bottom: 224px;
       max-width: min(520px, calc(100% - 28px));
       border-radius: 14px;
       background: rgba(255, 255, 255, .88);
@@ -479,6 +486,39 @@
     .control-panel {
       display: grid;
       gap: 12px;
+    }
+
+    .scene-controls {
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      bottom: 14px;
+      z-index: 3;
+      width: auto;
+      max-height: 196px;
+      overflow: auto;
+      overscroll-behavior: contain;
+      padding: 6px;
+      border-radius: 18px;
+      background: rgba(248, 250, 252, .72);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 14px 32px rgba(0, 0, 0, .18);
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+
+    .scene-controls .control-card {
+      padding: 9px;
+    }
+
+    .scene-controls .control-label {
+      display: grid;
+      gap: 2px;
+      font-size: 12px;
+      line-height: 1.25;
+    }
+
+    .scene-controls .result-grid {
+      grid-column: 1 / -1;
     }
 
     .control-card {
@@ -921,7 +961,52 @@
 
       .scene-wrap,
       #paint3d {
-        min-height: 390px;
+        min-height: 620px;
+      }
+
+      .scene-labels {
+        inset: 12px 10px auto;
+      }
+
+      .scene-label {
+        padding: 7px 9px;
+        font-size: 13px;
+      }
+
+      .scene-read {
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+        max-width: none;
+        padding: 9px 10px;
+        font-size: 13px;
+      }
+
+      .scene-controls {
+        left: 10px;
+        right: 10px;
+        top: 92px;
+        bottom: auto;
+        width: auto;
+        max-height: 216px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        padding: 8px;
+      }
+
+      .scene-controls .control-card {
+        padding: 9px;
+      }
+
+      .scene-controls .control-label {
+        display: grid;
+        gap: 2px;
+        font-size: 12px;
+        line-height: 1.25;
+      }
+
+      .scene-controls .result-grid {
+        grid-column: 1 / -1;
       }
 
       .hero-proof {
@@ -1108,9 +1193,7 @@
                 <div class="scene-read" id="sceneRead">
                   まず油膜を見る。油が少ないほど、塗料が金属へ近づく。
                 </div>
-              </div>
-
-              <div class="control-panel">
+              <div class="control-panel scene-controls">
                 <div class="control-card">
                   <label class="control-label" for="degrease">
                     <span>脱脂（だっし）</span>
@@ -1165,6 +1248,7 @@
                     <strong id="dryResult">良い</strong>
                   </div>
                 </div>
+              </div>
               </div>
             </div>
           </section>
@@ -1577,6 +1661,7 @@
       resize();
 
       canvas.addEventListener("pointerdown", event => {
+        event.preventDefault();
         isDragging = true;
         lastX = event.clientX;
         canvas.setPointerCapture(event.pointerId);
@@ -1586,11 +1671,16 @@
       });
       canvas.addEventListener("pointermove", event => {
         if (!isDragging) return;
+        event.preventDefault();
         dragX += (event.clientX - lastX) * .006;
         lastX = event.clientX;
       });
-      canvas.addEventListener("pointerup", () => isDragging = false);
+      canvas.addEventListener("pointerup", event => {
+        event.preventDefault();
+        isDragging = false;
+      });
       canvas.addEventListener("pointercancel", () => isDragging = false);
+      canvas.addEventListener("pointerleave", () => isDragging = false);
 
       animate();
     }
