@@ -62,7 +62,7 @@
     .summary-note { margin: 11px 0 0; padding: 9px 10px; border-radius: 10px; color: #6f5a23; background: var(--amber-soft); font-size: 11px; font-weight: 800; line-height: 1.5; }
     .progress-strip { height: 6px; margin-top: 11px; overflow: hidden; border-radius: 99px; background: #e8edf5; }
     .progress-strip span { display: block; width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #4c83ef, #38a883); transition: width .2s ease; }
-    .reset-button { min-height: 35px; padding: 6px 9px; border: 1px solid #cbd6e7; border-radius: 9px; color: var(--blue); background: white; font-size: 10px; font-weight: 900; cursor: pointer; }
+    .reset-button { min-height: 42px; padding: 6px 9px; border: 1px solid #cbd6e7; border-radius: 9px; color: var(--blue); background: white; font-size: 10px; font-weight: 900; cursor: pointer; }
 
     .route-card { margin: 14px 14px 0; padding: 13px 14px; border: 1px solid #d9e7fa; border-radius: 16px; background: var(--sky); }
     .route-title { display: flex; align-items: center; justify-content: space-between; gap: 8px; color: var(--navy); font-size: 13px; font-weight: 950; }
@@ -94,7 +94,7 @@
     .badge.green { color: var(--green); background: var(--green-soft); }
     .detail-title { margin: 8px 0 6px; font-size: 18px; line-height: 1.35; }
     .detail-lead { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
-    .confirm-button { display: inline-flex; min-height: 38px; align-items: center; justify-content: center; gap: 5px; margin-top: 10px; padding: 7px 10px; border: 0; border-radius: 10px; color: white; background: var(--green); font-size: 11px; font-weight: 950; cursor: pointer; }
+    .confirm-button { display: inline-flex; min-height: 44px; align-items: center; justify-content: center; gap: 5px; margin-top: 10px; padding: 7px 10px; border: 0; border-radius: 10px; color: white; background: var(--green); font-size: 11px; font-weight: 950; cursor: pointer; }
     .confirm-button[aria-pressed="true"] { color: var(--green); background: var(--green-soft); }
 
     .detail-body { padding: 0 13px 14px; }
@@ -110,7 +110,7 @@
     .truth-box { padding: 10px; border-left: 3px solid #efb741; border-radius: 9px; background: #fff9e8; color: #665323; font-size: 10px; line-height: 1.55; }
     .truth-box strong { color: #8a6210; }
     .detail-actions { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px; }
-    .action { display: inline-flex; min-height: 38px; align-items: center; justify-content: center; padding: 7px 11px; border-radius: 10px; color: white; background: var(--blue); font-size: 10px; font-weight: 950; text-decoration: none; }
+    .action { display: inline-flex; min-height: 44px; align-items: center; justify-content: center; padding: 7px 11px; border-radius: 10px; color: white; background: var(--blue); font-size: 10px; font-weight: 950; text-decoration: none; }
     .action.secondary { color: var(--blue); background: var(--blue-soft); }
 
     .source-note { margin: 14px 14px 0; padding: 10px 12px; border-radius: 11px; color: var(--muted); background: #f6f4ee; font-size: 10px; line-height: 1.55; }
@@ -232,14 +232,14 @@
         tabYears: "期間相談",
         name: "城南自主夜間学級",
         image: "assets/fukuoka-night-class.jpg",
-        imageAlt: "福岡県教育委員会の自主夜間学級案内画像",
+        imageAlt: "福岡県教育委員会公式ページの自主夜間学級案内バナー",
         imageClass: "",
         imageLink: "https://www.pref.fukuoka.lg.jp/site/kyouiku/yakangakkyu.html",
         badges: ["自主夜間学級", "小・中内容"],
         lead: "正式な中学校とは別に、読み書き・計算などを学べる北九州市の学びの場です。",
         facts: [
           ["学年", "小・中学校程度"],
-          ["通う年数", "一律の年数なし"],
+          ["通う年数", "固定年限の記載なし"],
           ["授業", "月〜金 18:00〜20:00"],
           ["場所", "城南中学校"],
         ],
@@ -261,14 +261,14 @@
         tabYears: "期間相談",
         name: "穴生・中学校 自主夜間学級",
         image: "assets/fukuoka-night-class.jpg",
-        imageAlt: "福岡県教育委員会の自主夜間学級案内画像",
+        imageAlt: "福岡県教育委員会公式ページの自主夜間学級案内バナー",
         imageClass: "",
         imageLink: "https://www.pref.fukuoka.lg.jp/site/kyouiku/yakangakkyu.html",
         badges: ["自主夜間学級", "小・中内容"],
         lead: "穴生小学校を会場に、読み書き・計算などを学べる北九州市の学びの場です。",
         facts: [
           ["学年", "小・中学校程度"],
-          ["通う年数", "一律の年数なし"],
+          ["通う年数", "固定年限の記載なし"],
           ["授業", "月・火・木 19:00〜21:00"],
           ["場所", "穴生小学校"],
         ],
@@ -306,11 +306,12 @@
           "年間行事：6月中間考査、9月前期期末・卒業、2月後期期末、3月卒業",
           "Ⅲ部（夜間部）は9〜12限。ほかの時間帯も条件付きで選択可能",
         ],
-        truth: "<strong>事実：</strong>74単位以上を積み、最低3年間在籍するなどの条件を満たして卒業します。原則6年を上限に在籍期間を決められます。<br /><strong>要確認：</strong>昼の職業訓練と両立する部・時間割、入試日程、編入条件は学校へ確認します。",
+        truth: "<strong>事実：</strong>74単位以上を積み、最低3年間在籍するなどの条件を満たして卒業します。公式案内では、ゆっくり学ぶ場合は原則6年までとされています。<br /><strong>要確認：</strong>昼の職業訓練と両立する部・時間割、入試日程、編入条件は学校へ確認します。",
         actions: [
           ["学校公式サイト", "https://hibiki.fku.ed.jp/", ""],
           ["単位制の説明", "https://hibiki.fku.ed.jp/school_life/about-class/credit-system/", "secondary"],
           ["年間行事を見る", "https://hibiki.fku.ed.jp/school_life/school-event/annual-events/", "secondary"],
+          ["在籍期間を見る", "https://hibiki.fku.ed.jp/introduction/%E3%81%B2%E3%81%B3%E3%81%8D%E9%AB%98%E6%A0%A1%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/", "secondary"],
         ],
       },
       {
