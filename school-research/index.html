@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#172a4b" />
+  <meta name="description" content="北九州・福岡の学び直し先を、学年・通う年数・2026年度の予定で確認するスマホ用ガイド。" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <title>学び直し 学校年度ガイド</title>
+  <style>
+    :root {
+      --ink: #18213a;
+      --muted: #657086;
+      --paper: #fffdf8;
+      --line: #e4dfd4;
+      --navy: #172a4b;
+      --blue: #2762d9;
+      --blue-soft: #eaf1ff;
+      --green: #1f8a5b;
+      --green-soft: #e9f7ef;
+      --amber: #946a11;
+      --amber-soft: #fff5d7;
+      --sand: #f5efe2;
+      --sky: #edf6ff;
+      --shadow: 0 10px 28px rgb(24 33 58 / 9%);
+    }
+
+    * { box-sizing: border-box; }
+    html { min-width: 320px; background: #e9e5dc; }
+    body {
+      min-width: 320px;
+      min-height: 100vh;
+      margin: 0;
+      overflow-x: hidden;
+      color: var(--ink);
+      background: radial-gradient(circle at 8% 0%, #fff4d6 0, transparent 28%), #e9e5dc;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP", "Yu Gothic", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button, a { font: inherit; }
+    button { -webkit-tap-highlight-color: transparent; }
+    a, button { outline-offset: 3px; }
+    a:focus-visible, button:focus-visible { outline: 3px solid #ffb020; outline-offset: 3px; }
+    .app-shell { width: 100%; max-width: 430px; min-height: 100vh; margin: 0 auto; overflow: hidden; background: var(--paper); box-shadow: 0 18px 60px rgb(24 33 58 / 16%); }
+
+    .hero { padding: calc(24px + env(safe-area-inset-top)) 20px 60px; color: white; background: linear-gradient(145deg, #172a4b, #244d87); }
+    .eyebrow { margin: 0 0 8px; color: #c9dcff; font-size: 11px; font-weight: 900; letter-spacing: .14em; }
+    .hero h1 { margin: 0; font-size: 27px; line-height: 1.28; letter-spacing: .01em; }
+    .hero p { max-width: 340px; margin: 11px 0 0; color: #dce8ff; font-size: 13px; line-height: 1.65; }
+    .updated { margin-top: 12px; color: #aac6f5; font-size: 11px; font-weight: 800; }
+
+    .summary-card { position: relative; z-index: 2; margin: -42px 14px 0; padding: 15px; border: 1px solid rgb(23 42 75 / 9%); border-radius: 19px; background: rgb(255 255 255 / 97%); box-shadow: var(--shadow); }
+    .summary-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+    .summary-head h2 { margin: 0; font-size: 16px; }
+    .summary-head span { color: var(--muted); font-size: 10px; font-weight: 800; text-align: right; }
+    .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; margin-top: 12px; }
+    .summary-cell { min-height: 69px; padding: 9px 7px; border-radius: 12px; background: #f7f9fc; }
+    .summary-cell strong { display: block; color: var(--blue); font-size: 17px; line-height: 1.15; }
+    .summary-cell strong #doneCount { display: inline; color: inherit; }
+    .summary-cell span { display: block; margin-top: 5px; color: var(--muted); font-size: 10px; font-weight: 800; line-height: 1.35; }
+    .summary-note { margin: 11px 0 0; padding: 9px 10px; border-radius: 10px; color: #6f5a23; background: var(--amber-soft); font-size: 11px; font-weight: 800; line-height: 1.5; }
+    .progress-strip { height: 6px; margin-top: 11px; overflow: hidden; border-radius: 99px; background: #e8edf5; }
+    .progress-strip span { display: block; width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #4c83ef, #38a883); transition: width .2s ease; }
+    .reset-button { min-height: 35px; padding: 6px 9px; border: 1px solid #cbd6e7; border-radius: 9px; color: var(--blue); background: white; font-size: 10px; font-weight: 900; cursor: pointer; }
+
+    .route-card { margin: 14px 14px 0; padding: 13px 14px; border: 1px solid #d9e7fa; border-radius: 16px; background: var(--sky); }
+    .route-title { display: flex; align-items: center; justify-content: space-between; gap: 8px; color: var(--navy); font-size: 13px; font-weight: 950; }
+    .route-title span { color: var(--blue); font-size: 10px; font-weight: 900; }
+    .route-flow { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; align-items: center; gap: 5px; margin-top: 9px; }
+    .route-step { min-height: 42px; padding: 7px 5px; border-radius: 10px; background: white; color: var(--navy); font-size: 10px; font-weight: 900; line-height: 1.35; text-align: center; }
+    .route-arrow { color: #6991d1; font-size: 15px; font-weight: 950; }
+    .route-note { margin: 8px 0 0; color: var(--muted); font-size: 10px; line-height: 1.45; }
+
+    .chooser { margin-top: 19px; }
+    .section-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; margin: 0 17px 9px; }
+    .section-head h2 { margin: 0; font-size: 18px; }
+    .section-head span { color: var(--muted); font-size: 10px; font-weight: 800; text-align: right; }
+    .school-tabs { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; padding: 0 12px; }
+    .school-tab { min-height: 76px; padding: 8px 4px; border: 1px solid var(--line); border-radius: 13px; color: var(--ink); background: white; box-shadow: 0 4px 13px rgb(24 33 58 / 5%); cursor: pointer; text-align: left; }
+    .school-tab[aria-selected="true"] { border-color: var(--blue); background: var(--blue-soft); box-shadow: 0 5px 14px rgb(39 98 217 / 17%); }
+    .school-tab .tab-type { display: block; color: var(--muted); font-size: 9px; font-weight: 900; line-height: 1.2; }
+    .school-tab strong { display: block; margin-top: 5px; font-size: 12px; line-height: 1.25; }
+    .school-tab .tab-years { display: block; margin-top: 5px; color: var(--blue); font-size: 10px; font-weight: 950; line-height: 1.2; }
+    .school-tab .tab-check { display: block; min-height: 12px; margin-top: 4px; color: var(--green); font-size: 9px; font-weight: 950; }
+
+    .detail-panel { margin: 14px 12px 0; border: 1px solid var(--line); border-radius: 19px; background: white; box-shadow: var(--shadow); overflow: hidden; }
+    .detail-top { display: grid; grid-template-columns: 105px minmax(0, 1fr); gap: 13px; padding: 13px; background: linear-gradient(135deg, #fbfcff, #fff); }
+    .detail-image-link { display: block; width: 105px; height: 141px; overflow: hidden; border-radius: 11px; background: #f2f0eb; box-shadow: 0 5px 13px rgb(24 33 58 / 12%); }
+    .detail-image { display: block; width: 100%; height: 100%; object-fit: cover; }
+    .detail-image.contain { object-fit: contain; background: white; }
+    .detail-kicker { display: flex; flex-wrap: wrap; gap: 5px; }
+    .badge { display: inline-flex; align-items: center; min-height: 22px; padding: 4px 7px; border-radius: 999px; color: var(--blue); background: var(--blue-soft); font-size: 9px; font-weight: 950; }
+    .badge.green { color: var(--green); background: var(--green-soft); }
+    .detail-title { margin: 8px 0 6px; font-size: 18px; line-height: 1.35; }
+    .detail-lead { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
+    .confirm-button { display: inline-flex; min-height: 38px; align-items: center; justify-content: center; gap: 5px; margin-top: 10px; padding: 7px 10px; border: 0; border-radius: 10px; color: white; background: var(--green); font-size: 11px; font-weight: 950; cursor: pointer; }
+    .confirm-button[aria-pressed="true"] { color: var(--green); background: var(--green-soft); }
+
+    .detail-body { padding: 0 13px 14px; }
+    .fact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 3px; }
+    .fact { min-height: 65px; padding: 9px 10px; border-radius: 11px; background: #f7f8fb; }
+    .fact dt { color: var(--muted); font-size: 9px; font-weight: 900; }
+    .fact dd { margin: 4px 0 0; color: var(--ink); font-size: 12px; font-weight: 950; line-height: 1.35; }
+    .block { margin-top: 13px; }
+    .block h3 { margin: 0 0 6px; color: var(--navy); font-size: 12px; }
+    .schedule-list { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+    .schedule-list li { position: relative; padding-left: 14px; color: #3f4a5e; font-size: 11px; line-height: 1.5; }
+    .schedule-list li::before { position: absolute; top: .42em; left: 0; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); content: ""; }
+    .truth-box { padding: 10px; border-left: 3px solid #efb741; border-radius: 9px; background: #fff9e8; color: #665323; font-size: 10px; line-height: 1.55; }
+    .truth-box strong { color: #8a6210; }
+    .detail-actions { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px; }
+    .action { display: inline-flex; min-height: 38px; align-items: center; justify-content: center; padding: 7px 11px; border-radius: 10px; color: white; background: var(--blue); font-size: 10px; font-weight: 950; text-decoration: none; }
+    .action.secondary { color: var(--blue); background: var(--blue-soft); }
+
+    .source-note { margin: 14px 14px 0; padding: 10px 12px; border-radius: 11px; color: var(--muted); background: #f6f4ee; font-size: 10px; line-height: 1.55; }
+    .source-note a { color: var(--blue); font-weight: 900; }
+    .footer-note { margin: 0; padding: 12px 17px 30px; color: #667085; font-size: 10px; line-height: 1.6; }
+    .hidden { display: none; }
+
+    @media (max-width: 370px) {
+      .hero { padding-inline: 17px; }
+      .summary-card { margin-inline: 10px; }
+      .summary-grid { gap: 4px; }
+      .summary-cell { padding-inline: 5px; }
+      .summary-cell strong { font-size: 15px; }
+      .school-tabs { gap: 4px; padding-inline: 9px; }
+      .school-tab { padding-inline: 3px; }
+      .school-tab strong { font-size: 11px; }
+      .detail-top { grid-template-columns: 91px minmax(0, 1fr); gap: 10px; }
+      .detail-image-link { width: 91px; height: 131px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app-shell">
+    <header class="hero">
+      <p class="eyebrow">2026 SCHOOL-YEAR GUIDE</p>
+      <h1>どの学校で、<br />何年学ぶ？</h1>
+      <p>夜間中学・自主夜間学級・定時制高校を、<br />学年、通う年数、今年度の予定から確認します。</p>
+      <p class="updated">作成・更新：2026年8月27日　｜　v2026.08.27</p>
+    </header>
+
+    <section class="summary-card" aria-label="最初に確認する学校年数のまとめ">
+      <div class="summary-head"><h2>まず年数だけ確認</h2><button id="resetConfirmed" class="reset-button" type="button">確認をリセット</button></div>
+      <div class="summary-grid">
+        <div class="summary-cell"><strong>中学</strong><span>1〜3年相当<br />標準3年枠</span></div>
+        <div class="summary-cell"><strong>自主</strong><span>小・中内容<br />期間は相談</span></div>
+        <div class="summary-cell"><strong>高校</strong><span>単位制<br />3〜6年</span></div>
+        <div class="summary-cell"><strong><span id="doneCount">0</span>/5</strong><span>確認済み<br />進み具合</span></div>
+      </div>
+      <div class="progress-strip" aria-label="確認の進み具合"><span id="progressBar"></span></div>
+      <p class="summary-note">「夜間小学校」という別の公立校ではなく、正式な公立夜間中学の基礎コースで小学校内容を学ぶ枠があります。</p>
+    </section>
+
+    <section class="route-card" aria-label="昼と夜の学び方の例">
+      <div class="route-title">昼は職業訓練・夜は学び <span>組み合わせ例</span></div>
+      <div class="route-flow" aria-hidden="true">
+        <div class="route-step">昼<br />職業訓練</div><div class="route-arrow">→</div>
+        <div class="route-step">夕方・夜<br />授業</div><div class="route-arrow">→</div>
+        <div class="route-step">次の仕事・<br />進学</div>
+      </div>
+      <p class="route-note">毎日の時刻・体力・在籍条件は学校ごとに違うため、候補を開いて公式窓口へ確認します。</p>
+    </section>
+
+    <section class="chooser" aria-labelledby="chooserTitle">
+      <div class="section-head"><h2 id="chooserTitle">学校を1つ選ぶ</h2><span id="selectionHint">いま表示中：ひまわり</span></div>
+      <div id="schoolTabs" class="school-tabs" role="tablist" aria-label="学校・制度を選ぶ"></div>
+    </section>
+
+    <section id="detailPanel" class="detail-panel" aria-live="polite" aria-label="選択した学校の詳細">
+      <div class="detail-top">
+        <a id="detailImageLink" class="detail-image-link" href="https://www.kita9.ed.jp/himawari-j/" aria-label="公式画像を開く">
+          <img id="detailImage" class="detail-image" src="assets/himawari.jpg" alt="北九州市立ひまわり中学校の公式募集画像" />
+        </a>
+        <div>
+          <div id="detailKicker" class="detail-kicker"></div>
+          <h2 id="detailTitle" class="detail-title"></h2>
+          <p id="detailLead" class="detail-lead"></p>
+          <button id="detailConfirm" class="confirm-button" type="button" aria-pressed="false"><span aria-hidden="true">✓</span><span>確認済みにする</span></button>
+        </div>
+      </div>
+      <div class="detail-body">
+        <dl id="detailFacts" class="fact-grid"></dl>
+        <div class="block"><h3>2026年度の動き・時間</h3><ul id="detailSchedule" class="schedule-list"></ul></div>
+        <div class="block"><h3>事実 / 要確認</h3><div id="detailTruth" class="truth-box"></div></div>
+        <div id="detailActions" class="detail-actions"></div>
+      </div>
+    </section>
+
+    <p class="source-note">情報は各自治体・学校の公式ページを基に整理しています。募集日・電話・対象条件が変わることがあるため、最後は必ず公式リンクで確認してください。<br /><a href="https://www.pref.fukuoka.lg.jp/site/kyouiku/yakangakkyu.html">福岡県教育委員会：自主夜間学級の案内</a></p>
+    <p class="footer-note">自主夜間学級は、正式な公立中学校とは別の学びの場です。入学年・在籍年数・通い方が公開情報だけで決まらない場合は、カード内の「要確認」を見て窓口に相談してください。</p>
+  </main>
+
+  <script>
+    const STORAGE_KEY = "school-research-confirmed-v20260827";
+    const schools = [
+      {
+        id: "himawari",
+        tabType: "公立中学",
+        tabName: "ひまわり",
+        tabYears: "3年枠",
+        name: "北九州市立ひまわり中学校",
+        image: "assets/himawari.jpg",
+        imageAlt: "北九州市立ひまわり中学校の公式募集画像",
+        imageClass: "",
+        imageLink: "https://www.kita9.ed.jp/himawari-j/",
+        badges: ["正式な公立中学", "小学校内容あり"],
+        lead: "夕方から学ぶ、北九州市の公立夜間中学校。基礎コースでは小学校内容も学びます。",
+        facts: [
+          ["学年", "中学1〜3年相当"],
+          ["通う年数", "標準は3年枠"],
+          ["授業", "月〜金 17:50〜21:00"],
+          ["場所", "小倉北区下富野"],
+        ],
+        schedule: [
+          "2026年度後期入学式：10月1日（公式掲載）",
+          "2027年度前期（4月入学）の募集：10月から開始予定",
+          "1日の流れ：17:50始まりの会、4時限、20:50終わりの会",
+        ],
+        truth: "<strong>事実：</strong>基礎コースで小学校内容を学べます。<br /><strong>要確認：</strong>個人が何年生相当から始めるか、秋入学の条件、学び方は面談で確認します。",
+        actions: [
+          ["入学関係を見る", "https://www.kita9.ed.jp/himawari-j/admissionrelated.html", ""],
+          ["1日の流れを見る", "https://www.kita9.ed.jp/himawari-j/educationcontent.html", "secondary"],
+          ["学校へ電話", "tel:0935132525", "secondary"],
+        ],
+      },
+      {
+        id: "jonan",
+        tabType: "自主夜間",
+        tabName: "城南",
+        tabYears: "期間相談",
+        name: "城南自主夜間学級",
+        image: "assets/fukuoka-night-class.jpg",
+        imageAlt: "福岡県教育委員会の自主夜間学級案内画像",
+        imageClass: "",
+        imageLink: "https://www.pref.fukuoka.lg.jp/site/kyouiku/yakangakkyu.html",
+        badges: ["自主夜間学級", "小・中内容"],
+        lead: "正式な中学校とは別に、読み書き・計算などを学べる北九州市の学びの場です。",
+        facts: [
+          ["学年", "小・中学校程度"],
+          ["通う年数", "一律の年数なし"],
+          ["授業", "月〜金 18:00〜20:00"],
+          ["場所", "城南中学校"],
+        ],
+        schedule: [
+          "2026年8月4日更新の福岡県公式案内に掲載",
+          "毎週月〜金曜日 18:00〜20:00（祝日等は窓口確認）",
+          "授業料は無料。文具・課外活動費などは実費の場合あり",
+        ],
+        truth: "<strong>事実：</strong>居住地に関わらず対象者は通えると県が案内しています。<br /><strong>要確認：</strong>自主学級なので、個人の通学開始日・続ける期間・受け入れ状況は事務局へ確認します。",
+        actions: [
+          ["県の最新案内", "https://www.pref.fukuoka.lg.jp/site/kyouiku/yakangakkyu.html", ""],
+          ["事務局へ電話", "tel:07038444687", "secondary"],
+        ],
+      },
+      {
+        id: "anou",
+        tabType: "自主夜間",
+        tabName: "穴生・中",
+        tabYears: "期間相談",
+        name: "穴生・中学校 自主夜間学級",
+        image: "assets/fukuoka-night-class.jpg",
+        imageAlt: "福岡県教育委員会の自主夜間学級案内画像",
+        imageClass: "",
+        imageLink: "https://www.pref.fukuoka.lg.jp/site/kyouiku/yakangakkyu.html",
+        badges: ["自主夜間学級", "小・中内容"],
+        lead: "穴生小学校を会場に、読み書き・計算などを学べる北九州市の学びの場です。",
+        facts: [
+          ["学年", "小・中学校程度"],
+          ["通う年数", "一律の年数なし"],
+          ["授業", "月・火・木 19:00〜21:00"],
+          ["場所", "穴生小学校"],
+        ],
+        schedule: [
+          "2026年8月4日更新の福岡県公式案内に掲載",
+          "毎週月・火・木曜日 19:00〜21:00（開催日は窓口確認）",
+          "授業料は無料。文具・課外活動費などは実費の場合あり",
+        ],
+        truth: "<strong>事実：</strong>十分な義務教育を受けられなかった15歳以上（留学生を除く）が対象と案内されています。<br /><strong>要確認：</strong>自主学級のため、個人の開始時期・学習期間は事務局へ相談します。",
+        actions: [
+          ["県の最新案内", "https://www.pref.fukuoka.lg.jp/site/kyouiku/yakangakkyu.html", ""],
+          ["事務局へ電話", "tel:09063356765", "secondary"],
+        ],
+      },
+      {
+        id: "hibiki",
+        tabType: "県立高校",
+        tabName: "ひびき",
+        tabYears: "3〜6年",
+        name: "福岡県立ひびき高等学校",
+        image: "assets/hibiki-logo.png",
+        imageAlt: "福岡県立ひびき高等学校の公式ロゴ",
+        imageClass: "contain",
+        imageLink: "https://hibiki.fku.ed.jp/",
+        badges: ["定時制・単位制", "三部制"],
+        lead: "学年で進む高校ではなく、自分で時間割を作り、単位を積み上げて卒業を目指します。",
+        facts: [
+          ["学年", "学年より単位"],
+          ["通う年数", "最低3年・原則6年以内"],
+          ["部", "Ⅰ午前・Ⅱ午後・Ⅲ夜間"],
+          ["卒業", "必要単位 74単位"],
+        ],
+        schedule: [
+          "2026年度：前期入学は4月、後期入学は10月",
+          "年間行事：6月中間考査、9月前期期末・卒業、2月後期期末、3月卒業",
+          "Ⅲ部（夜間部）は9〜12限。ほかの時間帯も条件付きで選択可能",
+        ],
+        truth: "<strong>事実：</strong>74単位以上を積み、最低3年間在籍するなどの条件を満たして卒業します。原則6年を上限に在籍期間を決められます。<br /><strong>要確認：</strong>昼の職業訓練と両立する部・時間割、入試日程、編入条件は学校へ確認します。",
+        actions: [
+          ["学校公式サイト", "https://hibiki.fku.ed.jp/", ""],
+          ["単位制の説明", "https://hibiki.fku.ed.jp/school_life/about-class/credit-system/", "secondary"],
+          ["年間行事を見る", "https://hibiki.fku.ed.jp/school_life/school-event/annual-events/", "secondary"],
+        ],
+      },
+      {
+        id: "formal",
+        tabType: "正式な制度枠",
+        tabName: "基礎コース",
+        tabYears: "3年が基準",
+        name: "正式な公立夜間中学の基礎コース",
+        image: "assets/himawari.jpg",
+        imageAlt: "北九州市立ひまわり中学校の公式募集画像（制度確認用）",
+        imageClass: "",
+        imageLink: "https://www.mext.go.jp/content/20230123-mxt_syoto02-000027121_1-3.pdf",
+        badges: ["正式な公立中学", "小学校内容を含む"],
+        lead: "『夜間小学校』という別制度ではなく、公立夜間中学で基礎から学ぶ正式な枠として整理します。",
+        facts: [
+          ["学年", "小学校内容〜中学相当"],
+          ["通う年数", "中学3年枠が基準"],
+          ["授業", "学校ごとの夜時間"],
+          ["資格", "正式な中学卒業へ"],
+        ],
+        schedule: [
+          "国の手引：義務教育未修了者などに学びの場を確保する制度",
+          "公立夜間中学は、自治体・学校ごとに募集時期や相談方法を案内",
+          "北九州市では、ひまわり中学校が2026年度の公式情報を更新中",
+        ],
+        truth: "<strong>事実：</strong>正式な学校は『公立夜間中学校』で、小学校内容から学べるコースを置く場合があります。<br /><strong>要確認：</strong>独立した夜間小学校の入学年・在籍年数として一律に決まっているわけではありません。本人の学習履歴と学校面談で確認します。",
+        actions: [
+          ["文科省の手引", "https://www.mext.go.jp/content/20230123-mxt_syoto02-000027121_1-3.pdf", ""],
+          ["ひまわりの公式案内", "https://www.kita9.ed.jp/himawari-j/admissionrelated.html", "secondary"],
+          ["福岡県の自主学級案内", "https://www.pref.fukuoka.lg.jp/site/kyouiku/yakangakkyu.html", "secondary"],
+        ],
+      },
+    ];
+
+    const schoolTabs = document.querySelector("#schoolTabs");
+    const doneCount = document.querySelector("#doneCount");
+    const progressBar = document.querySelector("#progressBar");
+    const resetConfirmed = document.querySelector("#resetConfirmed");
+    const selectionHint = document.querySelector("#selectionHint");
+    const detailImage = document.querySelector("#detailImage");
+    const detailImageLink = document.querySelector("#detailImageLink");
+    const detailKicker = document.querySelector("#detailKicker");
+    const detailTitle = document.querySelector("#detailTitle");
+    const detailLead = document.querySelector("#detailLead");
+    const detailConfirm = document.querySelector("#detailConfirm");
+    const detailFacts = document.querySelector("#detailFacts");
+    const detailSchedule = document.querySelector("#detailSchedule");
+    const detailTruth = document.querySelector("#detailTruth");
+    const detailActions = document.querySelector("#detailActions");
+    let selectedId = "himawari";
+    let confirmed = loadConfirmed();
+
+    function loadConfirmed() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+        return new Set(Array.isArray(saved) ? saved.filter((id) => schools.some((school) => school.id === id)) : []);
+      } catch (error) {
+        return new Set();
+      }
+    }
+
+    function saveConfirmed() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify([...confirmed]));
+    }
+
+    function updateProgress() {
+      doneCount.textContent = String(confirmed.size);
+      progressBar.style.width = `${(confirmed.size / schools.length) * 100}%`;
+      schools.forEach((school) => {
+        const button = schoolTabs.querySelector(`[data-id="${school.id}"]`);
+        if (!button) return;
+        button.querySelector(".tab-check").textContent = confirmed.has(school.id) ? "✓ 確認済み" : "";
+      });
+    }
+
+    function renderTabs() {
+      schoolTabs.innerHTML = schools.map((school, index) => `
+        <button class="school-tab" type="button" role="tab" data-id="${school.id}" aria-controls="detailPanel" aria-selected="${index === 0}">
+          <span class="tab-type">${school.tabType}</span>
+          <strong>${school.tabName}</strong>
+          <span class="tab-years">${school.tabYears}</span>
+          <span class="tab-check"></span>
+        </button>
+      `).join("");
+      schoolTabs.querySelectorAll(".school-tab").forEach((button) => {
+        button.addEventListener("click", () => selectSchool(button.dataset.id, true));
+      });
+      updateProgress();
+    }
+
+    function selectSchool(id, focusDetail) {
+      const school = schools.find((item) => item.id === id) || schools[0];
+      selectedId = school.id;
+      schoolTabs.querySelectorAll(".school-tab").forEach((button) => {
+        const active = button.dataset.id === school.id;
+        button.setAttribute("aria-selected", String(active));
+        button.tabIndex = active ? 0 : -1;
+      });
+      selectionHint.textContent = `いま表示中：${school.tabName}`;
+      detailImage.src = school.image;
+      detailImage.alt = school.imageAlt;
+      detailImage.className = `detail-image ${school.imageClass}`.trim();
+      detailImageLink.href = school.imageLink;
+      detailImageLink.setAttribute("aria-label", `${school.name}の公式画像・資料を開く`);
+      detailKicker.innerHTML = school.badges.map((badge, index) => `<span class="badge ${index === 1 ? "green" : ""}">${badge}</span>`).join("");
+      detailTitle.textContent = school.name;
+      detailLead.textContent = school.lead;
+      detailFacts.innerHTML = school.facts.map(([label, value]) => `<div class="fact"><dt>${label}</dt><dd>${value}</dd></div>`).join("");
+      detailSchedule.innerHTML = school.schedule.map((line) => `<li>${line}</li>`).join("");
+      detailTruth.innerHTML = school.truth;
+      detailActions.innerHTML = school.actions.map(([label, href, kind]) => `<a class="action ${kind}" href="${href}">${label} ↗</a>`).join("");
+      syncConfirmButton();
+      if (focusDetail) {
+        document.querySelector("#detailPanel").scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+    }
+
+    function syncConfirmButton() {
+      const done = confirmed.has(selectedId);
+      detailConfirm.setAttribute("aria-pressed", String(done));
+      detailConfirm.querySelector("span:last-child").textContent = done ? "確認済みを解除" : "確認済みにする";
+    }
+
+    detailConfirm.addEventListener("click", () => {
+      if (confirmed.has(selectedId)) confirmed.delete(selectedId);
+      else confirmed.add(selectedId);
+      saveConfirmed();
+      updateProgress();
+      syncConfirmButton();
+    });
+
+    resetConfirmed.addEventListener("click", () => {
+      confirmed.clear();
+      saveConfirmed();
+      updateProgress();
+      syncConfirmButton();
+    });
+
+    renderTabs();
+    selectSchool(selectedId, false);
+
+    if ("serviceWorker" in navigator && location.protocol !== "file:") {
+      navigator.serviceWorker.register("./service-worker.js").catch(() => {});
+    }
+  </script>
+</body>
+</html>

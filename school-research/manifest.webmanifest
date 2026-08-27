@@ -1,0 +1,20 @@
+{
+  "name": "学び直し 学校年度ガイド",
+  "short_name": "学び直し学校",
+  "description": "北九州・福岡の学び直し先を、学年・通う年数・年度予定で確認するガイド",
+  "lang": "ja",
+  "dir": "ltr",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fffdf8",
+  "theme_color": "#172a4b",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

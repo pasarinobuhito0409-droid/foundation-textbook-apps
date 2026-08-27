@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" role="img" aria-labelledby="title desc">
+  <title id="title">学び直し学校ガイド</title>
+  <desc id="desc">夜空の下で開いた本を表すアイコン</desc>
+  <rect width="192" height="192" rx="42" fill="#172a4b"/>
+  <circle cx="143" cy="46" r="17" fill="#ffd86b"/>
+  <circle cx="151" cy="41" r="17" fill="#172a4b"/>
+  <path d="M34 128c21-17 43-19 62-6 19-13 41-11 62 6v28c-21-16-43-18-62-5-19-13-41-11-62 5z" fill="#fffdf8"/>
+  <path d="M96 122v33" stroke="#5c89d9" stroke-width="5" stroke-linecap="round"/>
+  <path d="M45 116c16-10 33-10 51 0v33c-18-10-35-10-51 0zm102 0c-16-10-33-10-51 0v33c18-10 35-10 51 0z" fill="#d9e8ff" opacity=".75"/>
+  <circle cx="49" cy="55" r="4" fill="#8fb5ff"/>
+  <circle cx="77" cy="35" r="3" fill="#8fb5ff"/>
+  <circle cx="115" cy="70" r="3" fill="#8fb5ff"/>
+</svg>
