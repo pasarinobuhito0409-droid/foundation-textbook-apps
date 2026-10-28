@@ -521,6 +521,12 @@ body.app:not(.ui-peek) .app-min button:not(.on),body.app:not(.ui-peek) .app-min 
 /* 到達の知らせの補足を、名前に負けない大きさと間に（ソル30回目 12） */
 .sora-arr{gap:8px;padding:16px 28px 15px}
 .sora-arr span{font-size:18px;letter-spacing:.04em;line-height:1.5}
+/* 版54: 上と下の部品を同じ形に（ソル31回目 14）: 角の丸み・金のふち・影・上のつやの線を全部同じに。下のボタンのつやを少しおさえる */
+body.app .plus.plus4 button{border-radius:22px!important;box-shadow:var(--g-sh)!important;background-blend-mode:normal}
+body.app .plus.plus4 button::after{opacity:.55}
+body.app .app-bar button,body.app #b-yume .tabs,body.app .app-min,body.app #modosu,body.app .sora-btn,body.app .plus.plus4 button{border:1px solid rgba(242,207,124,.55)!important}
+/* たたむ時はすぐ消す（細くなる途中の暗い影が残らない様に）。開く時だけ動きを付ける */
+body.app:not(.ui-peek) .app-min button:not(.on){transition:none!important}
 
 </style>
 </head>
@@ -9654,7 +9660,7 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
       heyaG = new T.Group(); heyaG.position.set(1, 0, 1.5); scene.add(heyaG);
       var HF = HC.half, HT = HC.ht, ROT = { N: 0, E: -Math.PI / 2, S: Math.PI, W: Math.PI / 2 };
       HC.walls.forEach(function (w) {
-        var g = new T.PlaneGeometry(HF, HT, 144, 90), tx = new T.TextureLoader().load(w.img, function () { kick(); });
+        var g = new T.PlaneGeometry(HF, HT, 256, 160), tx = new T.TextureLoader().load(w.img, function () { kick(); });
         tx.encoding = T.sRGBEncoding; tx.anisotropy = 8;
         var uv = g.attributes.uv, yk0 = w.yuka || 0, ytp = Math.min(0.995, yk0 + HT / (HF / 1.5)); for (var i = 0; i < uv.count; i++) uv.setY(i, yk0 + uv.getY(i) * (ytp - yk0));   // 絵（3:2）の床の線から天井の高さまで。絵に写った床（下の yuka の割合）は使わず、家具の足を部屋の床へ着ける（ソル29回目 2）
         var wm = new T.MeshBasicMaterial({ map: tx, vertexColors: true }), cl = w.i === 0 ? 0.0 : 1.0;   // 部屋の角は板の左（i=0）か右（i=1）
@@ -9676,7 +9682,7 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
           // 家具が壁に貼り付いて見えない様に（ソル29回目 3）: 手前へ出た物のうしろの壁に落ち影、上を向く面は明るく・下と横を向く面は暗く
           var DW = di.width, DH = di.height, D = new Float32Array(DW * DH), Sb = new Float32Array(DW * DH), tmp = new Float32Array(DW * DH);
           for (var q = 0; q < DW * DH; q++) D[q] = px2[q * 4] / 255;
-          var R = 6;
+          var R = Math.round(6 * DW / 256);
           for (var yy = 0; yy < DH; yy++) for (var xx = 0; xx < DW; xx++) { var sm = 0, n = 0; for (var k = -R; k <= R; k++) { var x2 = xx + k; if (x2 >= 0 && x2 < DW) { sm += D[yy * DW + x2]; n++; } } tmp[yy * DW + xx] = sm / n; }
           for (yy = 0; yy < DH; yy++) for (xx = 0; xx < DW; xx++) { sm = 0; n = 0; for (k = -R; k <= R; k++) { var y2 = yy + k; if (y2 >= 0 && y2 < DH) { sm += tmp[y2 * DW + xx]; n++; } } Sb[yy * DW + xx] = sm / n; }
           function dAt(a, x, y) { x = Math.max(0, Math.min(DW - 1, x)); y = Math.max(0, Math.min(DH - 1, y)); return a[y * DW + x]; }
@@ -9685,8 +9691,8 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
             var uu = u2.getX(j);
             var ix = Math.min(di.width - 1, Math.floor(uu * di.width)), iy = Math.min(di.height - 1, Math.floor((1 - u2.getY(j)) * di.height));
             pos.setZ(j, px2[(iy * di.width + ix) * 4] / 255 * HC.relief);
-            var d0 = dAt(D, ix, iy), sh = Math.max(0, dAt(Sb, ix, iy - 5) - d0 - 0.04), cav = Math.max(0, dAt(Sb, ix, iy) - d0 - 0.03);   // 上の物の落ち影・物のまわりのくぼみ
-            var gy = dAt(D, ix, iy + 2) - dAt(D, ix, iy - 2), gx = dAt(D, ix + 2, iy) - dAt(D, ix - 2, iy);   // 面の向き（上を向く面は gy>0）
+            var sk = DW / 256, d0 = dAt(D, ix, iy), sh = Math.max(0, dAt(Sb, ix, iy - Math.round(5 * sk)) - d0 - 0.04), cav = Math.max(0, dAt(Sb, ix, iy) - d0 - 0.03);   // 上の物の落ち影・物のまわりのくぼみ
+            var g2 = Math.round(2 * sk), gy = dAt(D, ix, iy + g2) - dAt(D, ix, iy - g2), gx = dAt(D, ix + g2, iy) - dAt(D, ix - g2, iy);   // 面の向き（上を向く面は gy>0）
             var v = (1 - Math.min(0.55, sh * 2.4)) * (1 - Math.min(0.35, cav * 1.8)) * (1 + Math.max(-0.42, Math.min(0.22, gy * 1.8 - Math.abs(gx) * 1.6)));
             col.setXYZ(j, v, v * 0.985, v * 0.97);
           }
@@ -10212,7 +10218,7 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
     if (gazeTo) { var gu = Math.min(1, (now - gazeTo.t0) / 1600); gaze = gazeTo.from + (gazeTo.to - gazeTo.from) * (reduced ? 1 : sstep(gu)); if (gu >= 1) gazeTo = null; }
     if (!drag && !reduced) orbit += (0.035 + orbitV) * dt * (1 - 0.7 * gaze); orbitV *= Math.pow(0.05, dt);
     // 高いほど少し引いて見下ろし、塔の下が遠く細く消えて行くのが見える
-    var hl = Math.min(6, Math.log(1 + Math.max(0, camY)) / Math.LN2);
+    var hl = Math.min(6, Math.log(1 + Math.max(0, camY)) / Math.LN2) + 0.9 * Math.max(0, Math.min(3, Math.log(1 + Math.max(0, camY)) / Math.LN2 - 6));   // 64段より上も少しずつ引く（58時間と166時間で塔の見え方が同じにならない・ソル31回目 11）
     var wide = 1 - sstep((camY - ROOM_H - 1.5) / 3);   // 低い所は少し引いて、屋上のふち・まわりのビルの屋上と窓まで入れる
     var cx0 = 1, cz0 = 1.5, Rn = 12.5 + hl * 1.2 + 5 * wide, cyn = camY + 3.4 + hl * 1.5 + 2.5 * wide, tyn = camY - 0.5 - hl * 0.4 + 0.2 * wide;   // 画面いっぱいでは上に札があるので、てっぺんを少し下に写す
     // 「地上を見る」: 塔の角のすぐ外・てっぺんの上から、塔の側面に沿って真下を見る（てっぺんのふちは画面の上に残す）
@@ -11076,7 +11082,7 @@ window.TOU_E = {"ao": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJAAAAClCAY
 })();
 </script>
 
-<script>window.TRI_VER="a36bc8d396";
+<script>window.TRI_VER="36e22b7bbd";
 window.LV_BGT = [{"t": 0.0, "f": 0, "src": "lvbg-001.jpg"}, {"t": 2.458, "f": 59, "src": "lvbg-060.jpg"}, {"t": 4.125, "f": 99, "src": "lvbg-100.jpg"}, {"t": 5.792, "f": 139, "src": "lvbg-140.jpg"}, {"t": 7.875, "f": 189, "src": "lvbg-190.jpg"}, {"t": 9.542, "f": 229, "src": "lvbg-230.jpg"}];
 // ===== 積み上げ帳アプリ: 全画面の形・音の合図・留守番係 =====
 (function () {
