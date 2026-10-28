@@ -11,7 +11,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" href="icon-192.png">
-<script>window.HEYA_CFG = {"half": 9.0, "ht": 5.6, "walls": [{"n": "W1", "side": "N", "i": 0, "img": "heya-W1.jpg", "dep": "heya-W1-d.png", "yuka": 0}, {"n": "W2", "side": "N", "i": 1, "img": "heya-W2.jpg", "dep": "heya-W2-d.png", "yuka": 0}, {"n": "W3", "side": "E", "i": 0, "img": "heya-W3.jpg", "dep": "heya-W3-d.png", "yuka": 0.098}, {"n": "W4", "side": "E", "i": 1, "img": "heya-W4.jpg", "dep": "heya-W4-d.png", "yuka": 0}, {"n": "W5", "side": "S", "i": 0, "img": "heya-W5.jpg", "dep": "heya-W5-d.png", "yuka": 0.11}, {"n": "W6", "side": "S", "i": 1, "img": "heya-W6.jpg", "dep": "heya-W6-d.png", "yuka": 0.11}, {"n": "W7", "side": "W", "i": 0, "img": "heya-W7.jpg", "dep": "heya-W7-d.png", "yuka": 0}, {"n": "W8", "side": "W", "i": 1, "img": "heya-W8.jpg", "dep": "heya-W8-d.png", "yuka": 0.086}], "yuka": "heya-yuka.jpg", "hikari": "heya-hikari.jpg", "gain": [2.8466, 5.00361, 9.16428], "rep": 6.0, "relief": 0.9, "tenjou": "heya-tenjou.jpg", "juutan": "heya-juutan.jpg"};</script>
+<script>window.HEYA_CFG = {"half": 9.0, "ht": 5.6, "walls": [{"n": "W1", "side": "N", "i": 0, "img": "heya-W1.jpg", "dep": "heya-W1-d.png", "yuka": 0}, {"n": "W2", "side": "N", "i": 1, "img": "heya-W2.jpg", "dep": "heya-W2-d.png", "yuka": 0}, {"n": "W3", "side": "E", "i": 0, "img": "heya-W3.jpg", "dep": "heya-W3-d.png", "yuka": 0.098}, {"n": "W4", "side": "E", "i": 1, "img": "heya-W4.jpg", "dep": "heya-W4-d.png", "yuka": 0}, {"n": "W5", "side": "S", "i": 0, "img": "heya-W5.jpg", "dep": "heya-W5-d.png", "yuka": 0.11}, {"n": "W6", "side": "S", "i": 1, "img": "heya-W6.jpg", "dep": "heya-W6-d.png", "yuka": 0.11}, {"n": "W7", "side": "W", "i": 0, "img": "heya-W7.jpg", "dep": "heya-W7-d.png", "yuka": 0}, {"n": "W8", "side": "W", "i": 1, "img": "heya-W8.jpg", "dep": "heya-W8-d.png", "yuka": 0.086}], "yuka": "heya-yuka.jpg", "hikari": "heya-hikari.jpg", "gain": [2.8466, 5.00361, 9.16428], "rep": 6.0, "relief": 0.9, "tenjou": "heya-tenjou.jpg", "juutan": "heya-juutan.jpg", "props": [{"img": "heya-K1-chikyuugi.png", "h": 1.45, "w": 0.775, "x": -2.9, "z": -7.6}, {"img": "heya-K2-boenkyou.png", "h": 1.9, "w": 1.048, "x": 2.9, "z": -7.6}, {"img": "heya-K3-tenkyuugi.png", "h": 1.6, "w": 0.905, "x": 7.6, "z": -2.9}, {"img": "heya-K5-kikai.png", "h": 1.5, "w": 0.674, "x": 7.6, "z": 2.9}, {"img": "heya-K4-isu.png", "h": 1.1, "w": 1.213, "x": 2.9, "z": 7.6}, {"img": "heya-K1-chikyuugi.png", "h": 1.45, "w": 0.775, "x": -2.9, "z": 7.6}, {"img": "heya-K2-boenkyou.png", "h": 1.9, "w": 1.048, "x": -7.6, "z": 2.9}, {"img": "heya-K3-tenkyuugi.png", "h": 1.6, "w": 0.905, "x": -7.6, "z": -2.9}]};</script>
 <title>積み上げ帳</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -516,6 +516,8 @@ body.app:not(.ui-peek) .sora-meter{opacity:0}
 .sora-meter .sm-bar span{position:absolute;right:-3px;width:12px;height:2px;background:rgba(255,240,210,.85);transform:translateY(1px)}
 .sora-meter .sm-bar em{position:absolute;right:18px;top:-8px;font:500 12px "M PLUS 1",var(--body);font-style:normal;color:#fff;white-space:nowrap;text-shadow:0 1px 3px rgba(0,0,0,.9),0 0 8px rgba(0,0,0,.6)}
 .sora-meter .sm-now{position:absolute;right:-12px;z-index:2;font:700 11px "M PLUS 1",var(--body);color:#2a1606;background:linear-gradient(180deg,#f6dc9c,#d9b25e);border-radius:9px;padding:2px 6px;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.45)}
+/* 時間の札がたたまれる途中に、細くなった札の字がはみ出して見えない様に（字はすぐ消す） */
+body.app:not(.ui-peek) .app-min button:not(.on),body.app:not(.ui-peek) .app-min button:not(.on) small{color:transparent!important;text-shadow:none!important}
 
 </style>
 </head>
@@ -9712,6 +9714,19 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
         var cT = new T.TextureLoader().load(HC.tenjou, function () { kick(); }); cT.encoding = T.sRGBEncoding; cT.wrapS = cT.wrapT = T.RepeatWrapping; cT.repeat.set(1 / 4.5, 1 / 4.5); cT.anisotropy = 16;
         ceilG.children.forEach(function (m) { if (m.material && m.material.map === tjT) { m.material.map = cT; m.material.color.set(0xb4a494); m.material.needsUpdate = true; } });
       }
+      // 部屋に立てて置く家具と道具（ルナ R7・黒い背景を透明にした絵）。いつもカメラの方を向く板と、足元の影（ソル29回目 3: 壁に貼り付いて見えない様に、手前に本当に立つ物を置く）
+      if (HC.props) {
+        var shTx = (function () { var c = document.createElement("canvas"); c.width = c.height = 128; var x = c.getContext("2d"), g = x.createRadialGradient(64, 64, 0, 64, 64, 64); g.addColorStop(0, "rgba(0,0,0,0.75)"); g.addColorStop(0.5, "rgba(0,0,0,0.4)"); g.addColorStop(1, "rgba(0,0,0,0)"); x.fillStyle = g; x.fillRect(0, 0, 128, 128); return new T.CanvasTexture(c); })();
+        heyaG.userData.props = HC.props.map(function (q) {
+          var pt = new T.TextureLoader().load(q.img, function () { kick(); }); pt.encoding = T.sRGBEncoding; pt.anisotropy = 8;
+          var pg = new T.PlaneGeometry(q.w, q.h); pg.translate(0, q.h / 2 - 0.02, 0);
+          var pm = new T.Mesh(pg, new T.MeshBasicMaterial({ map: pt, transparent: true, alphaTest: 0.04, depthWrite: true })); pm.renderOrder = 3;
+          pm.position.set(q.x, 0, q.z); heyaG.add(pm);
+          var sg = new T.PlaneGeometry(q.w * 1.25, q.w * 0.75); sg.rotateX(-Math.PI / 2);
+          var sm = new T.Mesh(sg, new T.MeshBasicMaterial({ map: shTx, transparent: true, depthWrite: false })); sm.position.set(q.x, 0.012, q.z); sm.renderOrder = 2; heyaG.add(sm); pm.userData.sh = sm;
+          return pm;
+        });
+      }
       // 木の柱（角と壁の真ん中）と、天井のふち
       function kage(geo) {   // 面ごとの明るさで厚みを見せる（横の面・上の面・下の面。BoxGeometry は +x -x +y -y +z -z の順に4点ずつ）
         var f = [0.95, 0.8, 0.5, 0.42, 1.0, 0.86], n = geo.attributes.position.count, c = new Float32Array(n * 3);
@@ -10334,7 +10349,7 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
     var envKey = zi + ":" + Math.round(mix * 8);
     if (envKey !== lastEnv && now - envT > 400) { lastEnv = envKey; envT = now; makeEnv(za, zb, mix); }
     if (room) {
-      var inR = cyD < -0.2; room.visible = roomFloor.visible = roomAO.visible = inR; if (ceilG) { ceilG.visible = inR; if (ceilG.userData.patch) { var shut = blocks.length < ROOM_H * 12 - 6; ceilG.userData.patch.visible = shut; ceilG.userData.ana.visible = !shut; } } if (heyaG) heyaG.visible = inR; world.visible = cloudG.visible = stars.visible = !inR; sky.visible = true;
+      var inR = cyD < -0.2; room.visible = roomFloor.visible = roomAO.visible = inR; if (ceilG) { ceilG.visible = inR; if (ceilG.userData.patch) { var shut = blocks.length < ROOM_H * 12 - 6; ceilG.userData.patch.visible = shut; ceilG.userData.ana.visible = !shut; } } if (heyaG) { heyaG.visible = inR; if (inR && heyaG.userData.props) heyaG.userData.props.forEach(function (pm) { var ex = camera.position.x - heyaG.position.x, ez = camera.position.z - heyaG.position.z, el = Math.hypot(ex, ez) || 1, pl = Math.hypot(pm.position.x, pm.position.z) || 1; pm.rotation.y = Math.atan2(ex - pm.position.x, ez - pm.position.z); var fa = 1 - sstep(((pm.position.x * ex + pm.position.z * ez) / (el * pl) + 0.05) / 0.4); pm.material.opacity = fa; pm.visible = pm.userData.sh.visible = fa > 0.01; pm.userData.sh.material.opacity = fa; }); /* カメラの側（塔の手前）の物は消す */ } world.visible = cloudG.visible = stars.visible = !inR; sky.visible = true;
       frontC.forEach(function (c) { c.visible = !inR; });
       room.position.copy(camera.position); roomU.camP.value.copy(camera.position); roomU.k.value = 1;
       if (!roomEnv && roomU.tP.value.image && roomU.tP.value.image.width) { try { var rtx = roomU.tP.value.clone(); rtx.needsUpdate = true; rtx.mapping = T.EquirectangularReflectionMapping; roomEnv = pmrem.fromEquirectangular(rtx).texture; } catch (e) { roomEnv = false; } }
@@ -11034,7 +11049,7 @@ window.TOU_E = {"ao": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJAAAAClCAY
 })();
 </script>
 
-<script>window.TRI_VER="674c0fad1e";
+<script>window.TRI_VER="9d04b70337";
 window.LV_BGT = [{"t": 0.0, "f": 0, "src": "lvbg-001.jpg"}, {"t": 2.458, "f": 59, "src": "lvbg-060.jpg"}, {"t": 4.125, "f": 99, "src": "lvbg-100.jpg"}, {"t": 5.792, "f": 139, "src": "lvbg-140.jpg"}, {"t": 7.875, "f": 189, "src": "lvbg-190.jpg"}, {"t": 9.542, "f": 229, "src": "lvbg-230.jpg"}];
 // ===== 積み上げ帳アプリ: 全画面の形・音の合図・留守番係 =====
 (function () {
