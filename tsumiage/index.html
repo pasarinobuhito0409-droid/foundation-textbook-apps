@@ -321,7 +321,7 @@ body.app #b-yume .tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 #lvup video,#lvup .lv-num{position:absolute;inset:0;width:100%;height:100%;display:block}
 #lvup .lv-top,#lvup .lv-bot,#lvup .lv-tap{position:absolute;left:0;right:0;z-index:2;color:#fff8ec;font-family:"M PLUS 1",var(--body);font-weight:200;text-align:center;opacity:0;transform:translateY(10px);transition:opacity .9s ease,transform .9s ease}
 /* 字の後ろだけ、明るさの差をおさえる（光らせない） */
-#lvup .lv-top::before,#lvup .lv-bot::before{content:"";position:absolute;left:4%;right:4%;top:-22px;bottom:-22px;z-index:-1;background:radial-gradient(ellipse at 50% 50%,rgba(34,10,4,.68),rgba(34,10,4,0) 72%)}
+#lvup .lv-top::before,#lvup .lv-bot::before{content:"";position:absolute;left:4%;right:4%;top:-22px;bottom:-22px;z-index:-1;background:radial-gradient(ellipse at 50% 50%,rgba(30,8,4,.78),rgba(30,8,4,0) 74%)}
 #lvup .lv-tap::before{content:"";position:absolute;left:25%;right:25%;top:-10px;bottom:-10px;z-index:-1;background:radial-gradient(ellipse at 50% 50%,rgba(34,10,4,.6),rgba(34,10,4,0) 72%)}
 #lvup .lv-top{top:calc(9% + env(safe-area-inset-top,0px));font-size:24px;letter-spacing:.5em;padding-left:.5em}
 #lvup .lv-bot{bottom:calc(10% + env(safe-area-inset-bottom,0px))}
@@ -9815,7 +9815,8 @@ window.TOU_E = {"ao": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJAAAAClCAY
 })();
 </script>
 
-<script>window.TRI_VER="6df8149c88";
+<script>window.TRI_VER="5dc85e8556";
+window.LV_BGT = [{"t": 0.04, "src": "lvbg-001.jpg"}, {"t": 2.5, "src": "lvbg-060.jpg"}, {"t": 5.8, "src": "lvbg-140.jpg"}, {"t": 9.6, "src": "lvbg-230.jpg"}];
 // ===== 積み上げ帳アプリ: 全画面の形・音の合図・留守番係 =====
 (function () {
   var root = document.documentElement;
@@ -9986,7 +9987,7 @@ window.LV_DATA = {"track": [[732.5, 440.0, 1.0], [732.5, 440.0, 1.0], [732.5, 44
   try { document.fonts && document.fonts.load("700 40px 'M PLUS Rounded 1c'", "レベル0123456789"); } catch (e) {}
 
   function size() {
-    W = ov.clientWidth; H = ov.clientHeight;
+    W = ov.clientWidth; H = ov.clientHeight; BGD = BGI.length ? 1.5 : 30;   // 広げた絵が有る時は、くっきり
     bh = Math.max(H * 0.56, W * VH / VW); bw = bh * VW / VH; k = bw / VW;   // 動画の元の大きさ（これを縮めて使う）
     box.style.width = bw + "px"; box.style.height = bh + "px";
     var d = Math.min(3, window.devicePixelRatio || 1);
@@ -9994,20 +9995,35 @@ window.LV_DATA = {"track": [[732.5, 440.0, 1.0], [732.5, 440.0, 1.0], [732.5, 44
     bg.width = Math.max(8, Math.round(W / BGD)); bg.height = Math.max(8, Math.round(H / BGD));
     fx.width = W; fx.height = H;
   }
+  // ルナが上下へ広げた見本のコマ（lvbg-001.jpg など）。時間で重ねて替える
+  var BGT = window.LV_BGT || [], BGI = [];
+  BGT.forEach(function (o) { var im = new Image(); im.src = o.src; BGI.push({ t: o.t, im: im }); });
+  function drawExt(t, X0, Y0, RW, RH, bW, bH, f) {
+    var ok2 = BGI.every(function (b) { return b.im.complete && b.im.naturalWidth; }); if (!ok2) return false;
+    var i = 0; while (i < BGI.length - 1 && t > BGI[i + 1].t) i++;
+    var A = BGI[i], B = BGI[Math.min(BGI.length - 1, i + 1)], u = B === A ? 0 : sm((t - A.t) / (B.t - A.t));
+    var sc = RW / VW, cur = LV.track[f];
+    bx.fillStyle = "#1a0b0a"; bx.fillRect(0, 0, bW, bH);
+    // 見本のカメラは寄っていく。紋章の位置と大きさで、広げた絵をコマに合わせて動かす
+    function one(o, al) {
+      var kf = LV.track[Math.max(0, Math.min(NF - 1, Math.round(o.t * FPS)))], r = Math.max(cur[2] / kf[2], bH / (2048 * sc));
+      bx.globalAlpha = al;
+      bx.drawImage(o.im, X0 + (cur[0] - kf[0] * r) * sc, Y0 + (cur[1] - (kf[1] + 640) * r) * sc, VW * r * sc, 2048 * r * sc);
+    }
+    one(A, 1); if (u > 0) one(B, u); bx.globalAlpha = 1;
+    return true;
+  }
   function sm(u) { u = Math.max(0, Math.min(1, u)); return u * u * (3 - 2 * u); }
   function cam(t, tr) {
-    // はじめは2人が収まる全体 → 光ってから紋章へ寄る（脳の上と右のふちは残す）→ 最後は全体に引いて、笑顔と紋章
-    var Sfit = Math.min(W / VW, H * 0.62 / VH), S1 = Math.min(W / 900, H * 0.62 / VH);
-    var a = sm((t - 3.0) / 2.4), b = sm((t - 7.0) / 1.6);
-    var S = Sfit + (S1 - Sfit) * a; S += (Sfit - S) * b;
-    var X = VW / 2 + (tr[0] - VW / 2) * a; X += (VW / 2 - X) * b;
-    var half = W / 2 / S; X = half * 2 >= VW ? VW / 2 : Math.max(half, Math.min(VW - half, X));
+    // 見本と同じ見え方: 寄らない。縦の画面では、広げた背景の絵と同じ大きさ（高さ 2048 で画面いっぱい）
+    var S = BGI.length ? Math.max(W / VW, H / 2048) : Math.min(W / VW, H * 0.62 / VH);
+    var half = W / 2 / S, X = half * 2 >= VW ? VW / 2 : Math.max(half, Math.min(VW - half, VW / 2 - 20));
     return { S: S, X: X, Y: VH / 2 };
   }
   function frame() {
     if (!playing) return;
     var t = v.currentTime, f = Math.max(0, Math.min(NF - 1, Math.floor(t * FPS + 0.25))), tr = LV.track[f], c = LV.col[f];
-    var C = cam(t, tr), S = C.S, Z = S / k, cy = H * 0.47;
+    var C = cam(t, tr), S = C.S, Z = S / k, cy = BGI.length ? H / 2 : H * 0.47;
     var tx = W / 2 - S * C.X, ty = cy - S * C.Y, rw = S * VW, rh = S * VH;
     box.style.transform = "translate(" + tx.toFixed(1) + "px," + ty.toFixed(1) + "px) scale(" + Z.toFixed(4) + ")";
     // 紋章の字（半分の細かさで描いて広げる）
@@ -10017,7 +10033,7 @@ window.LV_DATA = {"track": [[732.5, 440.0, 1.0], [732.5, 440.0, 1.0], [732.5, 44
     cx.clearRect(0, 0, cn.width, cn.height); cx.drawImage(soft, 0, 0, cn.width, cn.height);
     // 下の絵: 動画のふちの色を、画面のはしまで伸ばす（小さく描いて広げるので、ぼける）
     var q = 1 / BGD, X0 = tx * q, Y0 = ty * q, RW = rw * q, RH = rh * q, bW = bg.width, bH = bg.height;
-    try {
+    if (BGI.length && drawExt(t, X0, Y0, RW, RH, bW, bH, f)) {} else try {
       // 動画を上下左右に鏡で映して続ける（さかいで色が必ずつながる）。小さく描いて広げるので、強くぼける
       bx.fillStyle = "#1a0b0a"; bx.fillRect(0, 0, bW, bH);
       for (var my = -2; my <= 2; my++) for (var mx = -1; mx <= 1; mx++) {
@@ -10038,13 +10054,27 @@ window.LV_DATA = {"track": [[732.5, 440.0, 1.0], [732.5, 440.0, 1.0], [732.5, 44
     fxc.clearRect(0, 0, W, H);
     fxc.globalCompositeOperation = "lighter";
     if (g > 0.01) {
-      var R = Math.max(W, H) * 0.75, gr = fxc.createRadialGradient(ex, ey, 0, ex, ey, R);
-      gr.addColorStop(0, "rgba(255,190,90," + (0.42 * g) + ")"); gr.addColorStop(0.35, "rgba(255,140,50," + (0.2 * g) + ")"); gr.addColorStop(1, "rgba(255,110,40,0)");
+      fxc.save();
+      fxc.beginPath(); fxc.rect(0, 0, W, H); fxc.rect(tx + rw * 0.06, ty + rh * 0.16, rw * 0.88, rh * 0.68); fxc.clip("evenodd");
+      var R = Math.max(W, H) * 0.8, gr = fxc.createRadialGradient(ex, ey, 0, ex, ey, R);
+      gr.addColorStop(0, "rgba(255,190,90," + (0.38 * g) + ")"); gr.addColorStop(0.4, "rgba(255,140,50," + (0.16 * g) + ")"); gr.addColorStop(1, "rgba(255,110,40,0)");
       fxc.fillStyle = gr; fxc.fillRect(0, 0, W, H);
-      fxc.save(); fxc.translate(ex, ey); fxc.scale(0.55, 1.6);
-      var g2 = fxc.createRadialGradient(0, 0, 0, 0, 0, H * 0.6);
-      g2.addColorStop(0, "rgba(255,200,110," + (0.3 * g) + ")"); g2.addColorStop(0.5, "rgba(255,150,60," + (0.12 * g) + ")"); g2.addColorStop(1, "rgba(255,120,40,0)");
-      fxc.fillStyle = g2; fxc.fillRect(-W * 2, -H, W * 4, H * 2); fxc.restore();
+      fxc.restore();
+      // 紋章から画面のはしまで、ゆっくり回る光の筋（細く、明るさが波打つ）
+      fxc.save(); fxc.translate(ex, ey);
+      var L = Math.hypot(W, H), NR = 14;
+      for (var r = 0; r < NR; r++) {
+        var an2 = r / NR * Math.PI * 2 + t * 0.18 + (r % 2) * 0.11, wv = 0.5 + 0.5 * Math.sin(t * 2.3 + r * 1.7);
+        var wd = 0.035 + 0.025 * (r % 3) / 2;
+        var lg = fxc.createLinearGradient(0, 0, Math.cos(an2) * L, Math.sin(an2) * L);
+        lg.addColorStop(0, "rgba(255,210,130," + (0.22 * g * wv) + ")"); lg.addColorStop(1, "rgba(255,150,60,0)");
+        fxc.fillStyle = lg; fxc.beginPath(); fxc.moveTo(0, 0);
+        fxc.lineTo(Math.cos(an2 - wd) * L, Math.sin(an2 - wd) * L); fxc.lineTo(Math.cos(an2 + wd) * L, Math.sin(an2 + wd) * L); fxc.closePath(); fxc.fill();
+      }
+      fxc.restore();
+      // 明るさの波（画面じゅう）
+      var wave = 0.5 + 0.5 * Math.sin(t * 3.1);
+      fxc.fillStyle = "rgba(255,160,70," + (0.05 * g * wave) + ")"; fxc.fillRect(0, 0, W, H);
     }
     var dt = Math.max(0, Math.min(0.1, t - lastT)); lastT = t;
     var n = Math.round(g * 60 * dt * 6);
