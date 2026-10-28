@@ -9498,7 +9498,7 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
   var mats = {}, stoneImg = {};
   // 遠い塔の下ほど、大気の青いかすみで弱く（近いてっぺんはくっきり・宇宙では無し）
   var hzU = { hzC: { value: new T.Color(0x9db8e0) }, hzN: { value: 20 }, hzF: { value: 60 }, hzK: { value: 0 } };
-  var hzV = new T.Vector3(), hzBlue = new T.Color(0x8fb3ea);
+  var hzV = new T.Vector3(), hzBlue = new T.Color(0xaecaf0);
   function hazify(m) {
     m.onBeforeCompile = function (sh) {
       Object.keys(hzU).forEach(function (k) { sh.uniforms[k] = hzU[k]; });
@@ -9704,9 +9704,10 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
     scene.fog.color.copy(lerpC(za.fog, zb.fog, mix)); skyU.fogC.value.copy(scene.fog.color);
     // 塔のかすみ: てっぺんからの距離で。大気のある高さだけ（月より上は無し）
     var d0 = camera.position.distanceTo(hzV.set(1, camY - 1, 1.5));
-    hzU.hzN.value = d0 + 1; hzU.hzF.value = d0 + 1 + Math.max(8, Math.min(30, camY * 0.9));
-    hzU.hzK.value = 0.85 * (1 - sstep((p - 2.3) / 0.5));
-    hzU.hzC.value.copy(scene.fog.color).lerp(hzBlue, 0.45 + 0.4 * sstep((p - 1.4) / 0.6));
+    // 「地上を見る」では、てっぺんのすぐ下から少しずつ（遠い下ほど色・明暗・段の線が弱まる）
+    hzU.hzN.value = d0 + 1 - 0.6 * gaze; hzU.hzF.value = hzU.hzN.value + Math.max(8 - 2.5 * gaze, Math.min(30, camY * (0.9 - 0.3 * gaze)));
+    hzU.hzK.value = (0.85 + 0.1 * gaze) * (1 - sstep((p - 2.3) / 0.5));
+    hzU.hzC.value.copy(scene.fog.color).lerp(hzBlue, 0.5 + 0.45 * sstep((p - 1.4) / 0.6));
     // 上るほど、地面は下へ遠ざかり（本当の高さの感じ）、雲の高さで白い霧に消える。ビルは地面まで伸びる
     var hk = Math.max(0, camY - 1);
     low.position.y = -Math.pow(hk, 1.5) * 6;
@@ -9866,7 +9867,7 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
   cv.style.touchAction = "none";
   window.addEventListener("resize", resize);
   resize();
-  window.SORA3D_DEBUG = { set: function (n) { var bl = []; for (var i = 0; i < n; i++) bl.push({ type: KINDS[i % KINDS.length].key }); take({ blocks: bl, lastAddedIndex: n - 1 }); }, look: function (v) { look = v; camY = null; }, gaze: function (v) { gaze = v; gazeTo = null; }, orbit: function (v) { orbit = v; }, fc: function () { return frontC.map(function (c) { return [c.position.x.toFixed(1), c.position.y.toFixed(1), c.position.z.toFixed(1), c.material.opacity.toFixed(2), c.visible, !!c.material.map]; }).concat([[camera.position.x.toFixed(1), camera.position.y.toFixed(1), camera.position.z.toFixed(1)]]); } };
+  window.SORA3D_DEBUG = { set: function (n) { var bl = []; for (var i = 0; i < n; i++) bl.push({ type: KINDS[i % KINDS.length].key }); take({ blocks: bl, lastAddedIndex: n - 1 }); }, look: function (v) { look = v; camY = null; }, gaze: function (v) { gaze = v; gazeTo = null; }, orbit: function (v) { orbit = v; }, hzT: function () { return mats[Object.keys(mats)[0]].onBeforeCompile ? "has" : "none"; }, hz: function () { return [hzU.hzN.value, hzU.hzF.value, hzU.hzK.value, hzU.hzC.value.getHexString(), camY, Object.keys(mats).length]; }, fc: function () { return frontC.map(function (c) { return [c.position.x.toFixed(1), c.position.y.toFixed(1), c.position.z.toFixed(1), c.material.opacity.toFixed(2), c.visible, !!c.material.map]; }).concat([[camera.position.x.toFixed(1), camera.position.y.toFixed(1), camera.position.z.toFixed(1)]]); } };
 })();
 
 /* 3Dの形を選ぶ札（宇宙・黒板・参考書・脳）。1度に1つだけ描く（電池のため） */
@@ -10446,7 +10447,7 @@ window.TOU_E = {"ao": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJAAAAClCAY
 })();
 </script>
 
-<script>window.TRI_VER="e166c47ba1";
+<script>window.TRI_VER="4fe6ece810";
 window.LV_BGT = [{"t": 0.0, "f": 0, "src": "lvbg-001.jpg"}, {"t": 2.458, "f": 59, "src": "lvbg-060.jpg"}, {"t": 4.125, "f": 99, "src": "lvbg-100.jpg"}, {"t": 5.792, "f": 139, "src": "lvbg-140.jpg"}, {"t": 7.875, "f": 189, "src": "lvbg-190.jpg"}, {"t": 9.542, "f": 229, "src": "lvbg-230.jpg"}];
 // ===== 積み上げ帳アプリ: 全画面の形・音の合図・留守番係 =====
 (function () {
