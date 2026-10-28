@@ -316,19 +316,19 @@ body.app #b-yume .tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 #lvup .lv-bg,#lvup .lv-fx{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none}
 #lvup .lv-bg{filter:saturate(1.15)}
 #lvup .lv-box{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform;
- -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 16%,#000 84%,transparent 100%),linear-gradient(to right,transparent 0,#000 6%,#000 94%,transparent 100%);-webkit-mask-composite:source-in;
- mask-image:linear-gradient(to bottom,transparent 0,#000 16%,#000 84%,transparent 100%),linear-gradient(to right,transparent 0,#000 6%,#000 94%,transparent 100%);mask-composite:intersect}
+ -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 12%,#000 94%,transparent 100%),linear-gradient(to right,transparent 0,#000 6%,#000 94%,transparent 100%);-webkit-mask-composite:source-in;
+ mask-image:linear-gradient(to bottom,transparent 0,#000 12%,#000 94%,transparent 100%),linear-gradient(to right,transparent 0,#000 6%,#000 94%,transparent 100%);mask-composite:intersect}
 #lvup video,#lvup .lv-num{position:absolute;inset:0;width:100%;height:100%;display:block}
 #lvup .lv-top,#lvup .lv-bot,#lvup .lv-tap{position:absolute;left:0;right:0;z-index:2;color:#fff8ec;font-family:"M PLUS 1",var(--body);font-weight:200;text-align:center;opacity:0;transform:translateY(10px);transition:opacity .9s ease,transform .9s ease}
 /* 字の後ろだけ、明るさの差をおさえる（光らせない） */
-#lvup .lv-top::before,#lvup .lv-bot::before{content:"";position:absolute;left:4%;right:4%;top:-22px;bottom:-22px;z-index:-1;background:radial-gradient(ellipse at 50% 50%,rgba(24,6,3,.85),rgba(24,6,3,.35) 55%,rgba(24,6,3,0) 78%)}
+#lvup .lv-top::before,#lvup .lv-bot::before{content:"";position:absolute;left:4%;right:4%;top:-22px;bottom:-22px;z-index:-1;background:radial-gradient(ellipse at 50% 50%,rgba(20,5,2,.92),rgba(20,5,2,.5) 55%,rgba(20,5,2,0) 80%)}
 #lvup .lv-tap::before{content:"";position:absolute;left:25%;right:25%;top:-10px;bottom:-10px;z-index:-1;background:radial-gradient(ellipse at 50% 50%,rgba(34,10,4,.6),rgba(34,10,4,0) 72%)}
 #lvup .lv-top{top:calc(9% + env(safe-area-inset-top,0px));font-size:24px;letter-spacing:.5em;padding-left:.5em}
 #lvup .lv-bot{bottom:calc(10% + env(safe-area-inset-bottom,0px))}
 #lvup .lv-n{font-size:26px;letter-spacing:.3em}
 #lvup .lv-n b{font-weight:200;font-size:56px;letter-spacing:0;margin:0 .1em}
-#lvup .lv-s{font-size:17px;letter-spacing:.12em;margin-top:8px}
-#lvup .lv-tap{bottom:calc(18px + env(safe-area-inset-bottom,0px));font-size:14px;letter-spacing:.3em}
+#lvup .lv-s{font-size:18px;letter-spacing:.12em;margin-top:8px;color:#fffaf2}
+#lvup .lv-tap{bottom:calc(18px + env(safe-area-inset-bottom,0px));font-size:15px;letter-spacing:.3em}
 #lvup.lv-on2 .lv-top,#lvup.lv-on2 .lv-bot{opacity:1;transform:none}
 #lvup.lv-on2 .lv-tap{opacity:.9;transform:none}
 
@@ -9815,8 +9815,8 @@ window.TOU_E = {"ao": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJAAAAClCAY
 })();
 </script>
 
-<script>window.TRI_VER="66f3a3f026";
-window.LV_BGT = [{"t": 0.04, "f": 0, "src": "lvbg-001.jpg"}, {"t": 2.5, "f": 59, "src": "lvbg-060.jpg"}, {"t": 5.8, "f": 139, "src": "lvbg-140.jpg"}, {"t": 9.6, "f": 229, "src": "lvbg-230.jpg"}];
+<script>window.TRI_VER="c43906bfd5";
+window.LV_BGT = [{"t": 0.0, "f": 0, "src": "lvbg-001.jpg"}, {"t": 2.458, "f": 59, "src": "lvbg-060.jpg"}, {"t": 4.125, "f": 99, "src": "lvbg-100.jpg"}, {"t": 5.792, "f": 139, "src": "lvbg-140.jpg"}, {"t": 7.875, "f": 189, "src": "lvbg-190.jpg"}, {"t": 9.542, "f": 229, "src": "lvbg-230.jpg"}];
 // ===== 積み上げ帳アプリ: 全画面の形・音の合図・留守番係 =====
 (function () {
   var root = document.documentElement;
@@ -10001,7 +10001,8 @@ window.LV_DATA = {"track":[[732.5,440.0,1.0],[732.5,440.0,1.0],[732.5,440.0,1.0]
   function drawExt(t, X0, Y0, RW, RH, bW, bH, f) {
     var ok2 = BGI.every(function (b) { return b.im.complete && b.im.naturalWidth; }); if (!ok2) return false;
     var i = 0; while (i < BGI.length - 1 && t > BGI[i + 1].t) i++;
-    var A = BGI[i], B = BGI[Math.min(BGI.length - 1, i + 1)], u = B === A ? 0 : sm((t - A.t) / (B.t - A.t));
+    // 重ねるのは2枚の間の短い間だけ（長く重ねると、動くアバターが二重に見える）
+    var A = BGI[i], B = BGI[Math.min(BGI.length - 1, i + 1)], mid = (A.t + B.t) / 2, u = B === A ? 0 : sm((t - mid + 0.2) / 0.4);
     var sc = RW / VW, cur = LV.track[f];
     bx.fillStyle = "#1a0b0a"; bx.fillRect(0, 0, bW, bH);
     // 見本のカメラの動き（コマとコマを重ねて測った物 LV.cam）で、広げた絵をコマに合わせる
@@ -10026,7 +10027,7 @@ window.LV_DATA = {"track":[[732.5,440.0,1.0],[732.5,440.0,1.0],[732.5,440.0,1.0]
     // 天井と床のはしは少し暗く（主役の帯に目が行く様に）・床の照り返しをおさえる
     var vg = bx.createLinearGradient(0, 0, 0, bH);
     vg.addColorStop(0, "rgba(20,8,6,0.55)"); vg.addColorStop(0.2, "rgba(20,8,6,0.12)"); vg.addColorStop(0.32, "rgba(20,8,6,0)");
-    vg.addColorStop(0.66, "rgba(20,8,6,0)"); vg.addColorStop(0.8, "rgba(20,8,6,0.35)"); vg.addColorStop(1, "rgba(20,8,6,0.7)");
+    vg.addColorStop(0.64, "rgba(20,8,6,0)"); vg.addColorStop(0.76, "rgba(20,8,6,0.5)"); vg.addColorStop(1, "rgba(20,8,6,0.82)");
     bx.fillStyle = vg; bx.fillRect(0, 0, bW, bH);
     return true;
   }
@@ -10046,7 +10047,7 @@ window.LV_DATA = {"track":[[732.5,440.0,1.0],[732.5,440.0,1.0],[732.5,440.0,1.0]
     // 紋章の字（半分の細かさで描いて広げる）
     if (soft.width !== Math.round(cn.width * 0.5)) { soft.width = Math.round(cn.width * 0.5); soft.height = Math.round(cn.height * 0.5); }
     sx.clearRect(0, 0, soft.width, soft.height);
-    drawLvText(sx, f, soft.width / VW, level);
+    drawLvText(sx, f, soft.width / VW, t < 3.1 && level > 1 ? level - 1 : level);
     cx.clearRect(0, 0, cn.width, cn.height); cx.drawImage(soft, 0, 0, cn.width, cn.height);
     // 下の絵: 動画のふちの色を、画面のはしまで伸ばす（小さく描いて広げるので、ぼける）
     var q = 1 / BGD, X0 = tx * q, Y0 = ty * q, RW = rw * q, RH = rh * q, bW = bg.width, bH = bg.height;
@@ -10077,6 +10078,10 @@ window.LV_DATA = {"track":[[732.5,440.0,1.0],[732.5,440.0,1.0],[732.5,440.0,1.0]
       gr.addColorStop(0, "rgba(255,190,90," + (0.3 * g) + ")"); gr.addColorStop(0.3, "rgba(255,140,50," + (0.08 * g) + ")"); gr.addColorStop(1, "rgba(255,110,40,0)");
       fxc.fillStyle = gr; fxc.fillRect(0, 0, W, H);
       fxc.restore();
+      // 紋章の真ん中は白く強く（見本の様に）
+      var rc = 70 * S * (tr[2] || 1), wc = fxc.createRadialGradient(ex, ey, 0, ex, ey, rc);
+      wc.addColorStop(0, "rgba(255,255,245," + (0.55 * g) + ")"); wc.addColorStop(0.45, "rgba(255,245,215," + (0.25 * g) + ")"); wc.addColorStop(1, "rgba(255,230,180,0)");
+      fxc.fillStyle = wc; fxc.fillRect(ex - rc, ey - rc, rc * 2, rc * 2);
       // 紋章から画面のはしまで、ゆっくり回る光の筋（細く、明るさが波打つ）
       fxc.save(); fxc.translate(ex, ey);
       var L = Math.hypot(W, H) * 0.7, NR = 20;
