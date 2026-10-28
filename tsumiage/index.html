@@ -490,6 +490,15 @@ body.app #t-nou .kb-fuda.nou-f{max-width:calc(100% - 24px);font-size:14px!import
 #lvup .lv-n{font-size:24px}
 #lvup .lv-n b{font-size:72px;font-weight:300}
 
+/* 版50: ソル28回目 8・12・15 */
+.app-toast{top:calc(env(safe-area-inset-top) + 196px)!important}
+.sora-arr{top:auto!important;bottom:calc(env(safe-area-inset-bottom) + 170px)}
+.sora-arr b{font-size:28px}
+.sora-arr span{font-size:15px}
+#lvup .lv-s{font-size:20px;font-weight:500;text-shadow:0 0 10px rgba(16,5,2,.95),0 1px 3px rgba(16,5,2,.9)}
+#lvup .lv-tap{font-weight:400}
+.app-toast{white-space:nowrap;text-align:center;line-height:1.5}
+
 </style>
 </head>
 <body class="app">
@@ -9427,7 +9436,7 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
     { name: "街の上", h: 0, kEl: 0.32, key: "machi", gnd: 0x5e4c3c, a: [0.375, 0.466, 96, 1], top: 0x7fa6d6, bot: 0xf4c08e, fog: 0xe9c7a4, sun: 0xffd2a0, sunI: 2.2, hemi: 0.75 },
     { name: "雲の上", h: 8, kEl: 0.42, key: "kumo", gnd: 0xb4c2d6, a: [0.505, 0.50, 96, 1], top: 0x2f63b4, bot: 0xdfe9f6, fog: 0xdbe6f3, sun: 0xfff0d8, sunI: 2.6, hemi: 0.8 },
     { name: "宇宙", h: 16, kEl: 0.55, key: "uchu", gnd: 0x3a6ad0, a: [0.40, 0.49, 130, 1], top: 0x02040c, bot: 0x1b3b74, fog: 0x0b1530, sun: 0xffffff, sunI: 3.0, hemi: 0.35 },
-    { name: "月", h: 32, kEl: 0.55, key: "tsuki", gnd: 0x2a2e3a, a: [0.464, 0.437, 28, 0], glow: 0x9fb4d8, top: 0x020308, bot: 0x10131c, fog: 0x0a0c14, sun: 0xffffff, sunI: 3.0, hemi: 0.3 },
+    { name: "月", h: 32, kEl: 0.55, key: "tsuki", gnd: 0x2a2e3a, a: [0.464, 0.437, 28, 0], glow: 0x9fb4d8, top: 0x020308, bot: 0x10131c, fog: 0x0a0c14, sun: 0xffffff, sunI: 3.6, hemi: 0.22 },
     { name: "太陽", h: 64, kEl: 0.25, key: "taiyou", gnd: 0x4a2a12, a: [0.371, 0.414, 30, 0], glow: 0xffa040, top: 0x020104, bot: 0x0c0604, fog: 0x140a05, sun: 0xffe2b0, sunI: 4.0, hemi: 0.45 },
     { name: "天の川", h: 128, kEl: 0.6, key: "amanogawa", gnd: 0x2e2660, a: [0.45, 0.51, 110, 0], top: 0x020208, bot: 0x16113a, fog: 0x0c0a22, sun: 0xd8d0ff, sunI: 2.4, hemi: 0.4 }
   ];
@@ -9639,7 +9648,7 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
             var ix = Math.min(di.width - 1, Math.floor(uu * di.width)), iy = Math.min(di.height - 1, Math.floor((1 - u2.getY(j)) * di.height));
             pos.setZ(j, px2[(iy * di.width + ix) * 4] / 255 * HC.relief);
             var fy = u2.getY(j) * HT / (HT / (HF / 1.5)) / (HF / 1.5), yk = w.yuka || 0;   // 絵の下からの高さの割合
-            if (yk && fy < yk) { pos.setY(j, -HT / 2 + 0.004); pos.setZ(j, 1.25 * (yk - fy) / yk); }   // 絵に写った床は、床の上へ寝かせる
+            if (yk && fy < yk) { pos.setY(j, -HT / 2 + 0.004); pos.setZ(j, 0.55 * (yk - fy) / yk); }   // 絵に写った床は、床の上へ寝かせる
           }
           pos.needsUpdate = true; g.computeBoundingSphere(); kick();
         }; di.src = w.dep;
@@ -9669,15 +9678,17 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
         ceilG.children.forEach(function (m) { if (m.material && m.material.map === tjT) { m.material.map = cT; m.material.color.set(0xb4a494); m.material.needsUpdate = true; } });
       }
       // 木の柱（角と壁の真ん中）と、天井のふち
-      var wood = new T.MeshStandardMaterial({ color: 0x3a2314, roughness: 0.48, metalness: 0.05 });
+      var wood = new T.MeshStandardMaterial({ color: 0x2a180d, roughness: 0.55, metalness: 0.05 });   // 壁の絵の木の柱と同じ暗さ（白茶に浮かない）
+      var woodC = new T.MeshLambertMaterial({ color: 0x1c0f07 });   // 天井のふちは日の光が当たらない暗い木（前は白茶の帯に見えた・ソル28回目 1）
       [[-HF, -HF], [HF, -HF], [HF, HF], [-HF, HF], [0, -HF], [HF, 0], [0, HF], [-HF, 0]].forEach(function (q) {
         var b = new T.Mesh(new T.BoxGeometry(0.5, HT, 0.5), wood); b.position.set(q[0], HT / 2, q[1]); heyaG.add(b);
         var pl = new T.Mesh(new T.BoxGeometry(0.72, 0.42, 0.72), wood); pl.position.set(q[0], 0.21, q[1]); heyaG.add(pl);   // 柱の台（床へ着く）
         var pl2 = new T.Mesh(new T.BoxGeometry(0.62, 0.08, 0.62), wood); pl2.position.set(q[0], 0.46, q[1]); heyaG.add(pl2);
-        var cp = new T.Mesh(new T.BoxGeometry(0.66, 0.22, 0.66), wood); cp.position.set(q[0], HT - 0.43, q[1]); heyaG.add(cp);   // 柱の頭（天井のふちへつなぐ）
+        var cp = new T.Mesh(new T.BoxGeometry(0.66, 0.22, 0.66), woodC); cp.position.set(q[0], HT - 0.43, q[1]); heyaG.add(cp);   // 柱の頭（天井のふちへつなぐ）
       });
       [[0, -HF, HF * 2, 0.3], [0, HF, HF * 2, 0.3], [-HF, 0, 0.3, HF * 2], [HF, 0, 0.3, HF * 2]].forEach(function (q) {
-        var b = new T.Mesh(new T.BoxGeometry(q[2] + 0.3, 0.32, q[3] + 0.3), wood); b.position.set(q[0], HT - 0.16, q[1]); heyaG.add(b);
+        var b = new T.Mesh(new T.BoxGeometry(q[2] + 0.3, 0.32, q[3] + 0.3), woodC); b.position.set(q[0], HT - 0.16, q[1]); heyaG.add(b);
+        var b2 = new T.Mesh(new T.BoxGeometry(q[2] + (q[2] > 1 ? 0.3 : 0.62), 0.1, q[3] + (q[3] > 1 ? 0.3 : 0.62)), woodC); b2.position.set(q[0], HT - 0.37, q[1]); heyaG.add(b2);   // 天井のふちの下の段（梁と壁をつなぐ）
       });
     }
   }
@@ -9759,7 +9770,7 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
     hole.rotation.x = -Math.PI / 2; hole.position.set(1, 0.006, 1.5); hole.renderOrder = 1; world.add(hole);
     var holeGlow = new T.PointLight(0xffa050, 4.2, 6, 2); holeGlow.position.set(1, 0.15, 1.5); world.add(holeGlow);
   }
-  var wallMat = new T.MeshStandardMaterial({ color: 0x7c766f, roughness: 0.88 });   // 白く浮かない、雨に打たれたコンクリート
+  var wallMat = new T.MeshStandardMaterial({ color: roofTex ? 0x8a847c : 0x6e6861, map: roofTex, roughness: 0.9 });   // 白く浮かない、雨に打たれたコンクリート
   [[1, 0.35, 1.5 - RD2 / 2, RW2, 0.7, 0.3], [1, 0.35, 1.5 + RD2 / 2, RW2, 0.7, 0.3], [1 - RW2 / 2, 0.35, 1.5, 0.3, 0.7, RD2], [1 + RW2 / 2, 0.35, 1.5, 0.3, 0.7, RD2]].forEach(function (w) {
     var m = new T.Mesh(new T.BoxGeometry(w[3], w[4], w[5]), wallMat); m.position.set(w[0], w[1], w[2]); m.castShadow = m.receiveShadow = true; world.add(m);
   });
@@ -9897,10 +9908,10 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
   function matFor(key, vi) {
     vi = vi || 0; var id = key + vi;
     if (mats[id]) return mats[id];
-    var col = new T.Color(COL[key] || "#3d7be0"), m = contactAO(hazify(new T.MeshPhysicalMaterial({ color: col, roughness: 0.24, metalness: 0.0, clearcoat: 1.0, clearcoatRoughness: 0.06, envMapIntensity: 1.05, aoMap: edgeAO, aoMapIntensity: 0.75 })));
+    var col = new T.Color(COL[key] || "#3d7be0"), m = contactAO(hazify(new T.MeshPhysicalMaterial({ color: col, roughness: 0.24, metalness: 0.0, clearcoat: 1.0, clearcoatRoughness: 0.06, envMapIntensity: 1.05, aoMap: edgeAO, aoMapIntensity: 0.45 })));
     function apply(im) {
       var t = new T.Texture(im); t.encoding = T.sRGBEncoding; t.anisotropy = 8; t.wrapS = t.wrapT = T.RepeatWrapping;
-      t.center.set(0.5, 0.5); t.rotation = [0, 1.5708, 0.6][vi]; t.offset.set([0, 0.37, 0.71][vi], [0, 0.52, 0.19][vi]); t.repeat.set(0.62, 0.62); t.needsUpdate = true;
+      t.center.set(0.5, 0.5); t.rotation = [0, 1.5708, 0.6][vi]; t.offset.set([0, 0.37, 0.71][vi], [0, 0.52, 0.19][vi]); t.repeat.set(0.85, 0.85); t.needsUpdate = true;
       m.map = t; m.color.set(0xffffff).lerp(col, SMOOTH ? 0.08 : 0.2);
       var nm = stoneImg[key + "n"] || (stoneImg[key + "n"] = normalFrom(im)); m.normalMap = nm; m.normalScale.set(SMOOTH ? 0.22 : 0.12, SMOOTH ? 0.22 : 0.12); m.needsUpdate = true; kick();
     }
@@ -10952,7 +10963,7 @@ window.TOU_E = {"ao": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJAAAAClCAY
 })();
 </script>
 
-<script>window.TRI_VER="dcfe188883";
+<script>window.TRI_VER="c636d33900";
 window.LV_BGT = [{"t": 0.0, "f": 0, "src": "lvbg-001.jpg"}, {"t": 2.458, "f": 59, "src": "lvbg-060.jpg"}, {"t": 4.125, "f": 99, "src": "lvbg-100.jpg"}, {"t": 5.792, "f": 139, "src": "lvbg-140.jpg"}, {"t": 7.875, "f": 189, "src": "lvbg-190.jpg"}, {"t": 9.542, "f": 229, "src": "lvbg-230.jpg"}];
 // ===== 積み上げ帳アプリ: 全画面の形・音の合図・留守番係 =====
 (function () {
@@ -11066,7 +11077,8 @@ window.LV_BGT = [{"t": 0.0, "f": 0, "src": "lvbg-001.jpg"}, {"t": 2.458, "f": 59
     noise(tIn - 0.02, 0.06, 0.35, 2500); tone(1320, tIn, 0.09, 0.09, "square", 990); tone(180, tIn, 0.16, 0.12, "sine", 90);   // カチッ
     for (var k = 0; k < 6; k++) tone(660 * Math.pow(1.122, k), tIn + 0.15 + k * ((tSig - tIn - 0.2) / 6), 0.22, 0.035, "sine");   // 光が走る
     var kn = { ao: "論文", sa: "算数", mm: "MMA", mi: "瞑想" }[d.kind] || "基板";
-    setTimeout(function () { showToast("<b>" + kn + "</b> を差した　<b>＋" + (d.mins || 5) + "分</b>", 1300); }, tIn * 1000);   // 何を入れたかを、差した時に
+    var rest0 = 12 - ((d.total || 0) % 12);
+    setTimeout(function () { showToast("<b>" + kn + "</b> を差した　<b>＋" + (d.mins || 5) + "分</b>" + (d.levelUp ? "" : "<br>レベルまで あと <b>" + rest0 + "</b> 個"), 2600); }, tIn * 1000);   // 何を入れたか・増えた時間・残りを一度に（ソル28回目 8）
     var big = d.levelUp && window.LV_PRIME && window.LV_PRIME(on);   // 画面いっぱいのレベルアップ（動画の音を使う）
     if (big) {
       setTimeout(function () { if (!window.LV_SHOW(Math.floor((d.total || 0) / 12), d.total || 0)) showToast("<b>LEVEL UP</b>", 2400); }, tSig * 1000);
@@ -11078,7 +11090,7 @@ window.LV_BGT = [{"t": 0.0, "f": 0, "src": "lvbg-001.jpg"}, {"t": 2.458, "f": 59
     } else {
       tone(1568, tLv, 0.9, 0.08, "sine"); tone(2093, tLv + 0.09, 1.1, 0.06, "sine");
       var rest = 12 - ((d.total || 0) % 12);
-      setTimeout(function () { showToast("<b>＋" + (d.mins || 5) + "分</b>　レベルまで あと " + rest + " 個", 1800); }, tLv * 1000);
+      void rest;   // 残りは差した時の札に入れた
     }
   }, false);
 
