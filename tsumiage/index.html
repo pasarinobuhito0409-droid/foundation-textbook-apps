@@ -9416,7 +9416,7 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
   var world = new T.Group(); scene.add(world);
   var roofTex = tex(IMG.roof, 4) || null;
   var roofMat = new T.MeshStandardMaterial({ color: roofTex ? 0xffffff : 0x8d8a86, map: roofTex, roughness: 0.42, metalness: 0.05 });
-  var RW2 = 9, RD2 = 10, roof = new T.Mesh(new T.BoxGeometry(RW2, 0.4, RD2), roofMat); roof.position.set(1, -0.2, 1.5); roof.receiveShadow = true; world.add(roof);
+  var RW2 = 7, RD2 = 8, roof = new T.Mesh(new T.BoxGeometry(RW2, 0.4, RD2), roofMat); roof.position.set(1, -0.2, 1.5); roof.receiveShadow = true; world.add(roof);
   var wallMat = new T.MeshStandardMaterial({ color: 0x9a948c, roughness: 0.7 });
   [[1, 0.35, 1.5 - RD2 / 2, RW2, 0.7, 0.3], [1, 0.35, 1.5 + RD2 / 2, RW2, 0.7, 0.3], [1 - RW2 / 2, 0.35, 1.5, 0.3, 0.7, RD2], [1 + RW2 / 2, 0.35, 1.5, 0.3, 0.7, RD2]].forEach(function (w) {
     var m = new T.Mesh(new T.BoxGeometry(w[3], w[4], w[5]), wallMat); m.position.set(w[0], w[1], w[2]); m.castShadow = m.receiveShadow = true; world.add(m);
@@ -9451,11 +9451,11 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
     for (var i = 0; i < 126; i++) {
       // はじめの 10 本はすぐ近くの背の高いビル（横の面と屋上が読める）
       var nearB = i < 16, a = nearB ? i / 16 * Math.PI * 2 + r() * 0.25 : r() * Math.PI * 2, d = nearB ? 12 + r() * 9 : 24 + Math.pow(r(), 0.9) * 170, w = 7 + r() * 9, dp2 = w * (0.7 + r() * 0.6);
-      var hgt = nearB ? 46 + r() * 11 : 12 + Math.pow(r(), 1.3) * 50 * Math.min(1, d / 40);
+      var hgt = nearB ? 50 + r() * 16 : 12 + Math.pow(r(), 1.3) * 50 * Math.min(1, d / 40);
       var g = new T.BoxGeometry(w, hgt, dp2), uv = g.attributes.uv;
       for (var k = 0; k < uv.count; k++) { var face = Math.floor(k / 4); var sx = face < 2 ? dp2 : w; uv.setXY(k, uv.getX(k) * sx / 12, uv.getY(k) * hgt / 12); }
       var mm = fm[i % fm.length], b = new T.Mesh(g, [mm, mm, topM, topM, mm, mm]);
-      b.position.set(1.5 + Math.cos(a) * d, -60.5 + hgt / 2, 2 + Math.sin(a) * d); b.rotation.y = Math.round(r() * 3) * 0.08; b.receiveShadow = true; low.add(b);
+      b.position.set(1.5 + Math.cos(a) * d, -60.5 + hgt / 2, 2 + Math.sin(a) * d); b.userData = { y0: b.position.y, a: a, near: nearB }; b.rotation.y = Math.round(r() * 3) * 0.08; b.receiveShadow = true; low.add(b);
     }
   })();
   var cloudSea = IMG.kumoue ? tex(IMG.kumoue) : null; if (cloudSea) cloudSea.wrapS = cloudSea.wrapT = T.RepeatWrapping;   // 真上から見た雲の海
@@ -9496,10 +9496,22 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
   }
   // 磨いた石: 種類ごとに模様の位置と向きを3通り（同じ模様が並ばない）。照り返しは空の景色から
   var mats = {}, stoneImg = {};
+  // 遠い塔の下ほど、大気の青いかすみで弱く（近いてっぺんはくっきり・宇宙では無し）
+  var hzU = { hzC: { value: new T.Color(0x9db8e0) }, hzN: { value: 20 }, hzF: { value: 60 }, hzK: { value: 0 } };
+  var hzV = new T.Vector3(), hzBlue = new T.Color(0x8fb3ea);
+  function hazify(m) {
+    m.onBeforeCompile = function (sh) {
+      Object.keys(hzU).forEach(function (k) { sh.uniforms[k] = hzU[k]; });
+      sh.vertexShader = "varying float vHzD;\n" + sh.vertexShader.replace("#include <project_vertex>", "#include <project_vertex>\n  vHzD = length(mvPosition.xyz);");
+      sh.fragmentShader = "varying float vHzD; uniform vec3 hzC; uniform float hzN; uniform float hzF; uniform float hzK;\n" +
+        sh.fragmentShader.replace("#include <fog_fragment>", "#include <fog_fragment>\n  gl_FragColor.rgb = mix(gl_FragColor.rgb, hzC, hzK * smoothstep(hzN, hzF, vHzD));");
+    };
+    return m;
+  }
   function matFor(key, vi) {
     vi = vi || 0; var id = key + vi;
     if (mats[id]) return mats[id];
-    var col = new T.Color(COL[key] || "#3d7be0"), m = new T.MeshPhysicalMaterial({ color: col, roughness: 0.24, metalness: 0.0, clearcoat: 1.0, clearcoatRoughness: 0.06, envMapIntensity: 1.05, aoMap: edgeAO, aoMapIntensity: 0.75 });
+    var col = new T.Color(COL[key] || "#3d7be0"), m = hazify(new T.MeshPhysicalMaterial({ color: col, roughness: 0.24, metalness: 0.0, clearcoat: 1.0, clearcoatRoughness: 0.06, envMapIntensity: 1.05, aoMap: edgeAO, aoMapIntensity: 0.75 }));
     function apply(im) {
       var t = new T.Texture(im); t.encoding = T.sRGBEncoding; t.anisotropy = 8; t.wrapS = t.wrapT = T.RepeatWrapping;
       t.center.set(0.5, 0.5); t.rotation = [0, 1.5708, 0.6][vi]; t.offset.set([0, 0.37, 0.71][vi], [0, 0.52, 0.19][vi]); t.repeat.set(0.62, 0.62); t.needsUpdate = true;
@@ -9521,7 +9533,7 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
   var ghost = new T.LineSegments(edgeGeo, new T.LineDashedMaterial({ color: 0xffffff, dashSize: 0.08, gapSize: 0.06, transparent: true, opacity: 0.8 }));
   ghost.computeLineDistances(); tower.add(ghost);
   // 石と石のすき間の影（塔の芯に暗い箱）
-  var core = new T.Mesh(new T.BoxGeometry(2.82, 1, 3.82), new T.MeshStandardMaterial({ color: 0x15100c, roughness: 1 }));
+  var core = new T.Mesh(new T.BoxGeometry(2.82, 1, 3.82), hazify(new T.MeshStandardMaterial({ color: 0x15100c, roughness: 1 })));
   core.position.set(1, 0.5, 1.5); tower.add(core);
   // 遠くの塔（近くの 40 階より下）: 積んだ石の色を1枚の絵にして、長い柱に貼る。下ほど霧と遠さで細く消える
   var farCv = [0, 1, 2, 3].map(function () { var c = document.createElement("canvas"); c.width = 16; c.height = 8; return c; });
@@ -9529,8 +9541,8 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
   var fadeCv = document.createElement("canvas"); fadeCv.width = 2; fadeCv.height = 256;
   (function () { var x = fadeCv.getContext("2d"), g = x.createLinearGradient(0, 256, 0, 0); g.addColorStop(0, "#000"); g.addColorStop(0.25, "#000"); g.addColorStop(0.9, "#fff"); g.addColorStop(1, "#fff"); x.fillStyle = g; x.fillRect(0, 0, 2, 256); })();
   var fadeTx = new T.CanvasTexture(fadeCv);
-  var farMats = [0, 1, 2, 3].map(function (i) { return new T.MeshStandardMaterial({ map: farTx[i], roughness: 0.45, metalness: 0.05, envMapIntensity: 0.8 }); });
-  var capMat = new T.MeshStandardMaterial({ color: 0x15100c, roughness: 1 });
+  var farMats = [0, 1, 2, 3].map(function (i) { return hazify(new T.MeshStandardMaterial({ map: farTx[i], roughness: 0.45, metalness: 0.05, envMapIntensity: 0.8 })); });
+  var capMat = hazify(new T.MeshStandardMaterial({ color: 0x15100c, roughness: 1 }));
   // BoxGeometry の面の順: +x, -x, +y, -y, +z, -z
   var far = new T.Mesh(new T.BoxGeometry(2.96, 1, 3.96), [farMats[0], farMats[1], capMat, capMat, farMats[2], farMats[3]]);
   far.visible = false; tower.add(far);
@@ -9581,7 +9593,7 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
   var frontC = [];
   for (var fc = 0; fc < 6; fc++) {
     var fsp = new T.Sprite(new T.SpriteMaterial({ map: cloudTex[fc % cloudTex.length], transparent: true, depthWrite: false, opacity: 0, fog: false }));
-    fsp.userData = { k: 0.62 + fc * 0.05, side: (fc % 3 - 1) * 5, y: -11 - (fc % 3) * 2.5, sz: 9 + fc * 1.5 }; fsp.scale.set(fsp.userData.sz, fsp.userData.sz * 0.5, 1); scene.add(fsp); frontC.push(fsp);
+    fsp.userData = { k: [0.78, 0.86, 0.72, 0.9, 0.8, 0.7][fc], side: [-2.6, 2.2, -0.6, 3.2, 0.8, -3.4][fc], y: [0.42, 0.25, 0.12, 0.55, 0.32, 0.05][fc], sz: [4.5, 5.5, 4, 5, 6.5, 4.5][fc], o: [0.7, 0.55, 0.62, 0.5, 0.6, 0.55][fc] }; fsp.scale.set(fsp.userData.sz, fsp.userData.sz * 0.5, 1); scene.add(fsp); frontC.push(fsp);
   }
   // 星（宇宙から上）
   var starGeo = new T.BufferGeometry(), sp2 = [];
@@ -9645,7 +9657,8 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
     if (!drag && !reduced) orbit += (0.035 + orbitV) * dt * (1 - 0.7 * gaze); orbitV *= Math.pow(0.05, dt);
     // 高いほど少し引いて見下ろし、塔の下が遠く細く消えて行くのが見える
     var hl = Math.min(6, Math.log(1 + Math.max(0, camY)) / Math.LN2);
-    var cx0 = 1, cz0 = 1.5, Rn = 12.5 + hl * 1.2, cyn = camY + 3.4 + hl * 1.5, tyn = camY - 1.6 - hl * 0.55;
+    var wide = 1 - sstep((camY - 1.5) / 3);   // 低い所は少し引いて、屋上のふち・まわりのビルの屋上と窓まで入れる
+    var cx0 = 1, cz0 = 1.5, Rn = 12.5 + hl * 1.2 + 5 * wide, cyn = camY + 3.4 + hl * 1.5 + 2.5 * wide, tyn = camY - 1.6 - hl * 0.55 - 1.2 * wide;
     // 「地上を見る」: 塔の角のすぐ外・てっぺんの上から、塔の側面に沿って真下を見る（てっぺんのふちは画面の上に残す）
     var R = Rn + (3.7 - Rn) * gaze, cy = cyn + (camY + 2.3 - cyn) * gaze;
     camera.position.set(cx0 + Math.sin(orbit) * R, cy, cz0 + Math.cos(orbit) * R);
@@ -9689,9 +9702,20 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
     skyU.atmK.value = za.key === "uchu" ? 1 - mix : zb.key === "uchu" ? mix : 0; skyU.atmL.value = (za.key === "uchu" ? skyU.tgA.value.y : skyU.tgB.value.y) - 0.01;
     skyU.sunC.value.copy(sun.color);
     scene.fog.color.copy(lerpC(za.fog, zb.fog, mix)); skyU.fogC.value.copy(scene.fog.color);
+    // 塔のかすみ: てっぺんからの距離で。大気のある高さだけ（月より上は無し）
+    var d0 = camera.position.distanceTo(hzV.set(1, camY - 1, 1.5));
+    hzU.hzN.value = d0 + 1; hzU.hzF.value = d0 + 1 + Math.max(8, Math.min(30, camY * 0.9));
+    hzU.hzK.value = 0.85 * (1 - sstep((p - 2.3) / 0.5));
+    hzU.hzC.value.copy(scene.fog.color).lerp(hzBlue, 0.45 + 0.4 * sstep((p - 1.4) / 0.6));
     // 上るほど、地面は下へ遠ざかり（本当の高さの感じ）、雲の高さで白い霧に消える。ビルは地面まで伸びる
     var hk = Math.max(0, camY - 1);
     low.position.y = -Math.pow(hk, 1.5) * 6;
+    // カメラと塔の間に来た近いビルは下げる（塔を隠さない）
+    low.children.forEach(function (b) {
+      var u = b.userData; if (!u || !u.near) return;
+      var dot = Math.sin(orbit) * Math.cos(u.a) + Math.cos(orbit) * Math.sin(u.a);
+      b.position.y = u.y0 - 40 * sstep((dot - 0.45) / 0.35);
+    });
     var whiteK = sstep((p - 0.55) / 0.45);
     scene.fog.near = 40 + hk * 4; scene.fog.far = 420 + hk * 40;
     low.visible = p < 0.85;
@@ -9714,12 +9738,12 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
     clouds.forEach(function (c, i) {
       var u2 = c.userData; u2.a += u2.sp * dt;
       c.position.set(cx0 + Math.cos(u2.a) * u2.d, camY - 3.5 + u2.y - (p < 1 ? (1 - p) * 10 : 0), cz0 + Math.sin(u2.a) * u2.d);
-      c.material.opacity = cloudK * 0.95 * Math.min(1, u2.d / 7);
+      c.material.opacity = cloudK * 0.95 * sstep((u2.d - 2.5 - u2.sz * 0.42) / 4);   // 塔と交わる大きな雲は消す（塔を横一直線に切る白い板に見えない様に）
     });
     frontC.forEach(function (c) {
       var u3 = c.userData, k3 = u3.k;
-      c.position.set(camera.position.x + (cx0 - camera.position.x) * k3 + rtv.x * u3.side, camY + u3.y, camera.position.z + (cz0 - camera.position.z) * k3 + rtv.z * u3.side);
-      c.material.opacity = cloudK * 0.55 * (1 - gaze);
+      c.position.set(camera.position.x + (cx0 - camera.position.x) * k3 + rtv.x * u3.side, camY * u3.y + 0.6, camera.position.z + (cz0 - camera.position.z) * k3 + rtv.z * u3.side);
+      c.material.opacity = cloudK * u3.o * (1 - gaze);
     });
     // 積み木が落ちて来る
     var dropT = drop ? Math.min(1, (now - drop.t0) / 900) : 1;
@@ -9842,7 +9866,7 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
   cv.style.touchAction = "none";
   window.addEventListener("resize", resize);
   resize();
-  window.SORA3D_DEBUG = { set: function (n) { var bl = []; for (var i = 0; i < n; i++) bl.push({ type: KINDS[i % KINDS.length].key }); take({ blocks: bl, lastAddedIndex: n - 1 }); }, look: function (v) { look = v; camY = null; }, gaze: function (v) { gaze = v; gazeTo = null; }, orbit: function (v) { orbit = v; } };
+  window.SORA3D_DEBUG = { set: function (n) { var bl = []; for (var i = 0; i < n; i++) bl.push({ type: KINDS[i % KINDS.length].key }); take({ blocks: bl, lastAddedIndex: n - 1 }); }, look: function (v) { look = v; camY = null; }, gaze: function (v) { gaze = v; gazeTo = null; }, orbit: function (v) { orbit = v; }, fc: function () { return frontC.map(function (c) { return [c.position.x.toFixed(1), c.position.y.toFixed(1), c.position.z.toFixed(1), c.material.opacity.toFixed(2), c.visible, !!c.material.map]; }).concat([[camera.position.x.toFixed(1), camera.position.y.toFixed(1), camera.position.z.toFixed(1)]]); } };
 })();
 
 /* 3Dの形を選ぶ札（宇宙・黒板・参考書・脳）。1度に1つだけ描く（電池のため） */
@@ -10422,7 +10446,7 @@ window.TOU_E = {"ao": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJAAAAClCAY
 })();
 </script>
 
-<script>window.TRI_VER="d4035ff5db";
+<script>window.TRI_VER="e166c47ba1";
 window.LV_BGT = [{"t": 0.0, "f": 0, "src": "lvbg-001.jpg"}, {"t": 2.458, "f": 59, "src": "lvbg-060.jpg"}, {"t": 4.125, "f": 99, "src": "lvbg-100.jpg"}, {"t": 5.792, "f": 139, "src": "lvbg-140.jpg"}, {"t": 7.875, "f": 189, "src": "lvbg-190.jpg"}, {"t": 9.542, "f": 229, "src": "lvbg-230.jpg"}];
 // ===== 積み上げ帳アプリ: 全画面の形・音の合図・留守番係 =====
 (function () {
@@ -10737,6 +10761,24 @@ window.LV_DATA = {"track":[[732.5,440.0,1.0],[732.5,440.0,1.0],[732.5,440.0,1.0]
     if (t < 2.45) return 0.3 * sm((t - 1.0) / 1.0);
     return 0.3 + 0.7 * sm((t - 2.45) / 1.0);
   }
+  // 光る前の紋章（月桂冠と輪）を動画から1枚写しておき、一番光る時に光の手前へ重ねる（10/28 ソル16回目 脳1）
+  var emCap = { ok: false, cv: document.createElement("canvas"), zs: 1 };
+  emCap.cv.width = emCap.cv.height = 256;
+  function capEm(f) {
+    var bc = LV.bcam[f], zv = Math.sqrt(Math.abs(bc[0] * bc[4] - bc[1] * bc[3]));
+    var x = bc[0] * SY.em[0] + bc[1] * SY.em[1] + bc[2], y = bc[3] * SY.em[0] + bc[4] * SY.em[1] + bc[5];
+    var R = SY.em[2] * zv * 1.2, g = emCap.cv.getContext("2d");
+    try {
+      g.clearRect(0, 0, 256, 256); g.globalCompositeOperation = "source-over";
+      g.drawImage(v, x - R, y - R, R * 2, R * 2, 0, 0, 256, 256);
+      // ふちは丸くぼかす（紋章の外の景色は持って来ない）
+      var m = g.createRadialGradient(128, 128, 128 * 0.72, 128, 128, 128);
+      m.addColorStop(0, "rgba(0,0,0,1)"); m.addColorStop(1, "rgba(0,0,0,0)");
+      g.globalCompositeOperation = "destination-in"; g.fillStyle = m; g.fillRect(0, 0, 256, 256);
+      g.globalCompositeOperation = "source-over";
+      emCap.zs = zv; emCap.ok = true;
+    } catch (e) {}
+  }
   function synDraw(t, tx, ty, S, f) {
     if (!SY) return;
     // 脳そのものの動き（brainreg.py で測った LV.bcam: 61コマ目の脳の座標 → いまのコマ）
@@ -10772,6 +10814,13 @@ window.LV_DATA = {"track":[[732.5,440.0,1.0],[732.5,440.0,1.0],[732.5,440.0,1.0]
       var ec = P(SY.em[0], SY.em[1]), r0 = SY.em[2] * zs, RR = r0 * 4.6, rg = fxc.createRadialGradient(ec[0], ec[1], 0, ec[0], ec[1], RR);
       rg.addColorStop(0, "rgba(240,160,90," + 0.62 * fk + ")"); rg.addColorStop(0.2, "rgba(190,80,20," + 0.75 * fk + ")"); rg.addColorStop(0.45, "rgba(170,70,20," + 0.55 * fk + ")"); rg.addColorStop(1, "rgba(170,70,20,0)");
       fxc.globalCompositeOperation = "multiply"; fxc.fillStyle = rg; fxc.fillRect(ec[0] - RR, ec[1] - RR, RR * 2, RR * 2);
+      fxc.globalCompositeOperation = "source-over";
+      // 光る前の紋章を光の手前に（真ん中でも月桂冠と字が読める）
+      if (emCap.ok) {
+        var Re = SY.em[2] * zs * 1.2;
+        fxc.globalAlpha = 0.86 * fk; fxc.drawImage(emCap.cv, ec[0] - Re, ec[1] - Re, Re * 2, Re * 2); fxc.globalAlpha = 1;
+      }
+      fxc.save(); fxc.globalAlpha = fk; fxc.translate(tx, ty); drawLvText(fxc, f, S, t < 3.1 && level > 1 ? level - 1 : level); fxc.restore();
       // 紋章のふち（光の中でも形が分かる細い輪）
       fxc.globalCompositeOperation = "source-over"; fxc.strokeStyle = "rgba(110,34,0," + 0.6 * fk + ")"; fxc.lineWidth = Math.max(1.5, 2.4 * zs);
       fxc.beginPath(); fxc.arc(ec[0], ec[1], r0 * 0.98, 0, 6.283); fxc.stroke();
@@ -10898,6 +10947,7 @@ window.LV_DATA = {"track":[[732.5,440.0,1.0],[732.5,440.0,1.0],[732.5,440.0,1.0]
       var wave = 0.5 + 0.5 * Math.sin(t * 3.1);
       fxc.fillStyle = "rgba(255,160,70," + (0.05 * g * wave) + ")"; fxc.fillRect(0, 0, W, H);
     }
+    if (!emCap.ok && t > 2.45 && t < 2.85 && SY && LV.bcam) capEm(f);
     synDraw(t, tx, ty, S, f);
     var dt = Math.max(0, Math.min(0.1, t - lastT)); lastT = t;
     var n = Math.round(g * 60 * dt * 6);
@@ -10959,7 +11009,7 @@ window.LV_DATA = {"track":[[732.5,440.0,1.0],[732.5,440.0,1.0],[732.5,440.0,1.0]
     ov.querySelector(".lv-s").innerHTML = "合計 " + h + " 時間<br>次のレベルまで 12 個";
     ov.hidden = false; size(); sparks = []; lastT = 0; KT = k1(); KB = k1(); synReset(); synDraw.lt = 0;
     try { v.currentTime = 0; } catch (e) {}
-    playing = true; frame();
+    emCap.ok = false; playing = true; frame();
     var p = v.play(); if (p && p.catch) p.catch(function () { v.muted = true; v.play().catch(function () { close(); }); });
     requestAnimationFrame(function () { ov.classList.add("on"); });
     return true;
