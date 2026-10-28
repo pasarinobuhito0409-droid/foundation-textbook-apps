@@ -9693,7 +9693,7 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
             pos.setZ(j, px2[(iy * di.width + ix) * 4] / 255 * HC.relief);
             var sk = DW / 256, d0 = dAt(D, ix, iy), sh = Math.max(0, dAt(Sb, ix, iy - Math.round(5 * sk)) - d0 - 0.04), cav = Math.max(0, dAt(Sb, ix, iy) - d0 - 0.03);   // 上の物の落ち影・物のまわりのくぼみ
             var g2 = Math.round(2 * sk), gy = dAt(D, ix, iy + g2) - dAt(D, ix, iy - g2), gx = dAt(D, ix + g2, iy) - dAt(D, ix - g2, iy);   // 面の向き（上を向く面は gy>0）
-            var v = (1 - Math.min(0.55, sh * 2.4)) * (1 - Math.min(0.35, cav * 1.8)) * (1 + Math.max(-0.42, Math.min(0.22, gy * 1.8 - Math.abs(gx) * 1.6)));
+            var v = (1 + 0.1 * d0) * (1 - Math.min(0.55, sh * 2.4)) * (1 - Math.min(0.55, cav * 3.2)) * (1 + Math.max(-0.42, Math.min(0.22, gy * 1.8 - Math.abs(gx) * 1.6)));
             col.setXYZ(j, v, v * 0.985, v * 0.97);
           }
           pos.needsUpdate = true; col.needsUpdate = true; g.computeBoundingSphere(); kick();
@@ -9846,6 +9846,11 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
     var hole = new T.Mesh(new T.PlaneGeometry(4.8, 5.8), new T.MeshStandardMaterial({ map: holeTx, transparent: true, depthWrite: false, roughness: 0.9, emissive: 0xffffff, emissiveMap: holeTx, emissiveIntensity: 0.12 }));
     hole.rotation.x = -Math.PI / 2; hole.position.set(1, 0.006, 1.5); hole.renderOrder = 1; world.add(hole);
     var holeGlow = new T.PointLight(0xffa050, 4.2, 6, 2); holeGlow.position.set(1, 0.15, 1.5); world.add(holeGlow);
+    // 穴のふちの立ち上がり（コンクリートの縁・厚み 0.14・高さ 0.16）。屋上の床を塔が抜ける所がはっきり分かる（ソル32回目 4）
+    var curbM = new T.MeshStandardMaterial({ color: 0x55514b, roughness: 0.92 }), CW = 0.14, CHh = 0.16;
+    [[1, 1.5 - HZ - CW / 2, HX * 2 + CW * 2, CW], [1, 1.5 + HZ + CW / 2, HX * 2 + CW * 2, CW], [1 - HX - CW / 2, 1.5, CW, HZ * 2], [1 + HX + CW / 2, 1.5, CW, HZ * 2]].forEach(function (c) {
+      var cm = new T.Mesh(new T.BoxGeometry(c[2], CHh + 0.4, c[3]), curbM); cm.position.set(c[0], (CHh - 0.4) / 2, c[1]); cm.castShadow = cm.receiveShadow = true; world.add(cm);
+    });
   }
   // 屋上の低い壁: 打ちっぱなしのコンクリートの板（目地・かさ木の下の水切りの影・雨の筋・足元の暗さ）。模型の様な一色の帯にしない（ソル29回目 13）
   function pWallTex(L) {
@@ -11082,7 +11087,7 @@ window.TOU_E = {"ao": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJAAAAClCAY
 })();
 </script>
 
-<script>window.TRI_VER="36e22b7bbd";
+<script>window.TRI_VER="3ab35fe8e5";
 window.LV_BGT = [{"t": 0.0, "f": 0, "src": "lvbg-001.jpg"}, {"t": 2.458, "f": 59, "src": "lvbg-060.jpg"}, {"t": 4.125, "f": 99, "src": "lvbg-100.jpg"}, {"t": 5.792, "f": 139, "src": "lvbg-140.jpg"}, {"t": 7.875, "f": 189, "src": "lvbg-190.jpg"}, {"t": 9.542, "f": 229, "src": "lvbg-230.jpg"}];
 // ===== 積み上げ帳アプリ: 全画面の形・音の合図・留守番係 =====
 (function () {
