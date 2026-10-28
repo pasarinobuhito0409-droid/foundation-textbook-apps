@@ -9914,8 +9914,8 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
     camera.position.set(pxo, cyo, pzo);
     if (Math.abs(camera.fov - fovW) > 0.01) { camera.fov = fovW; camera.updateProjectionMatrix(); }
     camera.lookAt(lx, ly, lz);
-    ui.style.opacity = ROOM_H ? Math.max(0, 1 - 5 * wR * (1 - wR)).toFixed(2) : "";   // 天井を抜ける間は、札をよける
-    var roomK = wR, cyD = camera.position.y - ROOM_H; ceil.style.opacity = ROOM_H ? Math.max(0, Math.min(1, 1 - Math.abs(cyD + 0.2) / 0.3)).toFixed(3) : "0";   // 天井の板の厚み（ROOM_H-0.4〜ROOM_H）の中だけ
+    var roomK = wR, cyD = camera.position.y - ROOM_H;
+    ui.style.opacity = ROOM_H ? (wR < 0.002 || wR > 0.998 ? 1 : Math.max(sstep((cyD - 0.3) / 0.6), 1 - sstep(wR / 0.08))).toFixed(2) : "";   // 天井を見上げて抜ける間だけ札をよけ、抜けたらすぐ暗い札をはっきり出す ceil.style.opacity = ROOM_H ? Math.max(0, Math.min(1, 1 - Math.abs(cyD + 0.2) / 0.3)).toFixed(3) : "0";   // 天井の板の厚み（ROOM_H-0.4〜ROOM_H）の中だけ
     var pitchN = Math.atan2(tyn - cyn, Rn);
     // 高さ（時間）で景色を決める
     var hH = Math.max(0, camY - 1.5), p = zonePos(hH), zi = Math.min(Math.floor(p), ZONES.length - 1), f = p - Math.floor(p);
@@ -10717,7 +10717,7 @@ window.TOU_E = {"ao": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJAAAAClCAY
 })();
 </script>
 
-<script>window.TRI_VER="a84c7693e0";
+<script>window.TRI_VER="da868ec547";
 window.LV_BGT = [{"t": 0.0, "f": 0, "src": "lvbg-001.jpg"}, {"t": 2.458, "f": 59, "src": "lvbg-060.jpg"}, {"t": 4.125, "f": 99, "src": "lvbg-100.jpg"}, {"t": 5.792, "f": 139, "src": "lvbg-140.jpg"}, {"t": 7.875, "f": 189, "src": "lvbg-190.jpg"}, {"t": 9.542, "f": 229, "src": "lvbg-230.jpg"}];
 // ===== 積み上げ帳アプリ: 全画面の形・音の合図・留守番係 =====
 (function () {
@@ -11379,15 +11379,17 @@ window.NOU3D_CFG = {"slot": [905, 560], "depthK": 0.34, "zoom": 1.03, "ext": {"u
       "      float ring = exp(-pow((dist - glowR) / 0.035, 2.0));",
       "      float tw = 0.85 + 0.15 * sin(time * 9.0 + bu.x * 40.0 + bu.y * 23.0);",   // 回路の光が少しゆらぐ
       "      vec3 gB = texture2D(tGlow, vec2(bu.x, 1.0 - bu.y), 5.0).rgb;",   // ぼかした光（にじみ・ブルーム）
-      "      vec3 A = g * (1.9 * m * tw + 1.5 * ring) * glowA + gB * (0.7 * m + 0.8 * ring) * glowA + vec3(1.0, 0.7, 0.35) * ring * 0.10 * glowA * (1.0 - smoothstep(0.0, 1.3, dist));",
+      "      float gA = min(glowA, 1.0), gX = max(glowA - 1.0, 0.0);",   // 脳の上の光は「全身へ広がる」と同じ強さまで。強い分（レベルアップ）は脳の外のにじみへ回す
+      "      vec3 A = g * (1.9 * m * tw + 1.5 * ring) * gA + gB * (0.7 * m + 0.8 * ring) * gA + vec3(1.0, 0.7, 0.35) * ring * 0.10 * gA * (1.0 - smoothstep(0.0, 1.3, dist));",
       "      float r2 = exp(-pow((dist - lvR) / 0.07, 2.0)) * lvA;",          // レベルアップだけの金の光の輪（脳の外まで広がる）
       "      float ln = dot(n, vec3(0.3, 0.55, 0.15)), inB = smoothstep(0.03, 0.16, dot(gB, vec3(0.33)));",   // inB: 脳の上か（光の絵のにじみがある所）
       "      A += vec3(1.0, 0.72, 0.32) * r2 * 1.5 * (1.0 - 0.75 * ln) * (1.0 - 0.85 * inB);",   // 輪は脳の外で明るく、脳の上では細部を残す
-      "      A *= 1.0 - 0.45 * smoothstep(0.8, 0.95, bu.x) * lvA;",   // 右のはしの金の線と外周を残す   // 明るい所（脳の右のはし）では輪を弱め、形と線を残す
+      "      A += gB * gX * 2.2 * m * (1.0 - smoothstep(0.03, 0.12, dot(g, vec3(0.33))));",   // 強い分は線のすき間と脳のまわりのにじみだけ
+      "      A *= 1.0 - 0.6 * smoothstep(0.66, 0.9, bu.x) * max(lvA, min(gX * 3.0, 1.0));",   // 右のはしの金の線と外周を残す   // 明るい所（脳の右のはし）では輪を弱め、形と線を残す
       "      A = min(A, vec3(1.6));",
       "      n = n + (1.0 - n) * (1.0 - exp(-A * 1.5)) * 0.55 + A * 0.38 * (1.0 - n * 0.6); }",                         // 白く飛ばさずに明るくする（基板の線が残る）
       "    c = mix(c, n, fe); }",
-      "  c += vec3(1.0, 0.78, 0.5) * flash * 0.2;",
+      "  c += vec3(1.0, 0.78, 0.5) * flash * 0.2 * (1.0 - 0.75 * dot(c, vec3(0.33)));",   // 明るい所は白く飛ばさない
       "  gl_FragColor = vec4(c, 1.0);",
       "}"
     ].join("\n")
