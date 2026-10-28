@@ -1,5 +1,5 @@
 // 積み上げ帳アプリの留守番係: 一度開けば、電波が無くても開ける。新しい版が有れば次に開いた時に入れ替わる
-var V = "tsumiage-ec4f23090b";
+var V = "tsumiage-c1bf601dd1";
 var FILES = ["./", "index.html", "three.min.js", "manifest.webmanifest", "icon-192.png", "icon-512.png", "apple-touch-icon.png"];
 self.addEventListener("install", function (e) {
   e.waitUntil(caches.open(V).then(function (c) { return c.addAll(FILES); }).then(function () { return self.skipWaiting(); }));
