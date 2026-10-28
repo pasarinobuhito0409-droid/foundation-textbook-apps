@@ -319,7 +319,7 @@ body.app #b-yume .tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
  -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 12%,#000 94%,transparent 100%),linear-gradient(to right,transparent 0,#000 6%,#000 94%,transparent 100%);-webkit-mask-composite:source-in;
  mask-image:linear-gradient(to bottom,transparent 0,#000 12%,#000 94%,transparent 100%),linear-gradient(to right,transparent 0,#000 6%,#000 94%,transparent 100%);mask-composite:intersect}
 #lvup video,#lvup .lv-num{position:absolute;inset:0;width:100%;height:100%;display:block}
-#lvup .lv-top,#lvup .lv-bot,#lvup .lv-tap{position:absolute;left:0;right:0;z-index:2;color:#fff8ec;font-family:"M PLUS 1",var(--body);font-weight:200;text-align:center;opacity:0;transform:translateY(10px);transition:opacity .9s ease,transform .9s ease}
+#lvup .lv-top,#lvup .lv-bot,#lvup .lv-tap{position:absolute;left:0;right:0;z-index:2;color:#fff;font-family:"M PLUS 1",var(--body);font-weight:200;text-align:center;opacity:0;transform:translateY(10px);transition:opacity .9s ease,transform .9s ease}
 /* 字の後ろだけ、明るさの差をおさえる（光らせない） */
 #lvup .lv-top::before,#lvup .lv-bot::before{content:"";position:absolute;left:4%;right:4%;top:-22px;bottom:-22px;z-index:-1;background:radial-gradient(ellipse at 50% 50%,rgba(20,5,2,.92),rgba(20,5,2,.5) 55%,rgba(20,5,2,0) 80%)}
 #lvup .lv-tap::before{content:"";position:absolute;left:25%;right:25%;top:-10px;bottom:-10px;z-index:-1;background:radial-gradient(ellipse at 50% 50%,rgba(34,10,4,.6),rgba(34,10,4,0) 72%)}
@@ -327,7 +327,7 @@ body.app #b-yume .tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 #lvup .lv-bot{bottom:calc(10% + env(safe-area-inset-bottom,0px))}
 #lvup .lv-n{font-size:26px;letter-spacing:.3em}
 #lvup .lv-n b{font-weight:200;font-size:56px;letter-spacing:0;margin:0 .1em}
-#lvup .lv-s{font-size:18px;letter-spacing:.12em;margin-top:8px;color:#fffaf2}
+#lvup .lv-s{font-size:18px;letter-spacing:.12em;margin-top:8px;color:#fff}
 #lvup .lv-tap{bottom:calc(18px + env(safe-area-inset-bottom,0px));font-size:15px;letter-spacing:.3em}
 #lvup.lv-on2 .lv-top,#lvup.lv-on2 .lv-bot{opacity:1;transform:none}
 #lvup.lv-on2 .lv-tap{opacity:.9;transform:none}
@@ -9815,7 +9815,7 @@ window.TOU_E = {"ao": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJAAAAClCAY
 })();
 </script>
 
-<script>window.TRI_VER="c43906bfd5";
+<script>window.TRI_VER="6d68c358a4";
 window.LV_BGT = [{"t": 0.0, "f": 0, "src": "lvbg-001.jpg"}, {"t": 2.458, "f": 59, "src": "lvbg-060.jpg"}, {"t": 4.125, "f": 99, "src": "lvbg-100.jpg"}, {"t": 5.792, "f": 139, "src": "lvbg-140.jpg"}, {"t": 7.875, "f": 189, "src": "lvbg-190.jpg"}, {"t": 9.542, "f": 229, "src": "lvbg-230.jpg"}];
 // ===== 積み上げ帳アプリ: 全画面の形・音の合図・留守番係 =====
 (function () {
@@ -10074,8 +10074,8 @@ window.LV_DATA = {"track":[[732.5,440.0,1.0],[732.5,440.0,1.0],[732.5,440.0,1.0]
     if (g > 0.01) {
       fxc.save();
       fxc.beginPath(); fxc.rect(0, 0, W, H); fxc.rect(tx + rw * 0.06, ty + rh * 0.16, rw * 0.88, rh * 0.68); fxc.clip("evenodd");
-      var R = Math.max(W, H) * 0.8, gr = fxc.createRadialGradient(ex, ey, 0, ex, ey, R);
-      gr.addColorStop(0, "rgba(255,190,90," + (0.3 * g) + ")"); gr.addColorStop(0.3, "rgba(255,140,50," + (0.08 * g) + ")"); gr.addColorStop(1, "rgba(255,110,40,0)");
+      var R = Math.max(W, H) * 0.55, gr = fxc.createRadialGradient(ex, ey, 0, ex, ey, R);
+      gr.addColorStop(0, "rgba(255,190,90," + (0.16 * g) + ")"); gr.addColorStop(0.25, "rgba(255,140,50," + (0.05 * g) + ")"); gr.addColorStop(1, "rgba(255,110,40,0)");
       fxc.fillStyle = gr; fxc.fillRect(0, 0, W, H);
       fxc.restore();
       // 紋章の真ん中は白く強く（見本の様に）
@@ -10116,6 +10116,11 @@ window.LV_DATA = {"track":[[732.5,440.0,1.0],[732.5,440.0,1.0],[732.5,440.0,1.0]
       fxc.fillStyle = "rgba(255,214,140," + (0.85 * al).toFixed(3) + ")";
       fxc.beginPath(); fxc.arc(p.x, p.y, p.r, 0, Math.PI * 2); fxc.fill();
     }
+    fxc.globalCompositeOperation = "destination-out";
+    var tg = fxc.createLinearGradient(0, 0, 0, H);
+    tg.addColorStop(0, "rgba(0,0,0,0.85)"); tg.addColorStop(0.16, "rgba(0,0,0,0.85)"); tg.addColorStop(0.24, "rgba(0,0,0,0)");
+    tg.addColorStop(0.66, "rgba(0,0,0,0)"); tg.addColorStop(0.74, "rgba(0,0,0,0.85)"); tg.addColorStop(1, "rgba(0,0,0,0.85)");
+    if (t > 5.8) { fxc.fillStyle = tg; fxc.fillRect(0, 0, W, H); }
     fxc.globalCompositeOperation = "source-over";
     ov.classList.toggle("lv-on2", t > 6.2);
     raf = requestAnimationFrame(frame);
