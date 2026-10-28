@@ -1,5 +1,5 @@
 // 積み上げ帳アプリの留守番係: 一度開けば、電波が無くても開ける。新しい版が有れば次に開いた時に入れ替わる
-var V = "tsumiage-abda886ca0";
+var V = "tsumiage-f2e1322091";
 var FILES = ["./", "index.html", "three.min.js", "manifest.webmanifest", "icon-192.png", "icon-512.png", "apple-touch-icon.png"];
 self.addEventListener("install", function (e) {
   e.waitUntil(caches.open(V).then(function (c) { return c.addAll(FILES); }).then(function () { return self.skipWaiting(); }));
@@ -13,6 +13,7 @@ self.addEventListener("fetch", function (e) {
   var r = e.request;
   if (r.method !== "GET") return;
   var u = new URL(r.url);
+  if (u.pathname.endsWith(".mp4")) return;   // 動画は途中から読む事が有るので、留守番係は通さない
   if (r.mode === "navigate" || u.pathname.endsWith("/index.html")) {
     // 本体は、まず新しい物を取りに行き、だめなら手元の物
     e.respondWith(fetch(r).then(function (res) {
