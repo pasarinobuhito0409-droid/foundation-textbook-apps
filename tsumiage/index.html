@@ -499,6 +499,24 @@ body.app #t-nou .kb-fuda.nou-f{max-width:calc(100% - 24px);font-size:14px!import
 #lvup .lv-tap{font-weight:400}
 .app-toast{white-space:nowrap;text-align:center;line-height:1.5}
 
+/* 版51: ソル29回目 7・12・14。部品の字を、明るい景色の上でも読める明暗差に（札は増やさない） */
+body.app #b-yume .tabs [data-tab="t-nou"],body.app #b-yume .tabs [data-tab="t-sora"]{color:#fff;font-weight:500;text-shadow:0 1px 3px rgba(0,0,0,.7)}
+body.app #b-yume .tabs [aria-selected="true"]{text-shadow:none}
+body.app #b-yume .tabs,body.app .app-bar button,body.app .app-min{background:rgba(12,8,10,.6)!important}
+body.app .app-bar .ttl{color:#f6eadb;font-weight:300;text-shadow:0 1px 3px rgba(0,0,0,.75),0 0 10px rgba(0,0,0,.35)}
+body.app .app-bar .ttl b{text-shadow:0 1px 3px rgba(0,0,0,.75)}
+body.app .plus.plus4 button{text-shadow:0 1px 2px rgba(0,0,0,.55)}
+.sora-arr span{font-size:17px;font-weight:600;color:#fff6e6;text-shadow:0 1px 3px rgba(0,0,0,.6)}
+/* 高さのものさし（空へ・触った時だけ）: 部屋→街→雲→宇宙→月→太陽→天の川 の中で、今どこまで来たか（ソル29回目 11） */
+.sora-meter{display:none}
+body.app .sora-meter{display:block;position:absolute;right:calc(env(safe-area-inset-right) + 14px);top:calc(env(safe-area-inset-top) + 290px);bottom:calc(env(safe-area-inset-bottom) + 250px);width:86px;pointer-events:none;z-index:6;transition:opacity .45s ease}
+body.app:not(.ui-peek) .sora-meter{opacity:0}
+.sora-meter .sm-bar{position:absolute;right:8px;top:0;bottom:0;width:6px;border-radius:3px;background:rgba(12,8,10,.55);border:1px solid rgba(242,207,124,.45)}
+.sora-meter .sm-fill{position:absolute;left:0;right:0;bottom:0;border-radius:3px;background:linear-gradient(0deg,#d9b25e,#fff0c0);box-shadow:0 0 8px rgba(255,210,120,.6)}
+.sora-meter .sm-bar span{position:absolute;right:-3px;width:12px;height:2px;background:rgba(255,240,210,.85);transform:translateY(1px)}
+.sora-meter .sm-bar em{position:absolute;right:18px;top:-8px;font:500 12px "M PLUS 1",var(--body);font-style:normal;color:#fff;white-space:nowrap;text-shadow:0 1px 3px rgba(0,0,0,.9),0 0 8px rgba(0,0,0,.6)}
+.sora-meter .sm-now{position:absolute;right:-12px;z-index:2;font:700 11px "M PLUS 1",var(--body);color:#2a1606;background:linear-gradient(180deg,#f6dc9c,#d9b25e);border-radius:9px;padding:2px 6px;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.45)}
+
 </style>
 </head>
 <body class="app">
@@ -6243,7 +6261,7 @@ window.TRIWHEEL_RELIEF = function (THREE, R, unproj, done) {
     if (!to) { anim = null; window.NOU_E_BUSY = false; return; }
     var fr = typeof to.from === "number" ? to.from : to.total - 1;
     anim = { start: Date.now(), kind: to.kind, levelUp: Math.floor(to.total / 12) > Math.floor(fr / 12), to: to };
-    try { window.dispatchEvent(new CustomEvent("tri-anim", { detail: { levelUp: anim.levelUp, total: to.total, mins: (to.total - fr) * 5, kind: to.kind, tIn: T_IN, tSig: T_SIGEND, tLv: T_LV } })); } catch (e) {}   // アプリの音の合図
+    try { window.dispatchEvent(new CustomEvent("tri-anim", { detail: { levelUp: anim.levelUp, total: to.total, mins: (to.total - fr) * 5, kind: (KINDS[to.kind] || {}).key, kindName: (KINDS[to.kind] || {}).name, tIn: T_IN, tSig: T_SIGEND, tLv: T_LV } })); } catch (e) {}   // アプリの音の合図
   }
 
   // 時間の流れ（ミリ秒）: ①工具を床の基盤へ 0〜600・持ち上げる 600〜1250・差す 1250〜1700・カチッ 1700
@@ -6639,14 +6657,17 @@ window.TRIWHEEL_RELIEF = function (THREE, R, unproj, done) {
     // 数（めくれる）
     var face = "'Shippori Mincho','Noto Serif JP','Hiragino Mincho ProN','Yu Mincho',serif";
     ctx.textAlign = "center"; ctx.textBaseline = "middle";
-    ctx.font = nameFont(30); spacing(11);
-    ctx.fillStyle = "rgba(247,236,210,0.92)";
-    ctx.fillText("LEVEL", HUD.x + 5, HUD.y - 66);
-    spacing(0);
+    var appM = document.body.classList.contains("app");   // アプリでは丸が小さく映るので、細かい字は出さず数だけ大きく（ソル29回目 7）。残りは上の札に出す
+    if (!appM) {
+      ctx.font = nameFont(30); spacing(11);
+      ctx.fillStyle = "rgba(247,236,210,0.92)";
+      ctx.fillText("LEVEL", HUD.x + 5, HUD.y - 66);
+      spacing(0);
+    }
     function num(n, sc, a, dy, sy) {
       if (a <= 0) return;
-      ctx.save(); ctx.globalAlpha *= a; ctx.translate(HUD.x, HUD.y + 16 + dy); ctx.scale(sc, sc * (sy === undefined ? 1 : sy));
-      ctx.font = "700 " + (String(n).length > 2 ? 104 : 140) + "px " + face;
+      ctx.save(); ctx.globalAlpha *= a; ctx.translate(HUD.x, HUD.y + (appM ? 10 : 16) + dy); ctx.scale(sc, sc * (sy === undefined ? 1 : sy));
+      ctx.font = "700 " + (String(n).length > 2 ? (appM ? 130 : 104) : (appM ? 190 : 140)) + "px " + face;
       ctx.shadowColor = "rgba(0,0,0,0.6)"; ctx.shadowBlur = 6; ctx.shadowOffsetY = 3;
       ctx.fillStyle = goldGrad(-50, 50); ctx.fillText(String(n), 0, 0);
       ctx.restore();
@@ -6664,10 +6685,12 @@ window.TRIWHEEL_RELIEF = function (THREE, R, unproj, done) {
     } else num(lvUp && lt <= 1.0 ? level - 1 : level, 1, 1, 0);
     // あと何個
     var rest = lvUp && lt < 1.6 ? 0 : 12 - (shown.total % 12);
-    ctx.font = nameFont(28); spacing(4);
-    ctx.fillStyle = "rgba(247,236,210,0.9)";
-    ctx.fillText("あと " + rest + " 個", HUD.x + 2, HUD.y + 98);
-    spacing(0);
+    if (!appM) {
+      ctx.font = nameFont(28); spacing(4);
+      ctx.fillStyle = "rgba(247,236,210,0.9)";
+      ctx.fillText("あと " + rest + " 個", HUD.x + 2, HUD.y + 98);
+      spacing(0);
+    }
     ctx.restore();
     // 差し口から目盛りへ飛ぶ金の光（1個ごと）
     if (anim && t > T_SIGEND - 300 && t < T_LV + 80) {
@@ -6690,7 +6713,7 @@ window.TRIWHEEL_RELIEF = function (THREE, R, unproj, done) {
       var pu = (t - T_LV) / 1200;
       ctx.save(); ctx.setTransform(k0(), 0, 0, k0(), 0, 0);
       ctx.globalAlpha *= 1 - sstep((pu - 0.5) * 2);
-      ctx.font = "700 54px " + face; ctx.textAlign = "left"; ctx.textBaseline = "middle";
+      ctx.font = "700 " + (document.body.classList.contains("app") ? 96 : 54) + "px " + face; ctx.textAlign = "left"; ctx.textBaseline = "middle";
       ctx.fillStyle = goldGrad(HUD.y - 120, HUD.y - 40);
       ctx.shadowColor = "rgba(0,0,0,0.5)"; ctx.shadowBlur = 6;
       ctx.fillText("+1", HUD.x + HUD.r + 18, HUD.y - 70 - pu * 50);
@@ -6958,6 +6981,7 @@ window.TRIWHEEL_RELIEF = function (THREE, R, unproj, done) {
         ctx.fillStyle = cg; ctx.fillRect(SLOT.x - 80, SLOT.y - 120, 240, 240);
         ctx.restore();
       }
+      if (t >= T_IN && !anim.levelUp && shown.total !== anim.to.total) { shown = copy(anim.to); writeText(shown); }   // 差して入った時に、上の札と結果の札を同じ数にする（ソル29回目 8）
       if (t >= T_LV) {
         if (shown.total !== anim.to.total) { shown = copy(anim.to); writeText(shown); }
         level = Math.floor(shown.total / 12) + 1;
@@ -9438,7 +9462,7 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
     { name: "宇宙", h: 16, kEl: 0.55, key: "uchu", gnd: 0x3a6ad0, a: [0.40, 0.49, 130, 1], top: 0x02040c, bot: 0x1b3b74, fog: 0x0b1530, sun: 0xffffff, sunI: 3.0, hemi: 0.35 },
     { name: "月", h: 32, kEl: 0.55, key: "tsuki", gnd: 0x2a2e3a, a: [0.464, 0.437, 28, 0], glow: 0x9fb4d8, top: 0x020308, bot: 0x10131c, fog: 0x0a0c14, sun: 0xffffff, sunI: 3.6, hemi: 0.22 },
     { name: "太陽", h: 64, kEl: 0.25, key: "taiyou", gnd: 0x4a2a12, a: [0.371, 0.414, 30, 0], glow: 0xffa040, top: 0x020104, bot: 0x0c0604, fog: 0x140a05, sun: 0xffe2b0, sunI: 4.0, hemi: 0.45 },
-    { name: "天の川", h: 128, kEl: 0.6, key: "amanogawa", gnd: 0x2e2660, a: [0.45, 0.51, 110, 0], top: 0x020208, bot: 0x16113a, fog: 0x0c0a22, sun: 0xd8d0ff, sunI: 2.4, hemi: 0.4 }
+    { name: "天の川", h: 128, kEl: 0.6, key: "amanogawa", gnd: 0x4a36a0, rimC: 0xb09cff, rimK: 0.9, a: [0.45, 0.51, 110, 0], top: 0x020208, bot: 0x16113a, fog: 0x0c0a22, sun: 0xe4dcff, sunI: 3.0, hemi: 0.22 }
   ];
   var SUP = "⁰¹²³⁴⁵⁶⁷⁸⁹";
   function sup(n) { return String(n).split("").map(function (d) { return SUP[+d]; }).join(""); }
@@ -9464,7 +9488,7 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
   var ceil = document.createElement("div"); ceil.className = "sora-ceil"; ceil.style.cssText = "position:absolute;inset:0;pointer-events:none;opacity:0;background:radial-gradient(ellipse at 50% 40%,rgba(255,206,140,.92),rgba(92,58,30,.97) 45%,rgba(40,24,12,1))"; host.appendChild(ceil);
   var ui = document.createElement("div"); ui.className = "sora-ui";
   ui.innerHTML = '<div class="sora-card"><div class="sc-now"><span>今</span><b></b></div><div class="sc-next"></div><div class="sc-exp"></div><div class="sc-sum"></div><div class="sc-big" style="display:none"><div class="sc-to"></div><div class="sc-ato"></div><div class="sc-sub"></div></div></div>' +
-    '<div class="sora-marks"></div><div class="sora-sum"></div><div class="sora-arr" aria-live="polite"></div>';
+    '<div class="sora-marks"></div><div class="sora-sum"></div><div class="sora-arr" aria-live="polite"></div><div class="sora-meter" aria-hidden="true"><div class="sm-bar"><i class="sm-fill"></i></div><b class="sm-now"></b></div>';
   host.appendChild(ui);
   var btn = document.createElement("button"); btn.type = "button"; btn.className = "sora-btn"; btn.textContent = "地上を見る";
   host.appendChild(btn);
@@ -9627,12 +9651,12 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
       HC.walls.forEach(function (w) {
         var g = new T.PlaneGeometry(HF, HT, 144, 90), tx = new T.TextureLoader().load(w.img, function () { kick(); });
         tx.encoding = T.sRGBEncoding; tx.anisotropy = 8;
-        var uv = g.attributes.uv; for (var i = 0; i < uv.count; i++) uv.setY(i, uv.getY(i) * (HT / (HF / 1.5)));   // 絵（3:2）の下から天井の高さまで
-        var wm = new T.MeshBasicMaterial({ map: tx }), cl = w.i === 0 ? 0.0 : 1.0;   // 部屋の角は板の左（i=0）か右（i=1）
+        var uv = g.attributes.uv, yk0 = w.yuka || 0, ytp = Math.min(0.995, yk0 + HT / (HF / 1.5)); for (var i = 0; i < uv.count; i++) uv.setY(i, yk0 + uv.getY(i) * (ytp - yk0));   // 絵（3:2）の床の線から天井の高さまで。絵に写った床（下の yuka の割合）は使わず、家具の足を部屋の床へ着ける（ソル29回目 2）
+        var wm = new T.MeshBasicMaterial({ map: tx, vertexColors: true }), cl = w.i === 0 ? 0.0 : 1.0;   // 部屋の角は板の左（i=0）か右（i=1）
         wm.onBeforeCompile = function (sh) {   // 壁の下（床との境）と部屋の角と天井の近くを暗く（光が回りにくい所）
-          sh.vertexShader = "varying vec2 vWU;\n" + sh.vertexShader.replace("#include <begin_vertex>", "#include <begin_vertex>\n  vWU = uv;");
+          sh.vertexShader = "varying vec2 vWU;\n" + sh.vertexShader.replace("#include <begin_vertex>", "#include <begin_vertex>\n  vWU = vec2(uv.x, position.y / " + HT.toFixed(2) + " + 0.5);");
           sh.fragmentShader = "varying vec2 vWU;\n" + sh.fragmentShader.replace("#include <fog_fragment>",
-            "float yN = vWU.y / " + (HT / (HF / 1.5)).toFixed(4) + ";\n  float ao = mix(0.5, 1.0, smoothstep(0.0, 0.14, yN)) * mix(0.62, 1.0, smoothstep(0.0, 0.16, abs(vWU.x - " + cl.toFixed(1) + "))) * mix(0.72, 1.0, smoothstep(1.0, 0.86, yN));\n  gl_FragColor.rgb *= ao;\n#include <fog_fragment>");
+            "float yN = vWU.y;\n  float ao = mix(0.5, 1.0, smoothstep(0.0, 0.14, yN)) * mix(0.62, 1.0, smoothstep(0.0, 0.16, abs(vWU.x - " + cl.toFixed(1) + "))) * mix(0.72, 1.0, smoothstep(1.0, 0.86, yN));\n  gl_FragColor.rgb *= ao;\n#include <fog_fragment>");
         };
         wm.customProgramCacheKey = function () { return "heyaW" + cl; };
         var m = new T.Mesh(g, wm);
@@ -9640,17 +9664,28 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
         m.rotation.y = ang;
         var px = c * Math.cos(ang) - HF * Math.sin(ang), pz = -c * Math.sin(ang) - HF * Math.cos(ang);   // 壁の向きに回した「左右 c・奥 -HF」の所
         m.position.set(px, HT / 2, pz); heyaG.add(m);
+        var vc = new Float32Array(g.attributes.position.count * 3).fill(1); g.setAttribute("color", new T.BufferAttribute(vc, 3));
         var di = new Image(); di.onload = function () {   // 奥行きの地図で、手前の家具を前へ押し出す
           var cv = document.createElement("canvas"); cv.width = di.width; cv.height = di.height; var cx = cv.getContext("2d"); cx.drawImage(di, 0, 0);
           var px2 = cx.getImageData(0, 0, di.width, di.height).data, pos = g.attributes.position, u2 = g.attributes.uv;
+          // 家具が壁に貼り付いて見えない様に（ソル29回目 3）: 手前へ出た物のうしろの壁に落ち影、上を向く面は明るく・下と横を向く面は暗く
+          var DW = di.width, DH = di.height, D = new Float32Array(DW * DH), Sb = new Float32Array(DW * DH), tmp = new Float32Array(DW * DH);
+          for (var q = 0; q < DW * DH; q++) D[q] = px2[q * 4] / 255;
+          var R = 6;
+          for (var yy = 0; yy < DH; yy++) for (var xx = 0; xx < DW; xx++) { var sm = 0, n = 0; for (var k = -R; k <= R; k++) { var x2 = xx + k; if (x2 >= 0 && x2 < DW) { sm += D[yy * DW + x2]; n++; } } tmp[yy * DW + xx] = sm / n; }
+          for (yy = 0; yy < DH; yy++) for (xx = 0; xx < DW; xx++) { sm = 0; n = 0; for (k = -R; k <= R; k++) { var y2 = yy + k; if (y2 >= 0 && y2 < DH) { sm += tmp[y2 * DW + xx]; n++; } } Sb[yy * DW + xx] = sm / n; }
+          function dAt(a, x, y) { x = Math.max(0, Math.min(DW - 1, x)); y = Math.max(0, Math.min(DH - 1, y)); return a[y * DW + x]; }
+          var col = g.attributes.color;
           for (var j = 0; j < pos.count; j++) {
             var uu = u2.getX(j);
             var ix = Math.min(di.width - 1, Math.floor(uu * di.width)), iy = Math.min(di.height - 1, Math.floor((1 - u2.getY(j)) * di.height));
             pos.setZ(j, px2[(iy * di.width + ix) * 4] / 255 * HC.relief);
-            var fy = u2.getY(j) * HT / (HT / (HF / 1.5)) / (HF / 1.5), yk = w.yuka || 0;   // 絵の下からの高さの割合
-            if (yk && fy < yk) { pos.setY(j, -HT / 2 + 0.004); pos.setZ(j, 0.55 * (yk - fy) / yk); }   // 絵に写った床は、床の上へ寝かせる
+            var d0 = dAt(D, ix, iy), sh = Math.max(0, dAt(Sb, ix, iy - 5) - d0 - 0.04), cav = Math.max(0, dAt(Sb, ix, iy) - d0 - 0.03);   // 上の物の落ち影・物のまわりのくぼみ
+            var gy = dAt(D, ix, iy + 2) - dAt(D, ix, iy - 2), gx = dAt(D, ix + 2, iy) - dAt(D, ix - 2, iy);   // 面の向き（上を向く面は gy>0）
+            var v = (1 - Math.min(0.55, sh * 2.4)) * (1 - Math.min(0.35, cav * 1.8)) * (1 + Math.max(-0.28, Math.min(0.2, gy * 1.6 - Math.abs(gx) * 0.9)));
+            col.setXYZ(j, v, v * 0.985, v * 0.97);
           }
-          pos.needsUpdate = true; g.computeBoundingSphere(); kick();
+          pos.needsUpdate = true; col.needsUpdate = true; g.computeBoundingSphere(); kick();
         }; di.src = w.dep;
       });
       // 床: ルナの板の模様（くっきり）× 前の景色の床の光
@@ -9678,17 +9713,22 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
         ceilG.children.forEach(function (m) { if (m.material && m.material.map === tjT) { m.material.map = cT; m.material.color.set(0xb4a494); m.material.needsUpdate = true; } });
       }
       // 木の柱（角と壁の真ん中）と、天井のふち
-      var wood = new T.MeshStandardMaterial({ color: 0x2a180d, roughness: 0.55, metalness: 0.05 });   // 壁の絵の木の柱と同じ暗さ（白茶に浮かない）
-      var woodC = new T.MeshLambertMaterial({ color: 0x1c0f07 });   // 天井のふちは日の光が当たらない暗い木（前は白茶の帯に見えた・ソル28回目 1）
+      function kage(geo) {   // 面ごとの明るさで厚みを見せる（横の面・上の面・下の面。BoxGeometry は +x -x +y -y +z -z の順に4点ずつ）
+        var f = [0.95, 0.8, 0.5, 0.42, 1.0, 0.86], n = geo.attributes.position.count, c = new Float32Array(n * 3);
+        for (var i = 0; i < n; i++) { var v = f[Math.floor(i / 4)]; c[i * 3] = v; c[i * 3 + 1] = v; c[i * 3 + 2] = v; }
+        geo.setAttribute("color", new T.BufferAttribute(c, 3)); return geo;
+      }
+      var wood = new T.MeshBasicMaterial({ color: new T.Color(0x3e2313).convertSRGBToLinear(), vertexColors: true, toneMapped: false });   // 光の計算で白茶に浮かない様に、色をそのまま（面ごとの明るさは kage で）
+      var woodC = new T.MeshBasicMaterial({ color: new T.Color(0x3a2112).convertSRGBToLinear(), vertexColors: true, toneMapped: false });   // 天井のふちは日の光が当たらない暗い木（光を受けると左の壁で白茶の帯になった・ソル29回目 1）
       [[-HF, -HF], [HF, -HF], [HF, HF], [-HF, HF], [0, -HF], [HF, 0], [0, HF], [-HF, 0]].forEach(function (q) {
-        var b = new T.Mesh(new T.BoxGeometry(0.5, HT, 0.5), wood); b.position.set(q[0], HT / 2, q[1]); heyaG.add(b);
-        var pl = new T.Mesh(new T.BoxGeometry(0.72, 0.42, 0.72), wood); pl.position.set(q[0], 0.21, q[1]); heyaG.add(pl);   // 柱の台（床へ着く）
-        var pl2 = new T.Mesh(new T.BoxGeometry(0.62, 0.08, 0.62), wood); pl2.position.set(q[0], 0.46, q[1]); heyaG.add(pl2);
-        var cp = new T.Mesh(new T.BoxGeometry(0.66, 0.22, 0.66), woodC); cp.position.set(q[0], HT - 0.43, q[1]); heyaG.add(cp);   // 柱の頭（天井のふちへつなぐ）
+        var b = new T.Mesh(kage(new T.BoxGeometry(0.5, HT, 0.5)), wood); b.position.set(q[0], HT / 2, q[1]); heyaG.add(b);
+        var pl = new T.Mesh(kage(new T.BoxGeometry(0.72, 0.42, 0.72)), wood); pl.position.set(q[0], 0.21, q[1]); heyaG.add(pl);   // 柱の台（床へ着く）
+        var pl2 = new T.Mesh(kage(new T.BoxGeometry(0.62, 0.08, 0.62)), wood); pl2.position.set(q[0], 0.46, q[1]); heyaG.add(pl2);
+        var cp = new T.Mesh(kage(new T.BoxGeometry(0.66, 0.22, 0.66)), woodC); cp.position.set(q[0], HT - 0.43, q[1]); heyaG.add(cp);   // 柱の頭（天井のふちへつなぐ）
       });
       [[0, -HF, HF * 2, 0.3], [0, HF, HF * 2, 0.3], [-HF, 0, 0.3, HF * 2], [HF, 0, 0.3, HF * 2]].forEach(function (q) {
-        var b = new T.Mesh(new T.BoxGeometry(q[2] + 0.3, 0.32, q[3] + 0.3), woodC); b.position.set(q[0], HT - 0.16, q[1]); heyaG.add(b);
-        var b2 = new T.Mesh(new T.BoxGeometry(q[2] + (q[2] > 1 ? 0.3 : 0.62), 0.1, q[3] + (q[3] > 1 ? 0.3 : 0.62)), woodC); b2.position.set(q[0], HT - 0.37, q[1]); heyaG.add(b2);   // 天井のふちの下の段（梁と壁をつなぐ）
+        var b = new T.Mesh(kage(new T.BoxGeometry(q[2] + 0.3, 0.32, q[3] + 0.3)), woodC); b.position.set(q[0], HT - 0.16, q[1]); heyaG.add(b);
+        var b2 = new T.Mesh(kage(new T.BoxGeometry(q[2] + (q[2] > 1 ? 0.3 : 0.62), 0.1, q[3] + (q[3] > 1 ? 0.3 : 0.62))), woodC); b2.position.set(q[0], HT - 0.37, q[1]); heyaG.add(b2);   // 天井のふちの下の段（梁と壁をつなぐ）
       });
     }
   }
@@ -9770,14 +9810,28 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
     hole.rotation.x = -Math.PI / 2; hole.position.set(1, 0.006, 1.5); hole.renderOrder = 1; world.add(hole);
     var holeGlow = new T.PointLight(0xffa050, 4.2, 6, 2); holeGlow.position.set(1, 0.15, 1.5); world.add(holeGlow);
   }
-  var wallMat = new T.MeshStandardMaterial({ color: roofTex ? 0x8a847c : 0x6e6861, map: roofTex, roughness: 0.9 });   // 白く浮かない、雨に打たれたコンクリート
+  // 屋上の低い壁: 打ちっぱなしのコンクリートの板（目地・かさ木の下の水切りの影・雨の筋・足元の暗さ）。模型の様な一色の帯にしない（ソル29回目 13）
+  function pWallTex(L) {
+    var c = document.createElement("canvas"), W = 1024, H = 128; c.width = W; c.height = H; var x = c.getContext("2d");
+    x.fillStyle = "#8d8882"; x.fillRect(0, 0, W, H);
+    for (var i = 0; i < 2600; i++) { var v = 120 + Math.random() * 40 | 0; x.fillStyle = "rgba(" + v + "," + (v - 4) + "," + (v - 9) + ",0.25)"; x.fillRect(Math.random() * W, Math.random() * H, 2 + Math.random() * 5, 1 + Math.random() * 3); }
+    for (i = 0; i < 70; i++) { var sx = Math.random() * W, sl = H * (0.25 + Math.random() * 0.6), sg = x.createLinearGradient(0, 0, 0, sl); sg.addColorStop(0, "rgba(40,36,32,0.28)"); sg.addColorStop(1, "rgba(40,36,32,0)"); x.fillStyle = sg; x.fillRect(sx, 0, 1 + Math.random() * 4, sl); }   // 雨の筋
+    var n = Math.max(1, Math.round(L / 1.2));
+    for (i = 1; i < n; i++) { var jx = i * W / n | 0; x.fillStyle = "rgba(30,26,22,0.6)"; x.fillRect(jx - 1, 0, 2, H); x.fillStyle = "rgba(255,250,240,0.12)"; x.fillRect(jx + 1, 0, 1, H); }   // 目地
+    for (i = 0; i < n; i++) for (var r = 0; r < 2; r++) { x.fillStyle = "rgba(30,26,22,0.35)"; x.beginPath(); x.arc((i + 0.25 + r * 0.5) * W / n, H * 0.5, 2.2, 0, 7); x.fill(); }   // 型枠の穴
+    var g = x.createLinearGradient(0, 0, 0, H); g.addColorStop(0, "rgba(0,0,0,0.5)"); g.addColorStop(0.12, "rgba(0,0,0,0.12)"); g.addColorStop(0.7, "rgba(0,0,0,0)"); g.addColorStop(1, "rgba(0,0,0,0.38)");
+    x.fillStyle = g; x.fillRect(0, 0, W, H);   // かさ木の下の影と、床に近い所の暗さ
+    var t = new T.CanvasTexture(c); t.encoding = T.sRGBEncoding; t.anisotropy = 8; return t;
+  }
+  var wallMats = {};
+  function pWallMat(L) { return wallMats[L] || (wallMats[L] = new T.MeshStandardMaterial({ map: pWallTex(L), roughness: 0.92 })); }
   [[1, 0.35, 1.5 - RD2 / 2, RW2, 0.7, 0.3], [1, 0.35, 1.5 + RD2 / 2, RW2, 0.7, 0.3], [1 - RW2 / 2, 0.35, 1.5, 0.3, 0.7, RD2], [1 + RW2 / 2, 0.35, 1.5, 0.3, 0.7, RD2]].forEach(function (w) {
-    var m = new T.Mesh(new T.BoxGeometry(w[3], w[4], w[5]), wallMat); m.position.set(w[0], w[1], w[2]); m.castShadow = m.receiveShadow = true; world.add(m);
+    var m = new T.Mesh(new T.BoxGeometry(w[3], w[4], w[5]), pWallMat(Math.max(w[3], w[5]))); m.position.set(w[0], w[1], w[2]); m.castShadow = m.receiveShadow = true; world.add(m);
   });
   // 低い壁の上の金属のかさ木と、壁の内側の足元の影（屋上の床と壁がつながって見える様に）
-  var copeMat = new T.MeshStandardMaterial({ color: 0x55534f, roughness: 0.45, metalness: 0.5 });
+  var copeMat = new T.MeshStandardMaterial({ color: 0x7c7a76, roughness: 0.38, metalness: 0.6 });   // かさ木は壁より明るい金属（壁と材質で分ける）
   [[1, 1.5 - RD2 / 2, RW2 + 0.38, 0.4], [1, 1.5 + RD2 / 2, RW2 + 0.38, 0.4], [1 - RW2 / 2, 1.5, 0.4, RD2 + 0.38], [1 + RW2 / 2, 1.5, 0.4, RD2 + 0.38]].forEach(function (w) {
-    var m = new T.Mesh(new T.BoxGeometry(w[2], 0.07, w[3]), copeMat); m.position.set(w[0], 0.735, w[1]); m.castShadow = true; world.add(m);
+    var m = new T.Mesh(new T.BoxGeometry(w[2], 0.09, w[3]), copeMat); m.position.set(w[0], 0.745, w[1]); m.castShadow = m.receiveShadow = true; world.add(m);
   });
   var paC = document.createElement("canvas"); paC.width = 4; paC.height = 64;
   (function () { var x = paC.getContext("2d"), g = x.createLinearGradient(0, 0, 0, 64); g.addColorStop(0, "rgba(0,0,0,0.55)"); g.addColorStop(1, "rgba(0,0,0,0)"); x.fillStyle = g; x.fillRect(0, 0, 4, 64); })();
@@ -9788,12 +9842,13 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
   });
   var railMat0 = new T.MeshStandardMaterial({ color: 0x9a9ea6, roughness: 0.35, metalness: 0.85 });
   // 手すりの支柱（1m ごと）と足元
-  var postG = new T.CylinderGeometry(0.022, 0.026, 0.34, 6);
+  var postG = new T.CylinderGeometry(0.022, 0.026, 0.34, 6), baseG = new T.BoxGeometry(0.1, 0.02, 0.1);
   [[RW2, 1.5 - RD2 / 2, 0], [RW2, 1.5 + RD2 / 2, 0], [RD2, 1 - RW2 / 2, 1], [RD2, 1 + RW2 / 2, 1]].forEach(function (e) {
     for (var k = 0; k <= Math.round(e[0]); k++) {
       var t = -e[0] / 2 + e[0] * k / Math.round(e[0]), pm = new T.Mesh(postG, railMat0);
       if (e[2]) pm.position.set(e[1], 0.9, 1.5 + t); else pm.position.set(1 + t, 0.9, e[1]);
       pm.castShadow = true; world.add(pm);
+      var bp = new T.Mesh(baseG, railMat0); bp.position.set(pm.position.x, 0.8, pm.position.z); world.add(bp);   // 支柱の足の座金
     }
   });
   // 手すり（細い金属）
@@ -9942,15 +9997,19 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
     x.putImageData(d, 0, 0); return new T.CanvasTexture(c);
   })();
   var cGeo = new T.PlaneGeometry(1.34, 1.34); cGeo.rotateX(-Math.PI / 2);
+  // 床への色の照り返し（1段目だけ・積み木の色がうすく床に広がる。ソル28回目 5）
+  var bTex = (function () { var c = document.createElement("canvas"); c.width = c.height = 128; var x = c.getContext("2d"), g = x.createRadialGradient(64, 64, 20, 64, 64, 64); g.addColorStop(0, "rgba(255,255,255,1)"); g.addColorStop(1, "rgba(255,255,255,0)"); x.fillStyle = g; x.fillRect(0, 0, 128, 128); return new T.CanvasTexture(c); })();
+  var bGeo = new T.PlaneGeometry(2.1, 2.1); bGeo.rotateX(-Math.PI / 2); var bMats = {};
+  function bounceMat(type) { return bMats[type] || (bMats[type] = new T.MeshBasicMaterial({ map: bTex, color: new T.Color(COL[type] || "#888"), transparent: true, opacity: 0.16, blending: T.AdditiveBlending, depthWrite: false })); }
   var cMat = hazify(new T.MeshBasicMaterial({ map: cTex, transparent: true, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 }));
   // 積み木の横の面は、下ほど暗く（置いた所へ沈む影）
   function contactAO(m) {
     var ob = m.onBeforeCompile;
     m.onBeforeCompile = function (sh) {
       ob(sh);
-      sh.vertexShader = "varying float vLY;\n" + sh.vertexShader.replace("#include <begin_vertex>", "#include <begin_vertex>\n  vLY = position.y;");
-      sh.fragmentShader = "varying float vLY;\n" + sh.fragmentShader.replace("#include <fog_fragment>", "gl_FragColor.rgb *= mix(0.4, 1.0, smoothstep(-0.48, -0.4, vLY)) * mix(0.82, 1.0, smoothstep(-0.48, -0.15, vLY));\n" +
-        (ROOM_H ? "  float cb = smoothstep(" + (ROOM_H - 0.85).toFixed(2) + ", " + (ROOM_H - 0.4).toFixed(2) + ", vWY) * (1.0 - smoothstep(" + (ROOM_H - 0.05).toFixed(2) + ", " + (ROOM_H + 0.3).toFixed(2) + ", vWY));\n  gl_FragColor.rgb *= 1.0 - 0.6 * cb;\n" : "") +   // 天井と屋上の板を通る所は、板の影で暗い（食い込まず通っている事が分かる）
+      sh.vertexShader = "varying float vLY;\nvarying float vNY;\n" + sh.vertexShader.replace("#include <begin_vertex>", "#include <begin_vertex>\n  vLY = position.y; vNY = normal.y;");
+      sh.fragmentShader = "varying float vLY;\nvarying float vNY;\n" + sh.fragmentShader.replace("#include <fog_fragment>", "gl_FragColor.rgb *= mix(0.4, 1.0, smoothstep(-0.48, -0.4, vLY)) * mix(0.82, 1.0, smoothstep(-0.48, -0.15, vLY));\n" +
+        (ROOM_H ? "  float cb = smoothstep(" + (ROOM_H - 0.85).toFixed(2) + ", " + (ROOM_H - 0.4).toFixed(2) + ", vWY) * (1.0 - smoothstep(" + (ROOM_H - 0.05).toFixed(2) + ", " + (ROOM_H + 0.3).toFixed(2) + ", vWY));\n  gl_FragColor.rgb *= 1.0 - 0.6 * cb * (1.0 - 0.8 * step(0.5, vNY));\n" : "") +   // 天井と屋上の板を通る所は、板の影で暗い（食い込まず通っている事が分かる）
         "#include <fog_fragment>");
     };
     return m;
@@ -10164,7 +10223,7 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
     starMat.opacity = spaceK * 0.9; stars.position.copy(camera.position);
     sky.position.copy(camera.position);
     var sI = za.sunI + (zb.sunI - za.sunI) * mix;
-    sun.color.copy(lerpC(za.sun, zb.sun, mix)); sun.intensity = sI * 1.15; rim.color.copy(sun.color); rim.intensity = sI * 0.55;
+    sun.color.copy(lerpC(za.sun, zb.sun, mix)); sun.intensity = sI * 1.15; rim.color.copy(lerpC(za.rimC || za.sun, zb.rimC || zb.sun, mix)); rim.intensity = sI * (0.55 + ((za.rimK || 0.55) - 0.55) * (1 - mix) + ((zb.rimK || 0.55) - 0.55) * mix);   // 天の川は、帯の方から紫の光がふちに当たる（ソル29回目 10）
     // まわりの光は弱め（影の面を暗く）。色はその場所の空と地面の色
     hemi.intensity = (za.hemi + (zb.hemi - za.hemi) * mix) * 0.6 + 0.12 * (1 - sstep((p - 1.5) / 0.6));
     hemi.color.copy(lerpC(za.top, zb.top, mix)).lerp(new T.Color(0xffffff), 0.5); hemi.groundColor.copy(lerpC(za.gnd || za.fog, zb.gnd || zb.fog, mix));   // 下からの照り返しは、その場所の地面・雲・地球・天の川の色（塔と景色の光をそろえる）
@@ -10319,6 +10378,18 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
     ui.querySelector(".sc-to").innerHTML = "<span>次</span>" + nx.name;
     ui.querySelector(".sc-ato").innerHTML = "<span>あと</span><b>" + nt + "</b><i>" + need + "個</i>";
     ui.querySelector(".sc-sub").textContent = "今 " + cur + "・合計 " + hh + "時間" + (mm ? mm + "分" : "");
+    // 高さのものさし（ソル29回目 11）: 部屋から天の川までの道のりの、今どこか。触った時だけ出る
+    var me = ui.querySelector(".sora-meter"); if (me) {
+      var pos = function (x) { return Math.log(1 + x) / Math.log(257); };
+      if (!me.dataset.ok) {
+        me.dataset.ok = 1;
+        var st = (ROOM_H ? [["部屋", 0], ["街", ROOM_H]] : [["街", 0]]).concat(ZONES.slice(1).map(function (z) { return [z.name, z.h]; }));
+        me.querySelector(".sm-bar").insertAdjacentHTML("beforeend", st.map(function (q, i) { var nx2 = st[i + 1], cl2 = nx2 && pos(nx2[1]) - pos(q[1]) < 0.06; return '<span style="bottom:' + (pos(q[1]) * 100).toFixed(1) + '%">' + (cl2 ? "" : "<em>" + q[0] + "</em>") + "</span>"; }).join(""));   // 近すぎる名前（街と雲の上）は上の方だけ
+      }
+      var ph = Math.min(1, pos(h));
+      me.querySelector(".sm-fill").style.height = (ph * 100).toFixed(1) + "%";
+      var nw = me.querySelector(".sm-now"); nw.style.bottom = "calc(" + (ph * 100).toFixed(1) + "% - 9px)"; nw.textContent = hh + "時間";
+    }
   }
 
   var raf = 0;
@@ -10354,8 +10425,8 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
     while (meshes.length > blocks.length) tower.remove(meshes.pop());
     blocks.forEach(function (b, i) {
       var m = meshes[i];
-      if (!m) { m = new T.Mesh(cubeGeo, matFor(b.type, (i * 7 + (i / 12 | 0)) % 3)); m.castShadow = m.receiveShadow = true; var cs = new T.Mesh(cGeo, cMat); cs.position.y = i < 12 ? -CUBE / 2 + 0.006 : -CUBE / 2 - 0.034; if (i < 12) cs.scale.setScalar(1.12); cs.renderOrder = 1; m.add(cs); tower.add(m); meshes[i] = m; }
-      else if (m.userData.type !== b.type) m.material = matFor(b.type, (i * 7 + (i / 12 | 0)) % 3);
+      if (!m) { m = new T.Mesh(cubeGeo, matFor(b.type, (i * 7 + (i / 12 | 0)) % 3)); m.castShadow = m.receiveShadow = true; var cs = new T.Mesh(cGeo, cMat); cs.position.y = i < 12 ? -CUBE / 2 + 0.006 : -CUBE / 2 - 0.034; if (i < 12) cs.scale.setScalar(1.12); if (i < 12) { var bo = new T.Mesh(bGeo, bounceMat(b.type)); bo.position.y = -CUBE / 2 + 0.008; bo.renderOrder = 0; m.add(bo); m.userData.bo = bo; } cs.renderOrder = 1; m.add(cs); tower.add(m); meshes[i] = m; }
+      else if (m.userData.type !== b.type) { m.material = matFor(b.type, (i * 7 + (i / 12 | 0)) % 3); if (m.userData.bo) m.userData.bo.material = bounceMat(b.type); }
       m.userData.type = b.type;
     });
     if (goldLine) { goldLine.parent && goldLine.parent.remove(goldLine); goldLine = null; }
@@ -10963,7 +11034,7 @@ window.TOU_E = {"ao": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJAAAAClCAY
 })();
 </script>
 
-<script>window.TRI_VER="c636d33900";
+<script>window.TRI_VER="674c0fad1e";
 window.LV_BGT = [{"t": 0.0, "f": 0, "src": "lvbg-001.jpg"}, {"t": 2.458, "f": 59, "src": "lvbg-060.jpg"}, {"t": 4.125, "f": 99, "src": "lvbg-100.jpg"}, {"t": 5.792, "f": 139, "src": "lvbg-140.jpg"}, {"t": 7.875, "f": 189, "src": "lvbg-190.jpg"}, {"t": 9.542, "f": 229, "src": "lvbg-230.jpg"}];
 // ===== 積み上げ帳アプリ: 全画面の形・音の合図・留守番係 =====
 (function () {
@@ -11076,9 +11147,9 @@ window.LV_BGT = [{"t": 0.0, "f": 0, "src": "lvbg-001.jpg"}, {"t": 2.458, "f": 59
     tone(520, 0.05, 0.18, 0.05, "triangle", 700);                       // 拾う
     noise(tIn - 0.02, 0.06, 0.35, 2500); tone(1320, tIn, 0.09, 0.09, "square", 990); tone(180, tIn, 0.16, 0.12, "sine", 90);   // カチッ
     for (var k = 0; k < 6; k++) tone(660 * Math.pow(1.122, k), tIn + 0.15 + k * ((tSig - tIn - 0.2) / 6), 0.22, 0.035, "sine");   // 光が走る
-    var kn = { ao: "論文", sa: "算数", mm: "MMA", mi: "瞑想" }[d.kind] || "基板";
+    var kn = d.kindName || { ao: "論文", sa: "算数", mm: "MMA", mi: "瞑想" }[d.kind] || "基板";   // 前は種類の番号が来ていて、いつも「基板」と出ていた
     var rest0 = 12 - ((d.total || 0) % 12);
-    setTimeout(function () { showToast("<b>" + kn + "</b> を差した　<b>＋" + (d.mins || 5) + "分</b>" + (d.levelUp ? "" : "<br>レベルまで あと <b>" + rest0 + "</b> 個"), 2600); }, tIn * 1000);   // 何を入れたか・増えた時間・残りを一度に（ソル28回目 8）
+    setTimeout(function () { showToast("<b>" + kn + "</b> を差した　<b>＋" + (d.mins || 5) + "分</b>（" + Math.round((d.mins || 5) / 5) + "個）" + (d.levelUp ? "" : "<br>レベルまで あと <b>" + rest0 + "</b> 個"), 2600); }, tIn * 1000);   // 何を入れたか・増えた時間・残りを一度に（ソル28回目 8）
     var big = d.levelUp && window.LV_PRIME && window.LV_PRIME(on);   // 画面いっぱいのレベルアップ（動画の音を使う）
     if (big) {
       setTimeout(function () { if (!window.LV_SHOW(Math.floor((d.total || 0) / 12), d.total || 0)) showToast("<b>LEVEL UP</b>", 2400); }, tSig * 1000);
@@ -11759,8 +11830,8 @@ window.NOU3D_CFG = {"slot": [905, 560], "depthK": 0.34, "zoom": 1.03, "ext": {"u
     var ga = 0, gr = 0, fl = 0, lr = 0, la = 0;
     if (fx) {
       var e = (now - fx.t0) / 1000;
-      if (!fx.b1 && e > fx.tIn) { fx.b1 = true; burst(fx.lv ? 70 : 40, 0.9); shake = Math.max(shake, 0.6); punch = 1; }
-      if (!fx.b2 && e > fx.tSig) { fx.b2 = true; burst(fx.lv ? 120 : 50, 1.4); shake = Math.max(shake, fx.lv ? 1 : 0.5); }
+      if (!fx.b1 && e > fx.tIn) { fx.b1 = true; burst(fx.lv ? 70 : 24, 0.9); shake = Math.max(shake, 0.6); punch = 1; }
+      if (!fx.b2 && e > fx.tSig) { fx.b2 = true; burst(fx.lv ? 120 : 16, 1.4); shake = Math.max(shake, fx.lv ? 1 : 0.5); }
       if (fx.lv && !fx.b3 && e > fx.tLv) { fx.b3 = true; burst(140, 1.8); shake = 1.2; punch = 1.4; }
       // 脳の全身へ広がる光（差した時は届いた所まで、レベルアップは全身）
       var u = (e - fx.tIn) / Math.max(0.3, (fx.tSig - fx.tIn) + 0.9);
