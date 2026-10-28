@@ -11,6 +11,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" href="icon-192.png">
+<script>window.HEYA_CFG = {"half": 9.0, "ht": 5.6, "walls": [{"n": "W1", "side": "N", "i": 0, "img": "heya-W1.jpg", "dep": "heya-W1-d.png"}, {"n": "W2", "side": "N", "i": 1, "img": "heya-W2.jpg", "dep": "heya-W2-d.png"}, {"n": "W3", "side": "E", "i": 0, "img": "heya-W3.jpg", "dep": "heya-W3-d.png"}, {"n": "W4", "side": "E", "i": 1, "img": "heya-W4.jpg", "dep": "heya-W4-d.png"}, {"n": "W5", "side": "S", "i": 0, "img": "heya-W5.jpg", "dep": "heya-W5-d.png"}, {"n": "W6", "side": "S", "i": 1, "img": "heya-W6.jpg", "dep": "heya-W6-d.png"}, {"n": "W7", "side": "W", "i": 0, "img": "heya-W7.jpg", "dep": "heya-W7-d.png"}, {"n": "W8", "side": "W", "i": 1, "img": "heya-W8.jpg", "dep": "heya-W8-d.png"}], "yuka": "heya-yuka.jpg", "hikari": "heya-hikari.jpg", "gain": [2.8466, 5.00361, 9.16428], "rep": 6.0, "relief": 0.9};</script>
 <title>積み上げ帳</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -413,6 +414,30 @@ body.app .sora-card .sc-next{font-size:16px;font-weight:600;letter-spacing:.06em
 body.app .sora-card .sc-exp{font-size:15px;font-weight:600;color:#ffd98a}
 body.app .sora-card .sc-sum{font-size:15px;font-weight:600;color:#fff}
 body.app #modosu{font-size:15px;font-weight:700;color:#fff;letter-spacing:.1em;background:rgba(10,6,8,.82)!important;border-color:rgba(242,207,124,.6)!important}
+/* 版46: 画面の一番下まで 3D（iPhone のホーム画面のアプリで、下に黒い帯が出ない様に）・押す所の黒い台を無くす・時間を選ぶ札 */
+@supports (height:100lvh){
+  html,body.app{height:100lvh}
+  body.app #t-sora .sora,body.app #nou-e{inset:auto;top:0;left:0;right:0;height:100lvh}
+  body.app .plus.plus4{bottom:calc(100% - 100lvh)}
+  body.app #modosu,body.app .app-min{bottom:calc(env(safe-area-inset-bottom) + 92px + 100% - 100lvh)}
+}
+html,body.app{background:#1a0f0b}
+body.app .plus.plus4{background:linear-gradient(180deg,rgba(10,6,8,0) 0%,rgba(10,6,8,.18) 50%,rgba(10,6,8,.34) 100%)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+.app-min{display:none}
+body.app .app-min{display:flex;position:fixed;z-index:31;left:max(12px,env(safe-area-inset-left));bottom:calc(env(safe-area-inset-bottom) + 92px);gap:2px;padding:3px;border-radius:22px;background:rgba(12,8,10,.72);border:1px solid rgba(242,207,124,.42);box-shadow:0 6px 16px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.2);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+body.app .app-min button{min-width:46px;min-height:38px;padding:0 6px;border:0;border-radius:19px;background:transparent;color:#f3e9e4;font:500 15px "M PLUS 1",var(--body);letter-spacing:.02em;font-variant-numeric:tabular-nums}
+body.app .app-min button small{font-size:10px;margin-left:1px;opacity:.8}
+body.app .app-min button.on{background:linear-gradient(180deg,#f3d58f,#d9b25e);color:#2a1606;font-weight:700;box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 2px 6px rgba(0,0,0,.35)}
+body.app .app-min button:active{transform:scale(.95)}
+@supports (height:100lvh){#lvup{inset:auto;top:0;left:0;right:0;height:100lvh}}
+/* 空への札を小さくまとめる（4段→3段・字の大きいスマホでも折れない） */
+body.app .sora-card{display:grid;grid-template-columns:1fr auto;column-gap:14px;row-gap:2px;align-items:baseline;right:auto;max-width:calc(100% - 24px - env(safe-area-inset-left) - env(safe-area-inset-right));padding:10px 16px 10px;letter-spacing:.04em;line-height:1.45}
+body.app .sora-card .sc-now,body.app .sora-card .sc-next{grid-column:1 / -1;white-space:nowrap}
+body.app .sora-card .sc-now span{margin-right:8px}
+body.app .sora-card .sc-next{letter-spacing:.02em}
+body.app .sora-card .sc-next b{font-size:18px;color:#ffd98a;margin:0 1px}
+body.app .sora-card .sc-sum{grid-column:1;grid-row:3;margin:0}
+body.app .sora-card .sc-exp{grid-column:2;grid-row:3;text-align:right}
 
 </style>
 </head>
@@ -6108,7 +6133,7 @@ window.TRIWHEEL_RELIEF = function (THREE, R, unproj, done) {
     var added = st && typeof st.lastAddedIndex === "number" && st.lastAddedIndex >= 0 && blocks[st.lastAddedIndex];
     return { total: total, counts: counts, kind: added ? kindIndex(blocks[st.lastAddedIndex].type) : kind, added: !!added };
   }
-  function copy(s) { return { total: s.total, counts: s.counts.slice(), kind: s.kind }; }
+  function copy(s) { return { total: s.total, counts: s.counts.slice(), kind: s.kind, from: s.from }; }
 
   function writeText(s) {
     var level = Math.floor(s.total / 12) + 1, rest = 12 - (s.total % 12); // 0個の時がレベル1（確定の絵の紋章）
@@ -6136,9 +6161,9 @@ window.TRIWHEEL_RELIEF = function (THREE, R, unproj, done) {
   window.addEventListener("tou-render", function (e) {
     var st = (e && e.detail) || window.touState;
     var next = readState(st);
-    if (next.added && next.total === target.total + 1 && ready && !reduced && visible && mode === "kairo") {
-      // 物語: 差して育つまでは、前の数のまま見せる。続けて押したら順番に待たせる（ソル6.1）
-      target = { total: next.total, counts: next.counts, kind: next.kind };
+    if (next.added && next.total > target.total && next.total - target.total <= 6 && ready && !reduced && visible && mode === "kairo") {
+      // 物語: 差して育つまでは、前の数のまま見せる。続けて押したら順番に待たせる（ソル6.1）。10分・20分・25分は1回で2〜5個
+      target = { total: next.total, counts: next.counts, kind: next.kind, from: target.total };
       queue.push(copy(target));
       window.NOU_E_BUSY = true;
       if (!anim) startNext();
@@ -6156,8 +6181,9 @@ window.TRIWHEEL_RELIEF = function (THREE, R, unproj, done) {
   function startNext() {
     var to = queue.shift();
     if (!to) { anim = null; window.NOU_E_BUSY = false; return; }
-    anim = { start: Date.now(), kind: to.kind, levelUp: to.total % 12 === 0, to: to };
-    try { window.dispatchEvent(new CustomEvent("tri-anim", { detail: { levelUp: anim.levelUp, total: to.total, kind: to.kind, tIn: T_IN, tSig: T_SIGEND, tLv: T_LV } })); } catch (e) {}   // アプリの音の合図
+    var fr = typeof to.from === "number" ? to.from : to.total - 1;
+    anim = { start: Date.now(), kind: to.kind, levelUp: Math.floor(to.total / 12) > Math.floor(fr / 12), to: to };
+    try { window.dispatchEvent(new CustomEvent("tri-anim", { detail: { levelUp: anim.levelUp, total: to.total, mins: (to.total - fr) * 5, kind: to.kind, tIn: T_IN, tSig: T_SIGEND, tLv: T_LV } })); } catch (e) {}   // アプリの音の合図
   }
 
   // 時間の流れ（ミリ秒）: ①工具を床の基盤へ 0〜600・持ち上げる 600〜1250・差す 1250〜1700・カチッ 1700
@@ -6200,7 +6226,7 @@ window.TRIWHEEL_RELIEF = function (THREE, R, unproj, done) {
   function resize() {
     var w = stage.clientWidth || 600;
     var dpr = Math.min(window.devicePixelRatio || 1, dprCap);   // スマホの細かい画面でもぼやけない様に（重い時は自動で少し下げる）
-    var cw = Math.min(Math.round(w * dpr), 1600);
+    var cw = document.body.classList.contains("app") ? Math.round(W0 * Math.min(1, dpr / 2.5)) : Math.min(Math.round(w * dpr), 1600);   // アプリは立体の板に大きく映すので、元の絵の細かさのまま描く
     canvas.width = cw; canvas.height = Math.round(cw * H0 / W0);
     canvas.style.width = "100%"; canvas.style.height = "auto";
     off.width = Math.round((D.kinBox[2] - D.kinBox[0]) * cw / W0);
@@ -9360,7 +9386,7 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
   var oldBtn = host.querySelector(".sora-btn"); if (oldBtn) oldBtn.remove();
 
   var renderer = new T.WebGLRenderer({ antialias: true, alpha: false, powerPreference: "high-performance" });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  var prMax = Math.min(window.devicePixelRatio || 1, 3), prQ = { n: 0, s: 0 }; renderer.setPixelRatio(prMax);   // スマホの細かい画面のまま描く（重い時だけ 2 へ下げる）
   renderer.outputEncoding = T.sRGBEncoding;
   renderer.toneMapping = T.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
   renderer.shadowMap.enabled = true; renderer.shadowMap.type = T.PCFSoftShadowMap;
@@ -9469,7 +9495,7 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
   // 塔が天井（ROOM_H 階＝6時間）を抜けると、ビルの屋上と街へ出る。
   var ROOM_H = IMG.heya ? 6 : 0, ROOM_E = 5, ROOM_S = 13;   // 絵の床と壁のさかい（水平から 22.5 度下）が、床の円（半径12）のふちに来る大きさ
   var roomU = { tP: { value: null }, camP: { value: new T.Vector3() }, k: { value: 0 }, eye: { value: ROOM_E }, rs: { value: ROOM_S }, rot: { value: 0.0 }, hole: { value: new T.Vector3(0, 0, 0) } };
-  var room = null, roomFloor = null, roomAO = null, roomEnv = null, ceilG = null;
+  var room = null, roomFloor = null, roomAO = null, roomEnv = null, ceilG = null, heyaG = null;
   if (ROOM_H) {
     var rpt = new T.TextureLoader().load(IMG.heya, function () { kick(); }); rpt.encoding = T.sRGBEncoding; rpt.minFilter = T.LinearFilter; rpt.generateMipmaps = false;
     roomU.tP.value = rpt;
@@ -9519,6 +9545,52 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
       });
     }
     roomAO.rotation.x = -Math.PI / 2; roomAO.position.set(1, 0.004, 1.5); roomAO.renderOrder = -7; scene.add(roomAO);
+    // ---- 本物の箱の部屋（10/28 20:54 CEO「画像が粗い・売るつもりで」）: ルナの壁の板8枚（奥行きで家具が前へ出る）・くっきりした床の模様・木の柱 ----
+    var HC = window.HEYA_CFG;
+    if (HC && HC.walls && HC.walls.length === 8) {
+      heyaG = new T.Group(); heyaG.position.set(1, 0, 1.5); scene.add(heyaG);
+      var HF = HC.half, HT = HC.ht, ROT = { N: 0, E: -Math.PI / 2, S: Math.PI, W: Math.PI / 2 };
+      HC.walls.forEach(function (w) {
+        var g = new T.PlaneGeometry(HF, HT, 144, 90), tx = new T.TextureLoader().load(w.img, function () { kick(); });
+        tx.encoding = T.sRGBEncoding; tx.anisotropy = 8;
+        var uv = g.attributes.uv; for (var i = 0; i < uv.count; i++) uv.setY(i, uv.getY(i) * (HT / (HF / 1.5)));   // 絵（3:2）の下から天井の高さまで
+        var m = new T.Mesh(g, new T.MeshBasicMaterial({ map: tx }));
+        var c = -HF / 2 + w.i * HF, ang = ROT[w.side];
+        m.rotation.y = ang;
+        var px = c * Math.cos(ang) - HF * Math.sin(ang), pz = -c * Math.sin(ang) - HF * Math.cos(ang);   // 壁の向きに回した「左右 c・奥 -HF」の所
+        m.position.set(px, HT / 2, pz); heyaG.add(m);
+        var di = new Image(); di.onload = function () {   // 奥行きの地図で、手前の家具を前へ押し出す
+          var cv = document.createElement("canvas"); cv.width = di.width; cv.height = di.height; var cx = cv.getContext("2d"); cx.drawImage(di, 0, 0);
+          var px2 = cx.getImageData(0, 0, di.width, di.height).data, pos = g.attributes.position, u2 = g.attributes.uv;
+          for (var j = 0; j < pos.count; j++) {
+            var uu = u2.getX(j);
+            var ix = Math.min(di.width - 1, Math.floor(uu * di.width)), iy = Math.min(di.height - 1, Math.floor((1 - u2.getY(j)) * di.height));
+            pos.setZ(j, px2[(iy * di.width + ix) * 4] / 255 * HC.relief);
+          }
+          pos.needsUpdate = true; g.computeBoundingSphere(); kick();
+        }; di.src = w.dep;
+      });
+      // 床: ルナの板の模様（くっきり）× 前の景色の床の光
+      var fT = new T.TextureLoader().load(HC.yuka, function () { kick(); }); fT.encoding = T.sRGBEncoding; fT.wrapS = fT.wrapT = T.RepeatWrapping; fT.anisotropy = 16;
+      var lT = new T.TextureLoader().load(HC.hikari, function () { kick(); }); lT.encoding = T.sRGBEncoding;
+      var fl = new T.Mesh(new T.PlaneGeometry(HF * 2, HF * 2), new T.ShaderMaterial({
+        uniforms: { tF: { value: fT }, tL: { value: lT }, rep: { value: HC.rep }, gain: { value: new T.Vector3(HC.gain[0], HC.gain[1], HC.gain[2]) } },
+        vertexShader: "varying vec2 vU; void main(){ vU = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }",
+        fragmentShader: "uniform sampler2D tF; uniform sampler2D tL; uniform float rep; uniform vec3 gain; varying vec2 vU;\n" +
+          "vec3 toLin(vec3 c){ return pow(c, vec3(2.2)); } vec3 toS(vec3 c){ return pow(max(c, 0.0), vec3(1.0 / 2.2)); }\n" +
+          "void main(){ vec3 f = texture2D(tF, vU * rep).rgb; vec3 l = texture2D(tL, vU).rgb;\n" +
+          "  gl_FragColor = vec4(toS(toLin(f) * toLin(l) / toLin(1.0 / gain)), 1.0); }"
+      }));
+      fl.rotation.x = -Math.PI / 2; fl.renderOrder = -8.5; heyaG.add(fl);
+      // 木の柱（角と壁の真ん中）と、天井のふち
+      var wood = new T.MeshStandardMaterial({ color: 0x3a2314, roughness: 0.48, metalness: 0.05 });
+      [[-HF, -HF], [HF, -HF], [HF, HF], [-HF, HF], [0, -HF], [HF, 0], [0, HF], [-HF, 0]].forEach(function (q) {
+        var b = new T.Mesh(new T.BoxGeometry(0.5, HT, 0.5), wood); b.position.set(q[0], HT / 2, q[1]); heyaG.add(b);
+      });
+      [[0, -HF, HF * 2, 0.3], [0, HF, HF * 2, 0.3], [-HF, 0, 0.3, HF * 2], [HF, 0, 0.3, HF * 2]].forEach(function (q) {
+        var b = new T.Mesh(new T.BoxGeometry(q[2] + 0.3, 0.32, q[3] + 0.3), wood); b.position.set(q[0], HT - 0.16, q[1]); heyaG.add(b);
+      });
+    }
   }
   var panos = {}; ZONES.forEach(function (z) {
     var src = IMG["pano_" + z.key]; if (!src) return;
@@ -9869,6 +9941,7 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
     } catch (e) {}
   }
   function frame(now) {
+    if (lastNow && now - lastNow < 200) { prQ.n++; prQ.s += now - lastNow; if (prQ.n >= 90) { if (prQ.s / prQ.n > 22 && prMax > 2) { prMax = 2; renderer.setPixelRatio(2); resize(); } prQ.n = prQ.s = 0; } }
     var dt = lastNow ? Math.min(0.05, (now - lastNow) / 1000) : 0.016; lastNow = now;
     var n = blocks.length, floors = Math.floor(n / 12), part = n % 12, topLv = floors + (part ? 1 : 0);
     camTop = topLv;
@@ -9902,10 +9975,10 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
     if (window.SORA3D_ROOMW != null) roomW = window.SORA3D_ROOMW;   // 試験用に止められる
     var wR = sstep((roomW - 0.15) / 0.7);
     if (wR > 0) {
-      var Rr = 9.4 + 0.3 * camY, cyr = Math.min(ROOM_H - 0.6, 2.4 + camY * 0.5), tyr = 0.9 + camY * 0.52;   // 部屋では「地上を見る」は無し
+      var Rr = heyaG ? 8.1 : 9.4 + 0.3 * camY, cyr = Math.min(ROOM_H - 0.6, 2.4 + camY * 0.5), tyr = 0.9 + camY * 0.52;   // 部屋では「地上を見る」は無し
       // 部屋の姿勢 → 天井の穴を見上げる姿勢（前半）→ 天井の板を抜けて外の姿勢（後半）
-      var P0 = [cx0 + Math.sin(orbit) * Rr, cyr, cz0 + Math.cos(orbit) * Rr, cx0, tyr, cz0, 66];
-      var Pu = [cx0 + Math.sin(orbit) * 8.6, ROOM_H - 4.2, cz0 + Math.cos(orbit) * 8.6, cx0, ROOM_H + 1.8, cz0, 74];
+      var P0 = [cx0 + Math.sin(orbit) * Rr, cyr, cz0 + Math.cos(orbit) * Rr, cx0, tyr, cz0, heyaG ? 76 : 66];   // 箱の部屋は広く見る（塔と部屋の両方が入る）
+      var Ru = heyaG ? 7.2 : 8.6, Pu = [cx0 + Math.sin(orbit) * Ru, ROOM_H - 4.2, cz0 + Math.cos(orbit) * Ru, cx0, ROOM_H + 1.8, cz0, 74];
       var Po = [pxo, cyo, pzo, lx, ly, lz, fovW], tt = 1 - wR, A, B, kk;
       if (tt < 0.5) { A = P0; B = Pu; kk = sstep(tt / 0.5); } else { A = Pu; B = Po; kk = sstep((tt - 0.5) / 0.5); }
       var Q = A.map(function (v, i) { return v + (B[i] - v) * kk; });
@@ -10003,11 +10076,12 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
       c.material.opacity = cloudK * u3.o * (1 - gaze) * (ROOM_H ? sstep((camY - ROOM_H - 5) / 5) : 1);   // 屋上のすぐ上では、手前の雲で屋上の穴を隠さない
     });
     // 積み木が落ちて来る
-    var dropT = drop ? Math.min(1, (now - drop.t0) / 900) : 1;
+    var dropT = drop ? Math.min(1, (now - drop.t0 - (drop.idx - drop.from) * 220) / 900) : 1;   // 10分・20分・25分は、2〜5個が順に落ちる
     meshes.forEach(function (m, i) {
       var base = cellPos(i); m.position.copy(base);
-      if (drop && i === drop.idx && dropT < 1) {
-        var e = dropT < 0.7 ? Math.pow(dropT / 0.7, 2) : 1 + Math.sin((dropT - 0.7) / 0.3 * Math.PI) * 0.06 * (1 - dropT);
+      var dT = drop && i >= drop.from && i <= drop.idx ? Math.min(1, (now - drop.t0 - (i - drop.from) * 220) / 900) : 1;
+      if (dT < 1) {
+        var e = dT <= 0 ? 0 : dT < 0.7 ? Math.pow(dT / 0.7, 2) : 1 + Math.sin((dT - 0.7) / 0.3 * Math.PI) * 0.06 * (1 - dT);
         m.position.y = base.y + (1 - Math.min(1, e)) * 7 + (e > 1 ? (e - 1) : 0);
         m.rotation.y = (1 - Math.min(1, e)) * 0.6;
       } else m.rotation.y = 0;
@@ -10046,7 +10120,7 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
     var envKey = zi + ":" + Math.round(mix * 8);
     if (envKey !== lastEnv && now - envT > 400) { lastEnv = envKey; envT = now; makeEnv(za, zb, mix); }
     if (room) {
-      var inR = cyD < -0.2; room.visible = roomFloor.visible = roomAO.visible = inR; if (ceilG) ceilG.visible = inR; world.visible = cloudG.visible = stars.visible = !inR; sky.visible = true;
+      var inR = cyD < -0.2; room.visible = roomFloor.visible = roomAO.visible = inR; if (ceilG) ceilG.visible = inR; if (heyaG) heyaG.visible = inR; world.visible = cloudG.visible = stars.visible = !inR; sky.visible = true;
       frontC.forEach(function (c) { c.visible = !inR; });
       room.position.copy(camera.position); roomU.camP.value.copy(camera.position); roomU.k.value = 1;
       if (!roomEnv && roomU.tP.value.image && roomU.tP.value.image.width) { try { var rtx = roomU.tP.value.clone(); rtx.needsUpdate = true; rtx.mapping = T.EquirectangularReflectionMapping; roomEnv = pmrem.fromEquirectangular(rtx).texture; } catch (e) { roomEnv = false; } }
@@ -10079,10 +10153,10 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
     var n = blocks.length, h = n / 12, zi = 0; for (var i = 0; i < ZONES.length; i++) if (h >= ZONES[i].h) zi = i;
     var gi = zi + 1; while (zoneGoal(gi).h <= h) gi++;
     var nx = zoneGoal(gi), need = Math.max(1, Math.ceil(nx.h * 12 - n)), cur = h >= 256 ? "その先" : ZONES[zi].name;
-    if (ROOM_H && h < ROOM_H) { cur = "数学者の部屋"; nx = { name: "天井を抜けて街", h: ROOM_H }; need = Math.max(1, Math.ceil(ROOM_H * 12 - n)); }
+    if (ROOM_H && h < ROOM_H) { cur = "数学者の部屋"; nx = { name: "天井の上の街", h: ROOM_H }; need = Math.max(1, Math.ceil(ROOM_H * 12 - n)); }
     ui.querySelector(".sc-now b").textContent = cur;
     var nm = need * 5, nt = nm >= 60 ? Math.floor(nm / 60) + "時間" + (nm % 60 ? nm % 60 + "分" : "") : nm + "分";
-    ui.querySelector(".sc-next").textContent = "次 " + nx.name + "まで あと " + need + " 個（" + nt + "）";
+    ui.querySelector(".sc-next").innerHTML = "次 " + nx.name + "まで <b>" + need + "</b>個・" + nt;   // 字の大きいスマホでも1行に入る長さ
     ui.querySelector(".sc-exp").textContent = (nx.h & (nx.h - 1)) === 0 ? nx.h + "h = 2" + sup(expOf(nx.h)) : nx.h + "h";
     var hh = Math.floor(n * 5 / 60), mm = n * 5 % 60;
     ui.querySelector(".sc-sum").textContent = "合計 " + hh + "時間" + mm + "分";
@@ -10116,8 +10190,8 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
     });
     if (goldLine) { goldLine.parent && goldLine.parent.remove(goldLine); goldLine = null; }
     if (lastIdx >= 0 && meshes[lastIdx]) { goldLine = new T.LineSegments(edgeGeo, goldEdge.clone()); meshes[lastIdx].add(goldLine); }
-    if (blocks.length === prev + 1 && lastIdx === blocks.length - 1 && W) {
-      drop = { idx: lastIdx, t0: performance.now() };
+    if (blocks.length > prev && blocks.length <= prev + 6 && lastIdx === blocks.length - 1 && W) {
+      drop = { idx: lastIdx, from: prev, t0: performance.now() };
       if (look !== 0) goTo(0);
     }
     label(); kick();
@@ -10643,17 +10717,18 @@ window.TOU_E = {"ao": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJAAAAClCAY
     };
   }
 
-  function addMinutes(type) {
+  function addMinutes(type, mins) {
+    mins = mins || window.TW_MIN || 5;   // アプリで選んだ時間（5・10・20・25分）。1個は5分
     refreshToday();
     var todayIndex = records.length - 1;
     var col = kindIndex(type);
-    lastAdded = type + (records[todayIndex][col] / 5);
-    records[todayIndex][col] += 5;
+    lastAdded = type + ((records[todayIndex][col] + mins - 5) / 5);
+    records[todayIndex][col] += mins;
     var key = dayKey(dates[todayIndex]);
     if (!saved.adds[key]) saved.adds[key] = [0, 0, 0, 0];
-    saved.adds[key][col] += 5;
+    saved.adds[key][col] += mins;
     if (!saved.log) saved.log = [];
-    saved.log.push([key, col]);
+    saved.log.push(mins === 5 ? [key, col] : [key, col, mins]);
     if (saved.log.length > 200) saved.log.shift();
     var ok = save();
     stats();
@@ -10666,16 +10741,17 @@ window.TOU_E = {"ao": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJAAAAClCAY
     refreshToday();
     var todayIndex = records.length - 1, key = dayKey(dates[todayIndex]);
     var log = saved.log || [], item = log[log.length - 1];
-    if (!item || item[0] !== key || !saved.adds[key] || saved.adds[key][item[1]] < 5) {
+    var um = item ? (item[2] || 5) : 5;   // 1回で入れた分をまとめてもどす
+    if (!item || item[0] !== key || !saved.adds[key] || saved.adds[key][item[1]] < um) {
       setText("hi1", "もどせる分が"); setText("hi2", "ありません。"); return;
     }
     log.pop();
-    saved.adds[key][item[1]] -= 5;
-    records[todayIndex][item[1]] = Math.max(0, records[todayIndex][item[1]] - 5);
+    saved.adds[key][item[1]] -= um;
+    records[todayIndex][item[1]] = Math.max(0, records[todayIndex][item[1]] - um);
     var ok = save(); stats();
     lastAdded = null;
     render();
-    setText("hi1", KINDS[item[1]].name + "を1個"); setText("hi2", "もどしました。");
+    setText("hi1", KINDS[item[1]].name + "を" + (um / 5) + "個"); setText("hi2", "もどしました。");
     if (!ok) saveFailed();
   }
   document.addEventListener("visibilitychange", function () {
@@ -10717,7 +10793,7 @@ window.TOU_E = {"ao": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJAAAAClCAY
 })();
 </script>
 
-<script>window.TRI_VER="da868ec547";
+<script>window.TRI_VER="4bfc90e31f";
 window.LV_BGT = [{"t": 0.0, "f": 0, "src": "lvbg-001.jpg"}, {"t": 2.458, "f": 59, "src": "lvbg-060.jpg"}, {"t": 4.125, "f": 99, "src": "lvbg-100.jpg"}, {"t": 5.792, "f": 139, "src": "lvbg-140.jpg"}, {"t": 7.875, "f": 189, "src": "lvbg-190.jpg"}, {"t": 9.542, "f": 229, "src": "lvbg-230.jpg"}];
 // ===== 積み上げ帳アプリ: 全画面の形・音の合図・留守番係 =====
 (function () {
@@ -10758,6 +10834,27 @@ window.LV_BGT = [{"t": 0.0, "f": 0, "src": "lvbg-001.jpg"}, {"t": 2.458, "f": 59
     var t = (bt.textContent || "").trim(), m = t.match(/^(\S)\s*＋1個\s*(.+)$/);
     if (m) bt.innerHTML = '<span class="pk">' + m[1] + '</span><span class="pn">' + m[2] + '</span><span class="pp">＋5分</span>';
   });
+
+  // 1回で入れる時間を選ぶ（5・10・20・25分。1個は5分なので、10分は2個）
+  var MINS = [5, 10, 20, 25], mins = 5;
+  try { mins = +window.localStorage.getItem("tw-min") || 5; } catch (e) {}
+  if (MINS.indexOf(mins) < 0) mins = 5;
+  var chips = document.createElement("div");
+  chips.className = "app-min"; chips.setAttribute("role", "radiogroup"); chips.setAttribute("aria-label", "1回の時間");
+  chips.innerHTML = MINS.map(function (v) { return '<button type="button" role="radio" data-min="' + v + '">' + v + '<small>分</small></button>'; }).join("");
+  document.body.appendChild(chips);
+  function paintMin() {
+    window.TW_MIN = mins;
+    [].forEach.call(chips.querySelectorAll("button"), function (b) { var on2 = +b.getAttribute("data-min") === mins; b.classList.toggle("on", on2); b.setAttribute("aria-checked", on2 ? "true" : "false"); });
+    [].forEach.call(document.querySelectorAll(".plus.plus4 .pp"), function (p) { p.textContent = "＋" + mins + "分"; });
+  }
+  chips.addEventListener("click", function (e) {
+    var b = e.target.closest ? e.target.closest("[data-min]") : null; if (!b) return;
+    mins = +b.getAttribute("data-min"); paintMin(); unlock(); tone(1046.5, 0, 0.08, 0.05, "sine");
+    try { window.localStorage.setItem("tw-min", String(mins)); } catch (e2) {}
+  }, false);
+  paintMin();
+  var mdb = document.getElementById("modosu"); if (mdb) mdb.textContent = "1回もどす";
 
   // 合図の札
   var toast = document.createElement("div");
@@ -10810,7 +10907,7 @@ window.LV_BGT = [{"t": 0.0, "f": 0, "src": "lvbg-001.jpg"}, {"t": 2.458, "f": 59
     noise(tIn - 0.02, 0.06, 0.35, 2500); tone(1320, tIn, 0.09, 0.09, "square", 990); tone(180, tIn, 0.16, 0.12, "sine", 90);   // カチッ
     for (var k = 0; k < 6; k++) tone(660 * Math.pow(1.122, k), tIn + 0.15 + k * ((tSig - tIn - 0.2) / 6), 0.22, 0.035, "sine");   // 光が走る
     var kn = { ao: "論文", sa: "算数", mm: "MMA", mi: "瞑想" }[d.kind] || "基板";
-    setTimeout(function () { showToast("<b>" + kn + "</b> を差した　<b>＋5分</b>", 1300); }, tIn * 1000);   // 何を入れたかを、差した時に
+    setTimeout(function () { showToast("<b>" + kn + "</b> を差した　<b>＋" + (d.mins || 5) + "分</b>", 1300); }, tIn * 1000);   // 何を入れたかを、差した時に
     var big = d.levelUp && window.LV_PRIME && window.LV_PRIME(on);   // 画面いっぱいのレベルアップ（動画の音を使う）
     if (big) {
       setTimeout(function () { if (!window.LV_SHOW(Math.floor((d.total || 0) / 12), d.total || 0)) showToast("<b>LEVEL UP</b>", 2400); }, tSig * 1000);
@@ -10822,7 +10919,7 @@ window.LV_BGT = [{"t": 0.0, "f": 0, "src": "lvbg-001.jpg"}, {"t": 2.458, "f": 59
     } else {
       tone(1568, tLv, 0.9, 0.08, "sine"); tone(2093, tLv + 0.09, 1.1, 0.06, "sine");
       var rest = 12 - ((d.total || 0) % 12);
-      setTimeout(function () { showToast("<b>＋5分</b>　レベルまで あと " + rest + " 個", 1800); }, tLv * 1000);
+      setTimeout(function () { showToast("<b>＋" + (d.mins || 5) + "分</b>　レベルまで あと " + rest + " 個", 1800); }, tLv * 1000);
     }
   }, false);
 })();
@@ -11426,10 +11523,11 @@ window.NOU3D_CFG = {"slot": [905, 560], "depthK": 0.34, "zoom": 1.03, "ext": {"u
   }
 
   // カメラ（ゆっくり揺れる・指でずらす・ばねで戻る）
+  var prMax = Math.min(window.devicePixelRatio || 1, 3), prQ = { n: 0, s: 0 };   // スマホの細かい画面のまま描く（重い時だけ 2 へ）
   var W = 0, H = 0, drag = null, dx = 0, dy = 0, vx2 = 0, vy2 = 0, shake = 0, punch = 0;
   function resize() {
     W = stage.clientWidth || window.innerWidth; H = stage.clientHeight || window.innerHeight;
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2)); renderer.setSize(W, H, false);
+    renderer.setPixelRatio(prMax); renderer.setSize(W, H, false);
     gl.style.width = W + "px"; gl.style.height = H + "px";
     cam.aspect = W / H; cam.updateProjectionMatrix();
     place(); kick();
@@ -11461,7 +11559,9 @@ window.NOU3D_CFG = {"slot": [905, 560], "depthK": 0.34, "zoom": 1.03, "ext": {"u
   function visible() { var p = document.getElementById("t-nou"); return !p || !p.hidden; }
   function tick() {
     raf = 0; if (!visible()) return;
-    var now = performance.now(), t = now / 1000, dt = Math.min(0.05, (now - last) / 1000); last = now;
+    var now = performance.now(), t = now / 1000, dt = Math.min(0.05, (now - last) / 1000);
+    if (now - last < 200) { prQ.n++; prQ.s += now - last; if (prQ.n >= 90) { if (prQ.s / prQ.n > 22 && prMax > 2) { prMax = 2; resize(); } prQ.n = prQ.s = 0; } }
+    last = now;
     // ばねで正面へ戻る
     if (!drag) { vx2 += (-dx * 40 - vx2 * 9) * dt; vy2 += (-dy * 40 - vy2 * 9) * dt; dx += vx2 * dt; dy += vy2 * dt; }
     var sx = reduced ? 0 : Math.sin(t * 0.23) * 0.055 + Math.sin(t * 0.61) * 0.012, sy = reduced ? 0 : Math.sin(t * 0.19 + 1.3) * 0.035;
