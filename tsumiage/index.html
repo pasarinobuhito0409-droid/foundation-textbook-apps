@@ -9669,11 +9669,17 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
     // 穴のすき間の下は、部屋のランプで明るい（上から見ると、穴だと分かる）
     var gr = new T.Shape(); gr.moveTo(-HX, -HZ); gr.lineTo(HX, -HZ); gr.lineTo(HX, HZ); gr.lineTo(-HX, HZ); gr.lineTo(-HX, -HZ);
     var gi = new T.Path(); gi.moveTo(-1.5, -2.0); gi.lineTo(-1.5, 2.0); gi.lineTo(1.5, 2.0); gi.lineTo(1.5, -2.0); gi.lineTo(-1.5, -2.0); gr.holes.push(gi);
+    // 穴の内壁（板の切り口）: 上は割れたコンクリートの明るい断面、下へ行くほど下の部屋のランプの橙（穴だと読める様に・ソル25回目 1）
+    var cutC = document.createElement("canvas"); cutC.width = 64; cutC.height = 64;
+    (function () { var x = cutC.getContext("2d"), g = x.createLinearGradient(0, 0, 0, 64); g.addColorStop(0, "#b0a698"); g.addColorStop(0.1, "#857b70"); g.addColorStop(0.3, "#2a2018"); g.addColorStop(0.85, "#120c08"); g.addColorStop(1, "#4a2610"); x.fillStyle = g; x.fillRect(0, 0, 64, 64);
+      for (var i = 0; i < 40; i++) { x.fillStyle = "rgba(30,24,20," + (Math.random() * 0.35).toFixed(2) + ")"; x.fillRect(Math.random() * 64, Math.random() * 8, 1 + Math.random() * 3, 1 + Math.random() * 2); } })();
+    var cutTx = new T.CanvasTexture(cutC); cutTx.encoding = T.sRGBEncoding;
     [[0, -HZ, 2 * HX, 0], [0, HZ, 2 * HX, Math.PI], [-HX, 0, 2 * HZ, Math.PI / 2], [HX, 0, 2 * HZ, -Math.PI / 2]].forEach(function (w) {   // 穴の内壁（屋上の厚み）
-      var wl = new T.Mesh(new T.PlaneGeometry(w[2], 0.44), new T.MeshBasicMaterial({ color: 0x241b14, side: T.DoubleSide }));
+      var wl = new T.Mesh(new T.PlaneGeometry(w[2], 0.44), new T.MeshBasicMaterial({ map: cutTx, side: T.DoubleSide }));
       wl.position.set(1 + w[0], -0.22, 1.5 + w[1]); wl.rotation.y = w[3]; world.add(wl);
     });
-    var gm = new T.Mesh(new T.ShapeGeometry(gr), new T.MeshBasicMaterial({ color: 0x1c120c }));   // 穴の中は屋上より暗い（下の部屋のかげ） gm.rotation.x = -Math.PI / 2; gm.position.set(1, -0.44, 1.5); world.add(gm);
+    var gm = new T.Mesh(new T.ShapeGeometry(gr), new T.MeshBasicMaterial({ color: 0x1e120a }));   // 穴の底は暗い（板の下のかげ）。切り口の下だけ、下の部屋のランプで橙
+    gm.rotation.x = -Math.PI / 2; gm.position.set(1, -0.44, 1.5); world.add(gm);
     for (var dbi = 0; dbi < 14; dbi++) {   // 割れたコンクリートのかけら
       var a = dbi / 14 * 6.283 + Math.random() * 0.3, sz = 0.06 + Math.random() * 0.12, rr = 0.15 + Math.random() * 0.5;
       var cx = 1 + Math.cos(a) * (HX + rr), cz = 1.5 + Math.sin(a) * (HZ + rr);
@@ -9698,13 +9704,13 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
       jag(78, 12); x.fillStyle = "rgba(118,110,100,0.95)"; x.fill();
       x.strokeStyle = "rgba(40,34,30,0.9)"; x.lineWidth = 2.5; for (var k = 0; k < 22; k++) { x.beginPath(); var a = Math.random() * 6.28, r0 = 215 + Math.random() * 20; x.moveTo(240 + Math.cos(a) * r0 * 0.8, 290 + Math.sin(a) * r0); x.lineTo(240 + Math.cos(a) * (r0 + 40) * 0.8, 290 + Math.sin(a) * (r0 + 46)); x.stroke(); }   // ひび
       var gl2 = x.createLinearGradient(0, 0, 0, 580); 
-      jag(68, 8); x.fillStyle = "rgba(255,150,60,0.75)"; x.fill();   // 割れたふちの内側だけ、下のランプの光で橙   // ふちの内側を照らす下の部屋のランプの光
+      jag(68, 8); x.fillStyle = "rgba(150,96,60,0.9)"; x.fill();   // 割れたふちの内側だけ、下のランプの光で橙   // ふちの内側を照らす下の部屋のランプの光
       x.globalCompositeOperation = "destination-out"; jag(60, 6); x.fill(); x.globalCompositeOperation = "source-over";   // 穴（透ける）
     })();
     var holeTx = new T.CanvasTexture(hc); holeTx.encoding = T.sRGBEncoding;
-    var hole = new T.Mesh(new T.PlaneGeometry(4.8, 5.8), new T.MeshStandardMaterial({ map: holeTx, transparent: true, depthWrite: false, roughness: 0.9, emissive: 0xffffff, emissiveMap: holeTx, emissiveIntensity: 0.35 }));
+    var hole = new T.Mesh(new T.PlaneGeometry(4.8, 5.8), new T.MeshStandardMaterial({ map: holeTx, transparent: true, depthWrite: false, roughness: 0.9, emissive: 0xffffff, emissiveMap: holeTx, emissiveIntensity: 0.12 }));
     hole.rotation.x = -Math.PI / 2; hole.position.set(1, 0.006, 1.5); hole.renderOrder = 1; world.add(hole);
-    var holeGlow = new T.PointLight(0xffa050, 2.6, 6, 2); holeGlow.position.set(1, 0.15, 1.5); world.add(holeGlow);
+    var holeGlow = new T.PointLight(0xffa050, 4.2, 6, 2); holeGlow.position.set(1, 0.15, 1.5); world.add(holeGlow);
   }
   var wallMat = new T.MeshStandardMaterial({ color: 0x7c766f, roughness: 0.88 });   // 白く浮かない、雨に打たれたコンクリート
   [[1, 0.35, 1.5 - RD2 / 2, RW2, 0.7, 0.3], [1, 0.35, 1.5 + RD2 / 2, RW2, 0.7, 0.3], [1 - RW2 / 2, 0.35, 1.5, 0.3, 0.7, RD2], [1 + RW2 / 2, 0.35, 1.5, 0.3, 0.7, RD2]].forEach(function (w) {
@@ -9858,10 +9864,12 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
   ghost.add(new T.Mesh(cubeGeo, ghostM)); ghost.add(new T.LineSegments(edgeGeo, ghostE)); ghost.children[0].scale.setScalar(0.985); tower.add(ghost);
   // 積み木の足元の影（下の段の上の面や床に、四角いやわらかい影）: 1個ずつの子にして、見える時だけ出る
   var cTex = (function () {
-    var N = 64, c = document.createElement("canvas"); c.width = c.height = N; var x = c.getContext("2d"), d = x.createImageData(N, N);
+    var N = 256, c = document.createElement("canvas"); c.width = c.height = N; var x = c.getContext("2d"), d = x.createImageData(N, N);
     for (var yy = 0; yy < N; yy++) for (var xx = 0; xx < N; xx++) {
       var u = Math.abs((xx + 0.5) / N * 2 - 1), v = Math.abs((yy + 0.5) / N * 2 - 1), r = Math.pow(Math.pow(u, 6) + Math.pow(v, 6), 1 / 6);
-      var t = Math.min(1, Math.max(0, (r - 0.66) / 0.34)), a = (1 - t * t * (3 - 2 * t)) * 0.62, k = (yy * N + xx) * 4; d.data[k] = d.data[k + 1] = d.data[k + 2] = 0; d.data[k + 3] = a * 255;
+      // 接点のすぐ外は細く濃く、そこから外へ柔らかく薄く（ソル25回目 2）
+      var e0 = 0.716, t = Math.min(1, Math.max(0, (r - e0) / (1 - e0))), soft = (1 - t * t * (3 - 2 * t)) * 0.42, line = r < e0 ? 0.9 : 0.9 * Math.exp(-(r - e0) / 0.035);
+      var a = Math.min(0.92, Math.max(soft, line)), k = (yy * N + xx) * 4; d.data[k] = d.data[k + 1] = d.data[k + 2] = 0; d.data[k + 3] = a * 255;
     }
     x.putImageData(d, 0, 0); return new T.CanvasTexture(c);
   })();
@@ -9873,7 +9881,7 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
     m.onBeforeCompile = function (sh) {
       ob(sh);
       sh.vertexShader = "varying float vLY;\n" + sh.vertexShader.replace("#include <begin_vertex>", "#include <begin_vertex>\n  vLY = position.y;");
-      sh.fragmentShader = "varying float vLY;\n" + sh.fragmentShader.replace("#include <fog_fragment>", "gl_FragColor.rgb *= mix(0.42, 1.0, smoothstep(-0.48, -0.18, vLY));\n" +
+      sh.fragmentShader = "varying float vLY;\n" + sh.fragmentShader.replace("#include <fog_fragment>", "gl_FragColor.rgb *= mix(0.4, 1.0, smoothstep(-0.48, -0.4, vLY)) * mix(0.82, 1.0, smoothstep(-0.48, -0.15, vLY));\n" +
         (ROOM_H ? "  float cb = smoothstep(" + (ROOM_H - 0.85).toFixed(2) + ", " + (ROOM_H - 0.4).toFixed(2) + ", vWY) * (1.0 - smoothstep(" + (ROOM_H - 0.05).toFixed(2) + ", " + (ROOM_H + 0.3).toFixed(2) + ", vWY));\n  gl_FragColor.rgb *= 1.0 - 0.6 * cb;\n" : "") +   // 天井と屋上の板を通る所は、板の影で暗い（食い込まず通っている事が分かる）
         "#include <fog_fragment>");
     };
@@ -10876,7 +10884,7 @@ window.TOU_E = {"ao": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJAAAAClCAY
 })();
 </script>
 
-<script>window.TRI_VER="116fffcb0f";
+<script>window.TRI_VER="573de2f750";
 window.LV_BGT = [{"t": 0.0, "f": 0, "src": "lvbg-001.jpg"}, {"t": 2.458, "f": 59, "src": "lvbg-060.jpg"}, {"t": 4.125, "f": 99, "src": "lvbg-100.jpg"}, {"t": 5.792, "f": 139, "src": "lvbg-140.jpg"}, {"t": 7.875, "f": 189, "src": "lvbg-190.jpg"}, {"t": 9.542, "f": 229, "src": "lvbg-230.jpg"}];
 // ===== 積み上げ帳アプリ: 全画面の形・音の合図・留守番係 =====
 (function () {
