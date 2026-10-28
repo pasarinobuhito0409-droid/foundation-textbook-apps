@@ -9815,7 +9815,7 @@ window.TOU_E = {"ao": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJAAAAClCAY
 })();
 </script>
 
-<script>window.TRI_VER="c5bde6e723";
+<script>window.TRI_VER="69cf8de9eb";
 window.LV_BGT = [{"t": 0.0, "f": 0, "src": "lvbg-001.jpg"}, {"t": 2.458, "f": 59, "src": "lvbg-060.jpg"}, {"t": 4.125, "f": 99, "src": "lvbg-100.jpg"}, {"t": 5.792, "f": 139, "src": "lvbg-140.jpg"}, {"t": 7.875, "f": 189, "src": "lvbg-190.jpg"}, {"t": 9.542, "f": 229, "src": "lvbg-230.jpg"}];
 // ===== 積み上げ帳アプリ: 全画面の形・音の合図・留守番係 =====
 (function () {
@@ -10248,6 +10248,19 @@ window.LV_DATA = {"track":[[732.5,440.0,1.0],[732.5,440.0,1.0],[732.5,440.0,1.0]
     return true;
   };
   window.addEventListener("resize", function () { if (!ov.hidden) size(); });
+  // 見るだけ: アドレスの終わりが #lvup の時は、画面をさわるとレベルアップが流れる（記録は変えない）
+  if (location.hash === "#lvup") {
+    var hint = document.createElement("div");
+    hint.textContent = "画面をさわると、レベルアップが流れます";
+    hint.style.cssText = "position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:99;padding:10px 16px;border-radius:999px;background:rgba(20,8,6,.88);color:#fff;font-size:15px;white-space:nowrap";
+    document.body.appendChild(hint);
+    document.addEventListener("click", function go(e) {
+      if (!ov.hidden) return;
+      document.removeEventListener("click", go, true); hint.remove();
+      e.preventDefault(); e.stopPropagation();
+      window.LV_PRIME(true); window.LV_SHOW(1, 12);
+    }, true);
+  }
 })();
 
 </script>
