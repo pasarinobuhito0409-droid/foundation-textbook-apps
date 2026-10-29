@@ -730,6 +730,10 @@ body.app .app-toast{bottom:calc(var(--plus-h,128px) + 64px)!important}
 .tw-log .tl-day{display:grid;grid-template-columns:3.2em 1fr;gap:8px;font-size:13.5px;padding:3px 0;color:#efe3cf}
 body.app.log-open #modosu{border-color:#f2cf7c!important;box-shadow:inset 0 0 0 2px rgba(242,207,124,.8)!important}
 body.app:not(.ui-peek) #modosu{opacity:1!important;pointer-events:auto!important}   /* 記録・もどすは、いつも見える所に（10/29 CEO「どこで戻すのか分からない」） */
+/* 版70b: 時間の札を開いた時に「記録・もどす」と重ならない様に、もどすの札を少し小さく（10/29 CEO「枠が被る」） */
+body.app #modosu{font-size:13px!important;padding:0 11px!important;letter-spacing:.06em!important}
+body.app .app-min{max-width:calc(100vw - 24px - 118px)!important}
+body.app .app-min button{flex:0 1 auto!important}
 
 </style>
 </head>
@@ -11455,7 +11459,7 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
 })();
 </script>
 
-<script>window.TRI_VER="1df25e7b15";
+<script>window.TRI_VER="4c3ba4db48";
 window.LV_BGT = [{"t": 0.0, "f": 0, "src": "lvbg-001.jpg"}, {"t": 2.458, "f": 59, "src": "lvbg-060.jpg"}, {"t": 4.125, "f": 99, "src": "lvbg-100.jpg"}, {"t": 5.792, "f": 139, "src": "lvbg-140.jpg"}, {"t": 7.875, "f": 189, "src": "lvbg-190.jpg"}, {"t": 9.542, "f": 229, "src": "lvbg-230.jpg"}];
 // ===== 積み上げ帳アプリ: 全画面の形・音の合図・留守番係 =====
 (function () {
