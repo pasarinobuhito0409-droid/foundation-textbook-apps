@@ -16,7 +16,7 @@
 <title>積み上げ帳</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Yomogi&family=Shippori+Mincho:wght@600&family=M+PLUS+1:wght@200;300&family=M+PLUS+Rounded+1c:wght@700;800&family=BIZ+UDPGothic:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Yomogi&family=Shippori+Mincho:wght@600&family=M+PLUS+1:wght@200;300;500;700;800&family=M+PLUS+Rounded+1c:wght@700;800&family=BIZ+UDPGothic:wght@400;700&display=swap">
 <style>
 /* Triwheel 全部署の紙の型（デザイン部 2026-10-07）。見本は待ち受け12案の紙と、売り上げ予定表。
    変えてよいのは「ここから中身」の間だけ。色・字・幅・ロゴ・次の1歩・社訓は変えない。 */
@@ -689,6 +689,12 @@ body.app .app-min button{font-size:15px!important;font-weight:800!important}
 body.app.tab-nou .app-min button{color:#1a0c04!important}
 body.app:not(.tab-nou) .app-min button{color:#fff!important}
 body.app.tab-nou .kb-fuda.nou-f .lv-ato{color:#2a1606!important;font-weight:800!important}
+
+/* v67（ソル41回目 3）: 空への上の札の小さな字を大きく（面と枠は増やさない） */
+body.app .sora-card .sc-sub{font-size:14.5px!important}
+body.app .sora-card .sc-ato span{font-size:15px!important}
+body.app .sora-card .sc-ato i{font-size:15.5px!important;opacity:1!important}
+body.app .sora-card .sc-ato b{font-size:28px!important}
 
 </style>
 </head>
@@ -6566,7 +6572,7 @@ window.TRIWHEEL_RELIEF = function (THREE, R, unproj, done) {
     ctx.font = nameFont(size); spacing(sp);
     // 回路の模様の上でも読める様に、うすい黒の帯（車の画面の様に、細いふち）
     var tw = ctx.measureText(K.name).width + size * 0.9, th = size * 1.55;
-    ctx.fillStyle = "rgba(8,10,14,0.66)";
+    ctx.fillStyle = "rgba(8,10,14,0.86)";   // 字の所だけ回路の模様を沈める（ソル41回目 2）。字は CEO が選んだ細く間の広い字（M PLUS 1 の 200）のまま
     roundRect(x - tw / 2, y - th / 2 + size * 0.06, tw, th, size * 0.12);
     ctx.fill();
     ctx.strokeStyle = "rgba(255,255,255,0.22)"; ctx.lineWidth = Math.max(1, size * 0.025); ctx.stroke();
@@ -7044,7 +7050,7 @@ window.TRIWHEEL_RELIEF = function (THREE, R, unproj, done) {
     } else {
       ctx.drawImage(img.moto, 0, 0, canvas.width, canvas.height);
     }
-    var mb = D.monshoBox, skd = layered ? spinK() : 0;   // 紋章の字と金の回路の光は、正面の脳の絵にだけ付く
+    var mb = D.monshoBox, skd = layered ? spinGone() : 0;   // 紋章の字と金の回路の光は、正面の脳の絵にだけ付く
     if (skd < 1) {
       ctx.globalAlpha = 1 - skd;
       ctx.drawImage(img.monsho, (mb[0] + ob.x) * k, (mb[1] + ob.y) * k, (mb[2] - mb[0]) * k, (mb[3] - mb[1]) * k);
@@ -7107,7 +7113,7 @@ window.TRIWHEEL_RELIEF = function (THREE, R, unproj, done) {
       if (gapA > 0.01) drawSlotGap(ob, gapA, false);
       if (A3S.boardOn) {
         ctx.save();
-        ctx.globalAlpha = A3S.alpha * (anim ? 1 : 1 - spinK());   // 脳を回している間は、手の基盤は消す（差し口が見えない向きで宙に浮かない様に）
+        ctx.globalAlpha = A3S.alpha * (anim ? 1 : 1 - spinGone());   // 脳を回している間は、手の基盤は消す（差し口が見えない向きで宙に浮かない様に）
         if (A3S.inPanel) { ctx.translate(ob.x, ob.y); clipPanel(); ctx.translate(-ob.x, -ob.y); }
         draw3D(2, of);
         ctx.restore();
@@ -7218,6 +7224,7 @@ window.TRIWHEEL_RELIEF = function (THREE, R, unproj, done) {
   function spinNorm(a) { return ((a % 360) + 360) % 360; }
   function spinFront() { var n = spinNorm(spin.a); return Math.min(n, 360 - n); }   // 正面からの角度
   function spinK() { return SC ? Math.min(1, spinFront() / 12) : 0; }               // 0 = 正面（いつもの絵・光・紋章）
+  function spinGone() { return SC ? Math.min(1, spinFront() / 3) : 0; }              // 紋章と手の基盤は 3度で消す（間の絵が出る前に。残すと 4〜11度で透けて二重に見えた・ソル41回目 1）
   function spinBusy() { return !!SC && (!!spin.demo || Math.abs(spin.v) > 0.5 || spin.goal !== null || (drag && drag.spin)); }
   function stepSpin(now) {
     if (!SC) return;
@@ -11368,7 +11375,7 @@ window.TOU_E = {"ao": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJAAAAClCAY
 })();
 </script>
 
-<script>window.TRI_VER="c9d3b5b21d";
+<script>window.TRI_VER="bfab2eb093";
 window.LV_BGT = [{"t": 0.0, "f": 0, "src": "lvbg-001.jpg"}, {"t": 2.458, "f": 59, "src": "lvbg-060.jpg"}, {"t": 4.125, "f": 99, "src": "lvbg-100.jpg"}, {"t": 5.792, "f": 139, "src": "lvbg-140.jpg"}, {"t": 7.875, "f": 189, "src": "lvbg-190.jpg"}, {"t": 9.542, "f": 229, "src": "lvbg-230.jpg"}];
 // ===== 積み上げ帳アプリ: 全画面の形・音の合図・留守番係 =====
 (function () {
