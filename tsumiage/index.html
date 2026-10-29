@@ -735,6 +735,18 @@ body.app #modosu{font-size:13px!important;padding:0 11px!important;letter-spacin
 body.app .app-min{max-width:calc(100vw - 24px - 118px)!important}
 body.app .app-min button{flex:0 1 auto!important}
 
+/* 版71: 記録の一覧（ソル45回目）: 後ろの脳が透けて読みにくい→ほぼ不透明・内わけの字を明るく・「とじる」はいつも上に・後ろへ押しが通らない・取り消す前に対象を大きく出す */
+.tw-log{background:rgba(14,10,12,.97)!important}
+.tw-log-bg{position:fixed;inset:0;z-index:59;background:rgba(0,0,0,.28)}
+.tw-log-bg[hidden]{display:none!important}
+.tw-log .tl-head{position:sticky;top:-14px;z-index:2;margin:-14px -14px 10px;padding:14px 14px 8px;background:rgba(14,10,12,.98)}
+.tw-log .tl-k small{color:#f1e6d2!important;font-size:13px!important;line-height:1.5}
+.tw-log .tl-ask{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:10px 8px;margin:4px -4px;border-radius:12px;background:rgba(184,67,42,.22);border:1px solid rgba(255,177,153,.55)}
+.tw-log .tl-ask p{margin:0;font-weight:700;line-height:1.45;font-size:14.5px}
+.tw-log .tl-ask p i{font-style:normal}
+.tw-log .tl-ask .tl-yes{background:#b8432a;border-color:#ffb199;color:#fff}
+.tw-log::after{content:"";position:sticky;display:block;bottom:-12px;height:18px;margin:0 -14px -12px;background:linear-gradient(rgba(14,10,12,0),rgba(14,10,12,.97));pointer-events:none}
+
 </style>
 </head>
 <body class="app">
@@ -11459,7 +11471,7 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
 })();
 </script>
 
-<script>window.TRI_VER="4c3ba4db48";
+<script>window.TRI_VER="5d5cb9d941";
 window.LV_BGT = [{"t": 0.0, "f": 0, "src": "lvbg-001.jpg"}, {"t": 2.458, "f": 59, "src": "lvbg-060.jpg"}, {"t": 4.125, "f": 99, "src": "lvbg-100.jpg"}, {"t": 5.792, "f": 139, "src": "lvbg-140.jpg"}, {"t": 7.875, "f": 189, "src": "lvbg-190.jpg"}, {"t": 9.542, "f": 229, "src": "lvbg-230.jpg"}];
 // ===== 積み上げ帳アプリ: 全画面の形・音の合図・留守番係 =====
 (function () {
@@ -11527,6 +11539,9 @@ window.LV_BGT = [{"t": 0.0, "f": 0, "src": "lvbg-001.jpg"}, {"t": 2.458, "f": 59
   var sheet = document.createElement("div");
   sheet.className = "tw-log"; sheet.hidden = true; sheet.setAttribute("role", "dialog"); sheet.setAttribute("aria-label", "記録");
   document.body.appendChild(sheet);
+  var sheetBg = document.createElement("div"); sheetBg.className = "tw-log-bg"; sheetBg.hidden = true;   // 一覧の後ろを押しても、下のボタンへ通らない様に（押すと閉じる）
+  document.body.insertBefore(sheetBg, sheet);
+  sheetBg.addEventListener("click", function (e) { e.stopPropagation(); closeLog(); }, false);
   function md(k) { var p = k.split("-"); return (+p[1]) + "/" + (+p[2]); }
   function paintLog() {
     var L = window.TW_LOG ? window.TW_LOG() : null; if (!L) return;
@@ -11536,7 +11551,7 @@ window.LV_BGT = [{"t": 0.0, "f": 0, "src": "lvbg-001.jpg"}, {"t": 2.458, "f": 59
     var h = '<div class="tl-head"><b>今日の記録</b><button type="button" class="tl-x">とじる</button></div><div class="tl-sum">';
     KN.forEach(function (k, i) {
       var parts = Object.keys(sum[i]).sort(function (a, b) { return b - a; }).map(function (m) { return m + "分×" + sum[i][m]; });
-      h += '<div class="tl-k"><i style="color:' + k.c + '">' + k.m + '</i><b>' + k.n + '</b><span>' + (ad[i] || 0) + '分</span><small>' + (parts.join("・") || "まだ") + '</small></div>';
+      h += '<div class="tl-k"><i style="color:' + k.c + '">' + k.m + '</i><b>' + k.n + '</b><span>' + (ad[i] || 0) + '分</span><small>' + (parts.join("・") || "記録なし") + '</small></div>';
     });
     h += '</div><div class="tl-list">';
     if (!tod.length) h += '<p class="tl-none">今日はまだ入れていません。</p>';
@@ -11557,20 +11572,30 @@ window.LV_BGT = [{"t": 0.0, "f": 0, "src": "lvbg-001.jpg"}, {"t": 2.458, "f": 59
     }
     sheet.innerHTML = h;
   }
-  function openLog() { paintLog(); sheet.hidden = false; document.body.classList.add("log-open"); }
-  function closeLog() { sheet.hidden = true; document.body.classList.remove("log-open"); }
+  function openLog() { paintLog(); sheet.hidden = false; sheetBg.hidden = false; sheet.scrollTop = 0; document.body.classList.add("log-open"); }
+  function closeLog() { sheet.hidden = true; sheetBg.hidden = true; document.body.classList.remove("log-open"); }
   window.TW_OPEN_LOG = openLog;
   if (mdb) mdb.addEventListener("click", function (e) { e.stopImmediatePropagation(); e.preventDefault(); if (sheet.hidden) openLog(); else closeLog(); }, true);
   sheet.addEventListener("click", function (e) {
     var t = e.target;
     if (t.closest(".tl-x")) { closeLog(); return; }
-    var b = t.closest("button[data-i]"); if (!b) return;
-    if (!b.classList.contains("sure")) {   // 押しまちがいで消えない様に、2回押してもどす
-      b.classList.add("sure"); b.textContent = "本当に？"; setTimeout(function () { if (b.isConnected) { b.classList.remove("sure"); b.textContent = "もどす"; } }, 3000); return;
+    if (t.closest(".tl-no")) { paintLog(); return; }
+    var y = t.closest(".tl-yes");
+    if (y) {   // 取り消す（どの記録かは、時刻・種類・分で探し直す。並びが変わっても別の記録を消さない）
+      if (Date.now() - (+y.getAttribute("data-t")) < 450) return;   // 2回の素早い押しでは消さない
+      var sig = y.getAttribute("data-sig"), L = window.TW_LOG(), i = -1;
+      L.log.forEach(function (it, j) { if (it[0] === L.today && [it[0], it[1], it[2] || 5, it[3] || ""].join("|") === sig) i = j; });
+      var it = i >= 0 ? L.log[i] : null;
+      if (it && window.TW_UNDO(i)) { showToast((it[3] ? it[3] + "　" : "") + "<b>" + KN[it[1]].n + "</b>　<b>" + (it[2] || 5) + "分</b>　を取り消しました", 2400); tone(660, 0, 0.12, 0.05, "sine", 440); }
+      paintLog(); return;
     }
-    var i = +b.getAttribute("data-i"), L = window.TW_LOG(), it = L.log[i];
-    if (it && window.TW_UNDO(i)) { showToast("<b>" + KN[it[1]].n + "</b>　<b>" + (it[2] || 5) + "分</b>　もどしました", 2200); tone(660, 0, 0.12, 0.05, "sine", 440); }
-    paintLog();
+    var b = t.closest("button[data-i]"); if (!b) return;
+    // 1回目: どの記録を取り消すかを、その行に大きく出す。取り消すのは別のボタン（押しまちがい・連打で消えない様に・ソル45回目）
+    var i0 = +b.getAttribute("data-i"), L0 = window.TW_LOG(), it0 = L0.log[i0]; if (!it0) return;
+    if (sheet.querySelector(".tl-ask")) { paintLog(); b = sheet.querySelector('button[data-i="' + i0 + '"]'); if (!b) return; }   // 聞いている行は1つだけ
+    var k0 = KN[it0[1]], row = b.closest(".tl-row"), sig0 = [it0[0], it0[1], it0[2] || 5, it0[3] || ""].join("|");
+    row.className = "tl-row tl-ask";
+    row.innerHTML = '<p>' + (it0[3] ? it0[3] + "の " : "") + '<i style="color:' + k0.c + '">' + k0.m + '</i><b>' + k0.n + " " + (it0[2] || 5) + '分</b>を取り消しますか？</p><button type="button" class="tl-no">やめる</button><button type="button" class="tl-yes" data-sig="' + sig0 + '" data-t="' + Date.now() + '">取り消す</button>';
   }, false);
 
   // 下の4つのボタンの高さを測り、時間の札・記録の札をそのすぐ上に置く（10/29 CEO「5分〜25分の枠が被っている」）
