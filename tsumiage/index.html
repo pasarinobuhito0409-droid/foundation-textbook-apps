@@ -12,6 +12,7 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" href="icon-192.png">
 <script>window.HEYA_CFG = {"half": 9.0, "ht": 5.6, "walls": [{"n": "W1", "side": "N", "i": 0, "img": "heya-W1.jpg", "dep": "heya-W1-d.png", "yuka": 0}, {"n": "W2", "side": "N", "i": 1, "img": "heya-W2.jpg", "dep": "heya-W2-d.png", "yuka": 0}, {"n": "W3", "side": "E", "i": 0, "img": "heya-W3.jpg", "dep": "heya-W3-d.png", "yuka": 0.098}, {"n": "W4", "side": "E", "i": 1, "img": "heya-W4.jpg", "dep": "heya-W4-d.png", "yuka": 0}, {"n": "W5", "side": "S", "i": 0, "img": "heya-W5.jpg", "dep": "heya-W5-d.png", "yuka": 0.11}, {"n": "W6", "side": "S", "i": 1, "img": "heya-W6.jpg", "dep": "heya-W6-d.png", "yuka": 0.11}, {"n": "W7", "side": "W", "i": 0, "img": "heya-W7.jpg", "dep": "heya-W7-d.png", "yuka": 0}, {"n": "W8", "side": "W", "i": 1, "img": "heya-W8.jpg", "dep": "heya-W8-d.png", "yuka": 0.086}], "yuka": "heya-yuka.jpg", "hikari": "heya-hikari.jpg", "gain": [2.8466, 5.00361, 9.16428], "rep": 6.0, "relief": 1.25, "tenjou": "heya-tenjou.jpg", "juutan": "heya-juutan.jpg", "props": [{"img": "heya-K1-chikyuugi.png", "h": 1.45, "w": 0.775, "x": -2.9, "z": -7.6}, {"img": "heya-K2-boenkyou.png", "h": 1.9, "w": 1.048, "x": 2.9, "z": -7.6}, {"img": "heya-K3-tenkyuugi.png", "h": 1.6, "w": 0.905, "x": 7.6, "z": -2.9}, {"img": "heya-K5-kikai.png", "h": 1.5, "w": 0.674, "x": 7.6, "z": 2.9}, {"img": "heya-K4-isu.png", "h": 1.1, "w": 1.213, "x": 2.9, "z": 7.6}, {"img": "heya-K1-chikyuugi.png", "h": 1.45, "w": 0.775, "x": -2.9, "z": 7.6}, {"img": "heya-K2-boenkyou.png", "h": 1.9, "w": 1.048, "x": -7.6, "z": 2.9}, {"img": "heya-K3-tenkyuugi.png", "h": 1.6, "w": 0.905, "x": -7.6, "z": -2.9}]};</script>
+<script>window.NOU_SPIN_CFG = {"views": [{"a": 30, "url": "nou-spin-030.webp", "box": [768.1, 156.7, 1755.1, 1134.0]}, {"a": 60, "url": "nou-spin-060.webp", "box": [750.5, 156.7, 1772.7, 1134.0]}, {"a": 90, "url": "nou-spin-090.webp", "box": [812.2, 156.7, 1711.0, 1134.0]}, {"a": 120, "url": "nou-spin-120.webp", "box": [738.4, 156.7, 1784.8, 1134.0]}, {"a": 150, "url": "nou-spin-150.webp", "box": [754.2, 156.7, 1769.0, 1134.0]}, {"a": 180, "url": "nou-spin-180.webp", "box": [717.9, 156.7, 1805.3, 1134.0]}, {"a": 210, "url": "nou-spin-210.webp", "box": [740.3, 156.7, 1783.0, 1134.0]}, {"a": 240, "url": "nou-spin-240.webp", "box": [777.8, 156.7, 1745.5, 1134.0]}, {"a": 270, "url": "nou-spin-270.webp", "box": [836.4, 156.7, 1686.8, 1134.0]}, {"a": 300, "url": "nou-spin-300.webp", "box": [762.0, 156.7, 1761.2, 1134.0]}, {"a": 330, "url": "nou-spin-330.webp", "box": [730.0, 156.7, 1793.2, 1134.0]}]};</script>
 <title>積み上げ帳</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -569,6 +570,7 @@ body.app.tab-nou .plus.plus4 .p-ao{background:linear-gradient(180deg,rgba(70,125
 body.app.tab-nou .plus.plus4 .p-sa{background:linear-gradient(180deg,rgba(210,120,175,.66),rgba(120,50,100,.72))!important}
 body.app.tab-nou .plus.plus4 .p-mm{background:linear-gradient(180deg,rgba(235,120,40,.68),rgba(140,55,8,.74))!important}
 body.app.tab-nou .plus.plus4 .p-mi{background:linear-gradient(180deg,rgba(60,170,105,.66),rgba(20,95,55,.72))!important}
+body.app .nou-e-canvas{touch-action:none}
 
 </style>
 </head>
@@ -6916,16 +6918,21 @@ window.TRIWHEEL_RELIEF = function (THREE, R, unproj, done) {
       ctx.drawImage(img.plate, bgx * k, bgy * k, W0 * bgs * k, H0 * bgs * k);
       var pw0 = anim ? powerAt(now - anim.start) : 0;
       drawDim(pw0, now);
-      var lb = D.brainBox;
-      ctx.drawImage(img.brainL, (lb[0] + ob.x) * k, (lb[1] + ob.y) * k, (lb[2] - lb[0]) * k, (lb[3] - lb[1]) * k);
-      drawPower(pw0, now, k, ob);
+      stepSpin(now);
+      var sk = spinK(); window.NOU_SPIN_K = sk;
+      if (sk > 0 || spinFront() > 0.01) drawSpinBrain(k, ob);
+      else { var lb = D.brainBox; ctx.drawImage(img.brainL, (lb[0] + ob.x) * k, (lb[1] + ob.y) * k, (lb[2] - lb[0]) * k, (lb[3] - lb[1]) * k); }
+      if (sk < 1) { ctx.save(); ctx.globalAlpha = 1 - sk; drawPower(pw0, now, k, ob); ctx.restore(); }
     } else {
       ctx.drawImage(img.moto, 0, 0, canvas.width, canvas.height);
     }
-    var mb = D.monshoBox;
-    ctx.drawImage(img.monsho, (mb[0] + ob.x) * k, (mb[1] + ob.y) * k, (mb[2] - mb[0]) * k, (mb[3] - mb[1]) * k);
-
-    drawSignals(now, k, ob);
+    var mb = D.monshoBox, skd = layered ? spinK() : 0;   // 紋章の字と金の回路の光は、正面の脳の絵にだけ付く
+    if (skd < 1) {
+      ctx.globalAlpha = 1 - skd;
+      ctx.drawImage(img.monsho, (mb[0] + ob.x) * k, (mb[1] + ob.y) * k, (mb[2] - mb[0]) * k, (mb[3] - mb[1]) * k);
+      ctx.globalAlpha = 1;
+      if (skd < 0.3) drawSignals(now, k, ob);
+    }
     ctx.setTransform(k, 0, 0, k, 0, 0);
     var t = anim ? now - anim.start : 1e9;
     var kind = anim ? anim.kind : target.kind;
@@ -6982,7 +6989,7 @@ window.TRIWHEEL_RELIEF = function (THREE, R, unproj, done) {
       if (gapA > 0.01) drawSlotGap(ob, gapA, false);
       if (A3S.boardOn) {
         ctx.save();
-        ctx.globalAlpha = A3S.alpha;
+        ctx.globalAlpha = A3S.alpha * (anim ? 1 : 1 - spinK());   // 脳を回している間は、手の基盤は消す（差し口が見えない向きで宙に浮かない様に）
         if (A3S.inPanel) { ctx.translate(ob.x, ob.y); clipPanel(); ctx.translate(-ob.x, -ob.y); }
         draw3D(2, of);
         ctx.restore();
@@ -7064,9 +7071,80 @@ window.TRIWHEEL_RELIEF = function (THREE, R, unproj, done) {
     drawHUD(now, t);
   }
 
+  // ===== 脳を360度回す（10/29 CEO「脳の3Dもブロックみたいに回る様に」）=====
+  // ルナが同じ脳を30度ずつ12の向きで描いた絵（0度は確定の絵の脳の層）を、指の横の動きに合わせて入れ替える。
+  // 離すと勢いで少し回り、近い向き（30度ごと）にぴたりと止まる。差す時と、しばらく触らない時は正面へ戻る。
+  var SC = window.NOU_SPIN_CFG, spin = { a: 0, v: 0, goal: null, t: 0, idle: 0, imgs: null };
+  function spinLoad() {
+    if (spin.imgs || !SC || !SC.views) return;
+    spin.imgs = {};
+    SC.views.forEach(function (v) { var im = new Image(); im.onload = function () { v.ok = true; kick(); }; im.src = v.url; spin.imgs[v.a] = im; });
+  }
+  if (SC) setTimeout(spinLoad, 2500);
+  function spinDemo() {   // 絵が全部そろってから
+    if (!SC || reduced) return;
+    var key = "tw-spin-demo", today = new Date().toDateString(), seen0 = null;
+    try { seen0 = window.localStorage.getItem(key); } catch (e) {}
+    if (seen0 === today) return;
+    var ok = SC.views.every(function (v) { return v.ok; });
+    if (!ok) { setTimeout(spinDemo, 600); return; }
+    try { window.localStorage.setItem(key, today); } catch (e) {}
+    spin.demo = Date.now(); kick();
+  }
+  if (SC) setTimeout(function () { spinLoad(); spinDemo(); }, 4200);
+  function spinNorm(a) { return ((a % 360) + 360) % 360; }
+  function spinFront() { var n = spinNorm(spin.a); return Math.min(n, 360 - n); }   // 正面からの角度
+  function spinK() { return SC ? Math.min(1, spinFront() / 12) : 0; }               // 0 = 正面（いつもの絵・光・紋章）
+  function spinBusy() { return !!SC && (!!spin.demo || Math.abs(spin.v) > 0.5 || spin.goal !== null || (drag && drag.spin)); }
+  function stepSpin(now) {
+    if (!SC) return;
+    var dt = Math.min(0.05, Math.max(0, (now - (spin.t || now)) / 1000)); spin.t = now;
+    if (drag && drag.spin) { spin.demo = 0; return; }
+    if (spin.demo) {   // その日はじめて開いた時だけ、1回ぐるりと回って見せる（回せる事が分かる様に）
+      var de = (now - spin.demo) / 3600;
+      if (de >= 1 || anim || queue.length) { spin.demo = 0; spin.a = 0; spin.goal = null; spin.v = 0; }
+      else { spin.a = 360 * sstep(de); return; }
+    }
+    if ((anim || queue.length) && spinFront() > 0.3) spin.goal = Math.round(spin.a / 360) * 360;          // 差す時は正面へ
+    if (spin.goal === null && spinFront() > 0.3 && now - lastTouch > 15000) spin.goal = Math.round(spin.a / 360) * 360;   // しばらく触らない時も正面へ
+    if (spin.goal === null) {
+      spin.a += spin.v * dt; spin.v *= Math.exp(-dt * 2.6);                                            // 勢いで回り、だんだん遅く
+      if (Math.abs(spin.v) < 40) { spin.goal = Math.round(spin.a / 30) * 30; }                          // 近い向きに止める
+    } else {
+      var d = spin.goal - spin.a, kf = 1 - Math.exp(-dt * ((anim || queue.length) ? 9 : 6));
+      spin.v = 0; spin.a += d * kf;
+      if (Math.abs(d) < 0.15) { spin.a = spin.goal; spin.goal = null; spin.v = 0; if (spinFront() < 0.01) spin.a = 0; }
+    }
+  }
+  // 回した向きの脳を描く（plate の上・brainL の代わり）。k は元の絵の座標から画面への倍率
+  function drawSpinBrain(k, ob) {
+    var n = spinNorm(spin.a), i0 = Math.floor(n / 30) % 12, f = n / 30 - Math.floor(n / 30), i1 = (i0 + 1) % 12;
+    var w = sstep((f - 0.3) / 0.4);
+    function one(i, al) {
+      if (al <= 0.003) return;
+      ctx.globalAlpha = al;
+      if (i === 0) { var lb = D.brainBox; ctx.drawImage(img.brainL, (lb[0] + ob.x) * k, (lb[1] + ob.y) * k, (lb[2] - lb[0]) * k, (lb[3] - lb[1]) * k); return; }
+      var v = SC.views[i - 1], im = spin.imgs && spin.imgs[v.a];
+      if (!im || !v.ok) { var lb2 = D.brainBox; ctx.drawImage(img.brainL, (lb2[0] + ob.x) * k, (lb2[1] + ob.y) * k, (lb2[2] - lb2[0]) * k, (lb2[3] - lb2[1]) * k); return; }
+      var b = v.box;
+      // 台の足元の影（元の絵の層は影ごと切り出してある）
+      ctx.save(); ctx.globalAlpha = al * 0.5;
+      var cx = (b[0] + b[2]) / 2 + ob.x, g = ctx.createRadialGradient(cx * k, 1128 * k, 0, cx * k, 1128 * k, 260 * k);
+      g.addColorStop(0, "rgba(60,40,30,0.55)"); g.addColorStop(1, "rgba(60,40,30,0)");
+      ctx.setTransform(1, 0, 0, 0.22, 0, 1128 * k * 0.78); ctx.fillStyle = g; ctx.fillRect((cx - 280) * k, 1128 * k - 280 * k, 560 * k, 560 * k);
+      ctx.restore(); ctx.globalAlpha = al;
+      ctx.drawImage(im, (b[0] + ob.x) * k, (b[1] + ob.y) * k, (b[2] - b[0]) * k, (b[3] - b[1]) * k);
+    }
+    // 重みの小さい方を先に、大きい方を上に（中が透けない様に）
+    var a0 = Math.min(1, 2 * (1 - w)), a1 = Math.min(1, 2 * w);
+    if (w < 0.5) { one(i1, a1); one(i0, a0); } else { one(i0, a0); one(i1, a1); }
+    ctx.globalAlpha = 1;
+  }
+  window.NOU_SPIN = spin;
+
   // 奥行きの動き: 指で横にずらすと、回り込む様に見える
   var par = { x: 0, y: 0 }, parGoal = { x: 0, y: 0 }, drag = null, lastTouch = 0;
-  function moving() { return Math.abs(par.x) > 0.002 || Math.abs(par.y) > 0.002 || !!drag; }
+  function moving() { return Math.abs(par.x) > 0.002 || Math.abs(par.y) > 0.002 || !!drag || spinBusy(); }
   function stepParallax(now) {
     if (reduced) { par.x = par.y = 0; return; }
     // 指を離したら正面（元の絵とぴったり重なる所）へ戻る（ソル6.1）。初めて見えた時だけ、1回左右を見回す
@@ -7105,21 +7183,40 @@ window.TRIWHEEL_RELIEF = function (THREE, R, unproj, done) {
     return null;
   }
   canvas.addEventListener("pointerdown", function (ev) {
-    drag = { x: ev.clientX, y: ev.clientY, px: parGoal.x, py: parGoal.y, moved: false };
+    drag = { x: ev.clientX, y: ev.clientY, px: parGoal.x, py: parGoal.y, moved: false, a0: spin.a, lx: ev.clientX, lt: performance.now(), spin: false };
     lastTouch = Date.now();
+    if (SC) { spinLoad(); spin.v = 0; }
+    try { canvas.setPointerCapture(ev.pointerId); } catch (e) {}
   }, false);
   canvas.addEventListener("pointermove", function (ev) {
     if (!drag) return;
     var dx = ev.clientX - drag.x, dy = ev.clientY - drag.y;
     if (Math.abs(dx) > 8) drag.moved = true;
-    parGoal.x = Math.max(-1, Math.min(1, drag.px + dx / 140));
+    if (SC && !anim && !queue.length) {
+      // 横に動かすと脳が回る（画面の横幅を1回なでると、約半周）
+      if (!drag.spin && Math.abs(dx) > 6) { drag.spin = true; drag.x = ev.clientX; drag.a0 = spin.a; spin.goal = null; dx = 0; }
+      if (drag.spin) {
+        var r = canvas.getBoundingClientRect(), deg = 200 / Math.max(240, r.width * 0.75);
+        spin.a = drag.a0 + dx * deg;
+        var tn = performance.now(), ddt = Math.max(1, tn - drag.lt);
+        spin.v = spin.v * 0.6 + 0.4 * ((ev.clientX - drag.lx) * deg) / (ddt / 1000);
+        drag.lx = ev.clientX; drag.lt = tn;
+      }
+      parGoal.x = 0;
+    } else parGoal.x = Math.max(-1, Math.min(1, drag.px + dx / 140));
     parGoal.y = Math.max(-1, Math.min(1, drag.py + dy / 260));
     lastTouch = Date.now();
     kick();
   }, false);
-  function endDrag() { if (drag) { lastTouch = Date.now(); setTimeout(function () { drag = null; }, 0); } }
+  function endDrag() {
+    if (drag) {
+      lastTouch = Date.now();
+      if (drag.spin) { if (performance.now() - drag.lt > 90) spin.v = 0; spin.v = Math.max(-900, Math.min(900, spin.v)); drag.spin = false; kick(); }
+      setTimeout(function () { drag = null; }, 0);
+    }
+  }
   canvas.addEventListener("pointerup", endDrag, false);
-  canvas.addEventListener("pointercancel", function () { drag = null; }, false);
+  canvas.addEventListener("pointercancel", function () { drag = null; kick(); }, false);
   canvas.addEventListener("click", function (ev) {
     if (drag && drag.moved) return;
     var y = hit(ev);
@@ -11138,7 +11235,7 @@ window.TOU_E = {"ao": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJAAAAClCAY
 })();
 </script>
 
-<script>window.TRI_VER="e96c3524ca";
+<script>window.TRI_VER="1410018c03";
 window.LV_BGT = [{"t": 0.0, "f": 0, "src": "lvbg-001.jpg"}, {"t": 2.458, "f": 59, "src": "lvbg-060.jpg"}, {"t": 4.125, "f": 99, "src": "lvbg-100.jpg"}, {"t": 5.792, "f": 139, "src": "lvbg-140.jpg"}, {"t": 7.875, "f": 189, "src": "lvbg-190.jpg"}, {"t": 9.542, "f": 229, "src": "lvbg-230.jpg"}];
 // ===== 積み上げ帳アプリ: 全画面の形・音の合図・留守番係 =====
 (function () {
@@ -11919,7 +12016,7 @@ window.NOU3D_CFG = {"slot": [905, 560], "depthK": 0.34, "zoom": 1.03, "ext": {"u
     src.style.position = "absolute"; src.style.opacity = "0"; src.style.zIndex = "2"; src.style.left = ((W - pw) / 2) + "px"; src.style.top = top + "px"; src.style.width = pw + "px"; src.style.height = ph + "px";
   }
   stage.addEventListener("pointerdown", function (e) { drag = { x: e.clientX, y: e.clientY, dx: dx, dy: dy }; }, true);
-  window.addEventListener("pointermove", function (e) { if (!drag) return; dx = drag.dx + (e.clientX - drag.x) / W; dy = drag.dy + (e.clientY - drag.y) / H; dx = Math.max(-0.5, Math.min(0.5, dx)); dy = Math.max(-0.4, Math.min(0.4, dy)); kick(); }, true);
+  window.addEventListener("pointermove", function (e) { if (!drag) return; dx = drag.dx + (e.clientX - drag.x) / W; dy = drag.dy + (e.clientY - drag.y) / H; var dxm = window.NOU_SPIN_CFG ? 0.08 : 0.5; dx = Math.max(-dxm, Math.min(dxm, dx));   /* 横は脳を回すので、カメラはほんの少しだけ */ dy = Math.max(-0.4, Math.min(0.4, dy)); kick(); }, true);
   window.addEventListener("pointerup", function () { drag = null; }, true);
 
   // 演出: 差した時・レベルアップ
@@ -11958,6 +12055,7 @@ window.NOU3D_CFG = {"slot": [905, 560], "depthK": 0.34, "zoom": 1.03, "ext": {"u
       if (e > (fx.lv ? fx.tLv + 3 : fx.tSig + 2.5)) fx = null;
     }
     if (window.NOU3D_FX) { gr = NOU3D_FX[0]; ga = NOU3D_FX[1]; fl = NOU3D_FX[2] || 0; lr = NOU3D_FX[3] || 0; la = NOU3D_FX[4] || 0; }
+    U.dK.value = (C.depthK || 0.34) * (1 - 0.8 * (window.NOU_SPIN_K || 0));   // 回した脳は元の絵の奥行きと形が違うので、凸凹を弱める
     U.lvR.value = lr; U.lvA.value = la;   // 試験用に止められる
     U.glowR.value = gr; U.glowA.value = ga; U.flash.value = fl; U.time.value = t;
     // まばたき（たまに2回）
