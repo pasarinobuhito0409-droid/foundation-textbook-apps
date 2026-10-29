@@ -6425,12 +6425,24 @@ window.TRIWHEEL_RELIEF = function (THREE, R, unproj, done) {
     A3.face.map = boardTex(fk); A3.face.needsUpdate = A3.lastKind !== fk; A3.lastKind = fk;
     A3S = { alpha: alpha, boardOn: !!pose && alpha > 0.01, inPanel: anim && t >= T_REACH + 150 && t < T_IN, rodIn: anim && t >= T_REACH + 150 && t < T_IN + 500 };
   }
+  // 立体のアバターを描く。WebGL の絵を 2D へ写すのは、スマホではとても重い（GPU から読み戻す・1回ごとに画面が止まる）。
+  // 差す動き・指で動かす時だけ毎コマ描き、ふだん（ゆっくり揺れるだけ）は 1秒に 6回だけ描いて、間は写しておいた物を使う（10/30 CEO「操作が重い」）
+  var A3C = [null, null, null], A3CT = [0, 0, 0], A3CK = ["", "", ""];
   function draw3D(pass, of) {
-    var r = A3.r, cw = canvas.width, ch = canvas.height;
+    var r = A3.r, cw = canvas.width, ch = canvas.height, now = Date.now();
+    var busy = !!anim || !!drag || !!intro || Math.abs(par.x) > 0.002 || Math.abs(par.y) > 0.002;
+    var key = cw + "x" + ch + ":" + Math.round(of.x * 10) + "," + Math.round(of.y * 10) + ":" + (A3.lastKind || 0) + ":" + (A3S && A3S.boardOn ? 1 : 0);
+    if (!busy && A3C[pass] && A3CK[pass] === key && now - A3CT[pass] < 170) { ctx.drawImage(A3C[pass], 0, 0, cw, ch, 0, 0, W0, H0); return; }
     if (A3.w !== cw || A3.h !== ch) { r.setSize(cw, ch, false); A3.w = cw; A3.h = ch; }
     A3.cam.layers.set(pass);
     r.render(A3.scene, A3.cam);
-    ctx.drawImage(A3.gl, of.x, of.y, W0, H0);
+    if (busy) { ctx.drawImage(A3.gl, of.x, of.y, W0, H0); A3CT[pass] = 0; return; }
+    var c = A3C[pass] || (A3C[pass] = document.createElement("canvas"));
+    if (c.width !== cw || c.height !== ch) { c.width = cw; c.height = ch; }
+    var cc = c.getContext("2d"); cc.setTransform(1, 0, 0, 1, 0, 0); cc.clearRect(0, 0, cw, ch);
+    cc.drawImage(A3.gl, of.x * cw / W0, of.y * ch / H0, cw, ch);
+    A3CT[pass] = now; A3CK[pass] = key;
+    ctx.drawImage(c, 0, 0, cw, ch, 0, 0, W0, H0);
   }
 
   function readState(st) {
@@ -9849,6 +9861,7 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
   renderer.debug.checkShaderErrors = false;   // 色の計算の組み立てを待たずに進む（空へを初めて開く時に 2秒止まっていた・10/29）
   renderer.toneMapping = T.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
   renderer.shadowMap.enabled = true; renderer.shadowMap.type = T.PCFSoftShadowMap;
+  renderer.shadowMap.autoUpdate = false; var shadowKey = "";
   var cv = renderer.domElement; cv.className = "sora-3d"; cv.setAttribute("aria-hidden", "true");
   host.appendChild(cv);
   var ceil = document.createElement("div"); ceil.className = "sora-ceil"; ceil.style.cssText = "position:absolute;inset:0;pointer-events:none;opacity:0;background:radial-gradient(ellipse at 50% 40%,rgba(255,206,140,.92),rgba(92,58,30,.97) 45%,rgba(40,24,12,1))"; host.appendChild(ceil);
@@ -10761,6 +10774,9 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
       if (roomK > 0.5 && roomEnv) scene.environment = roomEnv; else if (envRT) scene.environment = envRT.texture;
     }
     if (window.SORA3D_HIDE) { var ho = { far: far, root: root, core: core, haze: haze, world: world }; Object.keys(window.SORA3D_HIDE).forEach(function (k) { if (ho[k]) ho[k].visible = false; }); }   // 試験用
+    // 影の地図（1024×4096）は、太陽か積み木が動いた時だけ描き直す（毎コマ描いていて重かった・10/30 CEO「重い」）
+    var shK = sun.position.x.toFixed(2) + "," + sun.position.y.toFixed(2) + "," + sun.position.z.toFixed(2) + "," + blocks.length + "," + (drop ? 1 : 0) + "," + (meshes[lastIdx] ? meshes[lastIdx].position.y.toFixed(3) : "");
+    if (shK !== shadowKey || drop) { shadowKey = shK; renderer.shadowMap.needsUpdate = true; }
     renderer.render(scene, camera);
     placeMarks(topLv);
     ui.classList.toggle("gaze", gaze > 0.5);
@@ -10875,7 +10891,13 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
     }
     label(); kick();
   }
-  window.addEventListener("tou-render", function (e) { take(e.detail); }, false);
+  // 空へが見えない時は、記録を受け取っても組み立ては後にする（脳の画面でボタンを押した時に、見えない空への積み木まで作って重かった・10/30）
+  var pendingSt = null, tookOnce = false;
+  window.addEventListener("tou-render", function (e) {
+    if (tookOnce && !visible()) { pendingSt = e.detail; return; }
+    tookOnce = true; take(e.detail);
+  }, false);
+  new MutationObserver(function () { if (visible() && pendingSt) { var s = pendingSt; pendingSt = null; take(s); } }).observe(document.getElementById("t-sora") || host, { attributes: true, attributeFilter: ["hidden"] });
   if (window.touState) take(window.touState);
 
   // 指: 上下で塔を上り下り、左右で塔のまわりを回る
@@ -11481,7 +11503,7 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
 })();
 </script>
 
-<script>window.TRI_VER="aa406661df";
+<script>window.TRI_VER="ac4cc4396a";
 window.LV_BGT = [{"t": 0.0, "f": 0, "src": "lvbg-001.jpg"}, {"t": 2.458, "f": 59, "src": "lvbg-060.jpg"}, {"t": 4.125, "f": 99, "src": "lvbg-100.jpg"}, {"t": 5.792, "f": 139, "src": "lvbg-140.jpg"}, {"t": 7.875, "f": 189, "src": "lvbg-190.jpg"}, {"t": 9.542, "f": 229, "src": "lvbg-230.jpg"}];
 // ===== 積み上げ帳アプリ: 全画面の形・音の合図・留守番係 =====
 (function () {
