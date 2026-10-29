@@ -528,6 +528,48 @@ body.app .app-bar button,body.app #b-yume .tabs,body.app .app-min,body.app #modo
 /* たたむ時はすぐ消す（細くなる途中の暗い影が残らない様に）。開く時だけ動きを付ける */
 body.app:not(.ui-peek) .app-min button:not(.on){transition:none!important}
 
+/* 版56: 10/29 CEO「脳もブロックも、表示される画面を透明に・景色の邪魔をしない工夫」。
+   札・時間の札・もどす・地上を見る・タブは、色の板をやめて透明（金の細いふちと字の影だけ）。
+   ボタンの後ろのぼかし（backdrop-filter）は、スマホでとても重いので全部外す（ボタンの反応を軽く） */
+body.app{--g-bg:transparent;--g-bd:1px solid rgba(242,207,124,.55);--g-sh:none;--t-sh:0 1px 2px rgba(0,0,0,.95),0 0 10px rgba(0,0,0,.75),0 0 22px rgba(0,0,0,.45)}
+body.app *{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+body.app .app-bar button,body.app #b-yume .tabs,body.app #modosu,body.app .sora-btn,body.app .app-min,body.app .sora-card,body.app #t-nou .kb-fuda.nou-f,.app-toast,.sora-arr{background:linear-gradient(180deg,rgba(10,6,8,.16),rgba(10,6,8,.06))!important;box-shadow:none!important;border:var(--g-bd)!important}
+body.app .app-bar button,body.app #b-yume .tabs button,body.app #modosu,body.app .sora-btn,body.app .app-min button,body.app .sora-card,body.app .sora-card *,body.app #t-nou .kb-fuda.nou-f,body.app #t-nou .kb-fuda.nou-f *,.app-toast,.app-toast *,.sora-arr,.sora-arr *,body.app .app-bar .ttl{text-shadow:var(--t-sh)!important}
+body.app #b-yume .tabs [aria-selected="true"],body.app .app-min button.on{background:linear-gradient(180deg,rgba(246,220,156,.82),rgba(217,178,94,.78))!important;text-shadow:none!important}
+body.app .app-min button:not(.on){background:transparent!important;box-shadow:none!important}
+/* 下の4つのボタン: 下の暗い帯を消し、色は薄いガラスに（ふちと印は種類の色）。押せる所の大きさは同じ */
+body.app .plus.plus4{background:none!important;padding-top:8px!important}
+body.app .plus.plus4 button{min-height:60px!important;box-shadow:none!important;text-shadow:var(--t-sh)}
+body.app .plus.plus4 button::before{opacity:.45}
+body.app .plus.plus4 .p-ao{background:linear-gradient(180deg,rgba(70,125,230,.36),rgba(26,60,140,.42))!important;border:1.5px solid rgba(120,170,255,.85)!important}
+body.app .plus.plus4 .p-sa{background:linear-gradient(180deg,rgba(210,120,175,.36),rgba(120,50,100,.42))!important;border:1.5px solid rgba(240,160,210,.85)!important}
+body.app .plus.plus4 .p-mm{background:linear-gradient(180deg,rgba(235,120,40,.38),rgba(140,55,8,.44))!important;border:1.5px solid rgba(255,170,100,.88)!important}
+body.app .plus.plus4 .p-mi{background:linear-gradient(180deg,rgba(60,170,105,.36),rgba(20,95,55,.42))!important;border:1.5px solid rgba(120,220,160,.85)!important}
+/* 押した瞬間に光る（反応を指ですぐ感じる） */
+body.app .plus.plus4 button{transition:transform .08s ease,filter .08s ease}
+body.app .plus.plus4 button:active,body.app .plus.plus4 button.tap{transform:scale(.93);filter:brightness(1.6)}
+body.app button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+/* 脳の札: 明るい研究室の上なので、こげ茶の字に白い光の縁。1行だけ・左に寄せる（12の点は丸い目盛りと同じなので消す） */
+body.app #t-nou .kb-fuda.nou-f{left:max(12px,env(safe-area-inset-left))!important;transform:none!important;top:calc(env(safe-area-inset-top) + 104px)!important;padding:5px 14px!important;gap:6px;border-color:rgba(150,105,40,.55)!important;background:linear-gradient(180deg,rgba(255,250,242,.22),rgba(255,250,242,.08))!important}
+body.app #t-nou .kb-fuda.nou-f .yl,body.app #t-nou .kb-fuda.nou-f .lv-dots{display:none!important}
+body.app #t-nou .kb-fuda.nou-f,body.app #t-nou .kb-fuda.nou-f *{color:#2c190c!important;text-shadow:0 0 2px rgba(255,250,240,.95),0 0 10px rgba(255,248,236,.85)!important}
+body.app #t-nou .kb-fuda.nou-f b{display:flex;align-items:baseline;gap:8px;font-weight:600}
+body.app #t-nou .kb-fuda.nou-f .lv-n{color:#7a4a0c!important;font-size:22px;font-weight:800}
+body.app #t-nou .kb-fuda.nou-f .lv-ato{font-size:15px;font-weight:600}
+body.app #t-nou .kb-fuda.nou-f{right:auto!important;width:auto!important;max-width:calc(100% - 24px)}
+/* 脳（明るい研究室）の時: 透明な札の字は、こげ茶に白い光の縁（白い字に黒い影だと、明るい壁の上で汚れて見えた） */
+body.app.tab-nou{--t-sh:0 0 2px rgba(255,250,240,.95),0 0 9px rgba(255,248,236,.9),0 0 18px rgba(255,248,236,.6)}
+body.app.tab-nou .app-bar button,body.app.tab-nou #b-yume .tabs button,body.app.tab-nou #modosu,body.app.tab-nou .app-min button:not(.on),body.app.tab-nou .app-bar .ttl{color:#2c190c!important}
+body.app.tab-nou .app-bar .ttl{color:#5a3a12!important}
+body.app.tab-nou .app-bar button,body.app.tab-nou #b-yume .tabs,body.app.tab-nou #modosu,body.app.tab-nou .app-min{border-color:rgba(150,105,40,.55)!important;background:linear-gradient(180deg,rgba(255,250,242,.22),rgba(255,250,242,.08))!important}
+body.app.tab-nou #b-yume .tabs [aria-selected="true"],body.app.tab-nou .app-min button.on{color:#2a1606!important}
+/* 脳の時の下の4つは、明るい床の上でも色が分かる濃さに（字は白に黒い影のまま） */
+body.app.tab-nou .plus.plus4 button{text-shadow:0 1px 2px rgba(0,0,0,.9),0 0 8px rgba(0,0,0,.55)!important}
+body.app.tab-nou .plus.plus4 .p-ao{background:linear-gradient(180deg,rgba(70,125,230,.66),rgba(26,60,140,.72))!important}
+body.app.tab-nou .plus.plus4 .p-sa{background:linear-gradient(180deg,rgba(210,120,175,.66),rgba(120,50,100,.72))!important}
+body.app.tab-nou .plus.plus4 .p-mm{background:linear-gradient(180deg,rgba(235,120,40,.68),rgba(140,55,8,.74))!important}
+body.app.tab-nou .plus.plus4 .p-mi{background:linear-gradient(180deg,rgba(60,170,105,.66),rgba(20,95,55,.72))!important}
+
 </style>
 </head>
 <body class="app">
@@ -770,6 +812,7 @@ window.TRIWHEEL_ROBOT = function (THREE) {
 
 (function () {
   "use strict";
+  if (document.body && document.body.classList.contains("app")) return;   // アプリでは見せない箱
 
   var container = document.getElementById("yume");
   // three.js が読めない時（印刷の道具など）は、画面の写しを出す（オーパス 10/27）
@@ -1996,6 +2039,7 @@ window.KOKUBAN_SHIKI = ["98 = 12×8 + 2", "98×5分 = 490分 = 8時間10分", "1
 window.KOKUBAN_ZU = ["masu", "houbutsu", "sankaku", "en", "kaidan"];
 (function () {
   "use strict";
+  if (document.body && document.body.classList.contains("app")) return;   // アプリでは見せない箱
 
   var container = document.getElementById("kokuban");
   var shot = document.querySelector(".kokuban-utsushi");
@@ -2981,6 +3025,7 @@ window.KOKUBAN_ZU = ["masu", "houbutsu", "sankaku", "en", "kaidan"];
 
 (function () {
   "use strict";
+  if (document.body && document.body.classList.contains("app")) return;   // アプリでは見せない箱
 
   var container = document.getElementById("hon");
   var shot = document.querySelector(".hon-utsushi");
@@ -3881,6 +3926,7 @@ window.KOKUBAN_ZU = ["masu", "houbutsu", "sankaku", "en", "kaidan"];
 
 (function () {
   "use strict";
+  if (document.body && document.body.classList.contains("app")) return;   // アプリでは見せない箱
 
   var container = document.getElementById("nou");
   var shot = document.querySelector(".nou-utsushi");
@@ -6632,9 +6678,11 @@ window.TRIWHEEL_RELIEF = function (THREE, R, unproj, done) {
     var bg = ctx.createRadialGradient(HUD.x, HUD.y, 10, HUD.x, HUD.y, HUD.r + 46);
     bg.addColorStop(0, "rgba(14,10,12," + (0.8 + dk) + ")"); bg.addColorStop(0.75, "rgba(14,10,12," + (0.66 + dk) + ")"); bg.addColorStop(1, "rgba(14,10,12,0)");
     if (document.body.classList.contains("app")) {   // アプリ: 上の札やボタンと同じ「暗いガラス・金の細いふち・同じ影」（ソル24回目 8）
-      ctx.shadowColor = "rgba(0,0,0,0.45)"; ctx.shadowBlur = 40; ctx.shadowOffsetY = 16;
-      ctx.fillStyle = "rgba(12,8,10," + (0.8 + dk) + ")"; ctx.beginPath(); ctx.arc(HUD.x, HUD.y, HUD.r + 30, 0, Math.PI * 2); ctx.fill();
-      ctx.shadowColor = "transparent"; ctx.lineWidth = 2.5; ctx.strokeStyle = "rgba(242,207,124,0.5)"; ctx.stroke();
+      // 10/29 CEO「表示される画面を透明に」: 丸の中は透かし（ふちの金の線と、字の影だけで読ませる）
+      var cg = ctx.createRadialGradient(HUD.x, HUD.y, 0, HUD.x, HUD.y, HUD.r + 30);
+      cg.addColorStop(0, "rgba(12,8,10," + (0.2 + dk) + ")"); cg.addColorStop(1, "rgba(12,8,10," + (0.08 + dk * 0.5) + ")");
+      ctx.fillStyle = cg; ctx.beginPath(); ctx.arc(HUD.x, HUD.y, HUD.r + 30, 0, Math.PI * 2); ctx.fill();
+      ctx.lineWidth = 2.5; ctx.strokeStyle = "rgba(242,207,124,0.6)"; ctx.stroke();
       ctx.lineWidth = 2; ctx.strokeStyle = "rgba(255,255,255,0.14)"; ctx.beginPath(); ctx.arc(HUD.x, HUD.y, HUD.r + 27, Math.PI * 1.1, Math.PI * 1.9); ctx.stroke();
     } else { ctx.fillStyle = bg; ctx.beginPath(); ctx.arc(HUD.x, HUD.y, HUD.r + 46, 0, Math.PI * 2); ctx.fill(); }
     ctx.restore();
@@ -6679,7 +6727,7 @@ window.TRIWHEEL_RELIEF = function (THREE, R, unproj, done) {
       if (a <= 0) return;
       ctx.save(); ctx.globalAlpha *= a; ctx.translate(HUD.x, HUD.y + (appM ? 10 : 16) + dy); ctx.scale(sc, sc * (sy === undefined ? 1 : sy));
       ctx.font = "700 " + (String(n).length > 2 ? (appM ? 130 : 104) : (appM ? 190 : 140)) + "px " + face;
-      ctx.shadowColor = "rgba(0,0,0,0.6)"; ctx.shadowBlur = 6; ctx.shadowOffsetY = 3;
+      ctx.shadowColor = "rgba(0,0,0," + (appM ? 0.85 : 0.6) + ")"; ctx.shadowBlur = appM ? 18 : 6; ctx.shadowOffsetY = 3;   // 透かした丸の上でも読める影
       ctx.fillStyle = goldGrad(-50, 50); ctx.fillText(String(n), 0, 0);
       ctx.restore();
     }
@@ -6853,6 +6901,7 @@ window.TRIWHEEL_RELIEF = function (THREE, R, unproj, done) {
   }
   function draw(now) {
     if (!ready || !canvas.width) return;
+    window.NOUE_V = (window.NOUE_V || 0) + 1;   // 描き直した印（立体の板は、印が変わった時だけ絵を写す・10/29 ボタンを軽く）
     var k = canvas.width / W0;
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.globalCompositeOperation = "source-over";
@@ -7038,7 +7087,7 @@ window.TRIWHEEL_RELIEF = function (THREE, R, unproj, done) {
     frame = 0;
     var now = Date.now();
     // ふだんの弱い光はゆっくりでよい（電池を使いすぎない）
-    if (anim || intro || moving() || A3 || now - last > 45) { draw(now); last = now; }
+    if (anim || intro || moving() || A3 || now - last > 90) { draw(now); last = now; }   // ふだんは 11コマ/秒（10/29 ボタンを軽く）
     if (anim || moving()) watchFps(performance.now()); else lastF = 0;
     if (needLoop()) frame = window.requestAnimationFrame(tick);
   }
@@ -7115,6 +7164,7 @@ window.TRIWHEEL_RELIEF = function (THREE, R, unproj, done) {
 
 (function () {
   "use strict";
+  if (document.body && document.body.classList.contains("app")) return;   // アプリでは見せない箱
 
   var container = document.getElementById("mix");
   var shot = document.querySelector(".mix-utsushi");
@@ -8074,6 +8124,7 @@ window.TRIWHEEL_RELIEF = function (THREE, R, unproj, done) {
 
 (function () {
   "use strict";
+  if (document.body && document.body.classList.contains("app")) return;   // アプリでは見せない箱
 
   var container = document.getElementById("chishiki");
   var fallback = document.querySelector(".chishiki-utsushi");
@@ -10381,7 +10432,7 @@ window.SORA3D = {"pano_machi": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
       if (dd > 1.6) drop = null;
     }
     if (goldLine) { goldLine.material.opacity = 0.65 + 0.3 * Math.sin(now / 400); }
-    var gp = 0.5 + 0.5 * Math.sin(now / 520); ghostM.opacity = 0.1 + 0.12 * gp; ghostE.opacity = 0.14 + 0.16 * gp;
+    var gp = 0.5 + 0.5 * Math.sin(now / 520); ghostM.opacity = 0.03 + 0.05 * gp; ghostE.opacity = 0.3 + 0.35 * gp;   /* 次の置き場は、もやの箱でなく金の線で（10/29 透明に） */
     var nx = cellPos(n); ghost.position.copy(nx); ghost.visible = !drop && (!document.body.classList.contains("app") || document.body.classList.contains("ui-peek"));   // アプリでは触った時だけ（ふだんは景色だけ）
     // 石の照り返し: 空の景色から、ときどき作り直す
     var envKey = zi + ":" + Math.round(mix * 8);
@@ -11087,7 +11138,7 @@ window.TOU_E = {"ao": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJAAAAClCAY
 })();
 </script>
 
-<script>window.TRI_VER="3ab35fe8e5";
+<script>window.TRI_VER="e96c3524ca";
 window.LV_BGT = [{"t": 0.0, "f": 0, "src": "lvbg-001.jpg"}, {"t": 2.458, "f": 59, "src": "lvbg-060.jpg"}, {"t": 4.125, "f": 99, "src": "lvbg-100.jpg"}, {"t": 5.792, "f": 139, "src": "lvbg-140.jpg"}, {"t": 7.875, "f": 189, "src": "lvbg-190.jpg"}, {"t": 9.542, "f": 229, "src": "lvbg-230.jpg"}];
 // ===== 積み上げ帳アプリ: 全画面の形・音の合図・留守番係 =====
 (function () {
@@ -11228,6 +11279,17 @@ window.LV_BGT = [{"t": 0.0, "f": 0, "src": "lvbg-001.jpg"}, {"t": 2.458, "f": 59
   }
   window.TW_PEEK = peek;
   peek(3500);
+  // 今どちらの景色か（脳は明るい研究室・空へは暗い所が多い）。札の字の色を景色に合わせる
+  var tNou = document.getElementById("t-nou");
+  function paintTab() { document.body.classList.toggle("tab-nou", !!tNou && !tNou.hidden); }
+  if (tNou) new MutationObserver(paintTab).observe(tNou, { attributes: true, attributeFilter: ["hidden"] });
+  paintTab();
+  // 押した瞬間の手ごたえ（10/29 CEO「ボタンの反応が悪い」）: 指が触れた時にすぐ光らせ、カチッと鳴らす（数と絵はその後に続く）
+  document.addEventListener("pointerdown", function (e) {
+    var b = e.target.closest ? e.target.closest(".plus.plus4 button") : null; if (!b) return;
+    b.classList.add("tap"); setTimeout(function () { b.classList.remove("tap"); }, 160);
+    unlock(); tone(1760, 0, 0.05, 0.05, "triangle", 1320);
+  }, { passive: true });
   document.addEventListener("pointerdown", function (e) {
     var t = e.target;
     if (t.closest && t.closest(".app-min")) { if (!document.body.classList.contains("ui-peek")) { e.preventDefault(); e.stopPropagation(); } peek(5000); return; }
@@ -11869,7 +11931,7 @@ window.NOU3D_CFG = {"slot": [905, 560], "depthK": 0.34, "zoom": 1.03, "ext": {"u
   // まばたき
   var nextBlink = performance.now() + 2200, blinkT0 = -1, dbl = false;
 
-  var raf = 0, last = performance.now();
+  var raf = 0, last = performance.now(), texV = -1;
   function visible() { var p = document.getElementById("t-nou"); return !p || !p.hidden; }
   function tick() {
     raf = 0; if (!visible()) return;
@@ -11915,7 +11977,7 @@ window.NOU3D_CFG = {"slot": [905, 560], "depthK": 0.34, "zoom": 1.03, "ext": {"u
     cam.position.set(Math.sin(ax) * D0 * 0.25 + shx, Math.sin(ay) * D0 * 0.2 + shy, D0);
     cam.lookAt(shx * 0.5, shy * 0.5, 0);
     // 舞台の絵を写す
-    nouTex.needsUpdate = true;
+    if (window.NOUE_V !== texV) { texV = window.NOUE_V; nouTex.needsUpdate = true; }   // 絵が変わった時だけ写す（前は毎コマ 1920×1280 を写して重かった・10/29 CEO「ボタンの反応が悪い」）
     // 光の粒
     for (var j = 0; j < NP; j++) {
       var q = pv[j];
