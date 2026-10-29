@@ -1,12 +1,20 @@
 // 積み上げ帳アプリの留守番係: 一度開けば、電波が無くても開ける。新しい版が有れば次に開いた時に入れ替わる
-var V = "tsumiage-bc5dbea2df";
+var V = "tsumiage-1df25e7b15", KA = "tsumiage-a";
 var FILES = ["./", "index.html", "three.min.js", "manifest.webmanifest", "icon-192.png", "icon-512.png", "apple-touch-icon.png"];
 self.addEventListener("install", function (e) {
   e.waitUntil(caches.open(V).then(function (c) { return c.addAll(FILES); }).then(function () { return self.skipWaiting(); }));
 });
 self.addEventListener("activate", function (e) {
   e.waitUntil(caches.keys().then(function (ks) {
-    return Promise.all(ks.filter(function (k) { return k !== V; }).map(function (k) { return caches.delete(k); }));
+    return Promise.all(ks.filter(function (k) { return k !== V && k !== KA; }).map(function (k) { return caches.delete(k); }));
+  }).then(function () {
+    // 新しい本体で使わなくなった絵は捨てる（箱が太り続けない様に）
+    return caches.match("index.html").then(function (res) { return res ? res.text() : null; }).then(function (html) {
+      if (!html) return;
+      return caches.open(KA).then(function (c) { return c.keys().then(function (ks) {
+        return Promise.all(ks.filter(function (k) { var n = k.url.split("/a/").pop(); return html.indexOf("a/" + n) < 0; }).map(function (k) { return c.delete(k); }));
+      }); });
+    });
   }).then(function () { return self.clients.claim(); }));
 });
 self.addEventListener("fetch", function (e) {
@@ -16,10 +24,20 @@ self.addEventListener("fetch", function (e) {
   if (u.pathname.endsWith(".mp4")) return;   // 動画は途中から読む事が有るので、留守番係は通さない
   if (r.mode === "navigate" || u.pathname.endsWith("/index.html")) {
     // 本体は、まず新しい物を取りに行き、だめなら手元の物
-    e.respondWith(fetch(r).then(function (res) {
+    // 電波が弱い時は 2.5秒で待つのをやめ、手元の物で開く（10/29 CEO「開くとかなり時間がかかる」）
+    var net = fetch(r).then(function (res) {
       var cp = res.clone(); caches.open(V).then(function (c) { c.put("index.html", cp); });
       return res;
-    }).catch(function () { return caches.match("index.html"); }));
+    });
+    e.respondWith(Promise.race([net, new Promise(function (ok) { setTimeout(ok, 2500); }).then(function () { return caches.match("index.html"); })])
+      .then(function (res) { return res || net; }).catch(function () { return caches.match("index.html"); }));
+    return;
+  }
+  // 中身の印の名前の絵（a/…）は変わらないので、版をまたいで別の箱に持ち続ける
+  if (u.pathname.indexOf("/a/") >= 0) {
+    e.respondWith(caches.open(KA).then(function (c) { return c.match(r).then(function (hit) {
+      return hit || fetch(r).then(function (res) { if (res && res.ok) c.put(r, res.clone()); return res; });
+    }); }));
     return;
   }
   // 字の形（Google Fonts）と絵は、手元に有ればそれを使い、無ければ取って残す
