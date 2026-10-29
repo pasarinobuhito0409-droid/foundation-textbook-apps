@@ -696,6 +696,12 @@ body.app .sora-card .sc-ato span{font-size:15px!important}
 body.app .sora-card .sc-ato i{font-size:15.5px!important;opacity:1!important}
 body.app .sora-card .sc-ato b{font-size:28px!important}
 
+/* v68（ソル42回目 1・4）: 脳の下のボタンの枠をもっと細く薄く・空への札の小さな字の縁取りを均一に */
+body.app.tab-nou .plus.plus4.plus4 button{background:transparent!important;border:1px solid rgba(110,72,24,.26)!important}
+body.app.tab-nou .app-min{border:1px solid rgba(110,72,24,.2)!important}
+body.app.tab-nou .plus.plus4.plus4 button .pn,body.app.tab-nou .plus.plus4.plus4 button .pp,body.app.tab-nou .app-min button{text-shadow:0 0 3px rgba(255,250,240,.9),0 0 8px rgba(255,250,240,.5)!important}
+body.app .sora-card .sc-sub,body.app .sora-card .sc-sum,body.app .sora-card .sc-exp,body.app .sora-card .sc-ato i,body.app .sora-card .sc-ato span,body.app .sora-card .sc-next,body.app .sora-card .sc-now{text-shadow:0 0 2px rgba(0,0,0,1),0 0 4px rgba(0,0,0,.95),0 0 9px rgba(0,0,0,.8),0 1px 14px rgba(0,0,0,.6)!important}
+
 </style>
 </head>
 <body class="app">
@@ -6573,8 +6579,10 @@ window.TRIWHEEL_RELIEF = function (THREE, R, unproj, done) {
     // 回路の模様の上でも読める様に、うすい黒の帯（車の画面の様に、細いふち）
     var tw = ctx.measureText(K.name).width + size * 0.9, th = size * 1.55;
     ctx.fillStyle = "rgba(8,10,14,0.86)";   // 字の所だけ回路の模様を沈める（ソル41回目 2）。字は CEO が選んだ細く間の広い字（M PLUS 1 の 200）のまま
+    ctx.shadowColor = "rgba(6,8,12,0.9)"; ctx.shadowBlur = size * 0.45;   // 帯のすぐ外の明るい回路も、ぼかした影で沈める（ソル42回目 2）
     roundRect(x - tw / 2, y - th / 2 + size * 0.06, tw, th, size * 0.12);
-    ctx.fill();
+    ctx.fill(); ctx.fill();
+    ctx.shadowBlur = 0;
     ctx.strokeStyle = "rgba(255,255,255,0.22)"; ctx.lineWidth = Math.max(1, size * 0.025); ctx.stroke();
     ctx.shadowColor = "rgba(0,0,0,0.55)"; ctx.shadowBlur = size * 0.12;
     ctx.fillStyle = "rgba(246,248,250,0.97)";
@@ -11375,7 +11383,7 @@ window.TOU_E = {"ao": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJAAAAClCAY
 })();
 </script>
 
-<script>window.TRI_VER="bfab2eb093";
+<script>window.TRI_VER="5f27811208";
 window.LV_BGT = [{"t": 0.0, "f": 0, "src": "lvbg-001.jpg"}, {"t": 2.458, "f": 59, "src": "lvbg-060.jpg"}, {"t": 4.125, "f": 99, "src": "lvbg-100.jpg"}, {"t": 5.792, "f": 139, "src": "lvbg-140.jpg"}, {"t": 7.875, "f": 189, "src": "lvbg-190.jpg"}, {"t": 9.542, "f": 229, "src": "lvbg-230.jpg"}];
 // ===== 積み上げ帳アプリ: 全画面の形・音の合図・留守番係 =====
 (function () {
