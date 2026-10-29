@@ -669,6 +669,19 @@ body.app.tab-nou .app-min{border:1px solid rgba(110,72,24,.32)!important;backgro
 body.app:not(.tab-nou) .app-min{border:1px solid rgba(255,255,255,.22)!important;background:none!important}
 body.app.tab-nou #modosu{border:1px solid rgba(110,72,24,.32)!important;background:none!important}
 
+/* 版65: ソル39回目 2・3・4 */
+/* 2: 上のタブと音の札は、面を消して細い線だけ（選んだタブの輪郭だけ濃く）。下の4つは面をほぼ無くし、影も無し */
+body.app.tab-nou .app-bar button,body.app.tab-nou #b-yume .tabs{background:none!important;border:1px solid rgba(110,72,24,.3)!important;box-shadow:none!important}
+body.app:not(.tab-nou) .app-bar button,body.app:not(.tab-nou) #b-yume .tabs{background:none!important;border:1px solid rgba(255,255,255,.24)!important;box-shadow:none!important}
+body.app .plus.plus4.plus4 button{box-shadow:none!important}
+body.app.tab-nou .plus.plus4.plus4 button{background:rgba(255,252,246,.04)!important;border:1px solid rgba(110,72,24,.42)!important}
+body.app:not(.tab-nou) .plus.plus4.plus4 button{background:rgba(10,8,12,.04)!important;border:1px solid rgba(255,255,255,.3)!important}
+/* 3: 空へのボタンの字は、字のまわりだけの濃い影で、床・建物・空・宇宙のどこでも同じに読める様に */
+body.app:not(.tab-nou) .plus.plus4.plus4 button .pn,body.app:not(.tab-nou) .plus.plus4.plus4 button .pp,body.app:not(.tab-nou) .app-min button{color:#fff!important;text-shadow:0 0 2px rgba(0,0,0,1),0 0 5px rgba(0,0,0,.95),0 0 12px rgba(0,0,0,.75),0 0 22px rgba(0,0,0,.45)!important}
+body.app:not(.tab-nou) .plus.plus4.plus4 button .pp{font-size:14px!important}
+/* 4: 差した直後の「＋5分」は、押したボタンのすぐ上に（結果と操作をまとめる） */
+body.app .app-toast{top:auto!important;bottom:calc(env(safe-area-inset-bottom) + 152px)!important;font-size:17px!important}
+
 </style>
 </head>
 <body class="app">
@@ -11347,7 +11360,7 @@ window.TOU_E = {"ao": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJAAAAClCAY
 })();
 </script>
 
-<script>window.TRI_VER="d0da8870d7";
+<script>window.TRI_VER="b7a7e7337d";
 window.LV_BGT = [{"t": 0.0, "f": 0, "src": "lvbg-001.jpg"}, {"t": 2.458, "f": 59, "src": "lvbg-060.jpg"}, {"t": 4.125, "f": 99, "src": "lvbg-100.jpg"}, {"t": 5.792, "f": 139, "src": "lvbg-140.jpg"}, {"t": 7.875, "f": 189, "src": "lvbg-190.jpg"}, {"t": 9.542, "f": 229, "src": "lvbg-230.jpg"}];
 // ===== 積み上げ帳アプリ: 全画面の形・音の合図・留守番係 =====
 (function () {
