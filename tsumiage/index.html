@@ -6742,6 +6742,8 @@ window.TRIWHEEL_RELIEF = function (THREE, R, unproj, done) {
   }
   var zc = null;
   function applyCam(z) {
+    // 立体の脳の時は、2D の板を拡大しない。立体のカメラが同じ所へ寄る（前は奥の板を前の板へ写していて、差す間ずっと脳とアバターが消えていた・10/30 CEO「急に脳がなくなってアバターもいなくなる」）
+    if (M3() && img.plate && img.brainL && img.frontL) { window.NOU_ZOOM = z < 1.002 ? null : { z: z, x: CAM.x, y: CAM.y }; return; }
     if (z < 1.002) return;
     var cw = canvas.width, ch = canvas.height;
     if (!zc) zc = document.createElement("canvas");
@@ -6756,12 +6758,14 @@ window.TRIWHEEL_RELIEF = function (THREE, R, unproj, done) {
     ctx.restore();
   }
   // 部屋が暗くなる（脳の光が目立つ）。奥にぼんやりした明かり
-  function drawDim(pw, now) {
+  function drawDim(pw, now, m3) {
     if (pw < 0.01) return;
     ctx.save(); ctx.setTransform(k0(), 0, 0, k0(), 0, 0);
-    var vg = ctx.createRadialGradient(1080, 720, 120, 1080, 720, 1300);
-    vg.addColorStop(0, "rgba(40,8,14," + (0.5 * pw) + ")"); vg.addColorStop(0.6, "rgba(26,6,10," + (0.74 * pw) + ")"); vg.addColorStop(1, "rgba(10,3,6," + (0.9 * pw) + ")");
-    ctx.fillStyle = vg; ctx.fillRect(0, 0, W0, H0);
+    if (!m3) {   // 立体の脳の時は、暗くするのは立体の方（画面全体）。ここでも暗くすると、帯の中だけ二重に暗く四角いふちが出た
+      var vg = ctx.createRadialGradient(1080, 720, 120, 1080, 720, 1300);
+      vg.addColorStop(0, "rgba(40,8,14," + (0.5 * pw) + ")"); vg.addColorStop(0.6, "rgba(26,6,10," + (0.74 * pw) + ")"); vg.addColorStop(1, "rgba(10,3,6," + (0.9 * pw) + ")");
+      ctx.fillStyle = vg; ctx.fillRect(0, 0, W0, H0);
+    }
     // 床に映る脳の光
     ctx.save(); ctx.translate(1120, 1185); ctx.scale(1, 0.22);
     var fg = ctx.createRadialGradient(0, 0, 0, 0, 0, 520);
@@ -7134,7 +7138,7 @@ window.TRIWHEEL_RELIEF = function (THREE, R, unproj, done) {
       if (bk !== backKey) {
         backKey = bk;
         ctx.drawImage(img.plate, bgx3 * k, bgy3 * k, W0 * bgs3 * k, H0 * bgs3 * k);
-        drawDim(pw3, now);
+        drawDim(pw3, now, true);
         window.NOUE_VB = (window.NOUE_VB || 0) + 1;
       }
       window.NOU_DIM = pw3;
@@ -11577,7 +11581,7 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
 })();
 </script>
 
-<script>window.TRI_VER="310365de2b";
+<script>window.TRI_VER="042326d69b";
 window.LV_BGT = [{"t": 0.0, "f": 0, "src": "lvbg-001.jpg"}, {"t": 2.458, "f": 59, "src": "lvbg-060.jpg"}, {"t": 4.125, "f": 99, "src": "lvbg-100.jpg"}, {"t": 5.792, "f": 139, "src": "lvbg-140.jpg"}, {"t": 7.875, "f": 189, "src": "lvbg-190.jpg"}, {"t": 9.542, "f": 229, "src": "lvbg-230.jpg"}];
 // ===== 積み上げ帳アプリ: 全画面の形・音の合図・留守番係 =====
 (function () {
@@ -12592,8 +12596,15 @@ window.NOU3D_CFG = {"slot": [905, 560], "depthK": 0.34, "zoom": 1.03, "ext": {"u
     shake *= Math.pow(0.04, dt); punch *= Math.pow(0.02, dt);
     var shx = shake > 0.01 ? (Math.random() - 0.5) * 0.012 * shake : 0, shy = shake > 0.01 ? (Math.random() - 0.5) * 0.012 * shake : 0;
     var ax = -(dx * 0.35 + sx), ay = dy * 0.25 + sy, D0 = dist0 * (1 - 0.035 * punch);
-    cam.position.set(Math.sin(ax) * D0 * 0.25 + shx, Math.sin(ay) * D0 * 0.2 + shy, D0);
-    cam.lookAt(shx * 0.5, shy * 0.5, 0);
+    // 差す時に寄るカメラ（2D の絵の舞台と同じ寄り方・脳もアバターも一緒に寄る）
+    var Z = window.NOU_ZOOM, zx = 0, zy = 0;
+    if (Z && Z.z > 1.002) {
+      var zp = toWorld(Z.x, Z.y), zth = Math.tan(cam.fov * Math.PI / 360), hh = dist0 * zth, hw = hh * cam.aspect;
+      D0 /= Z.z; zx = Math.max(-(hw - hw / Z.z), Math.min(hw - hw / Z.z, zp.x)); zy = Math.max(-(hh - hh / Z.z), Math.min(hh - hh / Z.z, zp.y));
+    }
+    if (!!Z !== !!tick.zWas) needFull = true; tick.zWas = !!Z;
+    cam.position.set(Math.sin(ax) * D0 * 0.25 + shx + zx, Math.sin(ay) * D0 * 0.2 + shy + zy, D0);
+    cam.lookAt(shx * 0.5 + zx, shy * 0.5 + zy, 0);
     // 舞台の絵を写す
     if (brain) {
       brain.userData.update();
@@ -12614,7 +12625,7 @@ window.NOU3D_CFG = {"slot": [905, 560], "depthK": 0.34, "zoom": 1.03, "ext": {"u
     // 静かな時（演出・指・揺れ・まばたき・光の粒が無い）は、脳の四角の所だけ描き直す。壁と床とアバターは前のコマのまま
     // （前は 30コマ/秒 ずっと画面全部を描き直し、絵の外のぼかしも毎回計算していて、スマホの GPU が埋まりボタンの反応が遅れた）
     var live = 0; for (var k = 0; k < NP; k++) live += pa[k];
-    var quiet = brain && !needFull && !fx && !drag && shake < 0.01 && punch < 0.01 && Math.abs(vx2) + Math.abs(vy2) < 0.002 && Math.abs(dx) + Math.abs(dy) < 0.002 && live === 0 && !window.NOU3D_FX;   // まばたきは目の四角も足して描く
+    var quiet = brain && !needFull && !fx && !drag && shake < 0.01 && punch < 0.01 && Math.abs(vx2) + Math.abs(vy2) < 0.002 && Math.abs(dx) + Math.abs(dy) < 0.002 && live === 0 && !window.NOU3D_FX && !window.NOU_ZOOM;   // まばたきは目の四角も足して描く
     var D3 = window.NOU3D_N || (window.NOU3D_N = { q: 0, f: 0, why: {} }); if (quiet) D3.q++; else { D3.f++; var wy = needFull ? 'need' : fx ? 'fx' : drag ? 'drag' : live ? 'live' : U.blink.value ? 'blink' : (Math.abs(dx) + Math.abs(dy) >= 0.002) ? 'dxy' : (Math.abs(vx2) + Math.abs(vy2) >= 0.002) ? 'v' : 'other'; D3.why[wy] = (D3.why[wy] || 0) + 1; }
     if (quiet) {
       var rr = brain.userData.rect(), x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
