@@ -7429,7 +7429,7 @@ window.TRIWHEEL_RELIEF = function (THREE, R, unproj, done) {
       // 立体の脳: 回すのは立体の方。絵は、動きがある時と、正面の近く（紋章と光が消える所）と、ふだん 11コマ/秒だけ描く
       var f0 = spinFront(); stepSpin(now); var f1 = spinFront();
       var nearF = (f0 < 4 || f1 < 4) && Math.abs(f1 - f0) > 0.01;
-      if (anim || intro || (drag && !drag.spin) || Math.abs(par.x) > 0.002 || Math.abs(par.y) > 0.002 || nearF || now - last > 160) { draw(now); last = now; }   // ふだんは 6コマ/秒（アバターのゆれと光の点滅だけ）
+      if (anim || intro || (drag && !drag.spin) || Math.abs(par.x) > 0.002 || Math.abs(par.y) > 0.002 || nearF) { draw(now); last = now; }   // 静かな時は描き直さない（前は 6コマ/秒 描き直し、その度に立体の画面全部を描き直していて重かった・10/30 CEO「ボタンの反応がわるい」）
     } else if (anim || intro || (moving() && !calm) || now - last > (calm ? 45 : 90)) { draw(now); last = now; }   // ふだんは 11コマ/秒・ゆっくり回るだけの時は 22コマ/秒（1コマで1度ずつ・10/29 軽く）
     if (anim || moving()) watchFps(performance.now()); else lastF = 0;
     if (needLoop()) frame = window.requestAnimationFrame(tick);
@@ -10898,7 +10898,7 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
     warmQ = [];
     if (app) warmQ.push(warmSize);
     var seen = [];
-    scene.traverse(function (o) { var ms = o.material ? [].concat(o.material) : []; ms.forEach(function (m) { ["map", "normalMap", "roughnessMap", "emissiveMap", "alphaMap"].forEach(function (k) { var tx = m[k]; if (tx && tx.image && seen.indexOf(tx) < 0) { seen.push(tx); warmQ.push(function () { renderer.initTexture(tx); }); } }); }); });
+    scene.traverse(function (o) { var ms = o.material ? [].concat(o.material) : []; ms.forEach(function (m) { ["map", "normalMap", "roughnessMap", "emissiveMap", "alphaMap"].forEach(function (k) { var tx = m[k]; if (tx && tx.image && seen.indexOf(tx) < 0) { seen.push(tx); warmQ.push(function () { var im = tx.image; return (im && im.decode && !im.complete0) ? im.decode().then(function () { im.complete0 = 1; }, function () {}) : null; }); warmQ.push(function () { renderer.initTexture(tx); }); } }); }); });
     if (app) warmQ.push(function () { if (!visible()) { warmSize(); frame(performance.now()); lastNow = 0; } });
     else warmQ.push(function () { renderer.compile(scene, camera); });
     warmStep();
@@ -10907,8 +10907,9 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
     if (!warmQ || !warmQ.length) return;
     if (visible() && document.body.classList.contains("app")) { warmQ = null; return; }   // もう見えている（ふだんの描き方に任せる）
     if (performance.now() - lastPtr < 1200) { setTimeout(warmStep, 400); return; }
-    var f = warmQ.shift(); try { f(); } catch (e) {}
-    setTimeout(warmStep, 60);
+    // 絵の読み解き（decode）は裏で済ませ、終わってから GPU へ送る（前は送る時に読み解きも重なり、1枚 1〜2.6秒 止まった）
+    var f = warmQ.shift(), r = null; try { r = f(); } catch (e) {}
+    if (r && r.then) r.then(function () { setTimeout(warmStep, 30); }); else setTimeout(warmStep, 60);
   }
   setTimeout(function () { (window.requestIdleCallback || function (f) { setTimeout(f, 1); })(warm, { timeout: 4000 }); }, 2500);
   var raf = 0;
@@ -10918,7 +10919,8 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
     raf = 0; if (!visible()) return;
     var now = performance.now();
     // 指・移動・落ちる時は毎コマ。景色を見ているだけの時は 30コマ/秒にして電池と熱を減らす（10/29 CEO「重い」）
-    if (drag || travel || drop || gazeTo || Math.abs(orbitV) > 0.0005 || now - lastDraw > 30) { frame(now); lastDraw = now; }
+    // ゆっくり回って見ているだけの時は 15コマ/秒（1コマで 0.13度しか動かない）。GPU を空けて、押した時にすぐ応える（10/30 CEO「ボタンの反応がわるい」）
+    if (drag || travel || drop || gazeTo || Math.abs(orbitV) > 0.0005 || now - lastPtr < 1500 || now - lastDraw > 66) { frame(now); lastDraw = now; }
     raf = requestAnimationFrame(loop);
   }
   function kick() { if (!raf) raf = requestAnimationFrame(loop); }
@@ -11575,7 +11577,7 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
 })();
 </script>
 
-<script>window.TRI_VER="7431a0c088";
+<script>window.TRI_VER="310365de2b";
 window.LV_BGT = [{"t": 0.0, "f": 0, "src": "lvbg-001.jpg"}, {"t": 2.458, "f": 59, "src": "lvbg-060.jpg"}, {"t": 4.125, "f": 99, "src": "lvbg-100.jpg"}, {"t": 5.792, "f": 139, "src": "lvbg-140.jpg"}, {"t": 7.875, "f": 189, "src": "lvbg-190.jpg"}, {"t": 9.542, "f": 229, "src": "lvbg-230.jpg"}];
 // ===== 積み上げ帳アプリ: 全画面の形・音の合図・留守番係 =====
 (function () {
@@ -12295,7 +12297,7 @@ window.NOU3D_CFG = {"slot": [905, 560], "depthK": 0.34, "zoom": 1.03, "ext": {"u
   var src = stage.querySelector("canvas.nou-e-canvas");
   if (!src) return;
   var renderer;
-  try { renderer = new T.WebGLRenderer({ antialias: true, alpha: false, powerPreference: "high-performance" }); } catch (e) { return; }
+  try { renderer = new T.WebGLRenderer({ antialias: true, alpha: false, powerPreference: "high-performance", preserveDrawingBuffer: true }); /* 前のコマを残し、静かな時は脳の所だけ描き直す */ } catch (e) { return; }
   renderer.debug.checkShaderErrors = false;   // 色の計算の組み立てを待たずに進む（初めて見せる時に止まらない様に）
   stage.classList.add("nou3d-on");
   renderer.outputEncoding = T.sRGBEncoding;
@@ -12305,7 +12307,7 @@ window.NOU3D_CFG = {"slot": [905, 560], "depthK": 0.34, "zoom": 1.03, "ext": {"u
   var reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   function tex(url, srgb) {
-    var t = new T.TextureLoader().load(url, function () { kick(); });
+    var t = new T.TextureLoader().load(url, function () { needFull = true; kick(); });
     if (srgb) t.encoding = T.sRGBEncoding;
     t.minFilter = T.LinearMipmapLinearFilter; t.anisotropy = 8;
     return t;
@@ -12470,6 +12472,16 @@ window.NOU3D_CFG = {"slot": [905, 560], "depthK": 0.34, "zoom": 1.03, "ext": {"u
       BU.tA.value = xA || tA; BU.tB.value = xB || tB;
       set(xA, BU.bA, BU.fA, BU.gA, BU.aA, w0); set(xB, BU.bB, BU.fB, BU.gB, BU.aB, w1);
     };
+    // 今の2枚の絵と影が入る四角（元の絵の座標）。静かな時に描き直す所
+    brain.userData.rect = function () {
+      var r = [1e9, 1e9, -1e9, -1e9];
+      [[BU.bA, BU.fA, BU.gA, BU.aA], [BU.bB, BU.fB, BU.gB, BU.aB]].forEach(function (q) {
+        if (q[3].value <= 0) return; var b = q[0].value; r[0] = Math.min(r[0], b.x); r[1] = Math.min(r[1], b.y); r[2] = Math.max(r[2], b.z); r[3] = Math.max(r[3], b.w);
+        var f = q[1].value; if (f.z > 0) { r[0] = Math.min(r[0], f.x - 120); r[2] = Math.max(r[2], f.x + 120); r[3] = Math.max(r[3], f.y + 32); }
+        var g = q[2].value; if (g.y > 0) { r[0] = Math.min(r[0], g.x - 260); r[2] = Math.max(r[2], g.x + 260); r[3] = Math.max(r[3], 1128 + 58); }
+      });
+      return r[0] < r[2] ? [Math.max(R[0], r[0]), Math.max(R[1], r[1]), Math.min(R[2], r[2]), Math.min(R[3], r[3])] : R;
+    };
     mat.depthWrite = false;
     fplane.visible = true; U.m3.value = 1; window.NOU3D_MESH = true; kick();
   }
@@ -12506,7 +12518,7 @@ window.NOU3D_CFG = {"slot": [905, 560], "depthK": 0.34, "zoom": 1.03, "ext": {"u
     if (W !== resize.w || H !== resize.h || prMax !== resize.p) { renderer.setPixelRatio(prMax); renderer.setSize(W, H, false); resize.w = W; resize.h = H; resize.p = prMax; }   // 大きさが同じ時は作り直さない（タブを替える度に 1秒以上かかっていた・10/29）
     gl.style.width = W + "px"; gl.style.height = H + "px";
     cam.aspect = W / H; cam.updateProjectionMatrix();
-    place(); kick();
+    place(); needFull = true; kick();
   }
   var dist0 = 1;
   function place() {
@@ -12531,7 +12543,7 @@ window.NOU3D_CFG = {"slot": [905, 560], "depthK": 0.34, "zoom": 1.03, "ext": {"u
   // まばたき
   var nextBlink = performance.now() + 2200, blinkT0 = -1, dbl = false;
 
-  var raf = 0, last = performance.now(), texV = -1;
+  var raf = 0, last = performance.now(), texV = -1, needFull = true, dimV = -1, prevSc = null, blinkWas = false, bc = [new T.Vector3(), new T.Vector3(), new T.Vector3(), new T.Vector3()];
   function visible() { var p = document.getElementById("t-nou"); return !p || !p.hidden; }
   function tick() {
     raf = 0; if (!visible()) return;
@@ -12544,7 +12556,8 @@ window.NOU3D_CFG = {"slot": [905, 560], "depthK": 0.34, "zoom": 1.03, "ext": {"u
     last = now;
     // ばねで正面へ戻る
     if (!drag) { vx2 += (-dx * 40 - vx2 * 9) * dt; vy2 += (-dy * 40 - vy2 * 9) * dt; dx += vx2 * dt; dy += vy2 * dt; }
-    var sx = reduced ? 0 : Math.sin(t * 0.23) * 0.055 + Math.sin(t * 0.61) * 0.012, sy = reduced ? 0 : Math.sin(t * 0.19 + 1.3) * 0.035;
+    // 回る脳が有る時は、カメラのゆっくりした揺れをやめる（脳が回るので動きは足りる。揺れると毎コマ画面全部を描き直す事になり重かった・10/30 CEO「ボタンの反応がわるい」）
+    var sway = !reduced && !brain, sx = sway ? Math.sin(t * 0.23) * 0.055 + Math.sin(t * 0.61) * 0.012 : 0, sy = sway ? Math.sin(t * 0.19 + 1.3) * 0.035 : 0;
     // 演出の時間
     var ga = 0, gr = 0, fl = 0, lr = 0, la = 0;
     if (fx) {
@@ -12585,8 +12598,9 @@ window.NOU3D_CFG = {"slot": [905, 560], "depthK": 0.34, "zoom": 1.03, "ext": {"u
     if (brain) {
       brain.userData.update();
       U.dimA.value = window.NOU_DIM || 0;
-      if (window.NOUE_VB !== texB) { texB = window.NOUE_VB; nouTex.needsUpdate = true; }
-      if (window.NOUE_V !== texF) { texF = window.NOUE_V; frontTex.needsUpdate = true; }
+      if ((window.NOU_DIM || 0) !== dimV) { dimV = window.NOU_DIM || 0; needFull = true; }
+      if (window.NOUE_VB !== texB) { texB = window.NOUE_VB; nouTex.needsUpdate = true; needFull = true; }
+      if (window.NOUE_V !== texF) { texF = window.NOUE_V; frontTex.needsUpdate = true; needFull = true; }
     } else if (window.NOUE_V !== texV) { texV = window.NOUE_V; nouTex.needsUpdate = true; }   // 絵が変わった時だけ写す（前は毎コマ 1920×1280 を写して重かった・10/29 CEO「ボタンの反応が悪い」）
     // 光の粒
     for (var j = 0; j < NP; j++) {
@@ -12597,7 +12611,27 @@ window.NOU3D_CFG = {"slot": [905, 560], "depthK": 0.34, "zoom": 1.03, "ext": {"u
     }
     pg.attributes.position.needsUpdate = true; pg.attributes.alpha.needsUpdate = true;
     pmat.uniforms.sz.value = 36 * renderer.getPixelRatio();
-    renderer.render(scene, cam);
+    // 静かな時（演出・指・揺れ・まばたき・光の粒が無い）は、脳の四角の所だけ描き直す。壁と床とアバターは前のコマのまま
+    // （前は 30コマ/秒 ずっと画面全部を描き直し、絵の外のぼかしも毎回計算していて、スマホの GPU が埋まりボタンの反応が遅れた）
+    var live = 0; for (var k = 0; k < NP; k++) live += pa[k];
+    var quiet = brain && !needFull && !fx && !drag && shake < 0.01 && punch < 0.01 && Math.abs(vx2) + Math.abs(vy2) < 0.002 && Math.abs(dx) + Math.abs(dy) < 0.002 && live === 0 && !window.NOU3D_FX;   // まばたきは目の四角も足して描く
+    var D3 = window.NOU3D_N || (window.NOU3D_N = { q: 0, f: 0, why: {} }); if (quiet) D3.q++; else { D3.f++; var wy = needFull ? 'need' : fx ? 'fx' : drag ? 'drag' : live ? 'live' : U.blink.value ? 'blink' : (Math.abs(dx) + Math.abs(dy) >= 0.002) ? 'dxy' : (Math.abs(vx2) + Math.abs(vy2) >= 0.002) ? 'v' : 'other'; D3.why[wy] = (D3.why[wy] || 0) + 1; }
+    if (quiet) {
+      var rr = brain.userData.rect(), x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+      bc[0].copy(toWorld(rr[0], rr[1])); bc[1].copy(toWorld(rr[2], rr[1])); bc[2].copy(toWorld(rr[0], rr[3])); bc[3].copy(toWorld(rr[2], rr[3]));
+      for (var m = 0; m < 4; m++) { var v = bc[m]; v.project(cam); var px = (v.x + 1) / 2 * W, py = (1 - v.y) / 2 * H; x0 = Math.min(x0, px); x1 = Math.max(x1, px); y0 = Math.min(y0, py); y1 = Math.max(y1, py); }
+      x0 = Math.max(0, Math.floor(x0) - 3); y0 = Math.max(0, Math.floor(y0) - 3); x1 = Math.min(W, Math.ceil(x1) + 3); y1 = Math.min(H, Math.ceil(y1) + 3);
+      if (C.eye && (U.blink.value > 0 || blinkWas)) {   // まばたきの目の所も
+        var er = C.eye.rect, e0 = toWorld(er[0], er[1]), e1 = toWorld(er[0] + er[2], er[1] + er[3]); e0.project(cam); e1.project(cam);
+        x0 = Math.max(0, Math.min(x0, Math.floor((e0.x + 1) / 2 * W) - 3)); x1 = Math.min(W, Math.max(x1, Math.ceil((e1.x + 1) / 2 * W) + 3));
+        y0 = Math.max(0, Math.min(y0, Math.floor((1 - e0.y) / 2 * H) - 3)); y1 = Math.min(H, Math.max(y1, Math.ceil((1 - e1.y) / 2 * H) + 3));
+      }
+      blinkWas = U.blink.value > 0;
+      var sc = [x0, y0, x1, y1]; if (prevSc) { x0 = Math.min(x0, prevSc[0]); y0 = Math.min(y0, prevSc[1]); x1 = Math.max(x1, prevSc[2]); y1 = Math.max(y1, prevSc[3]); } prevSc = sc;   // 前のコマの四角も消す
+      renderer.setScissorTest(true); renderer.setScissor(x0, H - y1, x1 - x0, y1 - y0);
+      renderer.render(scene, cam);
+      renderer.setScissorTest(false);
+    } else { prevSc = null; renderer.render(scene, cam); needFull = !brain ? false : (fx || drag || live > 0 || shake >= 0.01 || punch >= 0.01) ? true : false; }
     raf = requestAnimationFrame(tick);
   }
   function kick() { if (!raf) raf = requestAnimationFrame(tick); }
