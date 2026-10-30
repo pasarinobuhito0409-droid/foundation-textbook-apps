@@ -7267,6 +7267,9 @@ window.TRIWHEEL_RELIEF = function (THREE, R, unproj, done) {
     // 工具は基盤より前
     var sb = D.supanaBox;
     if (!use3D) ctx.drawImage(img.supana, sb[0] + of.x, sb[1] + of.y, sb[2] - sb[0], sb[3] - sb[1]);
+    // 舞台ごと回る時（nou3d/NOU3D.js の makeOrbit）は、アバターと床の基盤は立体の方が見せる。正面から離れるほど、この絵の方を消す
+    var oa = orbitA();
+    if (oa < 1) { ctx.save(); ctx.globalCompositeOperation = "destination-out"; ctx.globalAlpha = 1 - oa; ctx.fillRect(-40, 430, 1290, 900); ctx.restore(); }
     ctx.save();
     ctx.translate(ob.x, ob.y);
 
@@ -7335,6 +7338,17 @@ window.TRIWHEEL_RELIEF = function (THREE, R, unproj, done) {
   function spinFront() { var n = spinNorm(spin.a); return Math.min(n, 360 - n); }   // 正面からの角度
   function spinK() { return SC ? Math.min(1, spinFront() / 12) : 0; }               // 0 = 正面（いつもの絵・光・紋章）
   function spinGone() { return SC ? Math.min(1, spinFront() / 3) : 0; }              // 紋章と手の基盤は 3度で消す（間の絵が出る前に。残すと 4〜11度で透けて二重に見えた・ソル41回目 1）
+  function orbitA() { return window.NOU3D_ORBIT && SC ? 1 - sstep((spinFront() - 1) / 5) : 1; }   // 1 = 正面の絵のまま・0 = 立体の舞台だけ
+  // 立体の舞台の床の基盤（絵の基盤に、床と同じ名前の字を書いた物）
+  window.NOUE_CARD = function (key) {
+    var y = null; for (var i = 0; i < D.yuka.length; i++) if (D.yuka[i].key === key) y = D.yuka[i];
+    var cim = img["card_" + key], cb = D["cardBox_" + key]; if (!y || !cim || !cb || !cim.complete) return null;
+    var w = cb[2] - cb[0], h = cb[3] - cb[1], c = document.createElement("canvas"); c.width = Math.round(w * 2); c.height = Math.round(h * 2);
+    var x = c.getContext("2d"); x.scale(2, 2); x.drawImage(cim, 0, 0, w, h);
+    var c2 = document.createElement("canvas"); c2.width = c.width; c2.height = c.height; c2.getContext("2d").drawImage(c, 0, 0);   // 裏の面（字なし）
+    drawName(kindIndex(key), y.cx - cb[0], y.cy - cb[1], 62, 1, x);
+    return { canvas: c, plain: c2, box: cb };
+  };
   var SPIN_AUTO = 20;   // ずっと回る速さ（度/秒・18秒で1周）
   function spinBusy() { return !!SC && (!!spin.demo || Math.abs(spin.v) > 0.5 || spin.goal !== null || (drag && drag.spin)); }
   function stepSpin(now) {
@@ -7432,7 +7446,7 @@ window.TRIWHEEL_RELIEF = function (THREE, R, unproj, done) {
     if (M3() && ready) {
       // 立体の脳: 回すのは立体の方。絵は、動きがある時と、正面の近く（紋章と光が消える所）と、ふだん 11コマ/秒だけ描く
       var f0 = spinFront(); stepSpin(now); var f1 = spinFront();
-      var nearF = (f0 < 4 || f1 < 4) && Math.abs(f1 - f0) > 0.01;
+      var nearF = (f0 < (window.NOU3D_ORBIT ? 9 : 4) || f1 < (window.NOU3D_ORBIT ? 9 : 4)) && Math.abs(f1 - f0) > 0.01;   // 舞台ごと回る時は、アバターと床の基盤が立体へ溶けきる 6度より少し先まで描く
       if (anim || intro || (drag && !drag.spin) || Math.abs(par.x) > 0.002 || Math.abs(par.y) > 0.002 || nearF) { draw(now); last = now; }   // 静かな時は描き直さない（前は 6コマ/秒 描き直し、その度に立体の画面全部を描き直していて重かった・10/30 CEO「ボタンの反応がわるい」）
     } else if (anim || intro || (moving() && !calm) || now - last > (calm ? 45 : 90)) { draw(now); last = now; }   // ふだんは 11コマ/秒・ゆっくり回るだけの時は 22コマ/秒（1コマで1度ずつ・10/29 軽く）
     if (anim || moving()) watchFps(performance.now()); else lastF = 0;
@@ -11581,7 +11595,7 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
 })();
 </script>
 
-<script>window.TRI_VER="042326d69b";
+<script>window.TRI_VER="4a8043f6cd";
 window.LV_BGT = [{"t": 0.0, "f": 0, "src": "lvbg-001.jpg"}, {"t": 2.458, "f": 59, "src": "lvbg-060.jpg"}, {"t": 4.125, "f": 99, "src": "lvbg-100.jpg"}, {"t": 5.792, "f": 139, "src": "lvbg-140.jpg"}, {"t": 7.875, "f": 189, "src": "lvbg-190.jpg"}, {"t": 9.542, "f": 229, "src": "lvbg-230.jpg"}];
 // ===== 積み上げ帳アプリ: 全画面の形・音の合図・留守番係 =====
 (function () {
@@ -12289,7 +12303,7 @@ window.LV_DATA = {"track":[[732.5,440.0,1.0],[732.5,440.0,1.0],[732.5,440.0,1.0]
   }
 })();
 
-window.NOU3D_CFG = {"slot": [905, 560], "depthK": 0.34, "zoom": 1.03, "ext": {"url": "nou3d-ext.jpg", "size": [1920, 2880], "band": [0.2777777777777778, 0.7222222222222222]}, "dep": "nou3d-dep.png", "glow": "nou3d-glow.jpg", "eye": {"url": "nou3d-eye.png", "rect": [270, 540, 400, 400]}};
+window.NOU3D_CFG = {"slot": [905, 560], "depthK": 0.34, "zoom": 1.03, "ext": {"url": "nou3d-ext.jpg", "size": [1920, 2880], "band": [0.2777777777777778, 0.7222222222222222]}, "dep": "nou3d-dep.png", "glow": "nou3d-glow.jpg", "eye": {"url": "nou3d-eye.png", "rect": [270, 540, 400, 400]}, "orbit": {"ava": ["nou3d-A000.webp", "nou3d-A030.webp", "nou3d-A060.webp", "nou3d-A090.webp", "nou3d-A120.webp", "nou3d-A150.webp", "nou3d-A180.webp", "nou3d-A210.webp", "nou3d-A240.webp", "nou3d-A270.webp", "nou3d-A300.webp", "nou3d-A330.webp"], "walls": ["nou3d-hw1.jpg", "nou3d-hw2.jpg", "nou3d-hw3.jpg", "nou3d-hw4.jpg", "nou3d-hw5.jpg", "nou3d-hw6.jpg", "nou3d-hw7.jpg", "nou3d-hw8.jpg"], "floor": "nou3d-floor.jpg", "ceil": "nou3d-ceil.jpg"}};
 // ===== 脳の舞台を、画面いっぱいの立体に（10/28 17:30 CEO「もっと滑らかな3D・画面いっぱい・まばたき・脳の全身がバーっと光る」）=====
 // 脳の舞台（parts/NOUE.js）が描いた絵を、そのまま three.js の板に貼る。板は絵の奥行き（Depth Anything）で凸凹にし、
 // カメラがゆっくり揺れると、手前のアバターと脳が奥の壁から浮いて見える。上と下はルナが描き足した研究室（有れば）。
@@ -12326,7 +12340,7 @@ window.NOU3D_CFG = {"slot": [905, 560], "depthK": 0.34, "zoom": 1.03, "ext": {"u
     glowR: { value: 0 }, glowA: { value: 0 }, lvR: { value: 0 }, lvA: { value: 0 }, slot: { value: new T.Vector2(C.slot[0] / 1920, C.slot[1] / 1280) },
     eyeR: { value: C.eye ? new T.Vector4(C.eye.rect[0] / 1920, C.eye.rect[1] / 1280, C.eye.rect[2] / 1920, C.eye.rect[3] / 1280) : new T.Vector4() },
     blink: { value: 0 }, hasGlow: { value: C.glow ? 1 : 0 }, hasEye: { value: C.eye ? 1 : 0 }, flash: { value: 0 }, time: { value: 0 },
-    bgC: { value: new T.Color(C.bg || 0x2a1d1f) }, m3: { value: 0 }, dimA: { value: 0 }
+    bgC: { value: new T.Color(C.bg || 0x2a1d1f) }, m3: { value: 0 }, dimA: { value: 0 }, fadeA: { value: 1 }
   };
   var mat = new T.ShaderMaterial({
     uniforms: U,
@@ -12339,7 +12353,7 @@ window.NOU3D_CFG = {"slot": [905, 560], "depthK": 0.34, "zoom": 1.03, "ext": {"u
     ].join("\n"),
     fragmentShader: [
       "uniform sampler2D tExt; uniform sampler2D tNou; uniform sampler2D tGlow; uniform sampler2D tEye;",
-      "uniform vec2 band; uniform float glowR; uniform float glowA; uniform float lvR; uniform float lvA; uniform vec2 slot; uniform vec4 eyeR; uniform float blink; uniform float hasGlow; uniform float hasEye; uniform float flash; uniform float time; uniform vec3 bgC; uniform float m3; uniform float dimA;",
+      "uniform vec2 band; uniform float glowR; uniform float glowA; uniform float lvR; uniform float lvA; uniform vec2 slot; uniform vec4 eyeR; uniform float blink; uniform float hasGlow; uniform float hasEye; uniform float flash; uniform float time; uniform vec3 bgC; uniform float m3; uniform float dimA; uniform float fadeA;",
       "varying vec2 vUv; varying float vD;",
       "vec3 toLin(vec3 c) { return pow(c, vec3(2.2)); }",
       "void main() {",
@@ -12378,7 +12392,7 @@ window.NOU3D_CFG = {"slot": [905, 560], "depthK": 0.34, "zoom": 1.03, "ext": {"u
       "    c = mix(c, n, fe); }",
       "  c *= 1.0 - dimA * (0.32 + 0.42 * smoothstep(0.15, 0.85, length((st - vec2(0.56, 0.5)) * vec2(1.0, 0.75))));",   // 差す時に、まわりを画面全体で暗く（前は板の四角の中だけ暗くなり、ふちが見えた）
       "  c += vec3(1.0, 0.78, 0.5) * flash * 0.2 * (1.0 - 0.75 * dot(c, vec3(0.33)));",   // 明るい所は白く飛ばさない
-      "  gl_FragColor = vec4(c, 1.0);",
+      "  gl_FragColor = vec4(c, fadeA);",
       "}"
     ].join("\n")
   });
@@ -12487,7 +12501,135 @@ window.NOU3D_CFG = {"slot": [905, 560], "depthK": 0.34, "zoom": 1.03, "ext": {"u
       return r[0] < r[2] ? [Math.max(R[0], r[0]), Math.max(R[1], r[1]), Math.min(R[2], r[2]), Math.min(R[3], r[3])] : R;
     };
     mat.depthWrite = false;
-    fplane.visible = true; U.m3.value = 1; window.NOU3D_MESH = true; kick();
+    fplane.visible = true; U.m3.value = 1; window.NOU3D_MESH = true;
+    makeOrbit(); kick();
+  }
+
+  // ===== 舞台ごと回る（10/30 20:04 CEO「脳みそが回るんじゃなくて、全体が回る」「ブロックで積み上げるみたいに360度」）=====
+  // 確定の絵のカメラ（アバターの立体と同じ: 地平の行 915・焦点 2388・床から 0.63）で、絵の中の物を床の上に立てる。
+  // 脳はルナの向きの絵の板（真ん中の軸で回る）、アバターはルナの12の向きの絵の板、床の基盤は本物の箱、部屋はルナの壁8枚と床と天井。
+  // 回すのは世界（脳の軸のまわり）。正面から 1〜6度で、確定の絵の舞台からこの立体の舞台へ溶かす。
+  var OB;   // 初めに値を入れない（makeSprite の中で先に作られる）
+  function makeOrbit() {
+    var O = C.orbit; if (!O || !O.ava || O.ava.length !== 12 || !brain) return;
+    var FOC = 2388, HZ = 915, CH = (1196 - HZ) / 447, R = [560, 80, 1960, 1260];
+    function depthAt(v) { return FOC * CH / (v - HZ); }
+    function at(u, v, d) { return new T.Vector3((u - 960) * d / FOC, CH + (HZ - v) * d / FOC, -d); }   // 絵の (u,v) が奥行き d に有る時の場所
+    var footU = SCF.foot0 ? SCF.foot0[0] : 1250, zb = depthAt(1128), P = new T.Vector3((footU - 960) * zb / FOC, 0, -zb);
+    var room = new T.Scene(), act = new T.Scene(), ocam = new T.Camera(); ocam.matrixAutoUpdate = false;
+    var warm = [];
+    function ltex(url, srgb, rep) {
+      var t = new T.TextureLoader().load(url, function () { warm.push(t); OB.dirty = true; kick(); });
+      if (srgb !== false) t.encoding = T.sRGBEncoding; t.anisotropy = 4;
+      if (rep) { t.wrapS = t.wrapT = T.RepeatWrapping; t.repeat.set(rep, rep); }
+      return t;
+    }
+    function basic(o) { o.toneMapped = false; o.side = T.DoubleSide; var m = new T.MeshBasicMaterial(o); return m; }
+    // ---- 部屋: 八角の壁（脳の軸が真ん中）・床・天井 ----
+    var RW = 11, PWd = 2 * RW * Math.tan(Math.PI / 8), HP = PWd * 1024 / 1536, HW = HP * 1.85;   // 縦長の画面でも天井が広がりすぎない高さ。上の段は同じ板を上下に裏返して続ける
+    var wallC = new T.Color(0xf1ebe1), hasW = O.walls && O.walls.length === 8;
+    var wg2 = new T.PlaneGeometry(PWd + 0.02, HW - HP), wu = wg2.attributes.uv;   // 上の段: 下の板の上のはしから、絵を上下に裏返して続ける
+    for (var j0 = 0; j0 < wu.count; j0++) wu.setY(j0, 1 - (HW - HP) / HP * wu.getY(j0));
+    for (var i = 0; i < 8; i++) {
+      var be = Math.PI - i * Math.PI / 4;   // W1 は脳の後ろ（0度のカメラから見て奥）、W2 から右へ
+      var wm = hasW ? basic({ map: ltex(O.walls[i]) }) : basic({ color: wallC });
+      var wg = new T.PlaneGeometry(PWd + 0.02, HP);
+      var w = new T.Mesh(wg, wm); w.position.set(P.x + Math.sin(be) * RW, HP / 2, P.z + Math.cos(be) * RW); w.rotation.y = be + Math.PI; room.add(w);
+      var w2 = new T.Mesh(wg2, wm); w2.position.set(P.x + Math.sin(be) * RW, (HP + HW) / 2, P.z + Math.cos(be) * RW); w2.rotation.y = be + Math.PI; room.add(w2);
+    }
+    var flm = O.floor ? basic({ map: ltex(O.floor, true, 7) }) : basic({ color: 0xece6dc });
+    var fl = new T.Mesh(new T.PlaneGeometry(2 * RW / Math.cos(Math.PI / 8), 2 * RW / Math.cos(Math.PI / 8)), flm);
+    fl.rotation.x = -Math.PI / 2; fl.position.set(P.x, 0, P.z); room.add(fl);
+    var cem = O.ceil ? basic({ map: ltex(O.ceil, true, 3) }) : basic({ color: 0xf6f1e8 });
+    var ce = new T.Mesh(new T.PlaneGeometry(2 * RW / Math.cos(Math.PI / 8), 2 * RW / Math.cos(Math.PI / 8)), cem);
+    ce.rotation.x = Math.PI / 2; ce.position.set(P.x, HW, P.z); room.add(ce);
+    // 床の映り込みと影は、床の上・物の前に描く
+    var refl = new T.Group(); room.add(refl);
+    function blob() {
+      var c = document.createElement("canvas"); c.width = c.height = 128; var x = c.getContext("2d"), g = x.createRadialGradient(64, 64, 0, 64, 64, 64);
+      g.addColorStop(0, "rgba(40,28,20,0.55)"); g.addColorStop(0.5, "rgba(40,28,20,0.25)"); g.addColorStop(1, "rgba(40,28,20,0)"); x.fillStyle = g; x.fillRect(0, 0, 128, 128);
+      return new T.CanvasTexture(c);
+    }
+    var blobT = blob();
+    function shadow(x, z, sx, sz) {
+      var m = new T.Mesh(new T.PlaneGeometry(sx, sz), basic({ map: blobT, transparent: true, depthWrite: false }));
+      m.rotation.x = -Math.PI / 2; m.position.set(x, 0.004, z); m.renderOrder = 1; room.add(m); return m;
+    }
+    // ---- 脳: 今の回る脳の板と同じ絵（同じ uniform）を、軸のまわりで回る板に ----
+    var bw = (R[2] - R[0]) * zb / FOC, bh = (R[3] - R[1]) * zb / FOC, bc = at((R[0] + R[2]) / 2, (R[1] + R[3]) / 2, zb);
+    var bPiv = new T.Group(); bPiv.position.copy(P); act.add(bPiv);
+    var bO = new T.Mesh(new T.PlaneGeometry(bw, bh), brain.material); bO.position.set(bc.x - P.x, bc.y, 0); bO.frustumCulled = false; bPiv.add(bO);
+    // 映り込み（下向きに裏返し、床から離れるほど薄く）
+    var BUr = {}; for (var k in brain.material.uniforms) BUr[k] = brain.material.uniforms[k]; BUr.op = { value: 0.22 };
+    var rfs = brain.material.fragmentShader.replace("uniform float flash;", "uniform float flash; uniform float op;").replace("gl_FragColor = vec4(c, o.a); }", "float fd = op * (1.0 - smoothstep(0.03, 0.4, (1128.0 - p.y) / 1000.0 + 0.0)); gl_FragColor = vec4(c, o.a) * fd; }");
+    var bRm = new T.ShaderMaterial({ uniforms: BUr, vertexShader: brain.material.vertexShader, fragmentShader: rfs, transparent: true, depthTest: false, depthWrite: false, side: T.DoubleSide,
+      blending: T.CustomBlending, blendSrc: T.OneFactor, blendDst: T.OneMinusSrcAlphaFactor });
+    var bRPiv = new T.Group(); bRPiv.position.copy(P); bRPiv.scale.y = -1; refl.add(bRPiv);
+    var bR = new T.Mesh(bO.geometry, bRm); bR.position.copy(bO.position); bR.frustumCulled = false; bRPiv.add(bR);
+    // ---- アバター: ルナの12の向きの絵（2枚を混ぜる）。0度の時は少し脳の方を向く（確定の絵と同じ） ----
+    var za = depthAt(1196), Pa = at(420, 1196, za); Pa.y = 0;
+    var ah = (1196 - 471) * za / FOC, ph = ah * 940 / 900, pw = ph * 720 / 940;
+    var avT = O.ava.map(function (u) { return ltex(u); });
+    var aGeo = new T.PlaneGeometry(pw, ph); aGeo.translate(0, ph / 2 - ah * 20 / 900, 0);
+    function avM(op) { return basic({ map: avT[0], transparent: true, depthTest: false, depthWrite: false, opacity: op }); }
+    var aA = new T.Mesh(aGeo, avM(1)), aB = new T.Mesh(aGeo, avM(0)), aG = new T.Group(); aG.position.copy(Pa); aG.add(aA); aG.add(aB); act.add(aG); aB.renderOrder = 1;
+    var aRA = new T.Mesh(aGeo, avM(0.14)), aRB = new T.Mesh(aGeo, avM(0)), aRG = new T.Group(); aRG.position.copy(Pa); aRG.scale.y = -1; aRG.add(aRA); aRG.add(aRB); refl.add(aRG);
+    var aSh = shadow(Pa.x, Pa.z, pw * 0.9, pw * 0.45);
+    var C0 = new T.Vector3(0, CH, 0), PSI = Math.atan2(C0.x - Pa.x, C0.z - Pa.z) + 20 * Math.PI / 180;   // 0度で 20度ぶん脳の方を向く
+    // ---- 床の基盤: 本物の箱（絵の基盤と名前の字）----
+    var cards = [], NY = (window.NOU_E && window.NOU_E.yuka) || [];
+    var edge = basic({ color: 0x16231f });
+    function makeCards() {
+      if (!window.NOUE_CARD) return false;
+      for (var j = 0; j < NY.length; j++) {
+        var cd = window.NOUE_CARD(NY[j].key); if (!cd) return false;
+        var bx = cd.box, d = depthAt(bx[3]), cw = (bx[2] - bx[0]) * d / FOC, chh = (bx[3] - bx[1]) * d / FOC, c0 = at((bx[0] + bx[2]) / 2, bx[3], d);
+        var ct = new T.CanvasTexture(cd.canvas); ct.encoding = T.sRGBEncoding; ct.anisotropy = 4; warm.push(ct);
+        var pt = new T.CanvasTexture(cd.plain); pt.encoding = T.sRGBEncoding; warm.push(pt);
+        var face = basic({ map: ct, transparent: true }), ed = basic({ color: 0x16231f, transparent: true }), back = basic({ map: pt, color: 0x9a9a9a, transparent: true });   // 箱は奥行きで前後を決める。裏は字の無い回路の面
+        var g = new T.BoxGeometry(cw, chh, 0.035); g.translate(0, chh / 2, 0);
+        var m = new T.Mesh(g, [ed, ed, ed, ed, face, back]); m.position.set(c0.x, 0, c0.z); act.add(m);
+        var rf = basic({ map: ct, transparent: true, depthTest: false, depthWrite: false, opacity: 0.16 }), inv = basic({ visible: false });
+        var r = new T.Mesh(g, [inv, inv, inv, inv, rf, inv]);   // 映り込みは前の面だけ r.position.set(c0.x, 0, c0.z); r.scale.y = -1; refl.add(r);
+        shadow(c0.x, c0.z + 0.03, cw * 1.15, 0.22);
+        cards.push(m);
+      }
+      return true;
+    }
+    mat.transparent = true;
+    var M = new T.Matrix4(), Mt = new T.Matrix4(), Mr = new T.Matrix4(), Cw = new T.Vector3(), q0 = new T.Vector3(), q1 = new T.Vector3(), tmp = new T.Vector3();
+    OB = {
+      a: null, dirty: true, cardsOk: false,
+      // 確定の絵の舞台と同じ写し方（絵の座標→画面）を、今のカメラ（寄り・揺れ）から求める
+      frame: function (deg) {
+        if (!OB.cardsOk) OB.cardsOk = makeCards();
+        q0.copy(toWorld(0, 0)).project(cam); q1.copy(toWorld(1920, 1280)).project(cam);
+        var sx0 = (q0.x + 1) / 2 * W, sy0 = (1 - q0.y) / 2 * H, kx = ((q1.x + 1) / 2 * W - sx0) / 1920, ky = ((1 - q1.y) / 2 * H - sy0) / 1280;
+        var A = 2 * kx * FOC / W, B = 2 * (sx0 + kx * 960) / W - 1, Cc = 2 * ky * FOC / H, Dd = 1 - 2 * (sy0 + ky * HZ) / H, n = 0.05, f = 80;
+        ocam.projectionMatrix.set(A, 0, -B, 0, 0, Cc, -Dd, 0, 0, 0, (f + n) / (n - f), 2 * f * n / (n - f), 0, 0, -1, 0);
+        ocam.projectionMatrixInverse.copy(ocam.projectionMatrix).invert();
+        var th = -deg * Math.PI / 180;   // 世界を +deg 回す = カメラを -deg 回す
+        Mt.makeTranslation(P.x, 0, P.z); Mr.makeRotationY(th); M.copy(Mt).multiply(Mr); Mt.makeTranslation(-P.x, 0, -P.z); M.multiply(Mt);
+        Mt.makeTranslation(0, CH, 0); M.multiply(Mt);
+        ocam.matrix.copy(M); ocam.matrixWorldNeedsUpdate = true; ocam.updateMatrixWorld(true);
+        Cw.setFromMatrixPosition(M);
+        bPiv.rotation.y = th; bRPiv.rotation.y = th;
+        // アバター: カメラへ向く板に、見える向きの絵
+        var phi = Math.atan2(Cw.x - Pa.x, Cw.z - Pa.z); aG.rotation.y = aRG.rotation.y = phi;
+        var ia = ((PSI - phi) * 180 / Math.PI % 360 + 360) % 360, i0 = Math.floor(ia / 30) % 12, fr = ia / 30 - Math.floor(ia / 30), i1 = (i0 + 1) % 12;
+        var wB = fr < 0.3 ? 0 : fr > 0.7 ? 1 : (fr - 0.3) / 0.4; wB = wB * wB * (3 - 2 * wB);
+        aA.material.map = aRA.material.map = avT[i0]; aB.material.map = aRB.material.map = avT[i1];
+        aB.material.opacity = wB; aRB.material.opacity = 0.14 * wB;
+        // 近い物を後に描く（脳の後ろへアバターが回る）
+        var list = [[bPiv, P], [aG, Pa]].concat(cards.map(function (m) { return [m, m.position]; }));
+        list.forEach(function (e) { tmp.copy(e[1]).applyMatrix4(ocam.matrixWorldInverse); e[0].renderOrder = 10 + Math.round(1000 / Math.max(0.5, -tmp.z)); /* 近い物ほど大きい数＝後に描く */ });
+        aA.renderOrder = aG.renderOrder; aB.renderOrder = aG.renderOrder + 0.5; bO.renderOrder = bPiv.renderOrder;
+      },
+      // 隠れている間や静かな時に、絵を1枚ずつ GPU へ送っておく（初めて回した時に止まらない様に）
+      warmOne: function () { var t = warm.shift(); if (t && t.image) { try { renderer.initTexture(t); } catch (e) {} } return warm.length > 0; },
+      room: room, act: act, cam: ocam
+    };
+    window.NOU3D_ORBIT = true;
   }
 
   // 光の粒（差し口から飛ぶ金の粒）
@@ -12627,6 +12769,18 @@ window.NOU3D_CFG = {"slot": [905, 560], "depthK": 0.34, "zoom": 1.03, "ext": {"u
     var live = 0; for (var k = 0; k < NP; k++) live += pa[k];
     var quiet = brain && !needFull && !fx && !drag && shake < 0.01 && punch < 0.01 && Math.abs(vx2) + Math.abs(vy2) < 0.002 && Math.abs(dx) + Math.abs(dy) < 0.002 && live === 0 && !window.NOU3D_FX && !window.NOU_ZOOM;   // まばたきは目の四角も足して描く
     var D3 = window.NOU3D_N || (window.NOU3D_N = { q: 0, f: 0, why: {} }); if (quiet) D3.q++; else { D3.f++; var wy = needFull ? 'need' : fx ? 'fx' : drag ? 'drag' : live ? 'live' : U.blink.value ? 'blink' : (Math.abs(dx) + Math.abs(dy) >= 0.002) ? 'dxy' : (Math.abs(vx2) + Math.abs(vy2) >= 0.002) ? 'v' : 'other'; D3.why[wy] = (D3.why[wy] || 0) + 1; }
+    // 舞台ごと回る時: 正面から離れたら、部屋・脳・アバター・床の基盤を立体で描く
+    var oDeg = window.NOU_SPIN ? window.NOU_SPIN.a : 0, oN = ((oDeg % 360) + 360) % 360, oFr = Math.min(oN, 360 - oN);
+    var oF = OB ? Math.max(0, Math.min(1, (oFr - 1) / 5)) : 0;   // 1〜6度で溶かす（長いと絵と立体が二重に見えた） oF = oF * oF * oF * (oF * (oF * 6 - 15) + 10);
+    if (OB && oF > 0) {
+      if (!(quiet && OB.a === oDeg && !OB.dirty)) renderOrbit(oF, oDeg);
+      else if (OB.warmOne()) kick();
+      OB.a = oDeg; OB.dirty = false; OB.was = true; prevSc = null;
+      needFull = (fx || drag || live > 0 || shake >= 0.01 || punch >= 0.01) ? true : false;
+      raf = requestAnimationFrame(tick); return;
+    }
+    if (OB && OB.was) { OB.was = false; quiet = false; }   // 正面へ戻った時は、全部を描き直す
+    if (OB && quiet && OB.warmOne()) needFull = true;
     if (quiet) {
       var rr = brain.userData.rect(), x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
       bc[0].copy(toWorld(rr[0], rr[1])); bc[1].copy(toWorld(rr[2], rr[1])); bc[2].copy(toWorld(rr[0], rr[3])); bc[3].copy(toWorld(rr[2], rr[3]));
@@ -12644,6 +12798,18 @@ window.NOU3D_CFG = {"slot": [905, 560], "depthK": 0.34, "zoom": 1.03, "ext": {"u
       renderer.setScissorTest(false);
     } else { prevSc = null; renderer.render(scene, cam); needFull = !brain ? false : (fx || drag || live > 0 || shake >= 0.01 || punch >= 0.01) ? true : false; }
     raf = requestAnimationFrame(tick);
+  }
+  function renderOrbit(f, deg) {
+    OB.frame(deg);
+    var vb = brain.visible, vf = fplane.visible, vp = pts.visible;
+    renderer.autoClear = false; renderer.clear();
+    renderer.render(OB.room, OB.cam);
+    brain.visible = false; fplane.visible = false; pts.visible = false;
+    renderer.clearDepth();
+    if (f < 1) { U.fadeA.value = 1 - f; renderer.render(scene, cam); renderer.clearDepth(); }   // 確定の絵の舞台（壁と床）を薄く重ねる
+    renderer.render(OB.act, OB.cam);
+    plane.visible = false; fplane.visible = vf; pts.visible = vp; renderer.render(scene, cam);   // 前の板（レベルの丸・字・光）と光の粒は、画面に止めたまま
+    plane.visible = true; brain.visible = vb; U.fadeA.value = 1; renderer.autoClear = true;
   }
   function kick() { if (!raf) raf = requestAnimationFrame(tick); }
   window.addEventListener("resize", resize);
