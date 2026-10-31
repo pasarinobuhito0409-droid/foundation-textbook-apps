@@ -855,6 +855,44 @@ body.app .sora-meter{top:calc(env(safe-area-inset-top) + 340px)!important}
 .ts-b.on.k-d60 i{background:radial-gradient(circle at 35% 30%,#fff,#c4ccd8 55%,#6f7a8a)}
 .ts-b.on.k-d180 i{background:conic-gradient(#ffb3c8,#ffe08a,#9ef0b0,#7fd0ff,#b9a4ff,#ffb3c8)}
 .ts-b.on.k-s i{background:radial-gradient(circle at 50% 70%,#fff0a0,#ffb02e 45%,#ff5a1f);box-shadow:0 0 8px rgba(255,120,40,.6)}
+/* 継続の月（上の札のふちの金の歯車の印） */
+.tg-hud{margin-top:10px}
+.tg-kz{position:absolute;left:50%;top:0;transform:translate(-50%,-55%);display:flex;align-items:center;gap:5px;padding:3px 13px 3px 4px;border-radius:16px;white-space:nowrap;pointer-events:none;
+  background:linear-gradient(180deg,#1b2a45,#101a2e);border:1px solid #c9a24e;box-shadow:0 3px 10px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.18);
+  font:600 12.5px "M PLUS 1",sans-serif;letter-spacing:.06em;color:#f3e2b4}
+.tg-kz svg{width:22px;height:22px;flex:0 0 22px;animation:tgGear 24s linear infinite}
+@keyframes tgGear{to{transform:rotate(360deg)}}
+.tg-kz span{color:#e8c877;letter-spacing:.2em;margin-right:2px}
+.tg-kz b{font-size:16px;font-weight:800;color:#fff;margin:0 1px}
+.tg-kz.fushime{border-color:#ffe08a;box-shadow:0 0 14px rgba(255,214,120,.6),inset 0 1px 0 rgba(255,255,255,.25)}
+.tg-cel.kz{background:radial-gradient(120% 140% at 50% 0%,rgba(30,48,82,.95),rgba(12,18,32,.95));border-color:#c9a24e}
+@media (prefers-reduced-motion:reduce){.tg-kz svg{animation:none}}
+/* ===== 10/31 昼: 旅の棒に名前を戻す・前の行き先の札は棒へまとめる・軽く ===== */
+body.app .sora-card{display:none!important}
+.tg-hud,.tg-kz{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+.tg-hud{background:linear-gradient(180deg,rgba(20,12,14,.86),rgba(12,8,10,.80))}
+body.app .sora-btn{top:auto!important;bottom:calc(env(safe-area-inset-bottom) + 200px)!important;left:max(12px,env(safe-area-inset-left))!important;right:auto!important}
+body.app .sora-meter{opacity:1!important;top:calc(env(safe-area-inset-top) + 330px)!important;bottom:calc(env(safe-area-inset-bottom) + 215px)!important;right:calc(env(safe-area-inset-right) + 10px)!important;width:120px}
+.sora-meter .sm-bar{width:5px!important;right:10px!important;background:rgba(12,8,10,.55)!important;border:1px solid rgba(242,207,124,.35)!important}
+.sora-meter .sm-fill{background:linear-gradient(0deg,#c9a24e,#ffe9a8)!important;box-shadow:0 0 10px rgba(255,210,120,.7)!important;transition:height .9s cubic-bezier(.2,.8,.2,1)}
+.sora-meter .sm-bar span{right:-4px!important;width:11px!important;height:11px!important;border-radius:50%;transform:translateY(50%)!important;background:#2a2024!important;border:1.5px solid rgba(255,240,210,.55)}
+.sora-meter .sm-bar span.done{background:radial-gradient(circle at 35% 30%,#fff4c4,#d9b25e 60%,#8a6a27)!important;border-color:#f6dc9c}
+.sora-meter .sm-bar span.near{background:#16243d!important;border:2px solid #ffd98a;box-shadow:0 0 0 3px rgba(255,217,138,.25),0 0 10px rgba(255,217,138,.7);animation:tgNear 1.6s ease-in-out infinite}
+@keyframes tgNear{50%{box-shadow:0 0 0 6px rgba(255,217,138,.08),0 0 14px rgba(255,217,138,.9)}}
+body.app .sora-meter .sm-bar em,body.app .sora-meter .sm-bar span.near em{display:grid!important;justify-items:end;right:16px!important;top:50%!important;transform:translateY(-50%);font-style:normal;white-space:nowrap;line-height:1.1;text-shadow:0 1px 3px rgba(0,0,0,.95),0 0 8px rgba(0,0,0,.7)}
+.sora-meter em b{font:600 11.5px "M PLUS 1",sans-serif;color:rgba(255,255,255,.72);letter-spacing:.06em}
+.sora-meter em small{font:500 9.5px "M PLUS 1",sans-serif;color:rgba(255,255,255,.5)}
+.sora-meter span.done em b{color:#f2cf7c}
+.sora-meter span.done em small{color:rgba(242,207,124,.65)}
+.sora-meter span.near em b{font-size:15px;font-weight:800;color:#fff}
+.sora-meter span.near em small{font-size:12px;font-weight:700;color:#ffd98a}
+.sora-meter .sm-now{right:0!important;bottom:-30px!important;font-size:11.5px!important;padding:3px 9px!important}
+.sora-meter .sm-now::before{content:"合計 ";font-weight:600}
+.tg-lvn em{font-style:normal;font-size:12px;font-weight:700;color:#fff;margin-left:6px;padding:1px 7px;border-radius:8px;background:linear-gradient(180deg,rgba(242,207,124,.35),rgba(242,207,124,.12));border:1px solid rgba(242,207,124,.5);vertical-align:3px}
+.tg-lvn{min-width:0!important;white-space:nowrap}
+.tg-kinds.all4 span{box-shadow:inset 0 0 0 1px rgba(255,217,138,.75),0 0 8px rgba(255,200,90,.35)}
+.tg-cel.title{background:radial-gradient(120% 140% at 50% 0%,rgba(60,40,90,.94),rgba(14,8,20,.94));border-color:#d7c2ff}
+.sora-meter span.done em small{display:none}
 
 </style>
 </head>
@@ -6583,7 +6621,7 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
   var oldBtn = host.querySelector(".sora-btn"); if (oldBtn) oldBtn.remove();
 
   var renderer = new T.WebGLRenderer({ antialias: true, alpha: false, powerPreference: "high-performance" });
-  var APP = document.body && document.body.classList.contains("app"), prMax = Math.min(window.devicePixelRatio || 1, APP ? 3 : 2), prQ = { n: 0, s: 0 }; renderer.setPixelRatio(prMax);   // 10/31 CEO「画質も上げて」: アプリは画面の細かさのまま（3倍）で描き、重い時だけ下げる   // 3倍の画面でも 2倍で描く（3倍は 2.25倍の点を描き重かった・10/29 CEO「重い」）。重い時は 1.5 へ
+  var APP = document.body && document.body.classList.contains("app"), prTop = Math.min(window.devicePixelRatio || 1, APP ? 3 : 2), prMax = Math.min(prTop, 2), prQ = { n: 0, s: 0, ok: 0, lock: false }; renderer.setPixelRatio(prMax);   // 10/31 CEO「画質も上げて」: アプリは画面の細かさのまま（3倍）で描き、重い時だけ下げる   // 3倍の画面でも 2倍で描く（3倍は 2.25倍の点を描き重かった・10/29 CEO「重い」）。重い時は 1.5 へ
   renderer.outputEncoding = T.sRGBEncoding;
   renderer.debug.checkShaderErrors = false;   // 色の計算の組み立てを待たずに進む（空へを初めて開く時に 2秒止まっていた・10/29）
   renderer.toneMapping = T.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
@@ -7344,7 +7382,7 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
     } catch (e) {}
   }
   function frame(now) {
-    if (lastNow && now - lastNow < 200) { prQ.n++; prQ.s += now - lastNow; if (prQ.n >= 90) { var av = prQ.s / prQ.n, nx0 = av > 40 ? 1.5 : av > 22 ? Math.max(1.5, prMax - 0.5) : prMax; if (nx0 < prMax) { prMax = nx0; renderer.setPixelRatio(prMax); resize(); } prQ.n = prQ.s = 0; } }   // 1コマ 22ms を超える時は 0.5 ずつ下げる（滑らかさが先）
+    if (lastNow && now - lastNow < 200) { prQ.n++; prQ.s += now - lastNow; if (prQ.n >= 90) { var av = prQ.s / prQ.n, nx0 = av > 40 ? 1.5 : av > 22 ? Math.max(1.5, prMax - 0.5) : prMax; if (nx0 < prMax) { prMax = nx0; prQ.lock = true; renderer.setPixelRatio(prMax); resize(); } else if (!prQ.lock && av < 17.6 && prMax < prTop && ++prQ.ok >= 3) { prQ.ok = 0; prMax = Math.min(prTop, prMax + 0.5); renderer.setPixelRatio(prMax); resize(); } else if (av >= 17.6) prQ.ok = 0; prQ.n = prQ.s = 0; } }   // 1コマ 22ms を超える時は 0.5 ずつ下げる（滑らかさが先）
     var dt = lastNow ? Math.min(0.05, (now - lastNow) / 1000) : 0.016; lastNow = now;
     var n = blocks.length, floors = Math.floor(n / 12), part = n % 12, topLv = floors + (part ? 1 : 0);
     camTop = topLv;
@@ -7580,19 +7618,26 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
     ui.querySelector(".sc-sub").textContent = "今 " + cur + "・合計 " + hh + "時間" + (mm ? mm + "分" : "");
     // 高さのものさし（ソル29回目 11）: 部屋から天の川までの道のりの、今どこか。触った時だけ出る
     var me = ui.querySelector(".sora-meter"); if (me) {
-      var pos = function (x) { return Math.log(1 + x) / Math.log(257); };
+      // 旅の棒（10/31 CEO「縦の棒に宇宙・数学者の部屋・空と書いてあった方が見やすかった」）: 行き先を全部、同じ間で並べる。
+      // 着いた所は金、次の行き先は大きく「あと○時間」、まだの所は白く細く
+      var st = (ROOM_H ? [["数学者の部屋", 0], ["街", ROOM_H]] : [["街", 0]]).concat(ZONES.slice(1).map(function (z) { return [z.name, z.h]; })).concat([["その先", 256]]);
+      var pos = function (x) { for (var q = 0; q < st.length - 1; q++) if (x < st[q + 1][1]) return (q + (x - st[q][1]) / (st[q + 1][1] - st[q][1])) / (st.length - 1); return 1; };
       if (!me.dataset.ok) {
         me.dataset.ok = 1;
-        var st = (ROOM_H ? [["部屋", 0], ["街", ROOM_H]] : [["街", 0]]).concat(ZONES.slice(1).map(function (z) { return [z.name, z.h]; }));
-        me.querySelector(".sm-bar").insertAdjacentHTML("beforeend", st.map(function (q, i) { var nx2 = st[i + 1], cl2 = nx2 && pos(nx2[1]) - pos(q[1]) < 0.06; return '<span style="bottom:' + (pos(q[1]) * 100).toFixed(1) + '%">' + (cl2 ? "" : "<em>" + q[0] + "</em>") + "</span>"; }).join(""));   // 近すぎる名前（街と雲の上）は上の方だけ
+        me.querySelector(".sm-bar").insertAdjacentHTML("beforeend", st.map(function (q, i) { return '<span style="bottom:' + (i / (st.length - 1) * 100).toFixed(2) + '%"><em><b>' + q[0] + '</b><small>' + q[1] + '時間</small></em></span>'; }).join(""));
       }
       var ph = Math.min(1, pos(h));
-      me.querySelector(".sm-fill").style.height = (ph * 100).toFixed(1) + "%";
-      var nw = me.querySelector(".sm-now"); nw.style.bottom = "calc(" + (ph * 100).toFixed(1) + "% - 9px)"; nw.textContent = hh + "時間";
-      // 名前は、次の到達先だけ読ませる（遠い所は目盛りの線だけ・ソル37回目 6）
+      me.querySelector(".sm-fill").style.height = (ph * 100).toFixed(2) + "%";
+      var nw = me.querySelector(".sm-now"); if (!APP) nw.style.bottom = "calc(" + (ph * 100).toFixed(2) + "% - 9px)"; nw.textContent = hh + "時間" + (mm ? mm + "分" : "");
       var sps = me.querySelectorAll(".sm-bar span"), nxi = -1;
-      for (var si = 0; si < sps.length; si++) { var bt = parseFloat(sps[si].style.bottom) / 100; if (nxi < 0 && bt > ph + 0.001) nxi = si; }
-      for (var sj = 0; sj < sps.length; sj++) sps[sj].classList.toggle("near", sj === nxi);
+      for (var si = 0; si < st.length; si++) if (nxi < 0 && st[si][1] * 12 > n) nxi = si;
+      for (var sj = 0; sj < sps.length; sj++) {
+        sps[sj].className = sj === nxi ? "near" : (nxi < 0 || sj < nxi) ? "done" : "";
+        var sm2 = sps[sj].querySelector("small");
+        if (sj === nxi) { var rm = st[sj][1] * 60 - n * 5, rt = "あと " + (rm >= 60 ? Math.floor(rm / 60) + "時間" + (rm % 60 ? rm % 60 + "分" : "") : rm + "分"); if (sm2.textContent !== rt) sm2.textContent = rt; }
+        else { var t0 = st[sj][1] + "時間"; if (sm2.textContent !== t0) sm2.textContent = t0; }
+      }
+      me.querySelector(".sm-now").style.display = n ? "" : "none";
     }
   }
 
@@ -8297,7 +8342,7 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
 })();
 </script>
 
-<script>window.TRI_VER="afc2d1a9e0";
+<script>window.TRI_VER="8b32b005b6";
 // ===== 積み上げ帳アプリ: 全画面の形・音の合図・留守番係 =====
 (function () {
   var root = document.documentElement;
@@ -8519,6 +8564,9 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
     { m: 180, name: "虹", c0: "#ffffff", c1: "#b9a4ff", c2: "#4fb3ff" }
   ];
   var ROOM_MIN = 6 * 60;
+  // 称号（合計の時間で上がる・CEO の目標の「研究者・大発明家」へ続く）
+  var TITLES = [[0, "見習い"], [3, "研究生"], [10, "研究者"], [24, "学者"], [50, "博士"], [100, "大博士"], [200, "発明家"], [500, "大発明家"]];
+  function titleOf(m) { var k = 0; TITLES.forEach(function (t, i) { if (m >= t[0] * 60) k = i; }); return k; }
   var JISSEKI = [
     { id: "first", n: "はじめの1個", d: "最初の5分を積んだ", t: function (s) { return s.total >= 5; } },
     { id: "t60", n: "1時間の塔", d: "合計 1時間", t: function (s) { return s.total >= 60; } },
@@ -8584,6 +8632,21 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
     '<div class="tg-kinds"></div>' +
     '<div class="tg-lv"><span class="tg-lvn"></span><span class="tg-seg"></span><span class="tg-lvr"></span></div>';
   document.body.appendChild(hud);
+  // ===== 継続の月（10/31 11:24 JST CEO「11月からこの継続を1年8ヶ月続けているので、邪魔にならない見やすい所に明記して意識できる様に」）=====
+  // 数え方は壁の暦（jibun/kabe-1030/koyomi-a3/build.py の keizoku）と同じ: 2026年11月 = 20か月（1年8ヶ月）・毎月1つ増える・2027年3月 = 2年の節目
+  function kzMonths(d) { return 20 + (d.getFullYear() - 2026) * 12 + (d.getMonth() + 1 - 11); }
+  function kzText(n) { var y = Math.floor(n / 12), m = n % 12; return "<b>" + y + "</b>年" + (m ? "<b>" + m + "</b>ヶ月" : ""); }
+  var gear = (function () { var pts = []; for (var k = 0; k < 48; k++) { var r = (k >> 1) % 2 === 0 ? 51 : 47.5, t = (k + 0.5) * Math.PI / 24; pts.push((60 + r * Math.cos(t)).toFixed(1) + "," + (60 + r * Math.sin(t)).toFixed(1)); } return pts.join(" "); })();
+  var kz = document.createElement("div"); kz.className = "tg-kz";
+  hud.appendChild(kz);
+  function paintKz() {
+    var n = kzMonths(new Date()), fu = n % 12 === 0;
+    kz.classList.toggle("fushime", fu);
+    kz.innerHTML = '<svg viewBox="-4 -4 128 128" aria-hidden="true"><defs><linearGradient id="tgKz" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6dc9c"/><stop offset=".45" stop-color="#c9a24e"/><stop offset="1" stop-color="#8a6a27"/></linearGradient></defs><polygon points="' + gear + '" fill="url(#tgKz)" stroke="#7a5c20" stroke-width="1"/><circle cx="60" cy="60" r="31" fill="#16243d"/><circle cx="60" cy="60" r="27" fill="none" stroke="#e8c877" stroke-width="3"/></svg><span>継続</span>' + kzText(n);
+    kz.setAttribute("aria-label", "継続 " + kz.textContent.replace("継続", ""));
+    return n;
+  }
+  var kzN = paintKz();
   var segEl = hud.querySelector(".tg-seg"); segEl.innerHTML = new Array(13).join("<i></i>");
   var kindEl = hud.querySelector(".tg-kinds");
   kindEl.innerHTML = KINDS.map(function (k, i) { return '<span data-k="' + i + '"><i style="color:' + k.color + '">' + k.mark + '</i>' + k.name + ' <b>0</b>分</span>'; }).join("");
@@ -8614,10 +8677,11 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
     f.classList.toggle("hot", s.streak >= 3);
     // 階のレベル: 今の階の 12個を、積んだ種類の色で
     var n = blocks ? blocks.length : Math.floor(s.total / 5), fl = Math.floor(n / 12), part = n % 12;
-    hud.querySelector(".tg-lvn").innerHTML = "<small>Lv.</small>" + (fl + 1);
+    hud.querySelector(".tg-lvn").innerHTML = "<small>Lv.</small>" + (fl + 1) + "<em>" + TITLES[titleOf(s.total)][1] + "</em>";
     var segs = segEl.children, b0 = fl * 12;
     for (var i = 0; i < 12; i++) { var b = blocks && blocks[b0 + i], c = b ? (KC[b.type] || {}).color : ""; segs[i].style.background = i < part ? (c || "#f2c14e") : ""; segs[i].className = i < part ? "on" + (b && b.today ? " td" : "") : ""; }
-    hud.querySelector(".tg-lvr").innerHTML = (fl + 1) + "階まで あと <b>" + (12 - part) + "</b>個";
+    hud.querySelector(".tg-lvr").innerHTML = "あと <b>" + (12 - part) + "</b>個";
+    kindEl.classList.toggle("all4", s.kinds[0] > 0 && s.kinds[1] > 0 && s.kinds[2] > 0 && s.kinds[3] > 0);
   }
 
   // ---- 浮かぶ「＋5分」 ----
@@ -8698,6 +8762,10 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
     if (up) {
       var m0 = medalOf(last.today), m1 = medalOf(s.today);
       if (last.today === 0 && s.streak >= 2) pend.push({ cls: "fire", top: "連続", big: s.streak + "日目", sub: "今日も積んだ。続いている", conf: 40, colors: ["#ff7a2e", "#ffb02e", "#fff0a0"], sound: sMedal, ms: 2200 });
+      var t0i = titleOf(last.total), t1i = titleOf(s.total);
+      if (t1i > t0i) pend.push({ cls: "title", top: "称号が上がった", big: TITLES[t1i][1], sub: "合計 " + TITLES[t1i][0] + "時間" + (TITLES[t1i + 1] ? "・次は " + TITLES[t1i + 1][1] + "（" + TITLES[t1i + 1][0] + "時間）" : ""), conf: 150, sound: sFloor, ms: 3000 });
+      var k4 = function (x) { return x.kinds[0] > 0 && x.kinds[1] > 0 && x.kinds[2] > 0 && x.kinds[3] > 0; };
+      if (!k4(last) && k4(s)) pend.push({ cls: "all4", top: "今日は", big: "4種類 そろった", sub: "論文・算数・MMA・瞑想", conf: 70, sound: sMedal, ms: 2400 });
       if (m1 > m0) pend.push({ cls: "medal m" + m1, icon: medalSvg(m1), top: "今日の" + MEDALS[m1].name + "メダル", big: hm(MEDALS[m1].m, true) + " 達成", sub: MEDALS[m1 + 1] ? "次は " + MEDALS[m1 + 1].name + "（" + hm(MEDALS[m1 + 1].m, true) + "）" : "今日の一番上のメダル", conf: 120 + 40 * m1, sound: sMedal, ms: 3000 });
       if (s.bestOther > 0 && last.today <= s.bestOther && s.today > s.bestOther && ls("tw-best") !== s.key) { ls("tw-best", s.key); pend.push({ cls: "best", top: "自己ベスト 更新", big: hm(s.today, true), sub: "前の一番は " + hm(s.bestOther, true), conf: 90, sound: sFloor, ms: 2600 }); }
       jissekiCheck(s).forEach(function (j) { pend.push({ cls: "badge", top: "実績 解除", big: j.n, sub: j.d, conf: 30, sound: sBadge, ms: 2000 }); });
@@ -8734,6 +8802,16 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
     return h + '</div></div>';
   };
 
+  // 継続の月が増えた後、最初に開いた時に1回だけ祝う（2年などの節目は大きく）
+  (function () {
+    var seen = +(ls("tw-kz") || 0);
+    if (kzN >= 20 && seen !== kzN) {
+      ls("tw-kz", String(kzN));
+      var y = Math.floor(kzN / 12), m = kzN % 12;
+      setTimeout(function () { celebrate({ cls: "kz" + (m ? "" : " fushime"), top: m ? "継続" : "継続の節目", big: y + "年" + (m ? m + "ヶ月" : ""), sub: m ? "続けてきた月が、1つ増えた" : "ここまで続けてきた", conf: m ? 90 : 200, colors: ["#f6dc9c", "#c9a24e", "#fff4c4", "#16243d", "#ffffff"], sound: m ? sMedal : sFloor, ms: 3000 }); }, 2500);
+    } else if (kzN < 20 && !seen) ls("tw-kz", String(kzN));
+  })();
+  document.addEventListener("visibilitychange", function () { if (!document.hidden) kzN = paintKz(); });
   // 最初の札
   var s0 = stats(); if (s0) { lastBlocks = ((window.touState || {}).blocks || []).filter(function (b) { return b && !b.planned; }); jissekiCheck(s0, true); paintHud(s0, lastBlocks, true); last = s0; }
 })();
