@@ -912,6 +912,68 @@ body.app .sora-meter .sm-bar span[data-si] em{pointer-events:auto}
 .sora-pv button{margin-top:6px;font:inherit;font-size:13px;font-weight:800;color:#16243d;background:linear-gradient(180deg,#f6dc9c,#c9a24e);border:0;border-radius:12px;padding:8px 16px;cursor:pointer}
 .ts-b.on.k-st i{background:radial-gradient(circle at 35% 30%,#fffbe8,#ffd98a 45%,#3d5a9e 100%);box-shadow:0 0 10px rgba(255,217,138,.8),0 0 0 2px rgba(255,227,154,.5)}
 .sora-pv{left:max(14px,env(safe-area-inset-left))!important;transform:none!important;bottom:calc(env(safe-area-inset-bottom) + 150px)!important;justify-items:start;text-align:left}
+/* ===== 小さくたたんだ札（10/31 17:57 CEO「上の札と字が多すぎて、せっかくの背景が台無し」）===== */
+.tg-hud{left:50%!important;right:auto!important;transform:translateX(-50%);width:max-content;max-width:calc(100vw - 24px);padding:6px 14px 7px 8px!important;border-radius:999px!important;background:linear-gradient(180deg,rgba(14,9,11,.58),rgba(14,9,11,.40))!important;border:1px solid rgba(242,207,124,.28)!important;box-shadow:0 6px 18px rgba(0,0,0,.28)!important;top:calc(env(safe-area-inset-top) + 50px)!important;cursor:pointer;transition:border-radius .3s ease}
+.tg-hud .tg-top{gap:9px}
+.tg-hud .tg-ring{flex:0 0 46px;width:46px;height:46px}
+.tg-hud .tg-ring .mt{font-size:19px}
+.tg-hud .tg-lab{font-size:0;letter-spacing:0;position:absolute;right:-6px;top:-11px}
+.tg-hud .tg-fire{font-size:11px;padding:1px 7px 1px 3px;background:rgba(40,16,8,.85)}
+.tg-hud .tg-fire svg{width:13px;height:13px}
+.tg-hud .tg-time{margin:0}
+.tg-hud .tg-time b{font-size:28px}
+.tg-hud .tg-time u{font-size:13px;margin:0 4px 0 2px}
+.tg-hud .tg-next{font-size:11px;color:rgba(239,226,204,.85)}
+.tg-hud .tg-next b{font-size:12px}
+.tg-hud:not(.open) .tg-kinds,.tg-hud:not(.open) .tg-stg,.tg-hud:not(.open) .tg-lvn,.tg-hud:not(.open) .tg-lvr{display:none}
+.tg-hud:not(.open) .tg-lv{margin-top:5px}
+.tg-hud:not(.open) .tg-seg{height:4px;gap:2px}
+.tg-hud:not(.open) .tg-seg i{border-radius:2px}
+.tg-hud.open{border-radius:22px!important;width:min(520px,calc(100vw - 24px));padding:10px 14px!important;background:linear-gradient(180deg,rgba(16,10,12,.82),rgba(12,8,10,.74))!important}
+.tg-hud.open .tg-lab{position:static;font-size:12px;letter-spacing:.14em}
+.tg-hud.open .tg-ring{flex-basis:60px;width:60px;height:60px}
+.tg-hud.open .tg-time b{font-size:34px}
+.tg-kz{transform:translate(-50%,-62%)!important;padding:1px 9px 1px 3px!important;gap:3px!important;font-size:10px!important;opacity:.92}
+.tg-kz svg{width:14px!important;height:14px!important;flex-basis:14px!important}
+.tg-kz b{font-size:11.5px!important}
+.tg-kz span{letter-spacing:.1em!important}
+body.app .sora-meter{top:calc(env(safe-area-inset-top) + 190px)!important}
+.sora-meter em b{font-size:10.5px!important;color:rgba(255,255,255,.62)!important}
+.sora-meter em small{font-size:9px!important}
+.sora-meter span.near em b{font-size:13px!important;color:#fff!important}
+.sora-meter span.near em small{font-size:11px!important}
+/* ===== 自分で足す種類（10/31 CEO「論文や数学以外も積み上げたい物を足せる様に」）===== */
+body.app .plus.plus4{grid-template-columns:repeat(var(--pn,4),1fr) 40px}
+body.app .plus.plus4.many{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:calc((100vw - 76px) / 4.25);overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;scrollbar-width:none}
+body.app .plus.plus4.many::-webkit-scrollbar{display:none}
+body.app .plus.plus4.many > button{scroll-snap-align:start}
+body.app .plus.plus4.many > .p-add{width:40px}
+body.app .plus.plus4 .p-x{background:var(--kc)!important;background:linear-gradient(180deg,color-mix(in srgb,var(--kc) 62%,transparent),color-mix(in srgb,var(--kc) 55%,#000 30%))!important}
+body.app .plus.plus4 .p-add{min-height:66px;padding:4px 0!important;border-radius:16px!important;background:rgba(20,14,16,.55)!important;border:1px dashed rgba(242,207,124,.6)!important;color:#f2cf7c}
+body.app .plus.plus4 .p-add .pk{font:800 20px "M PLUS 1",sans-serif!important;letter-spacing:0!important;opacity:1}
+body.app .plus.plus4 .p-add .pn{font:700 10.5px "M PLUS 1",sans-serif!important;letter-spacing:0!important;writing-mode:horizontal-tb}
+.tw-kind .tk-new{display:grid;gap:10px;padding:12px;border-radius:14px;background:rgba(255,255,255,.06);margin-bottom:12px}
+.tw-kind .tk-new label{display:grid;gap:6px;font-size:13px;color:#f2cf7c;font-weight:700}
+.tw-kind .tk-new input{font:600 17px "M PLUS 1",sans-serif;color:#fff;background:rgba(0,0,0,.35);border:1px solid rgba(242,207,124,.45);border-radius:10px;padding:10px 12px;width:100%;box-sizing:border-box}
+.tw-kind .tk-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.tw-kind .tk-row span{font-size:13px;font-weight:700;color:#f2cf7c;width:2em}
+.tw-kind .tk-c{width:34px;height:34px;border-radius:50%;border:2px solid rgba(255,255,255,.25);cursor:pointer}
+.tw-kind .tk-c.on{border-color:#fff;box-shadow:0 0 0 3px rgba(255,217,138,.6)}
+.tw-kind .tk-m{width:36px;height:36px;border-radius:10px;font-size:18px;color:#fff;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);cursor:pointer}
+.tw-kind .tk-m.on{background:rgba(242,207,124,.3);border-color:#f2cf7c}
+.tw-kind .tk-add{font:800 15px "M PLUS 1",sans-serif;color:#16243d;background:linear-gradient(180deg,#f6dc9c,#c9a24e);border:0;border-radius:12px;padding:12px;cursor:pointer}
+.tw-kind .tk-msg{margin:0;min-height:1.2em;font-size:13px;color:#ffd98a}
+.tw-kind .tk-list{display:grid;gap:6px}
+.tw-kind .tk-list > b{font-size:14px;color:#f2cf7c}
+.tw-kind .tk-k{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:12px;background:rgba(255,255,255,.06);color:#fff}
+.tw-kind .tk-k.off{opacity:.5}
+.tw-kind .tk-k i{font-style:normal;font-size:16px}
+.tw-kind .tk-k b{flex:1;font-size:15px}
+.tw-kind .tk-k small{font-size:11px;color:rgba(255,255,255,.5)}
+.tw-kind .tk-k button{font:700 12px "M PLUS 1",sans-serif;color:#fff;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:9px;padding:5px 10px;cursor:pointer}
+.tw-kind .tk-note{font-size:12px;color:rgba(255,255,255,.6);margin:4px 0 0}
+.tg-kinds.many{flex-wrap:wrap}.tg-kinds.many span{flex:0 0 calc(25% - 5px)}
+.tg-hud .tg-lab{top:auto!important;bottom:-11px;right:-8px}.tg-hud.open .tg-lab{position:static}
 
 </style>
 </head>
@@ -7201,16 +7263,23 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
   function matFor(key, vi) {
     vi = vi || 0; var id = key + vi;
     if (mats[id]) return mats[id];
+    var KD = (window.TOU_KINDS || []).filter(function (q) { return q.key === key; })[0];   // 足した種類（10/31）: 色はその種類、石の模様は近い色の元の種類から借りる
+    if (KD && !COL[key]) COL[key] = KD.color;
+    var tint = KD && KD.base ? 0.8 : 0, imgKey = ISHI[key] ? key : KD && KD.base && ISHI[KD.base] ? KD.base : key;
     var col = new T.Color(COL[key] || "#3d7be0"), m = contactAO(hazify(new T.MeshPhysicalMaterial({ color: col, roughness: 0.24, metalness: 0.0, clearcoat: 1.0, clearcoatRoughness: 0.06, envMapIntensity: 1.05, aoMap: edgeAO, aoMapIntensity: 0.45 })));
     function apply(im) {
+      if (tint) {   // 足した種類: 石の模様を白黒にして、その種類の色をそのまま乗せる（借りた石の色が残らない様に）
+        var gk = imgKey + "g"; if (!stoneImg[gk]) { var gc = document.createElement("canvas"); gc.width = im.naturalWidth; gc.height = im.naturalHeight; var gx = gc.getContext("2d"); gx.filter = "grayscale(1) brightness(1.35) contrast(1.1)"; gx.drawImage(im, 0, 0); stoneImg[gk] = gc; }
+        im = stoneImg[gk];
+      }
       var t = new T.Texture(im); t.encoding = T.sRGBEncoding; t.anisotropy = ANISO; t.wrapS = t.wrapT = T.RepeatWrapping;
       t.center.set(0.5, 0.5); t.rotation = [0, 1.5708, 0.6][vi]; t.offset.set([0, 0.37, 0.71][vi], [0, 0.52, 0.19][vi]); t.repeat.set(0.85, 0.85); t.needsUpdate = true;
-      m.map = t; m.color.set(0xffffff).lerp(col, SMOOTH ? 0.08 : 0.2);
-      var nm = stoneImg[key + "n"] || (stoneImg[key + "n"] = normalFrom(im)); m.normalMap = nm; m.normalScale.set(SMOOTH ? 0.22 : 0.12, SMOOTH ? 0.22 : 0.12); m.needsUpdate = true; kick();
+      m.map = t; if (tint) m.color.copy(col); else m.color.set(0xffffff).lerp(col, SMOOTH ? 0.08 : 0.2);
+      var nm = stoneImg[imgKey + "n"] || (stoneImg[imgKey + "n"] = normalFrom(im)); m.normalMap = nm; m.normalScale.set(SMOOTH ? 0.22 : 0.12, SMOOTH ? 0.22 : 0.12); m.needsUpdate = true; kick();
     }
-    if (ISHI[key]) {
-      var im = stoneImg[key];
-      if (!im) { im = stoneImg[key] = new Image(); im.src = ISHI[key]; }
+    if (ISHI[imgKey]) {
+      var im = stoneImg[imgKey];
+      if (!im) { im = stoneImg[imgKey] = new Image(); im.src = ISHI[imgKey]; }
       if (im.complete && im.naturalWidth) apply(im); else im.addEventListener("load", function () { apply(im); });
     }
     mats[id] = m; return m;
@@ -7462,7 +7531,7 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
     if (wR > 0) {
       var Rr = heyaG ? 8.1 : 9.4 + 0.3 * camY, cyr = Math.min(ROOM_H - 0.6, (heyaG ? 2.1 : 2.4) + camY * 0.5), tyr = heyaG ? 1.55 + camY * 0.46 : 0.9 + camY * 0.52;   // 箱の部屋は目の高さで見る（床ばかりにしない・壁の研究室が見える）   // 部屋では「地上を見る」は無し
       // 部屋の姿勢 → 天井の穴を見上げる姿勢（前半）→ 天井の板を抜けて外の姿勢（後半）
-      var P0 = [cx0 + Math.sin(orbit) * Rr, cyr, cz0 + Math.cos(orbit) * Rr, cx0, tyr, cz0, heyaG ? 76 : 66];   // 箱の部屋は広く見る（塔と部屋の両方が入る）
+      var P0 = [cx0 + Math.sin(orbit) * Rr, cyr, cz0 + Math.cos(orbit) * Rr, cx0, tyr, cz0, heyaG ? (STG ? 84 : 76) : 66];   /* 段階の部屋は、塔のまわりの部屋がもっと見える広さ（10/31 CEO「背景が見えづらい」） */   // 箱の部屋は広く見る（塔と部屋の両方が入る）
       var Ru = heyaG ? 7.2 : 8.6, Pu = [cx0 + Math.sin(orbit) * Ru, ROOM_H - 4.2, cz0 + Math.cos(orbit) * Ru, cx0, ROOM_H + 1.8, cz0, 74];
       var Po = [pxo, cyo, pzo, lx, ly, lz, fovW], tt = 1 - wR, A, B, kk;
       if (tt < 0.5) { A = P0; B = Pu; kk = sstep(tt / 0.5); } else { A = Pu; B = Po; kk = sstep((tt - 0.5) / 0.5); }
@@ -7958,9 +8027,14 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
     { key: "mm", name: "MMA", mark: "●", color: "#D55E00" },
     { key: "mi", name: "瞑想", mark: "◆", color: "#2f9e5e" }
   ];
+  // 自分で足した種類（10/31 17:59 CEO「論文や数学以外にも積み上げたい物を足せる仕組みを」）。このスマホに残す。消さずに「しまう」だけ（前の記録の数が崩れない様に）
+  try { (JSON.parse(window.localStorage.getItem("tw-kinds") || "[]") || []).forEach(function (k) { if (k && k.key && k.name) KINDS.push(k); }); } catch (e) {}
   window.TOU_KINDS = KINDS;
+  function Z() { var a = []; for (var i = 0; i < KINDS.length; i++) a.push(0); return a; }
+  function kindVars(k) { var r = document.documentElement.style; r.setProperty("--" + k.key, k.color); r.setProperty("--" + k.key + "2", k.color); r.setProperty("--" + k.key + "3", k.color); }
+  KINDS.slice(4).forEach(kindVars);
   // 1日の分（論文・算数・MMA・瞑想）。本番は 0個から（10/27 CEO が「0個から始める」を選んだ）
-  var records = [[0,0,0,0]];
+  var records = [Z()];
   var planned = [10,5,5,10];
   function tot(rec) { var t = 0; for (var i = 0; i < rec.length; i++) t += rec[i]; return t; }
   function kindIndex(key) { for (var i = 0; i < KINDS.length; i++) if (KINDS[i].key === key) return i; return 0; }
@@ -7993,7 +8067,7 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
   // 1日目（10/27）から今日までの日を足し、残した分を重ねる
   var dayCount = 0;
   for (var dd = new Date(SAMPLE_START); dd <= today && dayCount < 4000; dd.setDate(dd.getDate() + 1)) dayCount++;
-  while (records.length < dayCount) records.push([0, 0, 0, 0]);
+  while (records.length < dayCount) records.push(Z());
   var svg = document.getElementById("tou");
   var ns = "http://www.w3.org/2000/svg";
   var selected = null;
@@ -8005,7 +8079,7 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
     var day = new Date(2026, 9, 27 + d);
     dates.push(day);
     var add = saved.adds[dayKey(day)];
-    if (add) for (var ak = 0; ak < 4; ak++) records[d][ak] += Math.max(0, add[ak] || 0);
+    if (add) for (var ak = 0; ak < KINDS.length; ak++) records[d][ak] += Math.max(0, add[ak] || 0);
   }
 
   function stats() {
@@ -8034,8 +8108,8 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
       var nd = new Date(dates[dates.length - 1]);
       nd.setDate(nd.getDate() + 1);
       dates.push(nd);
-      var row = [0, 0, 0, 0], a = saved.adds[dayKey(nd)];
-      if (a) for (var k = 0; k < 4; k++) row[k] += Math.max(0, a[k] || 0);
+      var row = Z(), a = saved.adds[dayKey(nd)];
+      if (a) for (var k = 0; k < KINDS.length; k++) row[k] += Math.max(0, a[k] || 0);
       records.push(row);
     }
     stats();
@@ -8218,7 +8292,7 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
     var todayIndex = dayRecords.length - 1;
     var totalMinutes = 0;
     var doneToday = dayRecords[todayIndex].slice();
-    var kindCounts = [0, 0, 0, 0];
+    var kindCounts = Z();
 
     for (var i = 0; i < dayRecords.length; i++) {
       for (var t = 0; t < KINDS.length; t++) {
@@ -8401,7 +8475,8 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
     lastAdded = type + ((records[todayIndex][col] + mins - 5) / 5);
     records[todayIndex][col] += mins;
     var key = dayKey(dates[todayIndex]);
-    if (!saved.adds[key]) saved.adds[key] = [0, 0, 0, 0];
+    if (!saved.adds[key]) saved.adds[key] = Z();
+    while (saved.adds[key].length < KINDS.length) saved.adds[key].push(0);
     saved.adds[key][col] += mins;
     if (!saved.log) saved.log = [];
     var nw = new Date();   // 何時に入れたか（10/29 CEO「どれをどれだけ入れたか分からない」）
@@ -8438,6 +8513,21 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
   // アプリの「記録」の一覧から読む・もどす
   window.TW_LOG = function () { refreshToday(); return { today: dayKey(dates[records.length - 1]), log: (saved.log || []).slice(), adds: saved.adds }; };
   window.TW_UNDO = function (i) { return undoAt(i); };
+  window.TW_ADD = function (type) { addMinutes(type); };
+  // 種類を足す・名前や色を直す・しまう／出す（足した種類だけ）
+  function saveKinds() { try { window.localStorage.setItem("tw-kinds", JSON.stringify(KINDS.slice(4))); return true; } catch (e) { return false; } }
+  window.TW_ADD_KIND = function (d) {
+    var n = 1; while (KINDS.some(function (k) { return k.key === "x" + n; })) n++;
+    var k = { key: "x" + n, name: String(d.name || "").slice(0, 8), mark: d.mark || "★", color: d.color || "#e0a526", base: d.base || "mm" };
+    KINDS.push(k); kindVars(k);
+    records.forEach(function (r) { while (r.length < KINDS.length) r.push(0); });
+    var ok = saveKinds(); render(); return ok ? k : null;
+  };
+  window.TW_EDIT_KIND = function (key, d) {
+    var k = KINDS.filter(function (q) { return q.key === key; })[0]; if (!k || KINDS.indexOf(k) < 4) return false;
+    ["name", "mark", "color", "base", "hidden"].forEach(function (f) { if (d[f] !== undefined) k[f] = f === "name" ? String(d[f]).slice(0, 8) : d[f]; });
+    kindVars(k); var ok = saveKinds(); render(); return ok;
+  };
   document.addEventListener("visibilitychange", function () {
     if (!document.hidden && refreshToday()) { lastAdded = null; render(); }
   });
@@ -8477,7 +8567,7 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
 })();
 </script>
 
-<script>window.TRI_VER="2726ae45a5";
+<script>window.TRI_VER="1a034939b1";
 // ===== 積み上げ帳アプリ: 全画面の形・音の合図・留守番係 =====
 (function () {
   var root = document.documentElement;
@@ -8540,7 +8630,9 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
   // 「1回もどす」は、どれがもどるか分からなかった（10/29 CEO）。押すと「記録」の一覧を開き、そこで1回ずつもどす
   var mdb = document.getElementById("modosu");
   if (mdb) { var nb = mdb.cloneNode(false); nb.innerHTML = "記録・もどす"; mdb.parentNode.replaceChild(nb, mdb); mdb = nb; }   // 前の「すぐ1回もどす」の働きは外す
-  var KN = [{ n: "論文", m: "■", c: "#3d7be0" }, { n: "算数", m: "▲", c: "#CC79A7" }, { n: "MMA", m: "●", c: "#D55E00" }, { n: "瞑想", m: "◆", c: "#2f9e5e" }];
+  var KN = [];
+  function syncKN() { KN = (window.TOU_KINDS || []).map(function (k) { return { n: k.name, m: k.mark, c: k.color, h: !!k.hidden, key: k.key }; }); }   // 足した種類も入る（10/31）
+  syncKN();
   var sheet = document.createElement("div");
   sheet.className = "tw-log"; sheet.hidden = true; sheet.setAttribute("role", "dialog"); sheet.setAttribute("aria-label", "記録");
   document.body.appendChild(sheet);
@@ -8550,11 +8642,13 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
   function md(k) { var p = k.split("-"); return (+p[1]) + "/" + (+p[2]); }
   function paintLog() {
     var L = window.TW_LOG ? window.TW_LOG() : null; if (!L) return;
-    var tod = [], sum = [{}, {}, {}, {}], tot = [0, 0, 0, 0];
+    syncKN();
+    var tod = [], sum = KN.map(function () { return {}; });
     L.log.forEach(function (it, i) { if (it[0] === L.today) { tod.push(i); var m = it[2] || 5; sum[it[1]][m] = (sum[it[1]][m] || 0) + 1; } });
-    var ad = L.adds[L.today] || [0, 0, 0, 0];
+    var ad = L.adds[L.today] || [];
     var h = '<div class="tl-head"><b>今日の記録</b><button type="button" class="tl-x">とじる</button></div><div class="tl-sum">';
     KN.forEach(function (k, i) {
+      if (k.h && !ad[i]) return;
       var parts = Object.keys(sum[i]).sort(function (a, b) { return b - a; }).map(function (m) { return m + "分×" + sum[i][m]; });
       h += '<div class="tl-k"><i style="color:' + k.c + '">' + k.m + '</i><b>' + k.n + '</b><span>' + (ad[i] || 0) + '分</span><small>' + (parts.join("・") || "記録なし") + '</small></div>';
     });
@@ -8583,7 +8677,7 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
   window.TW_OPEN_LOG = openLog;
   if (mdb) mdb.addEventListener("click", function (e) { e.stopImmediatePropagation(); e.preventDefault(); if (sheet.hidden) openLog(); else closeLog(); }, true);
   sheet.addEventListener("click", function (e) {
-    var t = e.target;
+    var t = e.target; syncKN();
     if (t.closest(".tl-x")) { closeLog(); return; }
     if (t.closest(".tl-no")) { paintLog(); return; }
     var y = t.closest(".tl-yes");
@@ -8683,6 +8777,72 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
   window.addEventListener("sora-drop", function () { peek(5500); }, false);
 })();
 
+// ===== 自分で積み上げる種類を足す（10/31 17:59 CEO「論文や数学以外にも積み上げたい物がある時に、足せる仕組みを」）=====
+// 下のボタンの右はしの「＋」から。名前・色・印を選んで足すと、ボタンと上の札と塔の石の色が増える。足した種類は「しまう」でボタンから外せる（記録は消えない）
+(function () {
+  var p4 = document.querySelector(".plus.plus4"); if (!p4 || !window.TW_ADD_KIND) return;
+  var COLS = [["#e0a526", "金", "mm"], ["#17a2b8", "青緑", "mi"], ["#8a5cd6", "紫", "sa"], ["#c0392b", "赤", "mm"], ["#2e86de", "空色", "ao"], ["#7a8794", "鉄", "ao"]];
+  var MARKS = ["★", "▼", "✚", "⬟", "♥", "✦"];
+  function kinds() { return window.TOU_KINDS || []; }
+  function btnHtml(k) { return '<span class="pk" style="color:' + k.color + '">' + k.mark + '</span><span class="pn">' + k.name + '</span><span class="pp">＋' + (window.TW_MIN || 5) + '分</span>'; }
+  var addB = document.createElement("button"); addB.type = "button"; addB.className = "p-add"; addB.setAttribute("aria-label", "積み上げる種類を足す"); addB.innerHTML = '<span class="pk">＋</span><span class="pn">種類</span>';
+  function paintPlus() {
+    [].forEach.call(p4.querySelectorAll("button[data-x]"), function (b) { b.remove(); });
+    kinds().slice(4).forEach(function (k) {
+      if (k.hidden) return;
+      var b = document.createElement("button"); b.type = "button"; b.className = "p-x"; b.setAttribute("data-x", k.key);
+      b.style.setProperty("--kc", k.color); b.innerHTML = btnHtml(k); p4.insertBefore(b, addB.parentNode === p4 ? addB : null);
+    });
+    if (addB.parentNode !== p4) p4.appendChild(addB);
+    var n = p4.querySelectorAll("button[data-plus], button[data-x]").length;
+    p4.classList.toggle("many", n > 4); p4.style.setProperty("--pn", n);
+    window.dispatchEvent(new Event("resize"));
+  }
+  p4.addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-x]"); if (b) { window.TW_ADD(b.getAttribute("data-x")); return; }
+    if (e.target.closest(".p-add")) openK();
+  }, false);
+  // 種類の札
+  var sh = document.createElement("div"); sh.className = "tw-log tw-kind"; sh.hidden = true; sh.setAttribute("role", "dialog"); sh.setAttribute("aria-label", "積み上げる種類");
+  var bg = document.createElement("div"); bg.className = "tw-log-bg"; bg.hidden = true;
+  document.body.appendChild(bg); document.body.appendChild(sh);
+  var pick = { c: 0, m: 0 };
+  function paintK() {
+    var h = '<div class="tl-head"><b>積み上げる種類</b><button type="button" class="tl-x">とじる</button></div>';
+    h += '<div class="tk-new"><label>新しい種類の名前<input type="text" maxlength="8" placeholder="例: 英語・読書・図面" autocomplete="off"></label>';
+    h += '<div class="tk-row"><span>色</span>' + COLS.map(function (c, i) { return '<button type="button" class="tk-c' + (i === pick.c ? " on" : "") + '" data-c="' + i + '" style="background:' + c[0] + '" aria-label="' + c[1] + '"></button>'; }).join("") + '</div>';
+    h += '<div class="tk-row"><span>印</span>' + MARKS.map(function (m, i) { return '<button type="button" class="tk-m' + (i === pick.m ? " on" : "") + '" data-m="' + i + '">' + m + '</button>'; }).join("") + '</div>';
+    h += '<button type="button" class="tk-add">この種類を足す</button><p class="tk-msg" aria-live="polite"></p></div>';
+    h += '<div class="tk-list"><b>今の種類</b>';
+    kinds().forEach(function (k, i) {
+      h += '<div class="tk-k' + (k.hidden ? " off" : "") + '"><i style="color:' + k.color + '">' + k.mark + '</i><b>' + k.name + '</b>' + (i < 4 ? '<small>元の種類</small>' : '<button type="button" data-hide="' + k.key + '">' + (k.hidden ? "ボタンに出す" : "しまう") + '</button>') + '</div>';
+    });
+    h += '<p class="tk-note">しまっても、それまでの記録と塔の石は消えません。</p></div>';
+    sh.innerHTML = h;
+  }
+  function openK() { paintK(); sh.hidden = false; bg.hidden = false; document.body.classList.add("log-open"); }
+  function closeK() { sh.hidden = true; bg.hidden = true; document.body.classList.remove("log-open"); }
+  bg.addEventListener("click", function (e) { e.stopPropagation(); closeK(); }, false);
+  sh.addEventListener("click", function (e) {
+    var t = e.target;
+    if (t.closest(".tl-x")) { closeK(); return; }
+    var c = t.closest("[data-c]"); if (c) { pick.c = +c.getAttribute("data-c"); [].forEach.call(sh.querySelectorAll(".tk-c"), function (x) { x.classList.toggle("on", x === c); }); return; }
+    var m = t.closest("[data-m]"); if (m) { pick.m = +m.getAttribute("data-m"); [].forEach.call(sh.querySelectorAll(".tk-m"), function (x) { x.classList.toggle("on", x === m); }); return; }
+    var hd = t.closest("[data-hide]"); if (hd) { var key = hd.getAttribute("data-hide"), k = kinds().filter(function (q) { return q.key === key; })[0]; if (k) { window.TW_EDIT_KIND(key, { hidden: !k.hidden }); paintPlus(); paintK(); } return; }
+    if (t.closest(".tk-add")) {
+      var inp = sh.querySelector(".tk-new input"), name = (inp.value || "").trim(), msg = sh.querySelector(".tk-msg");
+      if (!name) { msg.textContent = "名前を入れてください。"; inp.focus(); return; }
+      if (kinds().some(function (k) { return k.name === name; })) { msg.textContent = "同じ名前が、もう有ります。"; return; }
+      var col = COLS[pick.c], k = window.TW_ADD_KIND({ name: name, color: col[0], base: col[2], mark: MARKS[pick.m] });
+      if (!k) { msg.textContent = "スマホに残せませんでした。"; return; }
+      paintPlus(); paintK(); sh.querySelector(".tk-msg").textContent = "「" + name + "」を足しました。下のボタンから積めます。";
+      if (window.TW_KINDS_CHANGED) window.TW_KINDS_CHANGED();
+    }
+  }, false);
+  paintPlus();
+  window.TW_PAINT_PLUS = paintPlus;
+})();
+
 // ===== 塔のゲーム（10/31 10:47 JST CEO「今日何時間積み上げたのかをもっと見やすく」「ゲームみたいに積み上げるのが楽しくなる要素を、どんどん考えて入れて」）=====
 // 上の札: 今日の時間（大きく）・今日のメダルの輪・種類ごとの分・連続の日・階のレベルの棒。
 // 積んだ時: 石の所から「＋5分」が浮かぶ・数が数え上がる。
@@ -8736,16 +8896,16 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
   // ---- 記録から数える ----
   function kd(d) { return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate(); }
   function fromKey(k) { var p = k.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
-  function sum(a) { return a ? (a[0] || 0) + (a[1] || 0) + (a[2] || 0) + (a[3] || 0) : 0; }
+  function sum(a) { var t = 0; if (a) for (var i = 0; i < a.length; i++) t += a[i] || 0; return t; }   // 足した種類も数える
   function stats() {
     var L = window.TW_LOG ? window.TW_LOG() : null; if (!L) return null;
-    var A = L.adds || {}, s = { today: sum(A[L.today]), kinds: (A[L.today] || [0, 0, 0, 0]).slice(), total: 0, best: 0, bestOther: 0, streak: 0, bestStreak: 0, all4: false, key: L.today, week: [], A: A };
+    var A = L.adds || {}, s = { today: sum(A[L.today]), kinds: (A[L.today] || []).slice(), total: 0, best: 0, bestOther: 0, streak: 0, bestStreak: 0, all4: false, key: L.today, week: [], A: A };
     Object.keys(A).forEach(function (k) { var v = sum(A[k]); s.total += v; if (v > s.best) s.best = v; if (k !== L.today && v > s.bestOther) s.bestOther = v; if (A[k] && A[k][0] && A[k][1] && A[k][2] && A[k][3]) s.all4 = true; });
     var t = fromKey(L.today), d = new Date(t); if (!s.today) d.setDate(d.getDate() - 1);
     while (sum(A[kd(d)]) > 0) { s.streak++; d.setDate(d.getDate() - 1); }
     var keys = Object.keys(A).filter(function (k) { return sum(A[k]) > 0; }).map(fromKey).sort(function (a, b) { return a - b; }), run = 0, prev = null;
     keys.forEach(function (x) { run = prev && Math.round((x - prev) / 864e5) === 1 ? run + 1 : 1; prev = x; if (run > s.bestStreak) s.bestStreak = run; });
-    for (var i = 6; i >= 0; i--) { var w = new Date(t); w.setDate(w.getDate() - i); s.week.push({ d: w, v: (A[kd(w)] || [0, 0, 0, 0]).slice() }); }
+    for (var i = 6; i >= 0; i--) { var w = new Date(t); w.setDate(w.getDate() - i); s.week.push({ d: w, v: (A[kd(w)] || []).slice() }); }
     return s;
   }
   function hm(m, small) {
@@ -8790,8 +8950,16 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
   var kzN = paintKz();
   var segEl = hud.querySelector(".tg-seg"); segEl.innerHTML = new Array(13).join("<i></i>");
   var kindEl = hud.querySelector(".tg-kinds");
-  kindEl.innerHTML = KINDS.map(function (k, i) { return '<span data-k="' + i + '"><i style="color:' + k.color + '">' + k.mark + '</i>' + k.name + ' <b>0</b>分</span>'; }).join("");
-  hud.addEventListener("click", function () { if (window.TW_OPEN_LOG) window.TW_OPEN_LOG(); }, false);
+  var kindSig = "";
+  function paintKinds(s) {   // 種類の札（しまった種類は、今日の分が有る時だけ出す）
+    var show = KINDS.map(function (k, i) { return i; }).filter(function (i) { return !KINDS[i].hidden || (s && s.kinds[i]); }), sig = show.join(",") + KINDS.map(function (k) { return k.name + k.color; }).join("");
+    if (sig !== kindSig) { kindSig = sig; KC = {}; KINDS.forEach(function (k) { KC[k.key] = k; }); kindEl.classList.toggle("many", show.length > 4); kindEl.innerHTML = show.map(function (i) { var k = KINDS[i]; return '<span data-k="' + i + '"><i style="color:' + k.color + '">' + k.mark + '</i>' + k.name + ' <b>0</b>分</span>'; }).join(""); }
+  }
+  paintKinds(null);
+  window.TW_KINDS_CHANGED = function () { var s = stats(); if (s) paintHud(s, lastBlocks, true); };
+  // 札は小さくたたんで、背景の部屋を見せる（10/31 CEO「札と字が多すぎて背景が見えづらい」）。押すと開いて、種類・Lv・ステージが見える
+  try { if (window.localStorage.getItem("tw-hud-open") === "1") hud.classList.add("open"); } catch (e) {}
+  hud.addEventListener("click", function () { var o = hud.classList.toggle("open"); try { window.localStorage.setItem("tw-hud-open", o ? "1" : "0"); } catch (e) {} }, false);
 
   var shown = null, anim = 0;
   function paintTime(m) { hud.querySelector(".tg-time").innerHTML = hm(Math.round(m)); }
@@ -8813,7 +8981,8 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
     hud.querySelector(".mt").textContent = mi >= 0 ? MEDALS[mi].name : "銅";
     hud.classList.toggle("tg-rainbow", mi === 3);
     hud.querySelector(".tg-next").innerHTML = nx ? '<em>' + nx.name + 'メダル</em>まで あと <b>' + hm(nx.m - s.today, true) + '</b>' : '<em>虹メダル</em> 達成・今日は ' + Math.floor(s.today / 5) + '個';
-    KINDS.forEach(function (k, i) { var e = kindEl.querySelector('[data-k="' + i + '"]'); e.querySelector("b").textContent = s.kinds[i] || 0; e.classList.toggle("on", !!s.kinds[i]); });
+    paintKinds(s);
+    KINDS.forEach(function (k, i) { var e = kindEl.querySelector('[data-k="' + i + '"]'); if (!e) return; e.querySelector("b").textContent = s.kinds[i] || 0; e.classList.toggle("on", !!s.kinds[i]); });
     var f = hud.querySelector(".tg-fire"); f.hidden = s.streak < 1; f.querySelector("i").textContent = s.streak + "日連続";
     f.classList.toggle("hot", s.streak >= 3);
     // 階のレベル: 今の階の 12個を、積んだ種類の色で
@@ -8950,7 +9119,7 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
     var h = '<div class="tg-week"><b>この7日</b><div class="tw-bars">';
     s.week.forEach(function (w, i) {
       var v = sum(w.v), mi = medalOf(v), bar = "";
-      for (var k = 3; k >= 0; k--) if (w.v[k]) bar += '<i style="height:' + (w.v[k] / mx * 100).toFixed(1) + '%;background:' + KINDS[k].color + '"></i>';
+      for (var k = w.v.length - 1; k >= 0; k--) if (w.v[k] && KINDS[k]) bar += '<i style="height:' + (w.v[k] / mx * 100).toFixed(1) + '%;background:' + KINDS[k].color + '"></i>';
       h += '<div class="tw-col' + (i === 6 ? " td" : "") + '"><em>' + (v ? hm(v, true) : "") + '</em><div class="tw-st">' + bar + '</div>' + (mi >= 0 ? '<u class="mm' + mi + '">' + MEDALS[mi].name + '</u>' : '<u></u>') + '<time>' + (i === 6 ? "今日" : (w.d.getMonth() + 1) + "/" + w.d.getDate()) + '</time></div>';
     });
     h += '</div><p class="tw-sum">合計 <b>' + hm(s.total, true) + '</b>・一番の日 <b>' + hm(s.best, true) + '</b>・一番長い連続 <b>' + s.bestStreak + '日</b></p></div>';
