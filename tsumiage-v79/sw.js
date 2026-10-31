@@ -1,12 +1,12 @@
 // 積み上げ帳アプリの留守番係: 一度開けば、電波が無くても開ける。新しい版が有れば次に開いた時に入れ替わる
-var V = "tsumiage-afc2d1a9e0", KA = "tsumiage-a";
+var V = "tsumiage79-afc2d1a9e0", KA = "tsumiage79-a";
 var FILES = ["./", "index.html", "three.min.js", "manifest.webmanifest", "icon-192.png", "icon-512.png", "apple-touch-icon.png"];
 self.addEventListener("install", function (e) {
   e.waitUntil(caches.open(V).then(function (c) { return c.addAll(FILES); }).then(function () { return self.skipWaiting(); }));
 });
 self.addEventListener("activate", function (e) {
   e.waitUntil(caches.keys().then(function (ks) {
-    return Promise.all(ks.filter(function (k) { return k !== V && k !== KA; }).map(function (k) { return caches.delete(k); }));
+    return Promise.all(ks.filter(function (k) { return k.indexOf("tsumiage79-") === 0 && k !== V && k !== KA; }).map(function (k) { return caches.delete(k); }));
   }).then(function () {
     // 新しい本体で使わなくなった絵は捨てる（箱が太り続けない様に）
     return caches.match("index.html").then(function (res) { return res ? res.text() : null; }).then(function (html) {

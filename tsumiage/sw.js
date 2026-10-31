@@ -6,7 +6,7 @@ self.addEventListener("install", function (e) {
 });
 self.addEventListener("activate", function (e) {
   e.waitUntil(caches.keys().then(function (ks) {
-    return Promise.all(ks.filter(function (k) { return k !== V && k !== KA; }).map(function (k) { return caches.delete(k); }));
+    return Promise.all(ks.filter(function (k) { return k.indexOf("tsumiage-") === 0 && k !== V && k !== KA;   // 別の版（tsumiage79-）の箱は消さない }).map(function (k) { return caches.delete(k); }));
   }).then(function () {
     // 新しい本体で使わなくなった絵は捨てる（箱が太り続けない様に）
     return caches.match("index.html").then(function (res) { return res ? res.text() : null; }).then(function (html) {
