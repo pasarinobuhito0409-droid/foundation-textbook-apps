@@ -974,6 +974,51 @@ body.app .plus.plus4 .p-add .pn{font:700 10.5px "M PLUS 1",sans-serif!important;
 .tw-kind .tk-note{font-size:12px;color:rgba(255,255,255,.6);margin:4px 0 0}
 .tg-kinds.many{flex-wrap:wrap}.tg-kinds.many span{flex:0 0 calc(25% - 5px)}
 .tg-hud .tg-lab{top:auto!important;bottom:-11px;right:-8px}.tg-hud.open .tg-lab{position:static}
+/* ===== 透ける札と、上へ畳む札（10/31 18:20 CEO「札をもっと透明に・プルダウンか何かで畳める工夫を・今の表示は気に入っている」）=====
+   板の色はほぼ無くし、字に影を付けて読ませる。縁は上だけ光るガラスの線。 */
+.tg-hud{touch-action:none;-webkit-user-select:none;user-select:none;
+  background:linear-gradient(180deg,rgba(255,236,200,.10),rgba(255,236,200,.03) 45%,rgba(8,5,6,.16))!important;
+  border:1px solid rgba(255,226,160,.20)!important;border-top-color:rgba(255,236,190,.42)!important;
+  box-shadow:0 4px 14px rgba(0,0,0,.14),inset 0 1px 0 rgba(255,255,255,.10)!important;
+  text-shadow:0 1px 1.5px rgba(0,0,0,.95),0 0 6px rgba(0,0,0,.70),0 0 14px rgba(0,0,0,.45);
+  transition:background .3s ease,opacity .35s ease,transform .35s cubic-bezier(.2,.8,.2,1)}
+.tg-hud svg text,.tg-hud .tg-ring{text-shadow:none}
+.tg-hud .tg-time{text-shadow:inherit}
+.tg-hud .tg-ring svg{filter:drop-shadow(0 1px 3px rgba(0,0,0,.6))}
+.tg-hud .tg-ring .tr{stroke:rgba(0,0,0,.28)}
+.tg-hud.open{background:linear-gradient(180deg,rgba(255,236,200,.10),rgba(10,6,8,.22) 40%,rgba(10,6,8,.30))!important}
+.tg-hud .tg-kinds span{background:rgba(0,0,0,.16)!important;border:1px solid rgba(255,255,255,.12)}
+.tg-hud .tg-kinds span.on{background:rgba(0,0,0,.24)!important;border-color:rgba(255,255,255,.28)}
+.tg-hud .tg-seg i{background:rgba(0,0,0,.30)}
+.tg-hud .tg-stg{border-top-color:rgba(255,226,160,.20)}
+.tg-hud .tg-stg u{background:rgba(0,0,0,.30)}
+.tg-hud .tg-stg i,.tg-hud .tg-lvn em{text-shadow:none}
+/* 開いた札の時は、右の旅の棒を薄くして字が重ならない様に */
+body.app.tw-hud-big .sora-meter{opacity:.18!important}
+/* 景色を指で動かしている間は、札も棒も薄く */
+body.tw-look .tg-hud{opacity:.22}
+body.app.tw-look .sora-meter{opacity:.12!important}
+/* 畳む「︿」: 札の下のふちに付く小さなつまみ */
+.tg-grip{position:absolute;left:50%;bottom:-13px;transform:translateX(-50%);width:44px;height:20px;padding:0;display:grid;place-items:center;border-radius:0 0 12px 12px;
+  background:linear-gradient(180deg,rgba(10,6,8,.10),rgba(10,6,8,.34));border:1px solid rgba(255,226,160,.26);border-top:0;color:#f2cf7c;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.tg-grip::before{content:"";position:absolute;inset:-10px -8px -12px}
+.tg-grip svg{width:16px;height:8px;filter:drop-shadow(0 1px 1px rgba(0,0,0,.8))}
+.tg-hud.fold .tg-grip{display:none}
+.tg-pull{display:none}
+/* 畳んだ形: 時間だけの細い帯（継続の印はそのまま上に）。押すか下へ引くと出る */
+.tg-hud.fold{padding:4px 12px 4px 6px!important;transform:translateX(-50%) translateY(-6px);background:linear-gradient(180deg,rgba(255,236,200,.08),rgba(8,5,6,.18))!important}
+.tg-hud.fold .tg-ring{flex:0 0 26px;width:26px;height:26px}
+.tg-hud.fold .tg-ring .mt{display:none}
+.tg-hud.fold .tg-top{gap:6px}
+.tg-hud.fold .tg-main{display:flex;align-items:center;gap:6px}
+.tg-hud.fold .tg-time b{font-size:18px}
+.tg-hud.fold .tg-time u{font-size:11px;margin:0 2px 0 1px}
+.tg-hud.fold .tg-next,.tg-hud.fold .tg-lv,.tg-hud.fold .tg-lab,.tg-hud.fold .tg-kinds,.tg-hud.fold .tg-stg{display:none!important}
+.tg-hud.fold .tg-pull{display:grid;place-items:center;width:18px;height:18px;color:#f2cf7c}
+.tg-hud.fold .tg-pull svg{width:14px;height:7px;filter:drop-shadow(0 1px 1px rgba(0,0,0,.8));animation:tgPull 2.4s ease-in-out infinite}
+@keyframes tgPull{0%,70%,100%{transform:translateY(0)}80%{transform:translateY(3px)}90%{transform:translateY(0)}}
+.tg-hud.fold .tg-kz{transform:translate(-50%,-70%) scale(.9)!important}
+@media (prefers-reduced-motion:reduce){.tg-hud.fold .tg-pull svg{animation:none}}
 
 </style>
 </head>
@@ -8567,7 +8612,7 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
 })();
 </script>
 
-<script>window.TRI_VER="1a034939b1";
+<script>window.TRI_VER="b5851a6d42";
 // ===== 積み上げ帳アプリ: 全画面の形・音の合図・留守番係 =====
 (function () {
   var root = document.documentElement;
@@ -8958,8 +9003,37 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
   paintKinds(null);
   window.TW_KINDS_CHANGED = function () { var s = stats(); if (s) paintHud(s, lastBlocks, true); };
   // 札は小さくたたんで、背景の部屋を見せる（10/31 CEO「札と字が多すぎて背景が見えづらい」）。押すと開いて、種類・Lv・ステージが見える
-  try { if (window.localStorage.getItem("tw-hud-open") === "1") hud.classList.add("open"); } catch (e) {}
-  hud.addEventListener("click", function () { var o = hud.classList.toggle("open"); try { window.localStorage.setItem("tw-hud-open", o ? "1" : "0"); } catch (e) {} }, false);
+  // 10/31 18:20 CEO「札をもっと透明に・プルダウンか何かで畳める工夫」: 札は3つの形（畳む＝時間だけの小さな帯／小さい札／開いた札）。
+  // 下の「︿」で上へ畳む・畳んだ帯を押すか下へ引くと出る・札を上へはじいても畳む。景色を指で動かしている間は、札も右の棒も薄くなる。
+  var hudSt = "mini";
+  try { var sv = window.localStorage.getItem("tw-hud-st"); if (sv === "fold" || sv === "open" || sv === "mini") hudSt = sv; else if (window.localStorage.getItem("tw-hud-open") === "1") hudSt = "open"; } catch (e) {}
+  var grip = document.createElement("button"); grip.type = "button"; grip.className = "tg-grip"; grip.setAttribute("aria-label", "札を上へ畳む");
+  grip.innerHTML = '<svg viewBox="0 0 24 12" aria-hidden="true"><path d="M5 9l7-6 7 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  hud.appendChild(grip);
+  var pull = document.createElement("span"); pull.className = "tg-pull"; pull.setAttribute("aria-hidden", "true");
+  pull.innerHTML = '<svg viewBox="0 0 24 12"><path d="M5 3l7 6 7-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  hud.querySelector(".tg-time").parentNode.appendChild(pull);
+  function setHud(st) {
+    hudSt = st; hud.classList.toggle("fold", st === "fold"); hud.classList.toggle("open", st === "open");
+    document.body.classList.toggle("tw-hud-big", st === "open");
+    hud.setAttribute("aria-label", st === "fold" ? "札を出す" : "");
+    try { window.localStorage.setItem("tw-hud-st", st); window.localStorage.setItem("tw-hud-open", st === "open" ? "1" : "0"); } catch (e) {}
+  }
+  setHud(hudSt);
+  var hudDn = null, hudSwiped = false;
+  hud.addEventListener("pointerdown", function (e) { hudDn = { y: e.clientY, t: performance.now() }; hudSwiped = false; }, false);
+  hud.addEventListener("pointerup", function (e) {
+    if (!hudDn) return; var dy = e.clientY - hudDn.y; hudDn = null;
+    if (dy < -24 && hudSt !== "fold") { hudSwiped = true; setHud("fold"); }
+    else if (dy > 24) { hudSwiped = true; setHud(hudSt === "fold" ? "mini" : "open"); }
+  }, false);
+  grip.addEventListener("click", function (e) { e.stopPropagation(); setHud("fold"); }, false);
+  hud.addEventListener("click", function () { if (hudSwiped) { hudSwiped = false; return; } setHud(hudSt === "fold" ? "mini" : hudSt === "open" ? "mini" : "open"); }, false);
+  // 景色を指で動かす間は、上の札と右の棒を薄くして、部屋を見せる
+  var lookT = 0;
+  window.addEventListener("pointerdown", function (e) { if (e.target && e.target.tagName === "CANVAS") { clearTimeout(lookT); document.body.classList.add("tw-look"); } }, true);
+  function lookEnd() { clearTimeout(lookT); lookT = setTimeout(function () { document.body.classList.remove("tw-look"); }, 700); }
+  window.addEventListener("pointerup", lookEnd, true); window.addEventListener("pointercancel", lookEnd, true);
 
   var shown = null, anim = 0;
   function paintTime(m) { hud.querySelector(".tg-time").innerHTML = hm(Math.round(m)); }
