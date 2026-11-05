@@ -39,7 +39,7 @@
 *{box-sizing:border-box}
 html{scroll-padding-top:12px;scroll-padding-bottom:84px} /* 11/2: 右下の「一番上へ」の下に、押す所や読む所が隠れない（WCAG 2.2 の 2.4.11・C43） */
 body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:18px;line-height:1.7;margin:0}
-.wrap{max-width:560px;margin:0 auto;padding:16px 16px 96px;display:flex;flex-direction:column;gap:16px}
+.wrap{max-width:560px;margin:0 auto;padding:16px 16px max(96px,calc(env(safe-area-inset-bottom,0px) + 72px));display:flex;flex-direction:column;gap:16px}
 h1{font-family:var(--display);font-weight:800;font-size:1.45rem;line-height:1.35;margin:4px 0 0}
 .sub{color:var(--muted);font-size:.85em;margin:2px 0 0}
 p{margin:0}
@@ -79,9 +79,11 @@ p{margin:0}
 
 /* ボタン（閉じる・上へ） */
 .botan{display:flex;gap:10px}
-.botan button{flex:1;line-height:1.3;padding:6px 8px;min-height:48px;font:700 1rem var(--body);color:var(--fg);background:var(--card);border:1px solid var(--line);border-radius:12px;cursor:pointer}
-.botan button small{display:block;font-weight:400;font-size:.8em;color:var(--muted)}
-.totop{position:fixed;right:14px;bottom:18px;min-height:48px;padding:0 18px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--fg);font:700 .95rem var(--body);box-shadow:0 4px 14px rgba(0,0,0,.15);cursor:pointer}
+.botan button{flex:1;padding:6px 8px;min-height:48px;font:700 1rem/1.3 var(--body);color:var(--fg);background:var(--card);border:1px solid var(--line);border-radius:12px;cursor:pointer}
+.botan button small{display:block;font-weight:400;font-size:.8em;line-height:1.3;margin-top:2px;color:var(--muted)}
+/* 11/5: 下のホームの棒（下 34）にかからない様に上げ、字にかぶる所を小さくするため、丸い小さなボタンにした（戦略部の見つけ） */
+.totop{position:fixed;right:max(10px,env(safe-area-inset-right,0px));bottom:max(46px,calc(env(safe-area-inset-bottom,0px) + 12px));width:54px;height:54px;padding:0;border-radius:50%;border:1px solid var(--line);background:color-mix(in srgb,var(--card) 88%,transparent);color:var(--fg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;font:800 1.25rem/1 var(--body);box-shadow:0 3px 10px rgba(0,0,0,.18);cursor:pointer}
+.totop small{font:700 .6rem/1.1 var(--body);margin-top:2px}
 .totop[hidden]{display:none}
 
 /* 押すと開く箱 */
@@ -1076,7 +1078,7 @@ body.app.tw-look .sora-meter{opacity:.12!important}
 @media (prefers-reduced-motion:reduce){.tg-hud.fold .tg-pull svg{animation:none}}
 /* ===== 11/4 全部の高さを見る（CEO「積み上げた分の高さを全部見られる方がやる気が出る」）===== */
 .sora-zen-btn{display:none}
-body.app .sora-zen-btn{display:flex;align-items:center;gap:6px;position:fixed;z-index:31;left:max(12px,env(safe-area-inset-left));bottom:calc(var(--min-b,92px) + 131px);min-height:44px;padding:0 14px 0 10px;border-radius:22px;border:1px solid rgba(242,207,124,.55);background:linear-gradient(180deg,rgba(10,6,8,.16),rgba(10,6,8,.06));color:#fff;font:600 14px "M PLUS 1",var(--body);letter-spacing:.06em;text-shadow:var(--t-sh);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:opacity .45s ease}
+body.app .sora-zen-btn{display:flex;align-items:center;gap:6px;position:fixed;z-index:31;left:max(12px,env(safe-area-inset-left));bottom:calc(var(--min-b,92px) + 114px);min-height:44px;padding:0 14px 0 10px;border-radius:22px;border:1px solid rgba(242,207,124,.55);background:linear-gradient(180deg,rgba(10,6,8,.16),rgba(10,6,8,.06));color:#fff;font:600 14px "M PLUS 1",var(--body);letter-spacing:.06em;text-shadow:var(--t-sh);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:opacity .45s ease}
 body.app .sora-zen-btn svg{width:20px;height:20px;color:#f6dc9c;flex:none}
 body.app .sora-zen-btn[hidden]{display:none}
 body.app:not(.ui-peek):not(.tw-zen) .sora-zen-btn{opacity:0;pointer-events:none}
@@ -1100,6 +1102,10 @@ body.app.tw-zen .sora-zen-btn svg{color:#2a1606}
 body.app.tw-zen .sora-meter,body.app.tw-zen .sora-pv{opacity:0!important;pointer-events:none!important}
 /* 11/4 1時間・2時間: 時間の札を開いた時は 3つずつ2段に */
 body.app.ui-peek .app-min{flex-wrap:wrap;max-width:calc(3 * clamp(48px,calc((100vw - 170px) / 4),60px) + 20px)}
+/* 11/5 CEO「スマホで見たら枠にもろかぶり」: 全部の高さを見ている間は、時間の札をしまう（塔にかぶっていた） */
+body.app.tw-zen .app-min{display:none!important}
+/* 11/5 部屋では時間の札（2段）の上の左、全部の高さを見ている間は時間の札の所（札はしまう） */
+body.app.tw-zen .sora-zen-btn{bottom:calc(var(--min-b,92px) + 5px)}
 
 </style>
 </head>
@@ -7574,11 +7580,18 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
 
   // ---- 大きさ・カメラ ----
   var lookV = 0, fx = [], shake = 0, gaze = 0, gazeTo = null, W = 0, H = 0, look = 0, travel = null, drag = null, orbit = 0.62, orbitV = 0, camTop = 0, camY = null, lastNow = 0, roomW = null;
+  // 写す所（11/5 CEO「スマホで見たら枠にもろかぶり」）: 段階の部屋では、塔を少し小さく左上へ写し、
+  // 上の札・右の段階の棒・下の時間の札と記録のボタンの間の空いた所に入れる（12 mini 375×812 で目で見て決めた）
+  function camOff() {
+    var z = 1, cx = W / 2, cy = H * 0.43;
+    if (APP && STG) { z = 0.8; cx = W * 0.34; cy = H * 0.34; }
+    var fw = W * z, fh = H * z; camera.setViewOffset(fw, fh, fw / 2 - cx, fh / 2 - cy, W, H);
+  }
   function resize() {
     W = host.clientWidth || 360; H = document.body.classList.contains("app") ? (host.clientHeight || window.innerHeight || Math.round(W * 1.5)) : Math.round(W * 1.5);   // アプリでは画面いっぱい
     var pr = renderer.getPixelRatio(), sz = renderer.getSize(new T.Vector2());
     if (sz.x !== W || sz.y !== H || pr !== prMax) { renderer.setPixelRatio(prMax); renderer.setSize(W, H); }   // 大きさが同じ時は作り直さない（タブを替える度に 1秒以上かかっていた・10/29）
-    camera.aspect = W / H; camera.setViewOffset(W, H, 0, Math.round(H * 0.07), W, H); camera.updateProjectionMatrix(); kick();
+    camera.aspect = W / H; camOff(); camera.updateProjectionMatrix(); kick();
   }
   function sstep(t) { t = Math.max(0, Math.min(1, t)); return t * t * t * (t * (t * 6 - 15) + 10); }
   function lerpC(a, b, u) { return new T.Color(a).lerp(new T.Color(b), u); }
@@ -7882,7 +7895,7 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
     var w0 = (ne && ne.clientWidth) || window.innerWidth || 360, h0 = (ne && ne.clientHeight) || window.innerHeight || Math.round(w0 * 1.9);
     W = w0; H = h0;
     if (sz.x !== W || sz.y !== H || pr !== prMax) { renderer.setPixelRatio(prMax); renderer.setSize(W, H); }
-    camera.aspect = W / H; camera.setViewOffset(W, H, 0, Math.round(H * 0.07), W, H); camera.updateProjectionMatrix();
+    camera.aspect = W / H; camOff(); camera.updateProjectionMatrix();
   }
   function warm() {
     if (warmed) return; warmed = true;
@@ -8156,7 +8169,7 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
     var r = zenBuild(); zen = { t0: performance.now(), top: r.top, n: r.n, st: r.st };
     var nx = null; for (var i = 0; i < STAGES.length; i++) if (STAGES[i].h * 12 > r.n) { nx = STAGES[i]; break; }
     zInfo.innerHTML = '<i>今までに積んだ高さ</i><b>' + hmTxt(r.n * 5) + '</b><span>' + Math.floor(r.n / 12) + '階' + (r.n % 12 ? "と" + (r.n % 12) + "個" : "") + '・1階で1時間</span>' + (nx ? '<em>次の ' + nx.name + 'まで あと ' + hmTxt(nx.h * 60 - r.n * 5) + '</em>' : "");
-    zenUi.hidden = false; document.body.classList.add("tw-zen"); zenBtn.querySelector("span").textContent = "部屋へ戻る"; zenBtn.setAttribute("aria-pressed", "true");
+    zenUi.hidden = false; document.body.classList.add("tw-zen"); zenBand(); zenBtn.querySelector("span").textContent = "部屋へ戻る"; zenBtn.setAttribute("aria-pressed", "true");
     lastNow = 0; kick();
   }
   function zenClose() {
@@ -8164,6 +8177,15 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
     zen = null; zenUi.hidden = true; document.body.classList.remove("tw-zen"); zenBtn.querySelector("span").textContent = "全部の高さ"; zenBtn.setAttribute("aria-pressed", "false");
     zClear(); look = 0; lookV = 0; travel = null; camY = null; lastNow = 0; shadowKey = ""; kick();
   }
+  // 塔を入れる帯（11/5 CEO「枠にもろかぶり」）: 上は数の札の下（「今」の字の分を空ける）、下は記録のボタンと下のボタンの上。札の位置は実際に測る
+  function zenBand() {
+    if (!zen) return;
+    var hr = host.getBoundingClientRect(), ir = zInfo.getBoundingClientRect(), yA = ir.bottom - hr.top + 30, yB = H - 24;
+    [document.getElementById("modosu"), document.querySelector(".plus.plus4"), zenBtn].forEach(function (el) { if (el) { var r = el.getBoundingClientRect(); if (r.height) yB = Math.min(yB, r.top - hr.top - 22); } });
+    if (yB - yA < 80) yB = yA + 80;   // 札がとても大きい時も、塔は小さく入れる（帯を広げて札にかぶせない）
+    zen.yA = yA; zen.yB = yB;
+  }
+  window.addEventListener("resize", function () { if (zen) setTimeout(zenBand, 60); });
   zenBtn.addEventListener("click", function (e) { e.stopPropagation(); if (zen) zenClose(); else zenOpen(); }, false);
   function zTick(i) {
     var el = zTicks[i]; if (!el) { el = zTicks[i] = document.createElement("div"); zRule.appendChild(el); }
@@ -8174,10 +8196,10 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
     if (!drag && !reduced) orbit += (0.06 + orbitV) * dt; orbitV *= Math.pow(0.05, dt);
     zCam.aspect = W / H;
     var top = zen.top, fh = Math.tan(zCam.fov * D2R / 2), u = reduced ? 1 : sstep((now - zen.t0) / 1600);
-    var dFit = Math.max((top / 2 + 0.6) / (fh * 0.43), 4.6 / (fh * zCam.aspect * 0.62), 10);   // 縦は画面の 43%（上の札・数の札と、下のボタンの間）に入る遠さ
+    var band = (zen.yB - zen.yA) / H, dFit = Math.max((top + 1.2) / (2 * fh * band), 4.6 / (fh * zCam.aspect * 0.55), 10);   // 縦は、数の札と下のボタンの間の帯に入る遠さ
     var d = 10 + (dFit - 10) * u, ty = top - 0.6 + (top / 2 - (top - 0.6)) * u, cy = ty + 2.4 * (1 - u) + Math.min(dFit * 0.1, 30) * u;
     zCam.position.set(1 + Math.sin(orbit) * d, cy, 1.5 + Math.cos(orbit) * d);
-    zCam.near = Math.max(0.1, d * 0.02); zCam.far = d * 3 + top + 200; zCam.setViewOffset(W, H, 0, -Math.round(H * 0.035), W, H);   // 塔を少し下へ（上に数の札）
+    zCam.near = Math.max(0.1, d * 0.02); zCam.far = d * 3 + top + 200; zCam.setViewOffset(W, H, 0, Math.round(H / 2 - (zen.yA + zen.yB) / 2), W, H);   // 塔の真ん中を帯の真ん中へ
     zCam.lookAt(1, ty, 1.5);
     zSun.position.set(1 + Math.sin(orbit + 0.8) * 40, ty + 40, 1.5 + Math.cos(orbit + 0.8) * 40); zSun.target.position.set(1, ty, 1.5);
     zFill.position.set(1 + Math.sin(orbit - 2.2) * 40, ty + 10, 1.5 + Math.cos(orbit - 2.2) * 40); zFill.target.position.set(1, ty, 1.5);
@@ -8803,7 +8825,7 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
 }());
 
 </script>
-<button type="button" class="totop" id="totop" hidden>↑ 一番上へ</button>
+<button type="button" class="totop" id="totop" aria-label="一番上へ" hidden>↑<small>一番上</small></button>
 
 <script>
 (function(){
@@ -8850,7 +8872,7 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
 </body>
 </html>
 
-<script>window.TRI_VER="d667a2f87c";
+<script>window.TRI_VER="a472bad2ca";
 // ===== 積み上げ帳アプリ: 全画面の形・音の合図・留守番係 =====
 (function () {
   var root = document.documentElement;
@@ -8989,7 +9011,10 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
   function plusH() { if (p4) root.style.setProperty("--plus-h", Math.ceil(p4.getBoundingClientRect().height) + "px"); }
   plusH(); window.addEventListener("resize", plusH);
   // 時間の札の下のはし（「全部の高さ」のボタンをその上に置く・11/4）
-  function minB() { var r = chips.getBoundingClientRect(); if (r.height) root.style.setProperty("--min-b", Math.round(window.innerHeight - r.bottom) + "px"); }
+  function minB() {
+    var r = chips.getBoundingClientRect(); if (r.height) root.style.setProperty("--min-b", Math.round(window.innerHeight - r.bottom) + "px");
+    var md = document.getElementById("modosu"), r2 = md ? md.getBoundingClientRect() : null; if (r2 && r2.height) root.style.setProperty("--mod-t", Math.round(window.innerHeight - r2.top) + "px");   // 記録のボタンの上のはし（11/5「全部の高さ」をその上に）
+  }
   setTimeout(minB, 300); window.addEventListener("resize", minB);
   if (p4 && window.ResizeObserver) new ResizeObserver(plusH).observe(p4);
 
