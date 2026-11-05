@@ -8136,7 +8136,7 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
     Object.keys(by).forEach(function (k) {
       var src = matFor(k, 0), m = zMats[k] || (zMats[k] = new T.MeshStandardMaterial({ roughness: 0.32, metalness: 0.02, envMapIntensity: 0.9 }));
       if (m.map !== (src.map || null)) { m.map = src.map || null; m.needsUpdate = true; }
-      m.color.copy(src.color);
+      m.color.copy(src.color); m.userData.src = src;
       var ids = by[k], im = new T.InstancedMesh(geo, m, ids.length);
       ids.forEach(function (gi, j) { var c = cellPos(gi); mt.makeTranslation(c.x, c.y, c.z); im.setMatrixAt(j, mt); });
       im.instanceMatrix.needsUpdate = true; zG.add(im);
@@ -8182,6 +8182,7 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
     zSun.position.set(1 + Math.sin(orbit + 0.8) * 40, ty + 40, 1.5 + Math.cos(orbit + 0.8) * 40); zSun.target.position.set(1, ty, 1.5);
     zFill.position.set(1 + Math.sin(orbit - 2.2) * 40, ty + 10, 1.5 + Math.cos(orbit - 2.2) * 40); zFill.target.position.set(1, ty, 1.5);
     zScene.environment = envRT ? envRT.texture : null;
+    Object.keys(zMats).forEach(function (k) { var m = zMats[k], sm = m.userData.src; if (sm && sm.map && m.map !== sm.map) { m.map = sm.map; m.color.copy(sm.color); m.needsUpdate = true; } });   // 床の下に沈んでいた種類の石の模様は、後から届く
     renderer.render(zScene, zCam);
     // 高さの目盛り（左）: 0時間から今の高さまで、5〜7本
     var steps = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000], stp = steps[steps.length - 1];
@@ -8849,7 +8850,7 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
 </body>
 </html>
 
-<script>window.TRI_VER="9749a80c57";
+<script>window.TRI_VER="d667a2f87c";
 // ===== 積み上げ帳アプリ: 全画面の形・音の合図・留守番係 =====
 (function () {
   var root = document.documentElement;
