@@ -1119,6 +1119,7 @@ body.app.tw-zen .sora-zen-btn svg{color:#2a1606}
 .zn-info span{font-size:12px}
 .zn-info em{font-style:normal;font-size:12px;color:#ffe2a0}
 body.app.tw-zen .sora-meter,body.app.tw-zen .sora-pv{opacity:0!important;pointer-events:none!important}
+body.app.tw-zen .sora-meter *{pointer-events:none!important}   /* 全部の高さでは、見えない段階の札が指を取らない（右の塔をつまめる様に） */
 /* 11/4 1時間・2時間: 時間の札を開いた時は 3つずつ2段に */
 body.app.ui-peek .app-min{flex-wrap:wrap;max-width:calc(3 * clamp(48px,calc((100vw - 170px) / 4),60px) + 20px)}
 /* 11/5 CEO「スマホで見たら枠にもろかぶり」: 全部の高さを見ている間は、時間の札をしまう（塔にかぶっていた） */
@@ -1183,7 +1184,7 @@ body.app .app-min .min-free:not(.on) .mf-t{color:#f6dc9c}
 .zn-info .zn-seg{display:flex;gap:3px;margin-top:7px;padding:3px;border-radius:999px;background:rgba(10,6,8,.45);border:1px solid rgba(242,207,124,.45);pointer-events:auto}
 .zn-info .zn-seg button{min-height:34px;padding:0 14px;border:0;border-radius:999px;background:none;color:#e8dcc0;font:700 13px "M PLUS 1",var(--body);letter-spacing:.04em;white-space:nowrap;text-shadow:0 1px 2px #000}
 .zn-info .zn-seg button.on{background:linear-gradient(180deg,#f6dc9c,#d9b25e);color:#1a1408;text-shadow:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.6)}
-.zn-k{position:absolute;left:0;top:0;color:#fff;font-family:"M PLUS 1",var(--body);text-align:center;white-space:nowrap;text-shadow:0 1px 2px #000,0 0 6px rgba(0,0,0,.9);transition:opacity .2s;opacity:0;will-change:transform}
+.zn-k{position:absolute;left:0;top:0;pointer-events:none;color:#fff;font-family:"M PLUS 1",var(--body);text-align:center;white-space:nowrap;text-shadow:0 1px 2px #000,0 0 6px rgba(0,0,0,.9);transition:opacity .2s;opacity:0;will-change:transform}
 .zn-kn{font-size:11px;font-weight:700;display:grid;justify-items:center;line-height:1.15;overflow:hidden;text-overflow:ellipsis}
 .zn-kn i{font-style:normal;font-size:12px;filter:brightness(1.3)}
 .zn-kt{font-size:11px;font-weight:800;color:#ffe2a0;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
@@ -8397,7 +8398,7 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
     var mt = new T.Matrix4(), Lmax = 0, cols = [];
     keys.forEach(function (k, i) {
       var c = cnt[k], cx = x0 + i * (TW + GAP), im = new T.InstancedMesh(geo, zMatOf(k), c);
-      for (var j = 0; j < c; j++) { var l = Math.floor(j / 4), q = j % 4; mt.makeTranslation(cx - 0.5 + (q % 2), l + CUBE / 2, 1 + Math.floor(q / 2)); im.setMatrixAt(j, mt); }
+      for (var j = 0; j < c; j++) { var l = Math.floor(j / 4), q = j % 4; mt.makeTranslation(cx - 0.5 + (q % 2), l + CUBE / 2, 1 + Math.floor(q / 2)); im.setMatrixAt(j, mt); } im.frustumCulled = false;   // 石の並びは原点から遠い。大きくして横の塔を見ても消えない様に
       im.instanceMatrix.needsUpdate = true; zG.add(im);
       var L = Math.ceil(c / 4); Lmax = Math.max(Lmax, L);
       var core = new T.Mesh(new T.BoxGeometry(1.7, 1, 1.7), zCore.material); core.scale.y = Math.max(0.01, Math.floor(c / 4) - 0.2); core.position.set(cx, 0.1 + core.scale.y / 2, 1.5); core.visible = c >= 4; zG.add(core);
@@ -8448,7 +8449,7 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
   function zSegPaint() { if (!zen) return; [].forEach.call(zInfo.querySelectorAll("[data-zs]"), function (b) { var on = (b.getAttribute("data-zs") === "1") === !!zen.split; b.classList.toggle("on", on); b.setAttribute("aria-selected", on ? "true" : "false"); }); zenUi.classList.toggle("zn-split", !!zen.split); }
   function zenSplit(v) {
     if (!zen || !!zen.split === !!v) return;
-    var r = zenBuild(v); zen.split = !!v; zen.top = r.top; zen.st = r.st; zen.cols = r.cols || []; zen.wr = r.wr || 0; zen.zoom = 1; zen.fy = null; zen.pinch = null; zen.pan = null; zen.t0 = performance.now() - 900;
+    var r = zenBuild(v); zen.split = !!v; zen.top = r.top; zen.st = r.st; zen.cols = r.cols || []; zen.wr = r.wr || 0; zen.zoom = 1; zen.fy = null; zen.fx = null; zen.o0 = null; zen.pinch = null; zen.pan = null; zen.t0 = performance.now() - 900;
     try { window.localStorage.setItem("tw-zsplit", v ? "1" : "0"); } catch (e) {}
     zSegPaint(); lastNow = 0; kick();
   }
@@ -8457,8 +8458,8 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
   ["pointerdown", "touchstart"].forEach(function (ev) { zInfo.addEventListener(ev, function (e) { if (e.target.closest && e.target.closest(".zn-seg")) e.stopPropagation(); }, { passive: true }); });
   var zSL = [];   // 種類ごとの塔の名前と時間（塔の足元）
   function zSplitLabels(cA, cB) {
-    var v = new T.Vector3(), cols = zen.cols || [], put = function (el, x, y, up) { var bw = el.offsetWidth || 50, bh = el.offsetHeight || 18, L = Math.max(4, Math.min(W - bw - 4, x - bw / 2)), Y = up ? y - bh : y; el.style.transform = "translate(" + L.toFixed(1) + "px," + Y.toFixed(1) + "px)"; return [L, Y, L + bw, Y + bh]; };
-    var tops = [], spx = W * 0.6;
+    var v = new T.Vector3(), cols = zen.cols || [], put = function (el, x, y, up) { var bw = el.offsetWidth || 50, bh = el.offsetHeight || 18, L = Math.max(4, Math.min(W - bw - 4, x - bw / 2)), Y = up ? y - bh : y; el.style.transform = "translate(" + L.toFixed(1) + "px," + Y.toFixed(1) + "px)"; return [L, Y, L + bw, Y + bh, x]; };
+    var tops = [], names = [], spx = W * 0.6;
     if (cols.length > 1) { v.set(cols[0].cx, 0, 2.7).project(zCam); var x0p = v.x; v.set(cols[1].cx, 0, 2.7).project(zCam); spx = Math.abs(v.x - x0p) * 0.5 * W; }
     cols.forEach(function (c, i) {
       var a = zSL[i * 2], b = zSL[i * 2 + 1];
@@ -8468,13 +8469,15 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
       if (a._t !== ta) { a.innerHTML = ta; a._t = ta; } if (b._t !== tb) { b.innerHTML = tb; b._t = tb; }
       a.className = "zn-k zn-kn" + (spx < 48 ? " sm" : ""); b.className = "zn-k zn-kt" + (nar ? " nar" : "");
       a.style.maxWidth = Math.max(28, spx - 3).toFixed(0) + "px";   // 名前は印の下に。となりの塔との間より広くしない（長い名前は「…」）
-      v.set(c.cx, -0.05, 2.45).project(zCam); put(a, (v.x * 0.5 + 0.5) * W, (-v.y * 0.5 + 0.5) * H + 2, false); a.style.opacity = "1";
+      v.set(c.cx, -0.05, 2.45).project(zCam); var ax = put(a, (v.x * 0.5 + 0.5) * W, (-v.y * 0.5 + 0.5) * H + 2, false), axIn = (v.x * 0.5 + 0.5) * W;
+      var aOk = (zen.zoom <= 1.01 || ax[3] < cB + 4) && axIn > -10 && axIn < W + 10 && !names.some(function (q) { return q[0] < ax[2] + 1 && ax[0] < q[2] + 1 && q[1] < ax[3] && ax[1] < q[3]; });   // 帯の外・画面の外・となりの名前と重なる時は出さない（回した時・大きくした時）
+      if (aOk) names.push(ax); a.style.opacity = aOk ? "1" : "0";
       v.set(c.cx, c.L + 0.25, 1.5).project(zCam); var bx = put(b, (v.x * 0.5 + 0.5) * W, (-v.y * 0.5 + 0.5) * H - 2, true);
       for (var tr = 0; tr < 4 && tops.some(function (q) { return q[0] < bx[2] + 2 && bx[0] < q[2] + 2 && q[1] < bx[3] && bx[1] < q[3]; }); tr++) {   // 重なる時は、重なった字の上へ
         var over = tops.filter(function (q) { return q[0] < bx[2] + 2 && bx[0] < q[2] + 2 && q[1] < bx[3] && bx[1] < q[3]; }), yT = Math.min.apply(null, over.map(function (q) { return q[1]; }));
-        bx = put(b, (bx[0] + bx[2]) / 2, yT - 1, true);
+        var rx0 = bx[4]; bx = put(b, (bx[0] + bx[2]) / 2, yT - 1, true); bx[4] = rx0;
       }
-      tops.push(bx); b.style.opacity = bx[1] > cA - 30 ? "1" : "0";
+      var bIn = bx[4], bOk = bx[1] > cA - 30 && (zen.zoom <= 1.01 || bx[3] < cB) && bIn > 0 && bIn < W; if (bOk) tops.push(bx); b.style.opacity = bOk ? "1" : "0";
     });
     for (var j = cols.length * 2; j < zSL.length; j++) zSL[j].style.opacity = "0";
   }
@@ -8497,18 +8500,20 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
   // 二本指でつまむ（11/5 CEO「二本指でつまむとアップできる様に」）: 広げると大きく、狭めると小さく（全体まで）。
   // 大きい時は、1本の指の上下で塔を上り下りする。左右は今まで通り回る
   var zP = {};
-  function zMid() { var ks = Object.keys(zP), a = zP[ks[0]], b = zP[ks[1]]; return { d: Math.max(1, Math.hypot(a.x - b.x, a.y - b.y)), y: (a.y + b.y) / 2 }; }
+  function zMid() { var ks = Object.keys(zP), a = zP[ks[ks.length - 2]], b = zP[ks[ks.length - 1]]; return { d: Math.max(1, Math.hypot(a.x - b.x, a.y - b.y)), y: (a.y + b.y) / 2, x: (a.x + b.x) / 2 }; }
   cv.addEventListener("pointerdown", function (e) {
-    if (!zen) return; zP[e.pointerId] = { x: e.clientX, y: e.clientY };
+    if (!zen) return; if (e.isPrimary) zP = {};   // 1本目の指が触れた時は、前の指の残りを消す（指を離した知らせが来ない時も、つまめる様に）
+    zP[e.pointerId] = { x: e.clientX, y: e.clientY };
     var n = Object.keys(zP).length;
-    if (n === 2 && zen.ppu) { var m = zMid(); zen.pan = null; zen.pinch = { d0: m.d, z0: zen.zoom, wy: zen.ty + (zen.ym - (m.y - host.getBoundingClientRect().top)) / zen.ppu, p0: zen.ppu }; }
+    if (n >= 2 && zen.ppu) { var m = zMid(); zen.pan = null; var hr0 = host.getBoundingClientRect(); zen.pinch = { d0: m.d, z0: zen.zoom, wy: zen.ty + (zen.ym - (m.y - hr0.top)) / zen.ppu, wx: (zen.tx || 1) + (m.x - hr0.left - W / 2) / zen.ppu / Math.max(0.35, Math.abs(Math.cos(zOb))), p0: zen.ppu }; }
+    if (n >= 2 && zen.pinch && zen.split && zen.cols && zen.cols.length) { var pc0 = zen.pinch, cn = zen.cols.reduce(function (b2, c2) { return Math.abs(c2.cx - pc0.wx) < Math.abs(b2.cx - pc0.wx) ? c2 : b2; }); pc0.wy = Math.min(pc0.wy, cn.L * 0.6 + 0.6); }   // 低い塔の上の空をつまんでも、その塔が見える高さで大きくする
     else if (n === 1 && zen.ppu) zen.pan = { y0: e.clientY, f0: zen.ty, p0: zen.ppu };
   });
   cv.addEventListener("pointermove", function (e) {
     if (!zen || !zP[e.pointerId]) return; zP[e.pointerId].x = e.clientX; zP[e.pointerId].y = e.clientY;
     if (zen.pinch && Object.keys(zP).length >= 2) {
       var m = zMid(), pc = zen.pinch, zm = Math.max(1, Math.min(zen.zMax || 1, pc.z0 * m.d / pc.d0)), pn = pc.p0 * zm / pc.z0;
-      zen.zoom = zm; zen.fy = pc.wy - (zen.ym - (m.y - host.getBoundingClientRect().top)) / pn; kick();
+      var hr1 = host.getBoundingClientRect(); zen.zoom = zm; zen.fy = pc.wy - (zen.ym - (m.y - hr1.top)) / pn; if (zen.split) zen.fx = pc.wx - (m.x - hr1.left - W / 2) / pn / Math.max(0.35, Math.abs(Math.cos(zOb))); kick();   // 種類ごと: 指の間の塔を見たまま大きく。二本指を横に動かすと、となりの塔へ
     } else if (zen.pan && zen.zoom > 1.01) {
       var dy = e.clientY - zen.pan.y0; if (Math.abs(dy) > 4) { zen.fy = zen.pan.f0 + dy / zen.pan.p0; kick(); }
     }
@@ -8516,7 +8521,7 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
   function zUp(e) { if (!zen) { zP = {}; return; } delete zP[e.pointerId]; zen.pinch = null; zen.pan = null; var ks = Object.keys(zP); if (ks.length === 1 && zen.ppu) zen.pan = { y0: zP[ks[0]].y, f0: zen.ty, p0: zen.ppu }; }
   cv.addEventListener("pointerup", zUp); cv.addEventListener("pointercancel", zUp);
   ["gesturestart", "gesturechange"].forEach(function (ev) { document.addEventListener(ev, function (e) { if (zen) e.preventDefault(); }, { passive: false }); });   // iPhone の画面ごとの拡大を止める
-  window.SORA3D_ZOOM = function (z, fy) { if (!zen) return null; if (z != null) zen.zoom = Math.max(1, Math.min(zen.zMax || 1, z)); if (fy !== undefined) zen.fy = fy; kick(); return { zoom: zen.zoom, ty: zen.ty, zMax: zen.zMax }; };
+  window.SORA3D_ZOOM = function (z, fy, fx) { if (!zen) return null; if (z != null) zen.zoom = Math.max(1, Math.min(zen.zMax || 1, z)); if (fy !== undefined) zen.fy = fy; if (fx !== undefined) zen.fx = fx; kick(); return { zoom: zen.zoom, ty: zen.ty, zMax: zen.zMax, tx: zen.tx, ob: zOb }; };
   zenBtn.addEventListener("click", function (e) { e.stopPropagation(); if (zen) zenClose(); else zenOpen(); }, false);
   function zTick(i) {
     var el = zTicks[i]; if (!el) { el = zTicks[i] = document.createElement("div"); zRule.appendChild(el); }
@@ -8524,22 +8529,25 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
   }
   function zenFrame(now) {
     var dt = lastNow ? Math.min(0.05, (now - lastNow) / 1000) : 0.016; lastNow = now;
-    if (!drag && !reduced) orbit += (0.06 + orbitV) * dt; orbitV *= Math.pow(0.05, dt);
+    if (!drag && !reduced) orbit += ((zen.split ? 0 : 0.06) + orbitV) * dt; orbitV *= Math.pow(0.05, dt);   // 種類ごとの時は勝手に回らない（指で回した向きのまま）
     zCam.aspect = W / H;
     var top = zen.top, fh = Math.tan(zCam.fov * D2R / 2), u = reduced ? 1 : sstep((now - zen.t0) / 1600), SP = !!zen.split;
-    var ob = SP ? 0.32 * Math.sin(now / 7000) : orbit; zOb = ob;   // 種類ごとの時は、正面から少しだけゆれる（並びが重ならない様に）
+    if (SP && zen.o0 == null) zen.o0 = orbit;
+    var ob = SP ? orbit - zen.o0 + (reduced ? 0 : 0.32 * Math.sin(now / 7000)) : orbit; zOb = ob;   // 種類ごとの時は、正面から少しだけゆれる。指で左右に動かすと回る（11/7 CEO「別々のブロックも回せる様に」）
     var yA2 = SP ? zen.yA + 26 : zen.yA + (zen.yB - zen.yA) * ZSKY, band = (zen.yB - yA2) / H, dFit = Math.max((top + 1.2) / (2 * fh * band), 4.6 / (fh * zCam.aspect * 0.55), 10, SP ? (zen.wr + 2.4) / (2 * fh * zCam.aspect * 0.9) : 0);   // 縦は、数の札と下のボタンの間の帯に入る遠さ（種類ごとの時は横の並びも入る遠さ）
-    zen.zMax = SP ? 1 : Math.max(1, Math.min(60, (W - 122 - 20) / (5.8 * (H / 2) / (fh * dFit))));   // 一番大きくして、塔が目盛りの右の空きに入るまで
+    zen.zMax = SP ? Math.max(1, Math.min(60, W * 0.92 / (4.6 * (H / 2) / (fh * dFit)))) : Math.max(1, Math.min(60, (W - 122 - 20) / (5.8 * (H / 2) / (fh * dFit))));   // 一番大きくして、塔が目盛りの右の空きに入るまで
     var Z = Math.max(1, Math.min(zen.zMax, zen.zoom || 1)), d = (10 + (dFit - 10) * u) / Z, ty = top - 0.6 + (top / 2 - (top - 0.6)) * u;
     var half = (zen.yB - yA2) / 2 / ((H / 2) / (fh * d)), lo = Math.min(top / 2, half - 0.6), hi = Math.max(top / 2, top + 0.6 - half);
     if (u >= 1 && zen.fy != null) { zen.fy = Math.max(lo, Math.min(hi, zen.fy)); ty = zen.fy; }
     if (Z <= 1.001 && !zen.pinch) zen.fy = null;
     var cy = ty + (2.4 * (1 - u) + Math.min(dFit * 0.1, 30) * u) / Z;
-    zCam.position.set(1 + Math.sin(ob) * d, cy, 1.5 + Math.cos(ob) * d);
+    if (Z <= 1.001 && !zen.pinch) zen.fx = null;
+    var fxM = SP ? zen.wr / 2 : 0, tx = SP && zen.fx != null ? (zen.fx = Math.max(1 - fxM, Math.min(1 + fxM, zen.fx))) : 1; zen.tx = tx;   // 種類ごとで大きくした時は、つまんだ所の塔へ寄る
+    zCam.position.set(tx + Math.sin(ob) * d, cy, 1.5 + Math.cos(ob) * d);
     zCam.near = Math.max(0.1, d * 0.02); zCam.far = d * 3 + top + 200; var pp0 = (H / 2) / (fh * Math.hypot(d, cy - ty)), dx = SP ? 0 : Math.max(0, 122 + 2.9 * pp0 + 6 - W / 2);   // 大きくした時は、塔を右へ寄せて左の目盛りの場所を空ける
     zCam.setViewOffset(W, H, -Math.round(dx), Math.round(H / 2 - (yA2 + zen.yB) / 2), W, H);   // 塔の真ん中を帯の真ん中へ
-    zCam.lookAt(1, ty, 1.5);
-    zSun.position.set(1 + Math.sin(ob + 0.8) * 40, ty + 40, 1.5 + Math.cos(ob + 0.8) * 40); zSun.target.position.set(1, ty, 1.5);
+    zCam.lookAt(tx, ty, 1.5);
+    zSun.position.set(tx + Math.sin(ob + 0.8) * 40, ty + 40, 1.5 + Math.cos(ob + 0.8) * 40); zSun.target.position.set(tx, ty, 1.5);
     zFill.position.set(1 + Math.sin(ob - 2.2) * 40, ty + 10, 1.5 + Math.cos(ob - 2.2) * 40); zFill.target.position.set(1, ty, 1.5);
     zScene.environment = envRT ? envRT.texture : null;
     Object.keys(zMats).forEach(function (k) { var m = zMats[k], sm = m.userData.src; if (sm && sm.map && m.map !== sm.map) { m.map = sm.map; m.color.copy(sm.color); m.needsUpdate = true; } });   // 床の下に沈んでいた種類の石の模様は、後から届く
@@ -8556,7 +8564,7 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
     for (var k = 0; k < steps.length; k++) if (vis / steps[k] <= 6) { stp = steps[k]; break; }
     var v = new T.Vector3(), yOf = function (h) { v.set(1, h, 1.5).project(zCam); return (-v.y * 0.5 + 0.5) * H; };
     var y0 = yOf(0), yT = yOf(zen.n / 12), cxs = (v.set(1, ty, 1.5).project(zCam).x * 0.5 + 0.5) * W;
-    var ppu = (H / 2) / (fh * zCam.position.distanceTo(new T.Vector3(1, ty, 1.5)));
+    var ppu = (H / 2) / (fh * zCam.position.distanceTo(new T.Vector3(tx, ty, 1.5)));
     zen.ppu = ppu; zen.ty = ty; zen.ym = (yA2 + zen.yB) / 2;
     var cA = zen.yA - (Z > 1.01 ? 0 : 24), cB = zen.yB + (Z > 1.01 ? 8 : 16);   // 目盛りは帯の中だけ（数の札・下のボタンに字をかぶせない）
     if (SP) {   // 種類ごと: 目盛りと窓の名前は出さず、塔の足元に種類の名前と時間
@@ -9246,7 +9254,7 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
 </body>
 </html>
 
-<script>window.TRI_VER="8d57bbe85e";
+<script>window.TRI_VER="7a08d95332";
 // ===== 積み上げ帳アプリ: 全画面の形・音の合図・留守番係 =====
 (function () {
   var root = document.documentElement;
