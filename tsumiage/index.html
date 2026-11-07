@@ -22,96 +22,126 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Yomogi&family=Shippori+Mincho:wght@600&family=M+PLUS+1:wght@200;300;500;700;800&family=M+PLUS+Rounded+1c:wght@700;800&family=BIZ+UDPGothic:wght@400;700&display=swap">
 <style>
-/* Triwheel 紙の新しい型（10/30 CEO「ルールを全部0にする。残すのは ①プルダウン ②会社のキャラと数式・発明・図面 ③閉じるボタンと上に行くボタン。あとは任せる・1発で管理と理解できる様に」）
-   作り: 一番上の「ひと目で」に全部の箱の状態（今・待ち・済み）と要点が1行ずつ並ぶ。押すとその箱へ飛んで開く。中身は全部 押すと開く箱。 */
+/* Triwheel 紙の型（11/6 の基準）
+   11/6 CEO「Cに物を作ってもらう時は、今回決まった形を基準に。中身は今回の2つの箱の形（Triwheelのロゴ・ホイールくん・背景の数式が入り、文字は読みやすい形で、日付の物は新しい日が上でプルダウンに分かれる形）」。
+   見た目は「発明メモと計画の箱」と「MMA の箱」（紺・金・クリーム・日付ごとの箱）に合わせた。
+   残す物（10/30）: 押すと開く箱・会社のキャラと数式・発明・図面・閉じるボタンと上に行くボタン・「ひと目で」。
+   消した物（11/6・整理の決まり）: 開くたびの8色シャッフルと「色を変える」・箱の左の色の太線・ひと目での中のキャラ。 */
 :root{
-  --bg:#eef3f6; --card:#ffffff; --fg:#17212a; --muted:#4f5e6b; --line:#d3dde4; --logo:#6E737B;
+  --navy:#1f2d3a; --gold:#b8923a; --gold-ji:#8a6a1f; --cream:#fffbf0; --bg:#f6f1e8; --fg:#1f2d3a; --muted:#5d6670;
+  --pale:#eef1f4; --line:#d8cfbd; --up:#f8eccf; --card:#fffbf0; --logo:#6E737B;
   --ima:#b8401f; --ima-bg:#fbe9e2; --machi:#6b45ad; --machi-bg:#efe8fa; --zumi:#22714f; --zumi-bg:#e3f3ea;
   --display:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN","Hiragino Sans",sans-serif;
   --body:"BIZ UDPGothic","Hiragino Sans","Noto Sans JP",sans-serif;
+  color-scheme:light;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0f161c; --card:#17212a; --fg:#e8eff4; --muted:#a9b8c4; --line:#2b3a46; --logo:#C9CDD2;
+  --navy:#0d151c; --gold:#d8c690; --gold-ji:#e6d6a2; --cream:#1b2731; --bg:#121b22; --fg:#f0ebdf; --muted:#b9c2ca;
+  --pale:#22313d; --line:#3a4955; --up:#3a3320; --card:#1b2731; --logo:#C9CDD2;
   --ima:#ff8a68; --ima-bg:#3a2119; --machi:#c3a3f5; --machi-bg:#2a2140; --zumi:#6fdcab; --zumi-bg:#173328; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#0f161c; --card:#17212a; --fg:#e8eff4; --muted:#a9b8c4; --line:#2b3a46; --logo:#C9CDD2;
+  --navy:#0d151c; --gold:#d8c690; --gold-ji:#e6d6a2; --cream:#1b2731; --bg:#121b22; --fg:#f0ebdf; --muted:#b9c2ca;
+  --pale:#22313d; --line:#3a4955; --up:#3a3320; --card:#1b2731; --logo:#C9CDD2;
   --ima:#ff8a68; --ima-bg:#3a2119; --machi:#c3a3f5; --machi-bg:#2a2140; --zumi:#6fdcab; --zumi-bg:#173328; color-scheme:dark}
 *{box-sizing:border-box}
 html{scroll-padding-top:12px;scroll-padding-bottom:84px} /* 11/2: 右下の「一番上へ」の下に、押す所や読む所が隠れない（WCAG 2.2 の 2.4.11・C43） */
-body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:18px;line-height:1.7;margin:0}
-.wrap{max-width:560px;margin:0 auto;padding:16px 16px max(96px,calc(env(safe-area-inset-bottom,0px) + 72px));display:flex;flex-direction:column;gap:16px}
-h1{font-family:var(--display);font-weight:800;font-size:1.45rem;line-height:1.35;margin:4px 0 0}
-.sub{color:var(--muted);font-size:.85em;margin:2px 0 0}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:18px;line-height:1.9;margin:0}
+body *{letter-spacing:.12em} /* 字の間を広く（11/6 の基準・読みやすい形） */
 p{margin:0}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px}
 
-/* ひと目で（全部の箱の一覧） */
+/* 頭の紺の帯: 白いロゴ・薄い数式・題・金の小さい字・右下にホイールくん */
+header.atama{background:var(--navy);color:#fff;padding:12px 110px 14px max(16px,env(safe-area-inset-left,0px));position:relative;min-height:150px;overflow:hidden}
+header.atama .suushiki{position:absolute;left:40%;top:-30px;width:150px;height:auto;filter:invert(1);opacity:.22;pointer-events:none}
+header.atama h1,header.atama p,header.atama .rogo{position:relative}
+header.atama:focus{outline:none}
+header.atama .rogo{display:block;width:120px;height:auto;margin:0 0 4px -6px}
+header.atama .wheel{position:absolute;right:6px;bottom:-4px;width:104px;height:auto}
+header.atama h1{margin:0;font-family:var(--display);font-weight:800;font-size:1.5rem;line-height:1.35}
+header.atama p{margin:4px 0 0;color:#e9c86a;font-size:.8rem;line-height:1.5}
+@media (min-width:600px){header.atama{padding-left:calc(50% - 264px)}}
+.wrap{max-width:560px;margin:0 auto;padding-block:14px max(110px,calc(env(safe-area-inset-bottom,0px) + 90px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:14px}
+.midashi{margin:6px 2px -4px;font-family:var(--display);font-weight:800;font-size:1rem;color:var(--muted)}
+.card{background:color-mix(in srgb,var(--cream) 72%,transparent);border:2px solid var(--gold);border-radius:14px}
+
+/* ひと目で（状態の有る箱の一覧・押すとその箱へ飛んで開く） */
 .hitome[hidden]{display:none}
-.hitome{position:relative;padding:16px 16px 12px;overflow:hidden}
-.hitome h2{font-family:var(--display);font-weight:800;font-size:1.1rem;margin:0 0 10px}
-.kazu{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
-.kazu span{font-weight:700;border-radius:999px;padding:4px 12px;font-size:.9em}
+.hitome{position:relative;padding:14px 14px 10px;overflow:hidden}
+.hitome h2{font-family:var(--display);font-weight:800;font-size:1.1rem;margin:0 0 8px}
+.kazu{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.kazu span{font-weight:700;border-radius:999px;padding:2px 12px;font-size:.88em}
 .k-ima{background:var(--ima-bg);color:var(--ima)} .k-machi{background:var(--machi-bg);color:var(--machi)} .k-zumi{background:var(--zumi-bg);color:var(--zumi)}
 .ichiran{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
 .ichiran li+li{border-top:1px solid var(--line)}
 .ichiran a{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;align-items:start;padding:10px 4px;min-height:48px;color:inherit;text-decoration:none}
 .ichiran .t{font-weight:700}
 .ichiran .y{grid-column:2;color:var(--muted);font-size:.9em}
-/* 今やる事は大きく・色の地で一番目立たせる */
 .ichiran li.r-ima{background:var(--ima-bg);border-radius:12px;border-top:0}
 .ichiran li.r-ima+li{border-top:0}
 .ichiran li.r-ima a{padding:12px 10px}
 .ichiran li.r-ima .t{font-size:1.12rem;line-height:1.45}
 .ichiran li.r-ima .y{color:var(--fg)}
-/* 済みは1行にたたむ（押すと出る） */
 .ichiran details>summary{list-style:none;cursor:pointer;min-height:48px;display:flex;align-items:center;gap:10px;padding:8px 4px;color:var(--muted);font-weight:700}
 .ichiran details>summary::-webkit-details-marker{display:none}
-.ichiran details[open]>summary .ya{transform:rotate(90deg)}
-.ichiran details>summary .ya{transition:transform .15s;margin-left:auto}
+.ichiran details>summary .ya{margin-left:auto;color:var(--gold-ji);font-size:.9rem}
+.ichiran details>summary .ya::after{content:"▶"}
+.ichiran details[open]>summary .ya::after{content:"▼"}
 .ichiran details ol{list-style:none;margin:0;padding:0 0 0 8px}
 .ichiran details li{border-top:1px solid var(--line)}
-.fuda{font-family:var(--display);font-weight:800;font-size:.8em;border-radius:8px;padding:2px 8px;white-space:nowrap;margin-top:2px}
-.f-ima{background:var(--ima);color:#fff} .f-machi{background:var(--machi);color:#fff} .f-zumi{background:var(--zumi);color:#fff}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .fuda{color:#0f161c}}
-:root[data-theme="dark"] .fuda{color:#0f161c}
-.hitome .chara{position:absolute;right:4px;top:6px;width:60px;height:auto;pointer-events:none;opacity:.95}
-@media (min-width:480px){.hitome .chara{width:78px;top:8px}}
 
-/* ボタン（閉じる・上へ） */
-.botan{display:flex;gap:10px}
-.botan button{flex:1;padding:6px 8px;min-height:48px;font:700 1rem/1.3 var(--body);color:var(--fg);background:var(--card);border:1px solid var(--line);border-radius:12px;cursor:pointer}
-.botan button small{display:block;font-weight:400;font-size:.8em;line-height:1.3;margin-top:2px;color:var(--muted)}
-/* 11/5: 下のホームの棒（下 34）にかからない様に上げ、字にかぶる所を小さくするため、丸い小さなボタンにした（戦略部の見つけ） */
-.totop{position:fixed;right:max(10px,env(safe-area-inset-right,0px));bottom:max(46px,calc(env(safe-area-inset-bottom,0px) + 12px));width:54px;height:54px;padding:0;border-radius:50%;border:1px solid var(--line);background:color-mix(in srgb,var(--card) 88%,transparent);color:var(--fg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;font:800 1.25rem/1 var(--body);box-shadow:0 3px 10px rgba(0,0,0,.18);cursor:pointer}
-.totop small{font:700 .6rem/1.1 var(--body);margin-top:2px}
+/* 札（丸い札）: 状態の札は色の地・ふつうの札は金の枠 */
+.fuda{font-family:var(--display);font-weight:800;font-size:.78rem;border-radius:999px;padding:1px 10px;white-space:nowrap;border:1px solid var(--gold);background:var(--up);color:var(--fg);margin-top:2px}
+.fuda:empty{display:none}
+.fuda.keikaku{background:var(--navy);color:#fff;border-color:var(--navy)}
+.fuda.hontai{background:var(--gold);color:#fff;border-color:var(--gold)}
+.f-ima{background:var(--ima);border-color:var(--ima);color:#fff} .f-machi{background:var(--machi);border-color:var(--machi);color:#fff} .f-zumi{background:var(--zumi);border-color:var(--zumi);color:#fff}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .f-ima,:root:not([data-theme="light"]) .f-machi,:root:not([data-theme="light"]) .f-zumi{color:#0f161c}}
+:root[data-theme="dark"] .f-ima,:root[data-theme="dark"] .f-machi,:root[data-theme="dark"] .f-zumi{color:#0f161c}
+
+/* ボタン（全部閉じる・一番上へ） */
+.botan{display:flex}
+.botan button{flex:1;min-height:52px;padding:6px 8px;font:700 1rem var(--body);color:var(--fg);background:var(--pale);border:1px solid var(--line);border-radius:12px;cursor:pointer}
+/* 11/5: 下のホームの棒（下 34）にかからない様に上げた丸い小さなボタン。11/6: 金の枠 */
+.totop{position:fixed;right:max(10px,env(safe-area-inset-right,0px));bottom:max(46px,calc(env(safe-area-inset-bottom,0px) + 12px));width:54px;height:54px;padding:0;border-radius:50%;border:1px solid var(--gold);background:color-mix(in srgb,var(--cream) 90%,transparent);color:var(--fg);display:flex;flex-direction:column;align-items:center;justify-content:center;font:800 1.2rem/1 var(--body);box-shadow:0 3px 10px rgba(0,0,0,.18);cursor:pointer}
+.totop small{font:700 .58rem/1.1 var(--body);margin-top:2px;letter-spacing:0}
 .totop[hidden]{display:none}
 
-/* 押すと開く箱 */
-details.box{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--line);border-radius:14px}
-details.box[data-jotai="ima"]{border-left-color:var(--ima)}
-details.box[data-jotai="machi"]{border-left-color:var(--machi)}
-details.box[data-jotai="zumi"]{border-left-color:var(--zumi)}
-details.box>summary{list-style:none;cursor:pointer;padding:14px 16px;min-height:48px;display:grid;grid-template-columns:auto 1fr auto;gap:2px 10px;align-items:start}
+/* 押すと開く箱（日付の箱も同じ形）: クリームの地・金の枠・右に ▶（閉）▼（開） */
+details.box{background:color-mix(in srgb,var(--cream) 72%,transparent);border:2px solid var(--gold);border-radius:14px}
+details.box>summary{list-style:none;cursor:pointer;padding:12px 14px;min-height:52px;display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center}
 details.box>summary::-webkit-details-marker{display:none}
-details.box>summary .t{font-family:var(--display);font-weight:800;font-size:1.05rem;line-height:1.4}
-details.box>summary .y{grid-column:2;color:var(--muted);font-size:.9em;text-wrap:pretty}
-details.box>summary .ya{grid-row:1;grid-column:3;color:var(--muted);transition:transform .15s}
-details.box[open]>summary .ya{transform:rotate(90deg)}
+details.box>summary .t,details.box>summary .hi,details.box>summary .bt{grid-column:1;font-family:var(--display);font-weight:800;font-size:1.15rem;line-height:1.4} /* 題は基準の日付の題と同じ大きさ（11/6 ソル6.1 の検査） */
+details.box>summary .ya{grid-row:1/3;grid-column:2;font-size:0;color:var(--gold-ji)}
+details.box>summary .ya::after{content:"▶";font-size:.9rem;letter-spacing:.12em}
+details.box[open]>summary .ya::after{content:"▼"}
+details.box>summary .y{grid-column:1;display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;font-size:.92rem;line-height:1.5;text-wrap:pretty}
+details.box>summary .y>span:not(.fuda){flex:1 1 9em;min-width:0}
+/* 11/6: 題と要点は、行の長さをそろえて折る（最後の行に1字だけ残らない・iPhone の Safari 17.5 から効く） */
+details.box>summary .t,details.box>summary .hi,details.box>summary .y>span:not(.fuda),.ichiran .t,.ichiran .y{text-wrap:balance} /* 札の横に要点を並べ、長い時は札の横で折り返す。要点は必ず span で囲む */
 details.box>summary .y:empty{display:none}
-.naka,details.box>.in{padding:0 16px 16px 16px;display:flex;flex-direction:column;gap:10px}
-details.box>summary .bt{grid-column:1/3;font-family:var(--display);font-weight:800;font-size:1.05rem;line-height:1.4}
+.naka,details.box>.in{padding:0 12px 14px;display:flex;flex-direction:column;gap:10px;font-size:1.05rem;line-height:1.95} /* 箱の中の本文は基準の本文（｜の行）と同じ 16.8px・行の間 1.95（11/6 ソル6.1 の検査） */
 .naka ul{margin:0;padding-left:1.2em}
 .naka .chui{background:var(--ima-bg);border-radius:10px;padding:10px 12px}
-.naka .tojiru2{align-self:flex-end;min-height:44px;padding:0 16px;font:700 .9rem var(--body);color:var(--muted);background:transparent;border:1px solid var(--line);border-radius:10px;cursor:pointer}
+.naka .tojiru2{align-self:flex-end;min-height:44px;padding:0 14px;font:700 .9rem var(--body);color:var(--muted);background:transparent;border:1px solid var(--line);border-radius:10px;cursor:pointer}
+
+/* 箱の中の札（11/6 の基準の部品）: 白い札と金の題・本人の言葉は金の枠・｜の行・↓の順番 */
+.koe{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .koe{background:var(--pale)}}
+:root[data-theme="dark"] .koe{background:var(--pale)}
+.koe .lab{display:block;font-family:var(--display);font-weight:800;font-size:.8rem;color:var(--gold-ji);margin-bottom:4px}
+.koe.honnin{border:2px solid var(--gold)}
+.gyou{display:block;font-size:1.05rem;line-height:1.95;padding-left:1em;text-indent:-1em} /* 折れた時は、2行目を ｜ の後ろにそろえる */
+.gyou::before{content:"｜";color:var(--gold-ji)}
+.junban{display:flex;flex-direction:column;gap:2px}
+.junban .ya2{text-align:center;color:var(--gold-ji);font-weight:700;line-height:1.3}
+footer{font-size:.78rem;color:var(--muted);text-align:center;line-height:1.7}
 
 /* 背景のキャラと端の数式・発明・図面（本文の後ろ・押せない・読み上げない） */
 .haikei{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
 .haikei img{position:absolute;display:block}
-.haikei .hashi{top:0;height:100%;width:auto;max-width:22vw;opacity:.13;object-fit:cover}
+.haikei .hashi{top:0;height:100%;width:auto;max-width:30vw;opacity:.30;object-fit:cover}
 .haikei .hidari{left:0;object-position:left top} .haikei .migi{right:0;object-position:right top}
-.haikei .chara{left:6px;bottom:6px;width:110px;height:auto;opacity:.25}
+.haikei .chara{left:6px;bottom:6px;width:110px;height:auto;opacity:.45}
 @media (min-width:900px){.haikei .chara{left:calc(50% - 540px);width:230px;opacity:.6}.haikei .hashi{opacity:.18}}
-@media (min-width:900px) and (prefers-color-scheme: dark){:root:not([data-theme="light"]) .haikei .chara{opacity:.4}:root:not([data-theme="light"]) .haikei .hashi{opacity:.09}}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .haikei .hashi{filter:invert(1);opacity:.09}:root:not([data-theme="light"]) .haikei .chara{opacity:.18}}
 :root[data-theme="dark"] .haikei .hashi{filter:invert(1);opacity:.09}:root[data-theme="dark"] .haikei .chara{opacity:.18}
 /* PC の広い余白: 左右の余白いっぱいにアート（yohaku）を置き、キャラは左の台の上に大きく（10/30 CEO「余白をもっとアートに美しく」） */
@@ -121,31 +151,21 @@ details.box>summary .bt{grid-column:1/3;font-family:var(--display);font-weight:8
   .haikei .yohaku.hidari{left:0;object-position:center bottom} .haikei .yohaku.migi{right:0;object-position:center}
   .haikei.ari .hashi{display:none}
   .haikei.ari .chara{left:calc((50% - 310px)/2);transform:translateX(-50%);width:clamp(150px,calc((50% - 310px)*.5),260px);bottom:5vh;opacity:.9}
+  .haikei .yohaku.kurai{display:none}
 }
-/* 暗い時は、線を明るい青白にした版（〜-kurai）に替える */
-@media (min-width:1100px){.haikei .yohaku.kurai{display:none}}
 @media (min-width:1100px) and (prefers-color-scheme: dark){:root:not([data-theme="light"]) .haikei .yohaku{display:none}:root:not([data-theme="light"]) .haikei .yohaku.kurai{display:block;opacity:.3}:root:not([data-theme="light"]) .haikei.ari .chara{opacity:.6}}
 @media (min-width:1100px){:root[data-theme="dark"] .haikei .yohaku{display:none}:root[data-theme="dark"] .haikei .yohaku.kurai{display:block;opacity:.3}:root[data-theme="dark"] .haikei.ari .chara{opacity:.6}}
-@media (prefers-reduced-motion: reduce){details.box>summary .ya,.ichiran details>summary .ya{transition:none}}
-@media print{.haikei,.totop,.botan,.hitome .chara,.tojiru2{display:none}}
-/* 色はシャッフル（10/30 CEO「白も黒もワイン色も、色んな色でシャッフル。この色と決めつけず」）: 開くたびに下の8色から1つ選ぶ。明るい色は線の濃い絵、暗い色は線の明るい絵 */
-:root[data-iro="shiro"][data-theme]{--bg:#eef3f6;--card:#ffffff;--fg:#17212a;--muted:#4f5e6b;--line:#d3dde4;--logo:#6E737B;--ima:#b8401f;--ima-bg:#fbe9e2;--machi:#6b45ad;--machi-bg:#efe8fa;--zumi:#22714f;--zumi-bg:#e3f3ea;color-scheme:light}
-:root[data-iro="kuro"][data-theme]{--bg:#0f161c;--card:#17212a;--fg:#e8eff4;--muted:#a9b8c4;--line:#2b3a46;--logo:#C9CDD2;--ima:#ff8a68;--ima-bg:#3a2119;--machi:#c3a3f5;--machi-bg:#2a2140;--zumi:#6fdcab;--zumi-bg:#173328;color-scheme:dark}
-:root[data-iro="wine"][data-theme]{--bg:#2b0b14;--card:#3d1120;--fg:#fbeef1;--muted:#e0bcc6;--line:#5e2236;--logo:#e8c9d1;--ima:#ffa184;--ima-bg:#55202a;--machi:#dcbcff;--machi-bg:#432248;--zumi:#86e6b8;--zumi-bg:#1f3a2d;color-scheme:dark}
-:root[data-iro="kon"][data-theme]{--bg:#0b1730;--card:#132447;--fg:#eaf1ff;--muted:#b4c3e0;--line:#2a3d66;--logo:#c9d4ea;--ima:#ff9a78;--ima-bg:#3d2536;--machi:#cdb1ff;--machi-bg:#2c2755;--zumi:#7fe3b5;--zumi-bg:#133b3b;color-scheme:dark}
-:root[data-iro="midori"][data-theme]{--bg:#0c241d;--card:#12342a;--fg:#eaf7f0;--muted:#b5d6c7;--line:#285446;--logo:#c6e0d4;--ima:#ff9d7c;--ima-bg:#3e2b21;--machi:#d0b5ff;--machi-bg:#2d2c47;--zumi:#8ff0c0;--zumi-bg:#1a4a38;color-scheme:dark}
-:root[data-iro="kinari"][data-theme]{--bg:#f4ecdc;--card:#fffaf0;--fg:#2b2118;--muted:#5f5040;--line:#e3d5bb;--logo:#7a6a55;--ima:#b33d1c;--ima-bg:#fbe4d6;--machi:#6a43a8;--machi-bg:#efe5f6;--zumi:#20704d;--zumi-bg:#e0f0e3;color-scheme:light}
-:root[data-iro="sakura"][data-theme]{--bg:#f9e9ee;--card:#fffafc;--fg:#2c1820;--muted:#644a55;--line:#edd2db;--logo:#8a6672;--ima:#b0391c;--ima-bg:#fde3dc;--machi:#6a43a8;--machi-bg:#f1e6f8;--zumi:#20704d;--zumi-bg:#e2f2e7;color-scheme:light}
-:root[data-iro="sora"][data-theme]{--bg:#e3eefa;--card:#fbfdff;--fg:#12233a;--muted:#44576f;--line:#c9d9ec;--logo:#5d6f86;--ima:#b33d1c;--ima-bg:#fbe6dd;--machi:#6542a6;--machi-bg:#ece6f8;--zumi:#1f6e4c;--zumi-bg:#e0f1e8;color-scheme:light}
+@media print{.haikei,.totop,.botan,.tojiru2{display:none}}
 /* 部品の形（11/2）: 箱の中で使う、数・帯・手順・道・棒・絵・薄い枠など。
-   前の型 kata.html の部品を、新しい型の色（8色のシャッフル）で動く様に移した。
+   前の型 kata.html の部品を、新しい型の色で動く様に移した（11/6 から色は紺・金・クリームの1つ。8色のシャッフルは消した）。
    前の名前（--s1 など）は、新しい色の名前につなぐ。 */
 :root{--s1:var(--ima);--s1-ji:var(--ima);--on-s1:#fff;--s2:var(--machi);--s3:#c99a14;--done:var(--zumi);--road:var(--line);--warn:var(--ima-bg);
-  --hero:#17324a;--hero-fg:#fff;--hero-sub:#c8d9e8}
-:root[data-theme="dark"]{--on-s1:#23110b;--s3:#f0c845;--hero:#1d3a55;--hero-sub:#b9cfe2}
+  --hero:var(--navy);--hero-fg:#fff;--hero-sub:#c8d9e8}
+:root[data-theme="dark"]{--on-s1:#23110b;--s3:#f0c845;--hero-sub:#b9cfe2}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--on-s1:#23110b;--s3:#f0c845;--hero-sub:#b9cfe2}}
 .muted{color:var(--muted)}
 .small{font-size:.85em}
-.card{background:var(--card);border-radius:16px;padding:16px;border:1px solid var(--line)}
+.card{border-radius:14px;padding:16px}
 details.card.box{padding:0}
 h2{font-family:var(--display);font-weight:800;font-size:1.2rem;margin:0 0 10px}
 .hero{background:var(--hero);color:var(--hero-fg);border-radius:18px;padding:18px 18px 20px;display:flex;flex-direction:column;gap:10px;position:relative}
@@ -187,7 +207,7 @@ h2{font-family:var(--display);font-weight:800;font-size:1.2rem;margin:0 0 10px}
 .list > div{border-left:5px solid var(--c,var(--s2));padding-left:10px}
 .blks{display:flex;flex-direction:column;gap:9px}
 .blk{background:var(--bg);border-left:3px solid var(--done);border-radius:0 9px 9px 0;padding:9px 13px}
-.blk p{margin:0;line-height:1.85}
+.blk p{margin:0;line-height:1.95} /* 11/6: 本文は基準と同じ行の間 */
 .blk-aka{border-left-color:var(--s1);background:var(--warn)}
 .warn .blk-aka{background:var(--card)}
 .note{font-size:.85em;color:var(--muted);padding:2px 13px 0 16px}
@@ -202,10 +222,9 @@ h2{font-family:var(--display);font-weight:800;font-size:1.2rem;margin:0 0 10px}
 .kaiheki button:focus-visible{outline:2px solid var(--ima);outline-offset:2px}
 .motto{font-family:var(--display);font-weight:800;text-align:center;color:var(--muted);line-height:1.7}
 .naka a,.in a{color:var(--s2);font-weight:700}
-/* 前の作りの箱（題が .bt だけ）にも、押すと開く印 ▶ を出す */
-details.box>summary:not(:has(.ya))::after{content:"▶";grid-row:1;grid-column:3;color:var(--muted);transition:transform .15s}
-details.box[open]>summary:not(:has(.ya))::after{transform:rotate(90deg)}
-@media (prefers-reduced-motion: reduce){details.box>summary:not(:has(.ya))::after{transition:none}}
+/* 前の作りの箱（題が .bt だけ）にも、押すと開く印を出す（11/6: ▶ 閉・▼ 開・金の字） */
+details.box>summary:not(:has(.ya))::after{content:"▶";grid-row:1/3;grid-column:2;color:var(--gold-ji);font-size:.9rem}
+details.box[open]>summary:not(:has(.ya))::after{content:"▼"}
 
 /* 勉強の塔（この紙だけの色と形） */
 :root{--sa1:#e3a6c9;--sa2:#CC79A7;--sa3:#9c4f7c;--mm1:#f39a5a;--mm2:#D55E00;--mm3:#9e4500;--ao1:#7fb0ff;--ao2:#3d7be0;--ao3:#2a59ad;--mi1:#7fdca6;--mi2:#2f9e5e;--mi3:#1f7343;--kin:#f2b200;--kage:#8a98a6}
@@ -1115,52 +1134,84 @@ body.app.tw-zen .sora-zen-btn{bottom:calc(var(--min-b,92px) + 5px)}
 .zn-p0 span{color:#fff;font-size:12px;font-weight:700}
 .zn-pz{border-color:rgba(255,230,160,.7)}
 .zn-pz b{color:#fff1c8}
+/* 11/7 自由な時間（5分ごと・5時間まで） */
+body.app .app-min button.min-free{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:0;line-height:1.05;padding:0 8px}
+body.app .app-min .min-free .mf-t{font-size:14px;letter-spacing:.06em}
+body.app .app-min .min-free .mf-v{font-size:11px;font-weight:600;opacity:.92;white-space:nowrap}
+body.app .app-min .min-free:not(.on){box-shadow:inset 0 0 0 1px rgba(242,207,124,.55)}
+body.app .app-min .min-free:not(.on) .mf-t{color:#f6dc9c}
+.min-pick{position:fixed;left:max(14px,env(safe-area-inset-left));right:max(14px,env(safe-area-inset-right));z-index:60;border-radius:22px;padding:14px 16px 14px;background:rgba(18,13,10,.9);border:1px solid rgba(242,207,124,.6);box-shadow:0 12px 34px rgba(0,0,0,.55);color:#fff;font-family:"M PLUS 1",var(--body);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.min-pick[hidden]{display:none}
+.min-pick>b{display:block;text-align:center;color:#f2cf7c;font-size:14px;letter-spacing:.12em}
+.min-pick .mp-big{display:flex;align-items:center;justify-content:center;gap:14px;margin:8px 0 4px}
+.min-pick .mp-big button{flex:none;width:52px;height:52px;border-radius:50%;border:1px solid rgba(242,207,124,.65);background:rgba(255,255,255,.06);color:#f6dc9c;font:700 28px/1 "M PLUS 1",var(--body)}
+.min-pick .mp-big button:active{transform:scale(.93)}
+.min-pick .mp-v{min-width:150px;text-align:center;font-size:40px;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+.min-pick .mp-v small{font-size:17px;margin:0 2px}
+.min-pick .mp-r{-webkit-appearance:none;appearance:none;display:block;width:100%;height:30px;margin:6px 0 0;background:transparent;--pc:15%}
+.min-pick .mp-r::-webkit-slider-runnable-track{height:8px;border-radius:4px;background:linear-gradient(90deg,#f2cf7c var(--pc),rgba(255,255,255,.16) var(--pc))}
+.min-pick .mp-r::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;margin-top:-9px;border-radius:50%;background:#fff;box-shadow:0 0 0 3px #c9a24e,0 2px 6px rgba(0,0,0,.4)}
+.min-pick .mp-ends{display:flex;justify-content:space-between;font-size:11px;color:#cdbf9f;margin:0 2px}
+.min-pick .mp-st{margin:6px 0 8px;text-align:center;font-size:12px;color:#e8dcc0}
+.min-pick .mp-q{display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
+.min-pick .mp-q button{padding:6px 11px;border-radius:999px;border:1px solid rgba(242,207,124,.4);background:rgba(255,255,255,.05);color:#f3e9e4;font:600 13px "M PLUS 1",var(--body)}
+.min-pick .mp-act{display:flex;gap:8px;margin-top:12px}
+.min-pick .mp-act button{flex:1;min-height:46px;border-radius:999px;border:1px solid rgba(242,207,124,.5);background:rgba(255,255,255,.05);color:#f3e9e4;font:700 15px "M PLUS 1",var(--body)}
+.min-pick .mp-act .mp-ok{flex:2;border:0;background:linear-gradient(180deg,#f6dc9c,#c9a24e);color:#1a1408}
+/* 11/7 記録の「種類ごと」（今日・この7日・全部） */
+.tg-kind{margin:14px 0 0;padding:12px 12px 10px;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid rgba(242,207,124,.22)}
+.tg-kind>b{display:block;font-size:14px;font-weight:700;color:#f2cf7c;letter-spacing:.1em;margin-bottom:8px}
+.tg-kind .tk-span{display:flex;gap:6px;margin:0 0 8px}
+.tg-kind .tk-span button{flex:1;min-height:36px;border-radius:999px;border:1px solid rgba(242,207,124,.35);background:rgba(255,255,255,.04);color:#e8dcc0;font:700 13px "M PLUS 1",var(--body)}
+.tg-kind .tk-span button.on{background:linear-gradient(180deg,#f6dc9c,#d9b25e);color:#1a1408;border-color:transparent}
+.tg-kind .tk-r{display:grid;grid-template-columns:20px minmax(40px,auto) 1fr 78px;align-items:center;gap:7px;margin:8px 0}
+.tg-kind .tk-r>i{font-style:normal;font-size:15px;text-align:center;text-shadow:0 0 6px rgba(0,0,0,.6)}
+.tg-kind .tk-n{color:#fff;font:700 13px "M PLUS 1",var(--body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:6.5em}
+.tg-kind .tk-b{height:14px;border-radius:7px;background:rgba(255,255,255,.08);overflow:hidden;min-width:0}
+.tg-kind .tk-b u{display:block;height:100%;border-radius:7px;min-width:2px}
+.tg-kind .tk-h{color:#fff;font:700 13px "M PLUS 1",var(--body);text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.tg-kind .tk-h small{display:block;font-size:10px;font-weight:500;color:#cdbf9f}
+.tg-kind .tk-r.zero{opacity:.45}
+.tg-kind .tk-all{display:flex;gap:2px;height:12px;border-radius:6px;overflow:hidden;margin:10px 0 4px}
+.tg-kind .tk-all u{display:block;min-width:3px}
+/* 11/7 16色（2段・使っている色は選べない） */
+.tw-kind .tk-row.tk-cols{display:grid;grid-template-columns:2em repeat(8,minmax(0,1fr));gap:7px}
+.tw-kind .tk-row.tk-cols>span{grid-row:span 2}
+.tw-kind .tk-cols .tk-c{width:100%;height:auto;aspect-ratio:1;max-width:36px;justify-self:center}
+.tw-kind .tk-c.used{opacity:.28;cursor:not-allowed;background-image:linear-gradient(135deg,transparent 45%,rgba(255,255,255,.9) 45%,rgba(255,255,255,.9) 55%,transparent 55%)!important}
+/* 11/7 全部の高さ: 1本の塔／種類ごと */
+.zn-info .zn-seg{display:flex;gap:3px;margin-top:7px;padding:3px;border-radius:999px;background:rgba(10,6,8,.45);border:1px solid rgba(242,207,124,.45);pointer-events:auto}
+.zn-info .zn-seg button{min-height:34px;padding:0 14px;border:0;border-radius:999px;background:none;color:#e8dcc0;font:700 13px "M PLUS 1",var(--body);letter-spacing:.04em;white-space:nowrap;text-shadow:0 1px 2px #000}
+.zn-info .zn-seg button.on{background:linear-gradient(180deg,#f6dc9c,#d9b25e);color:#1a1408;text-shadow:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.6)}
+.zn-k{position:absolute;left:0;top:0;color:#fff;font-family:"M PLUS 1",var(--body);text-align:center;white-space:nowrap;text-shadow:0 1px 2px #000,0 0 6px rgba(0,0,0,.9);transition:opacity .2s;opacity:0;will-change:transform}
+.zn-kn{font-size:11px;font-weight:700;display:grid;justify-items:center;line-height:1.15;overflow:hidden;text-overflow:ellipsis}
+.zn-kn i{font-style:normal;font-size:12px;filter:brightness(1.3)}
+.zn-kt{font-size:11px;font-weight:800;color:#ffe2a0;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.zn-kt.nar{line-height:1.1;font-size:10.5px}
+.zn-kn.sm{font-size:10px}
 
 </style>
 </head>
 <body class="app">
 
-<script>
-/* 開くたびに色を選ぶ（前と同じ色は避ける） */
-(function(){
-  var P=[["shiro","light","白"],["kuro","dark","黒"],["wine","dark","ワイン"],["kon","dark","紺"],["midori","dark","深緑"],["kinari","light","生成り"],["sakura","light","桜"],["sora","light","空色"]], r=document.documentElement, last="";
-  try{last=localStorage.getItem("kami-iro")||"";}catch(e){}
-  window.KAMI_IRO=function(skip){
-    var i, n=0; do{i=Math.floor(Math.random()*P.length);n++;}while(P[i][0]===skip&&n<20);
-    r.setAttribute("data-iro",P[i][0]); r.setAttribute("data-theme",P[i][1]);
-    try{localStorage.setItem("kami-iro",P[i][0]);}catch(e){}
-    var b=document.getElementById("irokae"); if(b)b.innerHTML="色を変える<small>今は "+P[i][2]+"</small>";
-    return P[i][0];
-  };
-  window.KAMI_IRO(last);
-})();
-</script>
 </head>
 <body>
 <div class="haikei ari" aria-hidden="true"><img class="hashi hidari" src="a/0191cec92af0e5.webp" alt=""><img class="hashi migi" src="a/875cf222869cb8.webp" alt=""><img class="yohaku hidari" src="a/8a2bc22a924221.webp" alt=""><img class="yohaku hidari kurai" src="a/34cfca816b22a4.webp" alt=""><img class="yohaku migi" src="a/797f457de7d459.webp" alt=""><img class="yohaku migi kurai" src="a/5d4b1fed5cc440.webp" alt=""><img class="chara" src="a/a8fce38314eb81.webp" alt=""></div>
-<div class="wrap">
-<header class="tw-logo" style="display:flex;justify-content:flex-start;padding:4px 0 10px;border-bottom:1px solid var(--line);margin-bottom:12px">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="227 424 812 406" width="168" height="84" role="img" aria-label="Triwheel" xmlns:c2pa="http://c2pa.org/manifest"><metadata><c2pa:manifest>AAAWgmp1bWIAAAAeanVtZGMycGEAEQAQgAAAqgA4m3EDYzJwYQAAABZcanVtYgAAAEdqdW1kYzJtYQARABCAAACqADibcQN1cm46YzJwYTo4NTA5NjNmYS03MzQwLTRmMjYtYTdmMy00MzM1NDc1NGY1MzMAAAADl2p1bWIAAAApanVtZGMyYXMAEQAQgAAAqgA4m3EDYzJwYS5hc3NlcnRpb25zAAAAALxqdW1iAAAARGp1bWRjYm9yABEAEIAAAKoAOJtxE2MycGEuaW5ncmVkaWVudC52MwAAAAAYYzJzaAYV/HPPyzlUrvf3H6gbcd4AAABwY2JvcqNpZGM6Zm9ybWF0bWltYWdlL3N2Zyt4bWxqaW5zdGFuY2VJRHgseG1wOmlpZDo0ZGM0YTE3Ni05Yzg1LTQxMzQtOTY5Yy1kYTc0ODk2MWE5MzVscmVsYXRpb25zaGlwaHBhcmVudE9mAAAB4mp1bWIAAABBanVtZGNib3IAEQAQgAAAqgA4m3ETYzJwYS5hY3Rpb25zLnYyAAAAABhjMnNo0uvi2dz/EzItOtGRRvi/PQAAAZljYm9yomdhY3Rpb25zgqJmYWN0aW9ua2MycGEub3BlbmVkanBhcmFtZXRlcnOha2luZ3JlZGllbnRzgaJjdXJseC1zZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmluZ3JlZGllbnQudjNkaGFzaFggakLEFlapAsJFP4KpkVQF1EfgWtjwGfF37HSEp14y6nqkZmFjdGlvbngdY29tLmFudGhyb3BpYy5jbGF1ZGUucHJvdmlkZWRqcGFyYW1ldGVyc6F4H2NvbS5hbnRocm9waWMub3JpZ2luLWNvbmZpZGVuY2VndW5rbm93bmtkZXNjcmlwdGlvbnhmQ2xhdWRlIHByb3ZpZGVkIHRoaXMgZmlsZSBhdCB0aGUgcmVxdWVzdCBvZiBhIHVzZXIgYW5kIG1heSBoYXZlIGNyZWF0ZWQgb3IgbW9kaWZpZWQgdGhlIGZpbGUgY29udGVudHMubXNvZnR3YXJlQWdlbnShZG5hbWVmQ2xhdWRlcmFsbEFjdGlvbnNJbmNsdWRlZPUAAADIanVtYgAAAEBqdW1kY2JvcgARABCAAACqADibcRNjMnBhLmhhc2guZGF0YQAAAAAYYzJzaOspSwQzCfJUM9ZVFf4++a8AAACAY2JvcqVjYWxnZnNoYTI1NmNwYWRNAAAAAAAAAAAAAAAAAGRoYXNoWCDcbgAsa+Zz9ujlSsZpRflOv5OQD8GCIy82N7C+E3EDd2RuYW1lbmp1bWJmIG1hbmlmZXN0amV4Y2x1c2lvbnOBomVzdGFydBiaZmxlbmd0aBkeBAAAAj5qdW1iAAAAJ2p1bWRjMmNsABEAEIAAAKoAOJtxA2MycGEuY2xhaW0udjIAAAACD2Nib3KlY2FsZ2ZzaGEyNTZpc2lnbmF0dXJleE1zZWxmI2p1bWJmPS9jMnBhL3VybjpjMnBhOjg1MDk2M2ZhLTczNDAtNGYyNi1hN2YzLTQzMzU0NzU0ZjUzMy9jMnBhLnNpZ25hdHVyZWppbnN0YW5jZUlEeCx4bXA6aWlkOmU4Y2UzY2JjLWEwNzMtNGFmMS05YTZiLTZiZWUzNjJhYjBhOXJjcmVhdGVkX2Fzc2VydGlvbnODomN1cmx4LXNlbGYjanVtYmY9YzJwYS5hc3NlcnRpb25zL2MycGEuaW5ncmVkaWVudC52M2RoYXNoWCBqQsQWVqkCwkU/gqmRVAXUR+Ba2PAZ8XfsdISnXjLqeqJjdXJseCpzZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmFjdGlvbnMudjJkaGFzaFgg9RsZarvZH8RR86f8GhceBkQbjZxy0aWDEHiY7clqPlCiY3VybHgpc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5oYXNoLmRhdGFkaGFzaFggx3KStnsX9tcb06X+T9yoV0ZFoEJq8uIkjRYwL9ZpCR50Y2xhaW1fZ2VuZXJhdG9yX2luZm+jZG5hbWVvQW50aHJvcGljIEZpbGVzZ3ZlcnNpb25lMS4wLjBrc3BlY1ZlcnNpb25lMi40LjAAABA4anVtYgAAAChqdW1kYzJjcwARABCAAACqADibcQNjMnBhLnNpZ25hdHVyZQAAABAIY2JvctKEWQISogEmGCFZAgowggIGMIIBjaADAgECAhRA5aAK7sI50L64g/oGQgU9Z1UTADAKBggqhkjOPQQDAzBJMRcwFQYDVQQKEw5BbnRocm9waWMsIFBCQzEuMCwGA1UEAxMlQW50aHJvcGljIENvbnRlbnQgQ3JlZGVudGlhbHMgUm9vdCBDQTAeFw0yNjA4MDcxODQzNTZaFw0yODA4MDYxOTQzNTZaMEQxFzAVBgNVBAoTDkFudGhyb3BpYywgUEJDMSkwJwYDVQQDEyBBbnRocm9waWMgQ2xhdWRlIENvbnRlbnQgU2lnbmluZzBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABJh6CmvLUBgFFNU0vUKlOVtE6djd17L5SuwX0LemFisBM3dkd/3cyjxFA3Qo5S46fX0/ihY0VZ7mfb9KF703t5OjWDBWMA4GA1UdDwEB/wQEAwIHgDAVBgNVHSUEDjAMBgorBgEEAYPoXgIBMAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUzlHiBIFOZFsj+OPEz5o+nMHXXMIwCgYIKoZIzj0EAwMDZwAwZAIwMXMdFJ4BetLLVY7ORuE9noqbbAZOZn/aArXyTwFAZfKrPzxF2vPoJNf1+UCdg1XGAjBwX1zd9WGqYkqmL5SFqw1QySjr1zJfpJM9+1rdDwSPLMOPOjKuiXjoU/pUUeG9RwmhY3BhZFkNngAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPZYQPf7i60nPlDjRqgmsN0SbnYO6UwLhnTdIutovPqF5rjeo84uKpBSw9yn9S9CKM+SZUjxVlKC/cwu+AHrwoMcrIQ=</c2pa:manifest></metadata><path d="M306,629.5 L323,626 L321,609.5 L288,616 L290.5,650 L357.5,638 L392.5,615.5 L770,532 L805,510 L914,488 L960,492.5 L919,514 L839.5,530" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="miter" stroke-linecap="butt"/><circle cx="349" cy="619" r="5.6" fill="currentColor"/><circle cx="972.5" cy="490" r="5.6" fill="currentColor"/><path d="M429.14285714285717 769.0V745.6428571428571H420.14285714285717V744.0H439.9642857142857V745.6428571428571H430.9642857142857V769.0Z" fill="currentColor"/><path d="M475.7040816326531 769.0V744.0H484.6683673469388Q489.3826530612245 744.0 492.06122448979596 746.2142857142858Q494.7397959183674 748.4285714285714 494.7397959183674 752.4285714285714Q494.7397959183674 755.0357142857143 493.5255102040817 756.9107142857143Q492.31122448979596 758.7857142857143 490.06122448979596 759.7857142857143Q489.4897959183674 760.0714285714286 488.8826530612245 760.25L495.1326530612245 769.0H493.06122448979596L487.09693877551024 760.6428571428571Q485.9540816326531 760.8214285714286 484.6683673469388 760.8214285714286H477.5255102040817V769.0ZM477.5255102040817 759.2142857142857H484.6683673469388Q488.7040816326531 759.2142857142857 490.7933673469388 757.4285714285713Q492.8826530612245 755.6428571428571 492.8826530612245 752.4285714285714Q492.8826530612245 749.1785714285714 490.7933673469388 747.4107142857142Q488.7040816326531 745.6428571428571 484.6683673469388 745.6428571428571H477.5255102040817Z" fill="currentColor"/><path d="M532.6581632653061 769.0V744.0H534.4795918367347V769.0Z" fill="currentColor"/><path d="M580.0051020408164 769.0 571.5051020408164 744.0H573.4336734693878L581.0408163265306 766.5L588.8622448979593 744.0H590.6122448979593L598.3979591836735 766.5357142857143L606.0765306122449 744.0H607.8622448979593L599.3979591836735 769.0H597.469387755102L589.719387755102 746.5714285714286L581.9336734693878 769.0Z" fill="currentColor"/><path d="M663.4234693877552 769.0V757.1071428571429H646.7091836734695V769.0H644.887755102041V744.0H646.7091836734695V755.5H663.4234693877552V744.0H665.2448979591837V769.0Z" fill="currentColor"/><path d="M705.1989795918369 769.0V744.0H721.9132653061225V745.6428571428571H707.0204081632654V755.5H720.341836734694V757.1071428571429H707.0204081632654V767.3571428571429H722.4489795918369V769.0Z" fill="currentColor"/><path d="M760.3316326530613 769.0V744.0H777.045918367347V745.6428571428571H762.1530612244899V755.5H775.4744897959184V757.1071428571429H762.1530612244899V767.3571428571429H777.5816326530613V769.0Z" fill="currentColor"/><path d="M815.4642857142858 769.0V744.0H817.2857142857143V767.3571428571429H831.6785714285714V769.0Z" fill="currentColor"/></svg>
-</header>
-<header>
+<header class="atama" id="ue" tabindex="-1">
+<img class="suushiki" src="a/875cf222869cb8.webp" alt="" aria-hidden="true">
+<img class="rogo" src="data:image/webp;base64,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" alt="Triwheel">
 <h1>Triwheel<br>勉強の積み上げ帳</h1>
 <p class="sub">10月28日の版20です。</p>
+<img class="wheel" src="a/71243f43848c6a.webp" alt="ホイールくん">
 </header>
-<section class="hero">
-<p class="lab">次の1歩</p>
-<div class="big"><p>CEO が、</p><p>論文を5分だけ読む。</p></div>
-<span class="min">5分だけ</span>
-</section>
+<div class="wrap">
 
-<!-- ひと目で: 下の箱から自動で作る。箱を足すと、ここにも1行増える -->
+<!-- ひと目で: 下の箱から自動で作る。状態（data-jotai）の付いた箱を足すと、ここにも1行増える -->
 <section class="card hitome" aria-label="ひと目で">
-<img class="chara" src="a/2b427446d0873b.webp" alt="" aria-hidden="true">
 <h2>ひと目で</h2>
 <div class="kazu" id="kazu"></div>
 <ol class="ichiran" id="ichiran"></ol>
 </section>
-
-<div class="botan"><button type="button" id="tojiru">全部閉じる</button><button type="button" id="irokae">色を変える</button></div>
 
 
 
@@ -1298,6 +1349,7 @@ body.app.tw-zen .sora-zen-btn{bottom:calc(var(--min-b,92px) + 5px)}
 </div></details>
 
 <!-- ===== ここまで中身 ===== -->
+<div class="botan"><button type="button" id="tojiru">全部閉じる（一番上へ戻る）</button></div>
 </div>
 <script src="three.min.js"></script>
 <script>
@@ -7398,13 +7450,13 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
     var tint = KD && KD.base ? 0.8 : 0, imgKey = ISHI[key] ? key : KD && KD.base && ISHI[KD.base] ? KD.base : key;
     var col = new T.Color(COL[key] || "#3d7be0"), m = contactAO(hazify(new T.MeshPhysicalMaterial({ color: col, roughness: 0.24, metalness: 0.0, clearcoat: 1.0, clearcoatRoughness: 0.06, envMapIntensity: 1.05, aoMap: edgeAO, aoMapIntensity: 0.45 })));
     function apply(im) {
-      if (tint) {   // 足した種類: 石の模様を白黒にして、その種類の色をそのまま乗せる（借りた石の色が残らない様に）
-        var gk = imgKey + "g"; if (!stoneImg[gk]) { var gc = document.createElement("canvas"); gc.width = im.naturalWidth; gc.height = im.naturalHeight; var gx = gc.getContext("2d"); gx.filter = "grayscale(1) brightness(1.35) contrast(1.1)"; gx.drawImage(im, 0, 0); stoneImg[gk] = gc; }
+      if (tint) {   // 足した種類: 石の模様を白黒にして、その種類の色の上に「重ね（overlay）」で乗せる。11/7 CEO「確実にその項目の色に」: 色を掛けると暗くなり（鉄色が黒に）、ボタンの印の色と違って見えたため
+        var gk = imgKey + "c" + KD.color; if (!stoneImg[gk]) { var gc = document.createElement("canvas"); gc.width = im.naturalWidth; gc.height = im.naturalHeight; var gx = gc.getContext("2d"); gx.fillStyle = KD.color; gx.fillRect(0, 0, gc.width, gc.height); gx.globalCompositeOperation = "overlay"; gx.globalAlpha = 0.5; gx.filter = "grayscale(1) contrast(0.9)"; gx.drawImage(im, 0, 0); stoneImg[gk] = gc; }
         im = stoneImg[gk];
       }
       var t = new T.Texture(im); t.encoding = T.sRGBEncoding; t.anisotropy = ANISO; t.wrapS = t.wrapT = T.RepeatWrapping;
       t.center.set(0.5, 0.5); t.rotation = [0, 1.5708, 0.6][vi]; t.offset.set([0, 0.37, 0.71][vi], [0, 0.52, 0.19][vi]); t.repeat.set(0.85, 0.85); t.needsUpdate = true;
-      m.map = t; if (tint) m.color.copy(col); else m.color.set(0xffffff).lerp(col, SMOOTH ? 0.08 : 0.2);
+      m.map = t; if (tint) m.color.set(0xffffff); else m.color.set(0xffffff).lerp(col, SMOOTH ? 0.08 : 0.2);
       var nm = stoneImg[imgKey + "n"] || (stoneImg[imgKey + "n"] = normalFrom(im)); m.normalMap = nm; m.normalScale.set(SMOOTH ? 0.22 : 0.12, SMOOTH ? 0.22 : 0.12); m.needsUpdate = true; kick();
     }
     if (ISHI[imgKey]) {
@@ -8138,7 +8190,7 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
   // 塔は、夕焼けの雲の海に浮かぶ島の上に立つ。上へ行くほど空は星と天の川になる（ルナの空の絵2枚を、向きで混ぜる）。
   // 右の空には、これから行く部屋（職業訓練校→夜間中学→定時制高校→MIT→発明家の研究室）が窓になって浮かび、
   // 塔のてっぺんから金の道が次の部屋へつながる。先の部屋ほど遠く高く、薄い。金の粒が塔のまわりを昇る。
-  var ZSKY = 0.26, zBgOnly = new T.Scene(), zW = null,   // 帯の上の 26% は空（行き先の窓）。塔は下の 74% に入れる
+  var zOb = 0, ZSKY = 0.26, zBgOnly = new T.Scene(), zW = null,   // 帯の上の 26% は空（行き先の窓）。塔は下の 74% に入れる
   zSkyCam = new T.PerspectiveCamera(78, 1, 0.1, 100);   // 空は広い角度で写す（絵の細かさを保つ）
   var PORTAL_IMG = { kunren: "st-S1-W1.jpg", yakan: "st-S2-W5.jpg", teiji: "st-S3-W1.jpg", mit: "st-S4-W5.jpg", hatsumei: "st-S5-W1.jpg" };
   function zDot(soft) { var c = document.createElement("canvas"); c.width = c.height = 64; var x = c.getContext("2d"), g = x.createRadialGradient(32, 32, 0, 32, 32, 32); g.addColorStop(0, "rgba(255,255,255,1)"); g.addColorStop(soft ? 0.25 : 0.18, "rgba(255,240,200," + (soft ? 0.55 : 0.9) + ")"); g.addColorStop(1, "rgba(255,200,120,0)"); x.fillStyle = g; x.fillRect(0, 0, 64, 64); var t = new T.CanvasTexture(c); return t; }
@@ -8239,7 +8291,7 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
   // 行き先の窓と金の道（今の高さで作り直す）
   function zWorldSet(n, top, P) {
     if (!zW) zW = zWorldMake();
-    var w = zW, S = Math.max(1, top / 14), all = STAGES.filter(function (q) { return q.h * 12 > n && PORTAL_IMG[q.key]; });
+    var w = zW, S = P.S || Math.max(1, top / 14), all = STAGES.filter(function (q) { return q.h * 12 > n && PORTAL_IMG[q.key]; });
     var fut = all.length > 1 ? [all[0], all[all.length - 1]] : all;   // 次の部屋と、一番先の夢（発明家の研究室）
     var key = fut.map(function (q) { return q.key; }).join() + "@" + [P.ppu, P.yA, P.yA2, P.yB].map(function (x) { return x.toFixed(1); }).join("/") + "/" + top;
     w.S = S; w.top = top; w.n = n;
@@ -8282,7 +8334,8 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
     w.su.hz.value = pitch + Math.atan((H / 2 - (zen.yB + 6)) / (H / 2) * Math.tan(zSkyCam.fov * D2R / 2));   // 雲の海の地平線を、塔の足元の高さへ w.su.yaw.value = orbit * 0.85 / 6.2831853;   // 夕日がいつも塔の後ろの近く（回ると少しずつ動く）
     w.su.res.value.set(renderer.domElement.width, renderer.domElement.height);
     w.su.bA.value = 1 - Math.min(1, (zen.yB + 40) / H); w.su.bB.value = 1 - Math.max(0, (zen.yA - 30) / H);
-    w.pg.position.set(1, 0, 1.5); w.pg.rotation.y = orbit;   // 窓と道は、いつも塔の右に（回っても正面を向く）
+    w.pg.position.set(1, 0, 1.5); w.pg.rotation.y = zOb;   // 窓と道は、いつも塔の右に（回っても正面を向く）
+    var sv = !(zen && zen.split); w.pg.children.forEach(function (c) { if (c !== w.rays && c !== w.star) c.visible = sv; });   // 種類ごとの時は、窓と道と今の光を出さない
     w.portals.forEach(function (p) { p.g.position.y = p.y0 + Math.sin(w.t * 0.8 + p.k * 1.7) * 0.05 * p.sz; });
     if (w.roadU) w.roadU.t.value = w.t;
     var pa = w.pts.geometry.attributes.position, S = w.S, Hh = w.top * 1.15 + 1;
@@ -8330,17 +8383,44 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
   function zClear() {
     for (var i = zG.children.length - 1; i >= 0; i--) { var o = zG.children[i]; zG.remove(o); if (o.isInstancedMesh) { if (o.dispose) o.dispose(); } else o.traverse(function (q) { if (q.geometry) q.geometry.dispose(); }); }
   }
-  function zenBuild() {
+  function zMatOf(k) {
+    var src = matFor(k, 0), m = zMats[k] || (zMats[k] = new T.MeshStandardMaterial({ roughness: 0.32, metalness: 0.02, envMapIntensity: 0.9 }));
+    if (m.map !== (src.map || null)) { m.map = src.map || null; m.needsUpdate = true; }
+    m.color.copy(src.color); m.userData.src = src; return m;
+  }
+  // 11/7 CEO「瞑想や算数などが、どれだけ積み上がったのか分けて見たい」: 種類ごとの塔を横に並べる。
+  // 1本は 2×2 の石が1段（20分）、3段で1時間（金の線）。並びは種類の順（論文・算数・MMA・瞑想・足した種類）
+  function zenBuildSplit(all, geo) {
+    var KS = window.TOU_KINDS || KINDS, cnt = {}, order = KS.map(function (k) { return k.key; });
+    all.forEach(function (b) { cnt[b.type] = (cnt[b.type] || 0) + 1; if (order.indexOf(b.type) < 0) order.push(b.type); });
+    var keys = order.filter(function (k) { return cnt[k] > 0; }), nk = Math.max(1, keys.length), TW = 2, GAP = 1.6, Wr = nk * TW + (nk - 1) * GAP, x0 = 1 - Wr / 2 + TW / 2;
+    var mt = new T.Matrix4(), Lmax = 0, cols = [];
+    keys.forEach(function (k, i) {
+      var c = cnt[k], cx = x0 + i * (TW + GAP), im = new T.InstancedMesh(geo, zMatOf(k), c);
+      for (var j = 0; j < c; j++) { var l = Math.floor(j / 4), q = j % 4; mt.makeTranslation(cx - 0.5 + (q % 2), l + CUBE / 2, 1 + Math.floor(q / 2)); im.setMatrixAt(j, mt); }
+      im.instanceMatrix.needsUpdate = true; zG.add(im);
+      var L = Math.ceil(c / 4); Lmax = Math.max(Lmax, L);
+      var core = new T.Mesh(new T.BoxGeometry(1.7, 1, 1.7), zCore.material); core.scale.y = Math.max(0.01, Math.floor(c / 4) - 0.2); core.position.set(cx, 0.1 + core.scale.y / 2, 1.5); core.visible = c >= 4; zG.add(core);
+      var th = 0.05, fr = new T.Group();
+      [[0, -1.18, 2.4, th], [0, 1.18, 2.4, th], [-1.18, 0, th, 2.4], [1.18, 0, th, 2.4]].forEach(function (q2) { var bx = new T.Mesh(new T.BoxGeometry(q2[2], th, q2[3]), zGold); bx.position.set(cx + q2[0], 0.02, 1.5 + q2[1]); fr.add(bx); });
+      for (var hh = 3; hh < L; hh += 3) [[0, -1.06, 2.16, 0.035], [0, 1.06, 2.16, 0.035], [-1.06, 0, 0.035, 2.16], [1.06, 0, 0.035, 2.16]].forEach(function (q2) { var bx = new T.Mesh(new T.BoxGeometry(q2[2], 0.035, q2[3]), zGold); bx.position.set(cx + q2[0], hh, 1.5 + q2[1]); fr.add(bx); });
+      zG.add(fr);
+      var KD = KS.filter(function (q) { return q.key === k; })[0] || { name: k, mark: "■", color: COL[k] || "#888" };
+      cols.push({ key: k, cx: cx, L: L, m: c * 5, name: KD.name, mark: KD.mark, color: KD.color || COL[k] });
+    });
+    zCore.visible = false;
+    var sc = Math.max(5, Wr * 0.75); zFloor.scale.set(sc, sc, 1);
+    return { n: all.length, top: Math.max(3, Lmax), st: [], cols: cols, wr: Wr };
+  }
+  function zenBuild(split) {
     zClear();
     var all = STG && lastFull ? lastFull.blocks.filter(function (b) { return b && !b.planned; }) : blocks.slice();
     var n = all.length, big = n > 3000, geo = big ? (zGeoB || (zGeoB = new T.BoxGeometry(CUBE, CUBE, CUBE))) : (zGeoR || (zGeoR = roundedBox(CUBE, 0.075, 2)));
+    if (split) return zenBuildSplit(all, geo);
     var by = {}; all.forEach(function (b, i) { (by[b.type] = by[b.type] || []).push(i); });
     var mt = new T.Matrix4();
     Object.keys(by).forEach(function (k) {
-      var src = matFor(k, 0), m = zMats[k] || (zMats[k] = new T.MeshStandardMaterial({ roughness: 0.32, metalness: 0.02, envMapIntensity: 0.9 }));
-      if (m.map !== (src.map || null)) { m.map = src.map || null; m.needsUpdate = true; }
-      m.color.copy(src.color); m.userData.src = src;
-      var ids = by[k], im = new T.InstancedMesh(geo, m, ids.length);
+      var ids = by[k], im = new T.InstancedMesh(geo, zMatOf(k), ids.length);
       ids.forEach(function (gi, j) { var c = cellPos(gi); mt.makeTranslation(c.x, c.y, c.z); im.setMatrixAt(j, mt); });
       im.instanceMatrix.needsUpdate = true; zG.add(im);
     });
@@ -8356,12 +8436,47 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
   function zenOpen() {
     if (zen || !STG) return;
     if (preview >= 0) setPreview(-1);
-    var r = zenBuild(); zen = { t0: performance.now(), top: r.top, n: r.n, st: r.st, zoom: 1, fy: null };
+    var sp = false; try { sp = window.localStorage.getItem("tw-zsplit") === "1"; } catch (e) {}
+    var r = zenBuild(sp); zen = { t0: performance.now(), top: r.top, n: r.n, st: r.st, zoom: 1, fy: null, split: sp, cols: r.cols || [], wr: r.wr || 0 };
     zScene.background = null;
     var nx = null; for (var i = 0; i < STAGES.length; i++) if (STAGES[i].h * 12 > r.n) { nx = STAGES[i]; break; }
-    zInfo.innerHTML = '<i>今までに積んだ高さ</i><b>' + hmTxt(r.n * 5) + '</b><span>' + Math.floor(r.n / 12) + '階' + (r.n % 12 ? "と" + (r.n % 12) + "個" : "") + '・1階で1時間</span>' + (nx ? '<em>次の ' + nx.name + 'まで あと ' + hmTxt(nx.h * 60 - r.n * 5) + '</em>' : "");
+    zInfo.innerHTML = '<i>今までに積んだ高さ</i><b>' + hmTxt(r.n * 5) + '</b><span>' + Math.floor(r.n / 12) + '階' + (r.n % 12 ? "と" + (r.n % 12) + "個" : "") + '・1階で1時間</span>' + (nx ? '<em>次の ' + nx.name + 'まで あと ' + hmTxt(nx.h * 60 - r.n * 5) + '</em>' : "") + '<div class="zn-seg" role="tablist" aria-label="塔の見せ方"><button type="button" role="tab" data-zs="0">1本の塔</button><button type="button" role="tab" data-zs="1">種類ごと</button></div>';
+    zSegPaint();
     zenUi.hidden = false; document.body.classList.add("tw-zen"); zenBand(); zenBtn.querySelector("span").textContent = "部屋へ戻る"; zenBtn.setAttribute("aria-pressed", "true");
     lastNow = 0; kick();
+  }
+  function zSegPaint() { if (!zen) return; [].forEach.call(zInfo.querySelectorAll("[data-zs]"), function (b) { var on = (b.getAttribute("data-zs") === "1") === !!zen.split; b.classList.toggle("on", on); b.setAttribute("aria-selected", on ? "true" : "false"); }); zenUi.classList.toggle("zn-split", !!zen.split); }
+  function zenSplit(v) {
+    if (!zen || !!zen.split === !!v) return;
+    var r = zenBuild(v); zen.split = !!v; zen.top = r.top; zen.st = r.st; zen.cols = r.cols || []; zen.wr = r.wr || 0; zen.zoom = 1; zen.fy = null; zen.pinch = null; zen.pan = null; zen.t0 = performance.now() - 900;
+    try { window.localStorage.setItem("tw-zsplit", v ? "1" : "0"); } catch (e) {}
+    zSegPaint(); lastNow = 0; kick();
+  }
+  window.SORA3D_ZSPLIT = function (v) { if (v === undefined) return zen ? !!zen.split : null; zenSplit(v); };
+  zInfo.addEventListener("click", function (e) { var b = e.target.closest ? e.target.closest("[data-zs]") : null; if (!b) return; e.stopPropagation(); zenSplit(b.getAttribute("data-zs") === "1"); }, false);
+  ["pointerdown", "touchstart"].forEach(function (ev) { zInfo.addEventListener(ev, function (e) { if (e.target.closest && e.target.closest(".zn-seg")) e.stopPropagation(); }, { passive: true }); });
+  var zSL = [];   // 種類ごとの塔の名前と時間（塔の足元）
+  function zSplitLabels(cA, cB) {
+    var v = new T.Vector3(), cols = zen.cols || [], put = function (el, x, y, up) { var bw = el.offsetWidth || 50, bh = el.offsetHeight || 18, L = Math.max(4, Math.min(W - bw - 4, x - bw / 2)), Y = up ? y - bh : y; el.style.transform = "translate(" + L.toFixed(1) + "px," + Y.toFixed(1) + "px)"; return [L, Y, L + bw, Y + bh]; };
+    var tops = [], spx = W * 0.6;
+    if (cols.length > 1) { v.set(cols[0].cx, 0, 2.7).project(zCam); var x0p = v.x; v.set(cols[1].cx, 0, 2.7).project(zCam); spx = Math.abs(v.x - x0p) * 0.5 * W; }
+    cols.forEach(function (c, i) {
+      var a = zSL[i * 2], b = zSL[i * 2 + 1];
+      if (!a) { a = zSL[i * 2] = document.createElement("div"); zenUi.appendChild(a); b = zSL[i * 2 + 1] = document.createElement("div"); zenUi.appendChild(b); }
+      var nar = spx < 66, hh2 = Math.floor(c.m / 60), mm2 = c.m % 60;   // 塔の間がせまい時（小さいスマホ・種類が多い）は、時間を2段に（4時間／20分）
+      var ta = '<i style="color:' + c.color + '">' + c.mark + '</i>' + c.name, tb = nar && hh2 && mm2 ? hh2 + "時間<br>" + mm2 + "分" : hmTxt(c.m);
+      if (a._t !== ta) { a.innerHTML = ta; a._t = ta; } if (b._t !== tb) { b.innerHTML = tb; b._t = tb; }
+      a.className = "zn-k zn-kn" + (spx < 48 ? " sm" : ""); b.className = "zn-k zn-kt" + (nar ? " nar" : "");
+      a.style.maxWidth = Math.max(28, spx - 3).toFixed(0) + "px";   // 名前は印の下に。となりの塔との間より広くしない（長い名前は「…」）
+      v.set(c.cx, -0.05, 2.45).project(zCam); put(a, (v.x * 0.5 + 0.5) * W, (-v.y * 0.5 + 0.5) * H + 2, false); a.style.opacity = "1";
+      v.set(c.cx, c.L + 0.25, 1.5).project(zCam); var bx = put(b, (v.x * 0.5 + 0.5) * W, (-v.y * 0.5 + 0.5) * H - 2, true);
+      for (var tr = 0; tr < 4 && tops.some(function (q) { return q[0] < bx[2] + 2 && bx[0] < q[2] + 2 && q[1] < bx[3] && bx[1] < q[3]; }); tr++) {   // 重なる時は、重なった字の上へ
+        var over = tops.filter(function (q) { return q[0] < bx[2] + 2 && bx[0] < q[2] + 2 && q[1] < bx[3] && bx[1] < q[3]; }), yT = Math.min.apply(null, over.map(function (q) { return q[1]; }));
+        bx = put(b, (bx[0] + bx[2]) / 2, yT - 1, true);
+      }
+      tops.push(bx); b.style.opacity = bx[1] > cA - 30 ? "1" : "0";
+    });
+    for (var j = cols.length * 2; j < zSL.length; j++) zSL[j].style.opacity = "0";
   }
   function zenClose() {
     if (!zen) return;
@@ -8411,23 +8526,24 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
     var dt = lastNow ? Math.min(0.05, (now - lastNow) / 1000) : 0.016; lastNow = now;
     if (!drag && !reduced) orbit += (0.06 + orbitV) * dt; orbitV *= Math.pow(0.05, dt);
     zCam.aspect = W / H;
-    var top = zen.top, fh = Math.tan(zCam.fov * D2R / 2), u = reduced ? 1 : sstep((now - zen.t0) / 1600);
-    var yA2 = zen.yA + (zen.yB - zen.yA) * ZSKY, band = (zen.yB - yA2) / H, dFit = Math.max((top + 1.2) / (2 * fh * band), 4.6 / (fh * zCam.aspect * 0.55), 10);   // 縦は、数の札と下のボタンの間の帯に入る遠さ
-    zen.zMax = Math.max(1, Math.min(60, (W - 122 - 20) / (5.8 * (H / 2) / (fh * dFit))));   // 一番大きくして、塔が目盛りの右の空きに入るまで
+    var top = zen.top, fh = Math.tan(zCam.fov * D2R / 2), u = reduced ? 1 : sstep((now - zen.t0) / 1600), SP = !!zen.split;
+    var ob = SP ? 0.32 * Math.sin(now / 7000) : orbit; zOb = ob;   // 種類ごとの時は、正面から少しだけゆれる（並びが重ならない様に）
+    var yA2 = SP ? zen.yA + 26 : zen.yA + (zen.yB - zen.yA) * ZSKY, band = (zen.yB - yA2) / H, dFit = Math.max((top + 1.2) / (2 * fh * band), 4.6 / (fh * zCam.aspect * 0.55), 10, SP ? (zen.wr + 2.4) / (2 * fh * zCam.aspect * 0.9) : 0);   // 縦は、数の札と下のボタンの間の帯に入る遠さ（種類ごとの時は横の並びも入る遠さ）
+    zen.zMax = SP ? 1 : Math.max(1, Math.min(60, (W - 122 - 20) / (5.8 * (H / 2) / (fh * dFit))));   // 一番大きくして、塔が目盛りの右の空きに入るまで
     var Z = Math.max(1, Math.min(zen.zMax, zen.zoom || 1)), d = (10 + (dFit - 10) * u) / Z, ty = top - 0.6 + (top / 2 - (top - 0.6)) * u;
     var half = (zen.yB - yA2) / 2 / ((H / 2) / (fh * d)), lo = Math.min(top / 2, half - 0.6), hi = Math.max(top / 2, top + 0.6 - half);
     if (u >= 1 && zen.fy != null) { zen.fy = Math.max(lo, Math.min(hi, zen.fy)); ty = zen.fy; }
     if (Z <= 1.001 && !zen.pinch) zen.fy = null;
     var cy = ty + (2.4 * (1 - u) + Math.min(dFit * 0.1, 30) * u) / Z;
-    zCam.position.set(1 + Math.sin(orbit) * d, cy, 1.5 + Math.cos(orbit) * d);
-    zCam.near = Math.max(0.1, d * 0.02); zCam.far = d * 3 + top + 200; var pp0 = (H / 2) / (fh * Math.hypot(d, cy - ty)), dx = Math.max(0, 122 + 2.9 * pp0 + 6 - W / 2);   // 大きくした時は、塔を右へ寄せて左の目盛りの場所を空ける
+    zCam.position.set(1 + Math.sin(ob) * d, cy, 1.5 + Math.cos(ob) * d);
+    zCam.near = Math.max(0.1, d * 0.02); zCam.far = d * 3 + top + 200; var pp0 = (H / 2) / (fh * Math.hypot(d, cy - ty)), dx = SP ? 0 : Math.max(0, 122 + 2.9 * pp0 + 6 - W / 2);   // 大きくした時は、塔を右へ寄せて左の目盛りの場所を空ける
     zCam.setViewOffset(W, H, -Math.round(dx), Math.round(H / 2 - (yA2 + zen.yB) / 2), W, H);   // 塔の真ん中を帯の真ん中へ
     zCam.lookAt(1, ty, 1.5);
-    zSun.position.set(1 + Math.sin(orbit + 0.8) * 40, ty + 40, 1.5 + Math.cos(orbit + 0.8) * 40); zSun.target.position.set(1, ty, 1.5);
-    zFill.position.set(1 + Math.sin(orbit - 2.2) * 40, ty + 10, 1.5 + Math.cos(orbit - 2.2) * 40); zFill.target.position.set(1, ty, 1.5);
+    zSun.position.set(1 + Math.sin(ob + 0.8) * 40, ty + 40, 1.5 + Math.cos(ob + 0.8) * 40); zSun.target.position.set(1, ty, 1.5);
+    zFill.position.set(1 + Math.sin(ob - 2.2) * 40, ty + 10, 1.5 + Math.cos(ob - 2.2) * 40); zFill.target.position.set(1, ty, 1.5);
     zScene.environment = envRT ? envRT.texture : null;
     Object.keys(zMats).forEach(function (k) { var m = zMats[k], sm = m.userData.src; if (sm && sm.map && m.map !== sm.map) { m.map = sm.map; m.color.copy(sm.color); m.needsUpdate = true; } });   // 床の下に沈んでいた種類の石の模様は、後から届く
-    zWorldSet(zen.n, top, { ppu: (H / 2) / (fh * Math.hypot(dFit, Math.min(dFit * 0.1, 30))), yA: zen.yA, yA2: yA2, yB: zen.yB });
+    zWorldSet(zen.n, top, { ppu: (H / 2) / (fh * Math.hypot(dFit, Math.min(dFit * 0.1, 30))), yA: zen.yA, yA2: yA2, yB: zen.yB, S: SP ? Math.max(1, (zen.wr / 2 + 0.9) / 2.96) : 0 });
     zWorldFrame(now, dt);
     // 空（後ろ）を先に描き、その上に塔・島・窓。大きくした時は、塔などを札とボタンの間の窓だけに描く（札やボタンにかぶせない）
     renderer.render(zBgOnly, zSkyCam);
@@ -8443,6 +8559,12 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
     var ppu = (H / 2) / (fh * zCam.position.distanceTo(new T.Vector3(1, ty, 1.5)));
     zen.ppu = ppu; zen.ty = ty; zen.ym = (yA2 + zen.yB) / 2;
     var cA = zen.yA - (Z > 1.01 ? 0 : 24), cB = zen.yB + (Z > 1.01 ? 8 : 16);   // 目盛りは帯の中だけ（数の札・下のボタンに字をかぶせない）
+    if (SP) {   // 種類ごと: 目盛りと窓の名前は出さず、塔の足元に種類の名前と時間
+      for (var j0 = 0; j0 < zTicks.length; j0++) zTicks[j0].className = "zn-t zn-off";
+      zLine.style.height = "0px"; if (zW) zW.labels.forEach(function (el) { el.style.opacity = "0"; });
+      zSplitLabels(cA, cB); zenUi.style.opacity = (0.15 + 0.85 * u).toFixed(2); return;
+    }
+    zSL.forEach(function (el) { el.style.opacity = "0"; });
     var rx = Math.max(Z > 1.01 ? 52 : 10, cxs - 2.6 * ppu - 76);   // 大きくした時は「今 ○時間」の字が左で切れない所まで
     zRule.style.transform = "translateX(" + rx.toFixed(1) + "px)";
     var lA = Math.max(cA, Math.min(yT, y0)), lB = Math.min(cB, Math.max(yT, y0));
@@ -8459,6 +8581,7 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
   }
   window.SORA3D_SCREEN = function (i) { return W ? scr(i) : null; };
   window.SORA3D_ZEN = function (on) { if (on) zenOpen(); else zenClose(); };
+  window.SORA3D_ZSHOW = function (v) { zG.visible = zCore.visible = v; if (zW) { zW.pg.visible = v; } kick(); };   // 見本の絵を撮る時に、塔と部屋を隠す（11/7 種類の塔の完成イメージ）
   window.SORA3D_DEBUG = { info: function () { return [renderer.info.render.calls, renderer.info.render.triangles, renderer.info.memory.textures, renderer.info.programs ? renderer.info.programs.length : 0, renderer.getPixelRatio(), renderer.shadowMap.enabled]; }, set: function (n) { var bl = []; for (var i = 0; i < n; i++) bl.push({ type: KINDS[i % KINDS.length].key }); take({ blocks: bl, lastAddedIndex: n - 1 }); }, look: function (v) { look = v; camY = null; roomW = null; }, gaze: function (v) { gaze = v; gazeTo = null; }, orbit: function (v) { orbit = v; }, hzT: function () { return mats[Object.keys(mats)[0]].onBeforeCompile ? "has" : "none"; }, hz: function () { return [hzU.hzN.value, hzU.hzF.value, hzU.hzK.value, hzU.hzC.value.getHexString(), camY, Object.keys(mats).length]; }, fc: function () { return frontC.map(function (c) { return [c.position.x.toFixed(1), c.position.y.toFixed(1), c.position.z.toFixed(1), c.material.opacity.toFixed(2), c.visible, !!c.material.map]; }).concat([[camera.position.x.toFixed(1), camera.position.y.toFixed(1), camera.position.z.toFixed(1)]]); } };
 })();
 
@@ -9069,15 +9192,21 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
   // 開いた箱の下にも「閉じる」（長い箱を開いた後、上まで戻らずに閉じられる）。どの箱にも付ける
   boxes.forEach(function(d){
     var c=document.createElement("button"); c.type="button"; c.className="tojiru2"; c.textContent="▲ この箱を閉じる";
-    c.addEventListener("click",function(){d.open=false;d.scrollIntoView({block:"nearest"});});
+    c.addEventListener("click",function(){d.open=false;d.scrollIntoView({block:"start"});});
     (d.querySelector(".naka")||d.querySelector(".in")||d).appendChild(c);
   });
   // 「ひと目で」に並ぶのは、状態（data-jotai）の付いた箱だけ。1つも無い紙では「ひと目で」を出さない
   boxes.filter(function(d){return d.hasAttribute("data-jotai")&&d.querySelector("summary .t");}).forEach(function(d){
     var j=d.getAttribute("data-jotai")||"ima", y=d.getAttribute("data-yoten")||"", t=d.querySelector("summary .t").textContent;
     n[j]=(n[j]||0)+1;
-    var f=d.querySelector("summary .fuda"); if(f){f.textContent=NA[j]; f.className="fuda f-"+j;}
-    var sy=d.querySelector("summary .y"); if(sy)sy.textContent=y;
+    // 箱の題の下の行: 状態の札＋要点（11/6 の基準の形）
+    var sy=d.querySelector("summary .y"), f=d.querySelector("summary .fuda");
+    if(sy){
+      if(!f){f=document.createElement("span");}
+      f.textContent=NA[j]; f.className="fuda f-"+j;
+      var ys=document.createElement("span"); ys.textContent=y;
+      sy.textContent=""; sy.appendChild(f); if(y)sy.appendChild(ys);
+    }
     var li=document.createElement("li"), a=document.createElement("a");
     a.href="#"+d.id;
     a.innerHTML='<span class="fuda f-'+j+'">'+NA[j]+'</span><span class="t"></span><span class="y"></span>';
@@ -9089,16 +9218,27 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
   (rows.ima||[]).concat(rows.machi||[]).forEach(function(li){ichiran.appendChild(li);});
   if(rows.zumi){
     var gl=document.createElement("li"), dd=document.createElement("details"), su=document.createElement("summary"), ol=document.createElement("ol");
-    su.innerHTML='<span class="fuda f-zumi">済み</span><span>'+rows.zumi.length+' 件（押すと出る）</span><span class="ya" aria-hidden="true">▶</span>';
+    su.innerHTML='<span class="fuda f-zumi">済み</span><span>'+rows.zumi.length+' 件（押すと出る）</span><span class="ya" aria-hidden="true"></span>';
     dd.appendChild(su); rows.zumi.forEach(function(li){ol.appendChild(li);}); dd.appendChild(ol); gl.appendChild(dd); ichiran.appendChild(gl);
   }
   ["ima","machi","zumi"].forEach(function(j){var s=document.createElement("span");s.className="k-"+j;s.textContent=NA[j]+" "+n[j];kazu.appendChild(s);});
   if(!ichiran.children.length){var hs=document.querySelector(".hitome"); if(hs)hs.hidden=true;}
-  document.getElementById("tojiru").addEventListener("click",function(){[].forEach.call(document.querySelectorAll("details"),function(d){d.open=false;});});
-  var ik=document.getElementById("irokae"); ik.addEventListener("click",function(){window.KAMI_IRO(document.documentElement.getAttribute("data-iro"));});
-  ik.innerHTML="色を変える<small>今は "+({shiro:"白",kuro:"黒",wine:"ワイン",kon:"紺",midori:"深緑",kinari:"生成り",sakura:"桜",sora:"空色"})[document.documentElement.getAttribute("data-iro")]+"</small>";
+  // 全部閉じて、一番上へ戻る（11/6 の基準）
+  document.getElementById("tojiru").addEventListener("click",function(){
+    [].forEach.call(document.querySelectorAll("details"),function(d){d.open=false;});
+    window.scrollTo(0,0);
+    var ue=document.getElementById("ue"); if(ue)ue.focus({preventScroll:true}); // 選ばれた所も一番上へ（11/6 調査部の確かめ）
+  });
   var top=document.getElementById("totop");
-  function update(){top.hidden=window.scrollY<window.innerHeight*0.6;}
+  // 11/6: 下へ読み進む間は隠す（本文・▶▼・「この箱を閉じる」にかぶらない）。上へ戻る向きに動かした時と、一番下（何も無い余白の上）で出す
+  var mae=window.scrollY;
+  function update(){
+    var y=window.scrollY, soko=y+window.innerHeight>=document.documentElement.scrollHeight-140;
+    if(y<window.innerHeight*0.6)top.hidden=true;
+    else if(soko||y<mae-4)top.hidden=false;
+    else if(y>mae+4)top.hidden=true;
+    mae=y;
+  }
   window.addEventListener("scroll",update,{passive:true});update();
   top.addEventListener("click",function(){window.scrollTo({top:0,behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});});
 })();
@@ -9106,7 +9246,7 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
 </body>
 </html>
 
-<script>window.TRI_VER="2f8c45bdbc";
+<script>window.TRI_VER="8d57bbe85e";
 // ===== 積み上げ帳アプリ: 全画面の形・音の合図・留守番係 =====
 (function () {
   var root = document.documentElement;
@@ -9149,24 +9289,51 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
 
   // 1回で入れる時間を選ぶ（5・10・20・25分・1時間・2時間。1個は5分なので、10分は2個・1時間は12個で1階）
   // 11/4 CEO「1時間とか2時間とか積み上げられる様に」で 60・120 を足した
-  var MINS = [5, 10, 20, 25, 60, 120], mins = 5;
-  function minTxt(v) { return v >= 60 ? v / 60 + "時間" : v + "分"; }
+  var MINS = [5, 10, 20, 25, 60, 120], mins = 5, free = 45;
+  // 11/7 CEO「時間もアプリで自由に設定できる様に」: 「自由」の札で、5分ごとに5時間まで選べる（1個は5分）
+  function minTxt(v) { var h = Math.floor(v / 60), m = v % 60; return (h ? h + "時間" : "") + (m || !h ? m + "分" : ""); }
+  function minHtml(v) { var h = Math.floor(v / 60), m = v % 60; return (h ? h + '<small>時間</small>' : "") + (m || !h ? m + '<small>分</small>' : ""); }
   window.TW_MIN_TXT = minTxt;
-  try { mins = +window.localStorage.getItem("tw-min") || 5; } catch (e) {}
-  if (MINS.indexOf(mins) < 0) mins = 5;
+  try { mins = +window.localStorage.getItem("tw-min") || 5; free = +window.localStorage.getItem("tw-min-free") || 45; } catch (e) {}
+  free = Math.max(5, Math.min(300, Math.round(free / 5) * 5));
+  if (MINS.indexOf(mins) < 0) { if (mins >= 5 && mins <= 300 && mins % 5 === 0) free = mins; else mins = 5; }
   var chips = document.createElement("div");
   chips.className = "app-min"; chips.setAttribute("role", "radiogroup"); chips.setAttribute("aria-label", "1回の時間");
-  chips.innerHTML = MINS.map(function (v) { return '<button type="button" role="radio" data-min="' + v + '">' + (v >= 60 ? v / 60 + '<small>時間</small>' : v + '<small>分</small>') + '</button>'; }).join("");
+  chips.innerHTML = MINS.map(function (v) { return '<button type="button" role="radio" data-min="' + v + '">' + minHtml(v) + '</button>'; }).join("") + '<button type="button" role="radio" class="min-free" data-free="1" aria-label="自由な時間"><span class="mf-t">自由</span><span class="mf-v"></span></button>';
   document.body.appendChild(chips);
   function paintMin() {
     window.TW_MIN = mins;
-    [].forEach.call(chips.querySelectorAll("button"), function (b) { var on2 = +b.getAttribute("data-min") === mins; b.classList.toggle("on", on2); b.setAttribute("aria-checked", on2 ? "true" : "false"); });
+    var isFree = MINS.indexOf(mins) < 0;
+    [].forEach.call(chips.querySelectorAll("button[data-min]"), function (b) { var on2 = +b.getAttribute("data-min") === mins; b.classList.toggle("on", on2); b.setAttribute("aria-checked", on2 ? "true" : "false"); });
+    var fb = chips.querySelector(".min-free"); fb.classList.toggle("on", isFree); fb.setAttribute("aria-checked", isFree ? "true" : "false"); fb.querySelector(".mf-v").textContent = minTxt(free);
     [].forEach.call(document.querySelectorAll(".plus.plus4 .pp"), function (p) { p.textContent = "＋" + minTxt(mins); });
   }
+  function setMin(v) { mins = v; paintMin(); try { window.localStorage.setItem("tw-min", String(mins)); } catch (e2) {} }
+  // 自由な時間を選ぶ札（−・＋・つまみ）
+  var fp = document.createElement("div"); fp.className = "min-pick"; fp.hidden = true; fp.setAttribute("role", "dialog"); fp.setAttribute("aria-label", "1回の時間を自由に");
+  fp.innerHTML = '<b>1回の時間を自由に</b><div class="mp-big"><button type="button" class="mp-dn" aria-label="5分へらす">−</button><span class="mp-v"></span><button type="button" class="mp-up" aria-label="5分ふやす">＋</button></div>' +
+    '<input type="range" class="mp-r" min="5" max="300" step="5" aria-label="時間"><div class="mp-ends"><span>5分</span><span>5時間</span></div><p class="mp-st"></p>' +
+    '<div class="mp-q"><button type="button" data-q="15">15分</button><button type="button" data-q="30">30分</button><button type="button" data-q="45">45分</button><button type="button" data-q="90">1時間30分</button><button type="button" data-q="180">3時間</button></div>' +
+    '<div class="mp-act"><button type="button" class="mp-no">やめる</button><button type="button" class="mp-ok">この時間にする</button></div>';
+  document.body.appendChild(fp);
+  var fpV = free;
+  function paintFp() { fp.querySelector(".mp-v").innerHTML = minHtml(fpV); fp.querySelector(".mp-r").value = fpV; fp.querySelector(".mp-st").textContent = "石 " + fpV / 5 + "個（5分で1個・1時間で1階）"; var pc = (fpV - 5) / 295 * 100; fp.querySelector(".mp-r").style.setProperty("--pc", pc.toFixed(1) + "%"); }
+  function openFp() { fpV = free; paintFp(); fp.hidden = false; var r = chips.getBoundingClientRect(); fp.style.bottom = Math.max(12, window.innerHeight - r.top + 10) + "px"; document.body.classList.add("min-picking"); if (window.TW_PEEK) window.TW_PEEK(60000); }
+  function closeFp() { fp.hidden = true; document.body.classList.remove("min-picking"); if (window.TW_PEEK) window.TW_PEEK(4000); }
+  fp.addEventListener("click", function (e) {
+    var t = e.target; e.stopPropagation();
+    if (t.closest(".mp-up")) { fpV = Math.min(300, fpV + 5); paintFp(); tone(1174.7, 0, 0.05, 0.04, "sine"); }
+    else if (t.closest(".mp-dn")) { fpV = Math.max(5, fpV - 5); paintFp(); tone(987.8, 0, 0.05, 0.04, "sine"); }
+    else if (t.closest("[data-q]")) { fpV = +t.closest("[data-q]").getAttribute("data-q"); paintFp(); }
+    else if (t.closest(".mp-no")) closeFp();
+    else if (t.closest(".mp-ok")) { free = fpV; try { window.localStorage.setItem("tw-min-free", String(free)); } catch (e3) {} setMin(free); unlock(); tone(1046.5, 0, 0.08, 0.05, "sine"); closeFp(); }
+  }, false);
+  fp.querySelector(".mp-r").addEventListener("input", function (e) { fpV = +e.target.value; paintFp(); }, false);
+  ["pointerdown", "touchstart"].forEach(function (ev) { fp.addEventListener(ev, function (e) { e.stopPropagation(); }, { passive: true }); });
   chips.addEventListener("click", function (e) {
+    if (e.target.closest && e.target.closest("[data-free]")) { if (!document.body.classList.contains("ui-peek")) return; unlock(); if (MINS.indexOf(mins) >= 0 && fp.hidden) { setMin(free); } openFp(); return; }
     var b = e.target.closest ? e.target.closest("[data-min]") : null; if (!b) return;
-    mins = +b.getAttribute("data-min"); paintMin(); unlock(); tone(1046.5, 0, 0.08, 0.05, "sine");
-    try { window.localStorage.setItem("tw-min", String(mins)); } catch (e2) {}
+    setMin(+b.getAttribute("data-min")); unlock(); tone(1046.5, 0, 0.08, 0.05, "sine");
   }, false);
   paintMin();
   // 「1回もどす」は、どれがもどるか分からなかった（10/29 CEO）。押すと「記録」の一覧を開き、そこで1回ずつもどす
@@ -9269,7 +9436,7 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
       [chips, md].forEach(function (el) { if (!el) return; el.style.removeProperty("bottom"); var r = rectOf(el); if (r && r.bottom > pTop - 8) raise(el, r.bottom - (pTop - 8)); });
       var rm = rectOf(md), rc = rectOf(chips);
       // 2 合計の札（右の棒の下）は、記録の札より上
-      if (me && pill) { me.style.removeProperty("bottom"); var rp = rectOf(pill); if (rp && rm && rp.bottom > rm.top - 8) raise(me, rp.bottom - (rm.top - 8)); }
+      if (me && pill) { me.style.removeProperty("bottom"); var rp = rectOf(pill); if (rp && rm && rp.bottom > rm.top - 8) raise(me, rp.bottom - (rm.top - 8)); rp = rectOf(pill); if (rp && rc && rc.right > rp.left - 6 && rp.bottom > rc.top - 8) raise(me, rp.bottom - (rc.top - 8)); }   // 11/7 時間の札（自由を足した）の横にも当てない
       // 3 全部の高さ／部屋へ戻る: 部屋では時間の札の上、全部の高さでは下の札の上。記録の札にも当てない
       if (zb) {
         var lim = bd.classList.contains("tw-zen") || !rc ? pTop : Math.min(pTop, rc.top);
@@ -9366,7 +9533,11 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
 // 下のボタンの右はしの「＋」から。名前・色・印を選んで足すと、ボタンと上の札と塔の石の色が増える。足した種類は「しまう」でボタンから外せる（記録は消えない）
 (function () {
   var p4 = document.querySelector(".plus.plus4"); if (!p4 || !window.TW_ADD_KIND) return;
-  var COLS = [["#e0a526", "金", "mm"], ["#17a2b8", "青緑", "mi"], ["#8a5cd6", "紫", "sa"], ["#c0392b", "赤", "mm"], ["#2e86de", "空色", "ao"], ["#7a8794", "鉄", "ao"]];
+  // 11/7 CEO「色をもっと増やして」: 16色（元の4種類の青・桃・橙・緑とは別の色）。もう使っている色は選べない（同じ色の種類を作らない）
+  var COLS = [["#d63031", "赤", "mm"], ["#e0a526", "金", "mm"], ["#f5d90a", "黄", "mm"], ["#8bc34a", "黄緑", "mi"], ["#17a2b8", "青緑", "mi"], ["#5ec8f2", "空色", "ao"], ["#2c3a8c", "紺", "ao"], ["#8a5cd6", "紫", "sa"],
+    ["#b9a3e3", "藤", "sa"], ["#ff8fb8", "桃", "sa"], ["#8e1b3c", "えんじ", "mm"], ["#8b5a2b", "茶", "mm"], ["#f2c9a0", "肌", "mm"], ["#eeeeee", "白", "ao"], ["#7a8794", "鉄", "ao"], ["#2b2b2b", "黒", "ao"]];
+  function usedCol(c) { return kinds().some(function (k) { return (k.color || "").toLowerCase() === c.toLowerCase(); }); }
+  function firstFree() { for (var i = 0; i < COLS.length; i++) if (!usedCol(COLS[i][0])) return i; return 0; }
   var MARKS = ["★", "▼", "✚", "⬟", "♥", "✦"];
   function kinds() { return window.TOU_KINDS || []; }
   function btnHtml(k) { return '<span class="pk" style="color:' + k.color + '">' + k.mark + '</span><span class="pn">' + k.name + '</span><span class="pp">＋' + (window.TW_MIN_TXT ? window.TW_MIN_TXT(window.TW_MIN || 5) : (window.TW_MIN || 5) + "分") + '</span>'; }
@@ -9395,7 +9566,8 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
   function paintK() {
     var h = '<div class="tl-head"><b>積み上げる種類</b><button type="button" class="tl-x">とじる</button></div>';
     h += '<div class="tk-new"><label>新しい種類の名前<input type="text" maxlength="8" placeholder="例: 英語・読書・図面" autocomplete="off"></label>';
-    h += '<div class="tk-row"><span>色</span>' + COLS.map(function (c, i) { return '<button type="button" class="tk-c' + (i === pick.c ? " on" : "") + '" data-c="' + i + '" style="background:' + c[0] + '" aria-label="' + c[1] + '"></button>'; }).join("") + '</div>';
+    if (usedCol(COLS[pick.c][0])) pick.c = firstFree();
+    h += '<div class="tk-row tk-cols"><span>色</span>' + COLS.map(function (c, i) { var u = usedCol(c[0]); return '<button type="button" class="tk-c' + (i === pick.c ? " on" : "") + (u ? " used" : "") + '" data-c="' + i + '" style="background:' + c[0] + '" aria-label="' + c[1] + (u ? "（もう使っている）" : "") + '"' + (u ? " disabled" : "") + '></button>'; }).join("") + '</div>';
     h += '<div class="tk-row"><span>印</span>' + MARKS.map(function (m, i) { return '<button type="button" class="tk-m' + (i === pick.m ? " on" : "") + '" data-m="' + i + '">' + m + '</button>'; }).join("") + '</div>';
     h += '<button type="button" class="tk-add">この種類を足す</button><p class="tk-msg" aria-live="polite"></p></div>';
     h += '<div class="tk-list"><b>今の種類</b>';
@@ -9418,6 +9590,7 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
       var inp = sh.querySelector(".tk-new input"), name = (inp.value || "").trim(), msg = sh.querySelector(".tk-msg");
       if (!name) { msg.textContent = "名前を入れてください。"; inp.focus(); return; }
       if (kinds().some(function (k) { return k.name === name; })) { msg.textContent = "同じ名前が、もう有ります。"; return; }
+      if (usedCol(COLS[pick.c][0])) { msg.textContent = "その色は、もう使っています。別の色を選んでください。"; return; }
       var col = COLS[pick.c], k = window.TW_ADD_KIND({ name: name, color: col[0], base: col[2], mark: MARKS[pick.m] });
       if (!k) { msg.textContent = "スマホに残せませんでした。"; return; }
       paintPlus(); paintK(); sh.querySelector(".tk-msg").textContent = "「" + name + "」を足しました。下のボタンから積めます。";
@@ -9727,10 +9900,33 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
   document.addEventListener("visibilitychange", function () { if (!document.hidden) { var s = stats(); if (s) { paintHud(s, lastBlocks, true); last = s; } } });
 
   // ---- 記録の一覧に足す: この7日・実績の棚 ----
+  // 11/7 CEO「瞑想や算数などが、どれだけ積み上がったのか・何時間したのか分けて見たい。見て分かる形でも、数でも」
+  // 種類ごと: 今日・この7日・全部を選び、種類の色の棒・時間・割合（％）と、全体を色で分けた1本の帯
+  var SPAN = ["今日", "この7日", "全部"], span = 2;
+  try { var sp0 = window.localStorage.getItem("tw-kind-span"); if (sp0 !== null && SPAN[+sp0]) span = +sp0; } catch (e) {}
+  function kindBlock(s) {
+    var KS = window.TOU_KINDS || KINDS, per = KS.map(function () { return 0; }), add = function (v) { (v || []).forEach(function (m, i) { if (i < per.length) per[i] += m || 0; }); };
+    if (span === 0) add(s.A[s.key]); else if (span === 1) s.week.forEach(function (w) { add(w.v); }); else Object.keys(s.A).forEach(function (k) { add(s.A[k]); });
+    var tot = per.reduce(function (a, b) { return a + b; }, 0), mx = Math.max.apply(null, per.concat([1]));
+    var h = '<div class="tg-kind"><b>種類ごと</b><div class="tk-span" role="tablist">' + SPAN.map(function (t, i) { return '<button type="button" role="tab" data-span="' + i + '" aria-selected="' + (i === span) + '"' + (i === span ? ' class="on"' : "") + '>' + t + '</button>'; }).join("") + '</div>';
+    var rows = KS.map(function (k, i) { return { k: k, m: per[i], i: i }; }).filter(function (r) { return r.m > 0 || !r.k.hidden; });
+    rows.forEach(function (r) {
+      h += '<div class="tk-r' + (r.m ? "" : " zero") + '"><i style="color:' + r.k.color + '">' + r.k.mark + '</i><span class="tk-n">' + r.k.name + '</span><span class="tk-b"><u style="width:' + (r.m / mx * 100).toFixed(1) + '%;background:' + r.k.color + '"></u></span><span class="tk-h">' + (r.m ? hm(r.m, true) : "0分") + '<small>' + (tot ? Math.round(r.m / tot * 100) : 0) + '%</small></span></div>';
+    });
+    if (tot) h += '<div class="tk-all">' + rows.filter(function (r) { return r.m; }).map(function (r) { return '<u style="flex:' + r.m + ';background:' + r.k.color + '"></u>'; }).join("") + '</div>';
+    h += '<p class="tw-sum">' + SPAN[span] + 'の合計 <b>' + hm(tot, true) + '</b>' + (tot ? "" : "・まだ積んでいません") + '</p></div>';
+    return h;
+  }
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest ? e.target.closest(".tg-kind [data-span]") : null; if (!b) return;
+    span = +b.getAttribute("data-span"); try { window.localStorage.setItem("tw-kind-span", String(span)); } catch (e2) {}
+    var box = b.closest(".tg-kind"), s = stats(); if (box && s) box.outerHTML = kindBlock(s);
+  }, false);
+  window.TW_KIND_SUM = function (sp) { var s = stats(); if (!s) return null; var KS = window.TOU_KINDS || KINDS, per = KS.map(function () { return 0; }), add = function (v) { (v || []).forEach(function (m, i) { if (i < per.length) per[i] += m || 0; }); }; if (sp === 0) add(s.A[s.key]); else if (sp === 1) s.week.forEach(function (w) { add(w.v); }); else Object.keys(s.A).forEach(function (k) { add(s.A[k]); }); return per; };
   window.TW_LOG_EXTRA = function () {
     var s = stats(); if (!s) return "";
     var mx = Math.max(60, Math.max.apply(null, s.week.map(function (w) { return sum(w.v); })));
-    var h = '<div class="tg-week"><b>この7日</b><div class="tw-bars">';
+    var h = kindBlock(s) + '<div class="tg-week"><b>この7日</b><div class="tw-bars">';
     s.week.forEach(function (w, i) {
       var v = sum(w.v), mi = medalOf(v), bar = "";
       for (var k = w.v.length - 1; k >= 0; k--) if (w.v[k] && KINDS[k]) bar += '<i style="height:' + (w.v[k] / mx * 100).toFixed(1) + '%;background:' + KINDS[k].color + '"></i>';
