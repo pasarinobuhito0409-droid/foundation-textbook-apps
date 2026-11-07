@@ -226,6 +226,17 @@ h2{font-family:var(--display);font-weight:800;font-size:1.2rem;margin:0 0 10px}
 details.box>summary:not(:has(.ya))::after{content:"▶";grid-row:1/3;grid-column:2;color:var(--gold-ji);font-size:.9rem}
 details.box[open]>summary:not(:has(.ya))::after{content:"▼"}
 
+/* 11/7 CEO「色を後で変更できたりという自由さも欲しい」: 初めは 11/6 の基準（紺と金）。下の「色を選ぶ」で選ぶと、このスマホに覚える */
+:root[data-iro="kuro"][data-theme]{--navy:#111417;--gold:#b9bec6;--gold-ji:#d4d8de;--cream:#1b1f24;--bg:#0e1114;--fg:#eef0f2;--muted:#b3b9c0;--pale:#23282e;--line:#3a4048;--up:#2a2f36;--card:#1b1f24;--logo:#C9CDD2;color-scheme:dark}
+:root[data-iro="wine"][data-theme]{--navy:#5a1a2b;--gold:#b8923a;--gold-ji:#8a6a1f;--cream:#fff8f6;--bg:#f6ece9;--fg:#3a1620;--muted:#6e5560;--pale:#f3e9ec;--line:#e2cfd2;--up:#f8eccf;--card:#fff8f6;--logo:#7a6a70;color-scheme:light}
+:root[data-iro="midori"][data-theme]{--navy:#1f3d33;--gold:#b8923a;--gold-ji:#7d621c;--cream:#fbfbf2;--bg:#eef2ea;--fg:#1d2e27;--muted:#56645c;--pale:#e8efe9;--line:#d2dccf;--up:#f3ecd0;--card:#fbfbf2;--logo:#5f6b64;color-scheme:light}
+:root[data-iro="sakura"][data-theme]{--navy:#7a3b52;--gold:#c48aa0;--gold-ji:#8c4a63;--cream:#fffafb;--bg:#fbeef2;--fg:#3b1f29;--muted:#6d5560;--pale:#f6e8ed;--line:#ecd3dc;--up:#fbe4ec;--card:#fffafb;--logo:#8a6672;color-scheme:light}
+:root[data-iro="sora"][data-theme]{--navy:#1f4e79;--gold:#5b8fc2;--gold-ji:#2f5f8f;--cream:#fbfdff;--bg:#e9f1fa;--fg:#12233a;--muted:#46586e;--pale:#e5eef8;--line:#c9d9ec;--up:#e1edf9;--card:#fbfdff;--logo:#5d6f86;color-scheme:light}
+.iro-erabu{display:flex;flex-wrap:wrap;gap:8px}
+.iro-erabu button{flex:1 1 calc(50% - 8px);min-height:48px;display:flex;align-items:center;gap:8px;padding:6px 10px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--fg);font:700 .95rem var(--body);cursor:pointer;text-align:left}
+.iro-erabu button[aria-pressed="true"]{border:2px solid var(--gold);background:var(--up)}
+.iro-erabu i{flex:none;width:26px;height:26px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.25)}
+@media print{#b-iro{display:none}}
 /* 勉強の塔（この紙だけの色と形） */
 :root{--sa1:#e3a6c9;--sa2:#CC79A7;--sa3:#9c4f7c;--mm1:#f39a5a;--mm2:#D55E00;--mm3:#9e4500;--ao1:#7fb0ff;--ao2:#3d7be0;--ao3:#2a59ad;--mi1:#7fdca6;--mi2:#2f9e5e;--mi3:#1f7343;--kin:#f2b200;--kage:#8a98a6}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--kage:#7d8c99}}
@@ -411,7 +422,7 @@ body.app .pinned{gap:0}
 body.app #b-yume .ato,body.app #t-nou .kb-fuda.nou-f{display:none}
 body.app #nou-e{margin-left:0;margin-right:0}
 body.app .plus.plus4 button .pk{display:block;font:200 13px "M PLUS 1",var(--body);letter-spacing:.2em;opacity:.9}
-body.app .plus.plus4 button .pn{display:block;font:700 17px var(--display);letter-spacing:.08em}
+body.app .plus.plus4 button .pn{display:block;font:700 17px var(--display);letter-spacing:.08em;white-space:nowrap;overflow:hidden}
 body.app .plus.plus4 button .pp{display:block;font:600 13px "Shippori Mincho",serif;opacity:.95}
 /* 10/28 CEO「脳のつみあげは脳だけでいい、あとはいらない」: 脳（回路）と空へ だけ */
 body.app [data-tab="t-chishiki"],body.app [data-tab="t-mix"],body.app [data-tab="t-yume"],body.app [data-tab="t-kokuban"],body.app [data-tab="t-hon"],
@@ -1190,11 +1201,56 @@ body.app .app-min .min-free:not(.on) .mf-t{color:#f6dc9c}
 .zn-kt{font-size:11px;font-weight:800;color:#ffe2a0;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
 .zn-kt.nar{line-height:1.1;font-size:10.5px}
 .zn-kn.sm{font-size:10px}
+/* 版93: 二本指で大きくしている間は、上の札と下のボタンを隠して、塔を画面全部に（11/7 CEO「画面全部でアップ」・部屋も全部の高さも） */
+body.app.tw-zoom .tg-hud,body.app.tw-zoom .app-min,body.app.tw-zoom #modosu,body.app.tw-zoom .sora-zen-btn,body.app.tw-zoom .plus.plus4,body.app.tw-zoom .sora-ui,body.app.tw-zoom .sora-meter,body.app.tw-zoom .sora-sum,body.app.tw-zoom .sora-marks,body.app.tw-zoom .sora-arr,body.app.tw-zoom .sora-pv,body.app.tw-zoom .zn-info,body.app.tw-zoom .tg-tabs{opacity:0!important;pointer-events:none!important;transition:opacity .25s}
+body.app.tw-zoom .zn-k{transition:none}
+/* 札やボタンの上をつまんでも、画面ごと大きくならず、塔が大きくなる様に */
+body.app .tg-hud,body.app .tg-hud *,body.app .sora,body.app .sora *,body.app #modosu,body.app .sora-zen-btn,body.app .app-bar{touch-action:none}
+body.app .plus.plus4,body.app .plus.plus4 *{touch-action:pan-x}   /* 種類が多い時の横の送りは残す */
+/* 版93: 種類ごとの塔の札（塔の上に印と名前と時間・重なる時は上へ・細い線で塔へ） */
+.zn-kl{display:grid;justify-items:center;padding:2px 6px 3px;border-radius:8px;background:rgba(12,8,10,.58);border:1px solid #f2cf7c;line-height:1.2;white-space:nowrap;will-change:transform}
+.zn-kl .kn{font-size:11px;font-weight:700;color:#fff}
+.zn-kl .kn i{font-style:normal;margin-right:2px;filter:brightness(1.3)}
+.zn-kl .kt{font-size:11px;font-weight:800;color:#ffe2a0;font-variant-numeric:tabular-nums}
+.zn-km{font-size:12px;line-height:1}
+.zn-km i{font-style:normal;filter:brightness(1.3)}
+.zn-kline{width:1.5px;height:0;border-radius:1px;box-shadow:0 0 3px rgba(0,0,0,.6)}
+.zn-kl.sm{padding:1px 4px 2px;border-radius:7px}.zn-kl.sm .kn,.zn-kl.sm .kt{font-size:9.5px}
+.zn-kl.xs .kn,.zn-kl.xs .kt{font-size:8.5px;letter-spacing:-.02em}
+/* 版93: 色を後から変える */
+.tw-kind .tk-k .tk-rc{display:inline-flex;align-items:center;gap:5px;margin-left:auto}
+.tw-kind .tk-k .tk-rc s{display:inline-block;width:14px;height:14px;border-radius:50%;border:1.5px solid rgba(255,255,255,.8);text-decoration:none}
+.tw-kind .tk-k .tk-rc + button{margin-left:6px}
+.tw-kind .tk-k.on{outline:2px solid #f2cf7c}
+.tw-kind .tk-recol{margin:2px 0 6px}
+/* 種類ごとの塔を 今週・今月・今年・全部 で分ける札（版93） */
+.zn-info .zn-per{display:none;gap:3px;margin-top:6px;padding:3px;border-radius:999px;background:rgba(10,6,8,.45);border:1px solid rgba(242,207,124,.35);pointer-events:auto;touch-action:none}
+.zn-split .zn-info .zn-per,.zn-info.zn-split .zn-per{display:flex}
+.zn-info .zn-per button{min-height:32px;padding:0 11px;border:0;border-radius:999px;background:none;color:#e8dcc0;font:700 12.5px "M PLUS 1",var(--body);white-space:nowrap;text-shadow:0 1px 2px #000}
+.zn-info .zn-per button.on{background:rgba(246,220,156,.9);color:#1a1408;text-shadow:none}
+.zn-info .zn-pt{display:none;margin-top:4px;font:700 12px "M PLUS 1",var(--body);color:#f2cf7c;text-shadow:0 1px 2px #000}
+.zn-split .zn-info .zn-pt:not(:empty){display:block}
+/* 種類ごとの時は札を小さく（塔と名前の場所を広く） */
+.zn-split .zn-info>span,.zn-split .zn-info>em{display:none}
+.zn-split .zn-info{padding:6px 12px 7px}
+.zn-split .zn-info b{font-size:23px}
+.zn-split .zn-info .zn-seg{margin-top:5px}
+.zn-split .zn-info .zn-seg button{min-height:32px}
+.zn-split .zn-info .zn-per{margin-top:4px}
+.zn-info b{font-variant-numeric:tabular-nums}
+/* 札から塔への線は、いつも札の後ろを通る（線が札の字を横切らない） */
+.sora-zen .zn-kline{z-index:1}
+.sora-zen .zn-km{z-index:2}
+.sora-zen .zn-kl{z-index:3;background:rgba(12,8,10,.74)}
 
 </style>
 </head>
 <body class="app">
 
+<script>
+/* 選んだ色を、開いた時すぐに当てる（11/7・初めは基準の紺と金・端末の明るい暗いに合わせる） */
+(function(){var T={kuro:"dark",wine:"light",midori:"light",sakura:"light",sora:"light"};try{var k=localStorage.getItem("kami-iro-1107");if(k&&T[k]){document.documentElement.setAttribute("data-iro",k);document.documentElement.setAttribute("data-theme",T[k]);}}catch(e){}})();
+</script>
 </head>
 <body>
 <div class="haikei ari" aria-hidden="true"><img class="hashi hidari" src="a/0191cec92af0e5.webp" alt=""><img class="hashi migi" src="a/875cf222869cb8.webp" alt=""><img class="yohaku hidari" src="a/8a2bc22a924221.webp" alt=""><img class="yohaku hidari kurai" src="a/34cfca816b22a4.webp" alt=""><img class="yohaku migi" src="a/797f457de7d459.webp" alt=""><img class="yohaku migi kurai" src="a/5d4b1fed5cc440.webp" alt=""><img class="chara" src="a/a8fce38314eb81.webp" alt=""></div>
@@ -1350,6 +1406,13 @@ body.app .app-min .min-free:not(.on) .mf-t{color:#f6dc9c}
 </div></details>
 
 <!-- ===== ここまで中身 ===== -->
+<details class="box" id="b-iro">
+<summary><span class="t">色を選ぶ</span><span class="ya" aria-hidden="true"></span><span class="y"><span>あとで、いつでも変えられます</span></span></summary>
+<div class="naka">
+<div class="iro-erabu" role="group" aria-label="紙の色"><button type="button" data-iro="" aria-pressed="true"><i style="background:linear-gradient(135deg,#1f2d3a 50%,#b8923a 50%)"></i>紺と金</button><button type="button" data-iro="kuro" aria-pressed="false"><i style="background:linear-gradient(135deg,#111417 50%,#b9bec6 50%)"></i>黒と銀</button><button type="button" data-iro="wine" aria-pressed="false"><i style="background:linear-gradient(135deg,#5a1a2b 50%,#b8923a 50%)"></i>ワインと金</button><button type="button" data-iro="midori" aria-pressed="false"><i style="background:linear-gradient(135deg,#1f3d33 50%,#b8923a 50%)"></i>深緑と金</button><button type="button" data-iro="sakura" aria-pressed="false"><i style="background:linear-gradient(135deg,#7a3b52 50%,#fbeef2 50%)"></i>桜</button><button type="button" data-iro="sora" aria-pressed="false"><i style="background:linear-gradient(135deg,#1f4e79 50%,#e9f1fa 50%)"></i>空色</button></div>
+<p>選んだ色は、このスマホに覚えます。</p><p>初めの色は、基準の紺と金です。</p>
+</div>
+</details>
 <div class="botan"><button type="button" id="tojiru">全部閉じる（一番上へ戻る）</button></div>
 </div>
 <script src="three.min.js"></script>
@@ -6884,6 +6947,62 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
   renderer.toneMapping = T.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
   renderer.shadowMap.enabled = true; renderer.shadowMap.type = T.PCFSoftShadowMap;
   renderer.shadowMap.autoUpdate = false; var shadowKey = "";
+  // ===== 光のにじみと仕上げの色（11/7 CEO「立体をもっと綺麗に・限界まで」）=====
+  // 絵を一度 裏の紙（4倍のなめらかな縁）に描き、明るい所（金・光・空の夕日）だけを取り出して ぼかして重ねる（光のにじみ）。
+  // 最後に 四すみを少し暗く・色を少し暖かく。スマホが重い時（描く間が長い時）は、にじみを止めて前の描き方に戻る
+  var POST = (function () {
+    var caps = renderer.capabilities; if (!caps.isWebGL2 || !T.WebGLMultisampleRenderTarget) return null;
+    var q = new URLSearchParams(window.location.search); if (q.get("post") === "0") return null;
+    var oc = new T.OrthographicCamera(-1, 1, 1, -1, 0, 1), qs = new T.Scene(), quad = new T.Mesh(new T.PlaneGeometry(2, 2), null); quad.frustumCulled = false; qs.add(quad);
+    var vs = "varying vec2 vU; void main(){ vU = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }";
+    var pr = { minFilter: T.LinearFilter, magFilter: T.LinearFilter, format: T.RGBAFormat, depthBuffer: false, stencilBuffer: false };
+    var main = new T.WebGLMultisampleRenderTarget(4, 4, { format: T.RGBAFormat, minFilter: T.LinearFilter, magFilter: T.LinearFilter }); main.samples = 4; main.texture.encoding = T.sRGBEncoding;
+    var h1 = new T.WebGLRenderTarget(4, 4, pr), h2 = new T.WebGLRenderTarget(4, 4, pr), e1 = new T.WebGLRenderTarget(4, 4, pr), e2 = new T.WebGLRenderTarget(4, 4, pr);
+    var mBright = new T.ShaderMaterial({ uniforms: { t: { value: null }, th: { value: 0.86 }, px: { value: new T.Vector2() } }, vertexShader: vs, depthTest: false, depthWrite: false,
+      fragmentShader: "uniform sampler2D t; uniform float th; uniform vec2 px; varying vec2 vU; vec3 g(vec2 o){ vec3 c = texture2D(t, vU + o * px).rgb; float l = dot(c, vec3(0.2126, 0.7152, 0.0722)); float k = smoothstep(th, th + 0.1, l); return c * k; } void main(){ vec3 c = (g(vec2(-1.0,-1.0)) + g(vec2(1.0,-1.0)) + g(vec2(-1.0,1.0)) + g(vec2(1.0,1.0))) * 0.25; gl_FragColor = vec4(c, 1.0); }" });
+    var mBlur = new T.ShaderMaterial({ uniforms: { t: { value: null }, d: { value: new T.Vector2() } }, vertexShader: vs, depthTest: false, depthWrite: false,
+      fragmentShader: "uniform sampler2D t; uniform vec2 d; varying vec2 vU; void main(){ vec3 c = texture2D(t, vU).rgb * 0.2270; c += (texture2D(t, vU + d * 1.3846).rgb + texture2D(t, vU - d * 1.3846).rgb) * 0.3162; c += (texture2D(t, vU + d * 3.2308).rgb + texture2D(t, vU - d * 3.2308).rgb) * 0.0703; gl_FragColor = vec4(c, 1.0); }" });
+    var mCopy = new T.ShaderMaterial({ uniforms: { t: { value: null } }, vertexShader: vs, depthTest: false, depthWrite: false, fragmentShader: "uniform sampler2D t; varying vec2 vU; void main(){ gl_FragColor = vec4(texture2D(t, vU).rgb, 1.0); }" });
+    var mFin = new T.ShaderMaterial({ uniforms: { t: { value: null }, b1: { value: null }, b2: { value: null }, k: { value: 0.55 }, vig: { value: 0.28 }, warm: { value: 1 }, asp: { value: 1 } }, vertexShader: vs, depthTest: false, depthWrite: false,
+      fragmentShader: [
+        "uniform sampler2D t; uniform sampler2D b1; uniform sampler2D b2; uniform float k; uniform float vig; uniform float warm; uniform float asp; varying vec2 vU;",
+        "void main(){",
+        "  vec3 c = texture2D(t, vU).rgb;",
+        "  vec3 b = texture2D(b1, vU).rgb * 0.65 + texture2D(b2, vU).rgb * 0.9;",
+        "  c = c + b * k * (vec3(1.0) - c * 0.55);",   // 明るい所の光がにじむ（白く飛ばない様に、明るい所ほど控えめ）
+        "  vec2 p = (vU - 0.5) * vec2(1.0, asp); float r = dot(p, p);",
+        "  c *= 1.0 - vig * smoothstep(0.12, 0.62, r);",   // 四すみを少し暗く（目が真ん中の塔へ行く）
+        "  float l = dot(c, vec3(0.299, 0.587, 0.114));",
+        "  c = mix(vec3(l), c, 1.0 + 0.10 * warm);",   // 色を少しあざやかに
+        "  c *= mix(vec3(1.0), vec3(1.035, 1.0, 0.955), warm * smoothstep(0.25, 0.9, l));",   // 明るい所を少し暖かく（夕日の色）
+        "  gl_FragColor = vec4(c, 1.0);",
+        "}"].join("\n") });
+    var Wp = 0, Hp = 0, on = false;
+    function size() {
+      var w = Math.max(4, renderer.domElement.width), h = Math.max(4, renderer.domElement.height);
+      if (w === Wp && h === Hp) return; Wp = w; Hp = h;
+      main.setSize(w, h); var w2 = Math.max(2, Math.round(w / 4)), hh2 = Math.max(2, Math.round(h / 4)); h1.setSize(w2, hh2); h2.setSize(w2, hh2); e1.setSize(Math.max(2, Math.round(w / 8)), Math.max(2, Math.round(h / 8))); e2.setSize(Math.max(2, Math.round(w / 8)), Math.max(2, Math.round(h / 8)));
+    }
+    function pass(m, tgt) { quad.material = m; renderer.setRenderTarget(tgt); renderer.render(qs, oc); }
+    return {
+      ok: true, k: 0.42, vig: 0.24, warm: 1,
+      begin: function () { size(); on = true; renderer.setRenderTarget(main); },
+      end: function (kk) {
+        if (!on) return; on = false; var kUse = kk == null ? this.k : kk;
+        var ac = renderer.autoClear; renderer.autoClear = true; var tm = renderer.toneMapping; renderer.toneMapping = T.NoToneMapping;
+        mBright.uniforms.t.value = main.texture; mBright.uniforms.px.value.set(1 / Wp, 1 / Hp); pass(mBright, h1);
+        mBlur.uniforms.t.value = h1.texture; mBlur.uniforms.d.value.set(1 / h1.width, 0); pass(mBlur, h2);
+        mBlur.uniforms.t.value = h2.texture; mBlur.uniforms.d.value.set(0, 1 / h1.height); pass(mBlur, h1);
+        mCopy.uniforms.t.value = h1.texture; pass(mCopy, e1);
+        mBlur.uniforms.t.value = e1.texture; mBlur.uniforms.d.value.set(1.5 / e1.width, 0); pass(mBlur, e2);
+        mBlur.uniforms.t.value = e2.texture; mBlur.uniforms.d.value.set(0, 1.5 / e1.height); pass(mBlur, e1);
+        mFin.uniforms.t.value = main.texture; mFin.uniforms.b1.value = h1.texture; mFin.uniforms.b2.value = e1.texture; mFin.uniforms.k.value = kUse; mFin.uniforms.vig.value = this.vig; mFin.uniforms.warm.value = this.warm; mFin.uniforms.asp.value = Hp / Wp;
+        pass(mFin, null);
+        renderer.toneMapping = tm; renderer.autoClear = ac;
+      }
+    };
+  })();
+  window.SORA3D_POST = function (v) { if (!POST) return null; if (v != null) POST.ok = !!v; return POST.ok; };   // 試しの道具が、前と後を並べて撮る
   var cv = renderer.domElement; cv.className = "sora-3d"; cv.setAttribute("aria-hidden", "true");
   // スマホの描く力が足りなくなって絵が止まった時（11/4 CEO「ブロックが落ちてこない・エラー」）: 開き直して描き直す。記録はスマホに残っているので消えない
   cv.addEventListener("webglcontextlost", function (e) {
@@ -7446,27 +7565,33 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
   function matFor(key, vi) {
     vi = vi || 0; var id = key + vi;
     if (mats[id]) return mats[id];
-    var KD = (window.TOU_KINDS || []).filter(function (q) { return q.key === key; })[0];   // 足した種類（10/31）: 色はその種類、石の模様は近い色の元の種類から借りる
-    if (KD && !COL[key]) COL[key] = KD.color;
-    var tint = KD && KD.base ? 0.8 : 0, imgKey = ISHI[key] ? key : KD && KD.base && ISHI[KD.base] ? KD.base : key;
-    var col = new T.Color(COL[key] || "#3d7be0"), m = contactAO(hazify(new T.MeshPhysicalMaterial({ color: col, roughness: 0.24, metalness: 0.0, clearcoat: 1.0, clearcoatRoughness: 0.06, envMapIntensity: 1.05, aoMap: edgeAO, aoMapIntensity: 0.45 })));
-    function apply(im) {
-      if (tint) {   // 足した種類: 石の模様を白黒にして、その種類の色の上に「重ね（overlay）」で乗せる。11/7 CEO「確実にその項目の色に」: 色を掛けると暗くなり（鉄色が黒に）、ボタンの印の色と違って見えたため
-        var gk = imgKey + "c" + KD.color; if (!stoneImg[gk]) { var gc = document.createElement("canvas"); gc.width = im.naturalWidth; gc.height = im.naturalHeight; var gx = gc.getContext("2d"); gx.fillStyle = KD.color; gx.fillRect(0, 0, gc.width, gc.height); gx.globalCompositeOperation = "overlay"; gx.globalAlpha = 0.5; gx.filter = "grayscale(1) contrast(0.9)"; gx.drawImage(im, 0, 0); stoneImg[gk] = gc; }
-        im = stoneImg[gk];
+    var m = contactAO(hazify(new T.MeshPhysicalMaterial({ color: 0xffffff, roughness: 0.24, metalness: 0.0, clearcoat: 1.0, clearcoatRoughness: 0.06, envMapIntensity: 1.05, aoMap: edgeAO, aoMapIntensity: 0.45 })));
+    function paint() {   // 色を後から変えた時も、同じ石の色を塗り直す（11/7 CEO「色を後で変えられる自由さ」）
+      var KD = (window.TOU_KINDS || []).filter(function (q) { return q.key === key; })[0];   // 足した種類（10/31）: 色はその種類、石の模様は近い色の元の種類から借りる
+      if (KD && (KD.base || !COL[key])) COL[key] = KD.color;
+      var tint = KD && KD.base ? 0.8 : 0, imgKey = ISHI[key] ? key : KD && KD.base && ISHI[KD.base] ? KD.base : key, col = new T.Color(COL[key] || "#3d7be0");
+      m.color.copy(col);
+      function apply(im) {
+        if (tint) {   // 足した種類・色を変えた種類: 石の模様を白黒にして、その種類の色の上に「重ね（overlay）」で乗せる。11/7 CEO「確実にその項目の色に」
+          var gk = imgKey + "c" + KD.color; if (!stoneImg[gk]) { var gc = document.createElement("canvas"); gc.width = im.naturalWidth; gc.height = im.naturalHeight; var gx = gc.getContext("2d"); gx.fillStyle = KD.color; gx.fillRect(0, 0, gc.width, gc.height); gx.globalCompositeOperation = "overlay"; gx.globalAlpha = 0.5; gx.filter = "grayscale(1) contrast(0.9)"; gx.drawImage(im, 0, 0); stoneImg[gk] = gc; }
+          im = stoneImg[gk];
+        }
+        if (m.map) m.map.dispose();
+        var t = new T.Texture(im); t.encoding = T.sRGBEncoding; t.anisotropy = ANISO; t.wrapS = t.wrapT = T.RepeatWrapping;
+        t.center.set(0.5, 0.5); t.rotation = [0, 1.5708, 0.6][vi]; t.offset.set([0, 0.37, 0.71][vi], [0, 0.52, 0.19][vi]); t.repeat.set(0.85, 0.85); t.needsUpdate = true;
+        m.map = t; if (tint) m.color.set(0xffffff); else m.color.set(0xffffff).lerp(col, SMOOTH ? 0.08 : 0.2);
+        var nm = stoneImg[imgKey + "n"] || (stoneImg[imgKey + "n"] = normalFrom(im)); m.normalMap = nm; m.normalScale.set(SMOOTH ? 0.22 : 0.12, SMOOTH ? 0.22 : 0.12); m.needsUpdate = true; kick();
       }
-      var t = new T.Texture(im); t.encoding = T.sRGBEncoding; t.anisotropy = ANISO; t.wrapS = t.wrapT = T.RepeatWrapping;
-      t.center.set(0.5, 0.5); t.rotation = [0, 1.5708, 0.6][vi]; t.offset.set([0, 0.37, 0.71][vi], [0, 0.52, 0.19][vi]); t.repeat.set(0.85, 0.85); t.needsUpdate = true;
-      m.map = t; if (tint) m.color.set(0xffffff); else m.color.set(0xffffff).lerp(col, SMOOTH ? 0.08 : 0.2);
-      var nm = stoneImg[imgKey + "n"] || (stoneImg[imgKey + "n"] = normalFrom(im)); m.normalMap = nm; m.normalScale.set(SMOOTH ? 0.22 : 0.12, SMOOTH ? 0.22 : 0.12); m.needsUpdate = true; kick();
+      if (ISHI[imgKey]) {
+        var im = stoneImg[imgKey];
+        if (!im) { im = stoneImg[imgKey] = new Image(); im.src = ISHI[imgKey]; }
+        if (im.complete && im.naturalWidth) apply(im); else im.addEventListener("load", function () { apply(im); });
+      }
     }
-    if (ISHI[imgKey]) {
-      var im = stoneImg[imgKey];
-      if (!im) { im = stoneImg[imgKey] = new Image(); im.src = ISHI[imgKey]; }
-      if (im.complete && im.naturalWidth) apply(im); else im.addEventListener("load", function () { apply(im); });
-    }
+    paint(); m.userData.paint = paint;
     mats[id] = m; return m;
   }
+  window.SORA3D_RECOLOR = function (key) { for (var vi = 0; vi < 3; vi++) { var m = mats[key + vi]; if (m && m.userData.paint) m.userData.paint(); } if (zen) { var zm = zMats[key]; if (zm) { zm.map = null; } } if (window.TOU_KINDS) { var KD = window.TOU_KINDS.filter(function (q) { return q.key === key; })[0]; if (KD) COL[key] = KD.color; } kick(); };
   var goldEdge = new T.LineBasicMaterial({ color: 0xf0c66c, transparent: true, opacity: 0.95 });
   var edgeGeo = new T.EdgesGeometry(new T.BoxGeometry(CUBE + 0.01, CUBE + 0.01, CUBE + 0.01));
   var tower = new T.Group(); scene.add(tower);   // 塔は部屋の床（y=0）から立つ。屋上（world）は天井の上
@@ -7647,8 +7772,15 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
   function camOff() {
     var z = 1, cx = W / 2, cy = H * 0.43;
     if (APP && STG) { z = 0.8; cx = W * 0.34; cy = H * 0.34; }
-    var fw = W * z, fh = H * z; camera.setViewOffset(fw, fh, fw / 2 - cx, fh / 2 - cy, W, H);
+    var fw = W * z, fh = H * z, rz = rZ.z;
+    if (rz <= 1.001) camera.setViewOffset(fw, fh, fw / 2 - cx, fh / 2 - cy, W, H);
+    else camera.setViewOffset(fw, fh, fw / 2 - cx + rZ.cx - W / (2 * rz), fh / 2 - cy + rZ.cy - H / (2 * rz), W / rz, H / rz);   // 部屋でも二本指で大きく（11/7 CEO「全部の画面で」）: 写した絵の一部を画面全部へ
   }
+  var rZ = { z: 1, cx: 0, cy: 0 }, rPin = null;
+  function rClamp() { var z = rZ.z, hw = W / (2 * z), hh = H / (2 * z); rZ.cx = Math.max(hw, Math.min(W - hw, rZ.cx)); rZ.cy = Math.max(hh, Math.min(H - hh, rZ.cy)); }
+  // 大きくしている間は、上の札と下のボタンを隠す（全体に戻すと出る）。札の場所を測り直す見張りにも知らせる
+  var zoomOn = false;
+  function setZoomed(v) { if (v === zoomOn) return; zoomOn = v; document.body.classList.toggle("tw-zoom", v); }
   function resize() {
     W = host.clientWidth || 360; H = document.body.classList.contains("app") ? (host.clientHeight || window.innerHeight || Math.round(W * 1.5)) : Math.round(W * 1.5);   // アプリでは画面いっぱい
     var pr = renderer.getPixelRatio(), sz = renderer.getSize(new T.Vector2());
@@ -7685,7 +7817,7 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
   }
   function dropAt(g, now) { var t = dropQ[g]; return t == null ? 1 : Math.min(1, (now - t) / 900); }
   function frame(now) {
-    if (lastNow && now - lastNow < 200) { prQ.n++; prQ.s += now - lastNow; if (prQ.n >= 90) { var av = prQ.s / prQ.n, nx0 = av > 40 ? 1.5 : av > 22 ? Math.max(1.5, prMax - 0.5) : prMax; if (nx0 < prMax) { prMax = nx0; prQ.lock = true; renderer.setPixelRatio(prMax); resize(); } else if (!prQ.lock && av < 17.6 && prMax < prTop && ++prQ.ok >= 3) { prQ.ok = 0; prMax = Math.min(prTop, prMax + 0.5); renderer.setPixelRatio(prMax); resize(); } else if (av >= 17.6) prQ.ok = 0; prQ.n = prQ.s = 0; } }   // 1コマ 22ms を超える時は 0.5 ずつ下げる（滑らかさが先）
+    if (lastNow && now - lastNow < 200) { prQ.n++; prQ.s += now - lastNow; if (prQ.n >= 90) { var av = prQ.s / prQ.n; if (POST && POST.ok && av > 24 && prMax <= 1.5) POST.ok = false; var nx0 = av > 40 ? 1.5 : av > 22 ? Math.max(1.5, prMax - 0.5) : prMax; if (nx0 < prMax) { prMax = nx0; prQ.lock = true; renderer.setPixelRatio(prMax); resize(); } else if (!prQ.lock && av < 17.6 && prMax < prTop && ++prQ.ok >= 3) { prQ.ok = 0; prMax = Math.min(prTop, prMax + 0.5); renderer.setPixelRatio(prMax); resize(); } else if (av >= 17.6) prQ.ok = 0; prQ.n = prQ.s = 0; } }   // 1コマ 22ms を超える時は 0.5 ずつ下げる（滑らかさが先）
     var dt = lastNow ? Math.min(0.05, (now - lastNow) / 1000) : 0.016; lastNow = now;
     var n = blocks.length, floors = Math.floor(n / 12), part = n % 12, topLv = floors + (part ? 1 : 0);
     camTop = STG && preview >= 0 ? 0.5 : topLv - sinkStep(now);   // 見学の間は、目の高さを下げて壁を見せる
@@ -7882,7 +8014,9 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
     // 影の地図（1024×4096）は、太陽か積み木が動いた時だけ描き直す（毎コマ描いていて重かった・10/30 CEO「重い」）
     var shK = sun.position.x.toFixed(2) + "," + sun.position.y.toFixed(2) + "," + sun.position.z.toFixed(2) + "," + blocks.length + "," + (drop ? 1 : 0) + "," + (meshes[lastIdx] ? meshes[lastIdx].position.y.toFixed(3) : "");
     if (shK !== shadowKey || drop) { shadowKey = shK; renderer.shadowMap.needsUpdate = true; }
+    var pr0 = POST && POST.ok; if (pr0) POST.begin();
     renderer.render(scene, camera);
+    if (pr0) POST.end(0.24);   // 部屋は控えめに（石の色が白く飛ばない様に）
     placeMarks(topLv);
     ui.classList.toggle("gaze", gaze > 0.5);
     var want = gaze < 0.5 ? "地上を見る" : "てっぺんを見る";
@@ -8167,7 +8301,7 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
   // 指: 上下で塔を上り下り、左右で塔のまわりを回る
   cv.addEventListener("pointerdown", function (e) { travel = null; lookV = 0; drag = { x: e.clientX, y: e.clientY, l: look, o: orbit, t: performance.now(), ly: e.clientY, lt: performance.now() }; if (cv.setPointerCapture) cv.setPointerCapture(e.pointerId); kick(); });
   cv.addEventListener("pointermove", function (e) {
-    if (!drag || (zen && zen.pinch)) return;   // 全部の高さで、つまむ間は回さない
+    if (!drag || (zen && zen.pinch) || rPin) return;   // つまむ間は回さない
     look = Math.max(-camTop - 0.5, Math.min(0, drag.l + (e.clientY - drag.y) * 0.03));
     var tn = performance.now(), dtm = Math.max(8, tn - drag.lt); lookV = lookV * 0.5 + 0.5 * ((e.clientY - drag.ly) * 0.03) / (dtm / 1000); drag.ly = e.clientY; drag.lt = tn;
     var no = drag.o - (e.clientX - drag.x) * 0.008; orbitV = (no - orbit) * 6; orbit = no;
@@ -8196,10 +8330,13 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
   var PORTAL_IMG = { kunren: "st-S1-W1.jpg", yakan: "st-S2-W5.jpg", teiji: "st-S3-W1.jpg", mit: "st-S4-W5.jpg", hatsumei: "st-S5-W1.jpg" };
   function zDot(soft) { var c = document.createElement("canvas"); c.width = c.height = 64; var x = c.getContext("2d"), g = x.createRadialGradient(32, 32, 0, 32, 32, 32); g.addColorStop(0, "rgba(255,255,255,1)"); g.addColorStop(soft ? 0.25 : 0.18, "rgba(255,240,200," + (soft ? 0.55 : 0.9) + ")"); g.addColorStop(1, "rgba(255,200,120,0)"); x.fillStyle = g; x.fillRect(0, 0, 64, 64); var t = new T.CanvasTexture(c); return t; }
   function zRockGeo(rr) {   // 下へ細くなる岩（上は明るい茶・下へ暗く）
-    var ig = new T.CylinderGeometry(2.9, 0.35, 3.4, 40, 10, false), ip = ig.attributes.position;
-    for (var i = 0; i < ip.count; i++) { var px = ip.getX(i), py = ip.getY(i), pz = ip.getZ(i), r = Math.hypot(px, pz); if (py < 1.69) { var n = 0.86 + 0.16 * Math.sin(px * 1.6 + py * 1.3) * Math.cos(pz * 1.4 - py * 0.8) + 0.06 * rr(); ip.setXYZ(i, px * n, py - (r < 0.6 ? 0.6 * rr() : 0), pz * n); } }
+    // 11/7 立体を綺麗に: 角ばった岩 → 細かい岩肌（波を重ねた凸凹・地層の縞・なめらかな光）
+    var ig = new T.CylinderGeometry(2.9, 0.35, 3.4, 120, 30, false), ip = ig.attributes.position, ph = [rr() * 6, rr() * 6, rr() * 6, rr() * 6];
+    var nse = function (x, y, z) { return Math.sin(x * 1.6 + y * 1.3 + ph[0]) * Math.cos(z * 1.4 - y * 0.8 + ph[1]) * 0.5 + Math.sin(x * 3.7 - z * 2.9 + y * 2.2 + ph[2]) * 0.25 + Math.sin(z * 7.3 + x * 5.1 - y * 6.7 + ph[3]) * 0.12 + Math.sin(x * 13.0 + y * 11.0 + z * 9.0) * 0.05; };
+    var cY = [];
+    for (var i = 0; i < ip.count; i++) { var px = ip.getX(i), py = ip.getY(i), pz = ip.getZ(i), r = Math.hypot(px, pz), a0 = Math.atan2(pz, px); if (py < 1.69) { var kk = Math.min(1, (1.69 - py) / 0.25), n = 1 + (0.26 * nse(Math.cos(a0) * 2, py, Math.sin(a0) * 2) - 0.05) * kk, dy = r < 0.7 ? -0.7 * (0.5 + 0.5 * Math.sin(a0 * 5 + ph[0])) * (1 - r / 0.7) : 0; ip.setXYZ(i, px * n, py + dy, pz * n); } cY.push(nse(Math.cos(a0) * 3, py * 2, Math.sin(a0) * 3)); }
     ig.computeVertexNormals();
-    var icol = new Float32Array(ip.count * 3); for (var ci = 0; ci < ip.count; ci++) { var tt = Math.max(0, Math.min(1, (ip.getY(ci) + 1.7) / 3.4)), nz = 0.85 + 0.3 * rr(); icol[ci * 3] = (0.05 + 0.22 * tt) * nz; icol[ci * 3 + 1] = (0.035 + 0.15 * tt) * nz; icol[ci * 3 + 2] = (0.03 + 0.11 * tt) * nz; }
+    var icol = new Float32Array(ip.count * 3); for (var ci = 0; ci < ip.count; ci++) { var yy = ip.getY(ci), tt = Math.max(0, Math.min(1, (yy + 1.7) / 3.4)), band = 0.82 + 0.18 * Math.sin(yy * 11 + cY[ci] * 2.4), nz = (0.88 + 0.24 * rr()) * band; icol[ci * 3] = (0.06 + 0.26 * tt) * nz; icol[ci * 3 + 1] = (0.042 + 0.175 * tt) * nz; icol[ci * 3 + 2] = (0.034 + 0.125 * tt) * nz; }
     ig.setAttribute("color", new T.BufferAttribute(icol, 3));
     return ig;
   }
@@ -8267,18 +8404,19 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
     w.sky.frustumCulled = false; zBgOnly.add(w.sky);
     // 2 浮かぶ島（塔の足元）: 数式を金で彫った石の台座と、その下の岩。島のまわりに夕焼けの雲
     var rr = zRnd(7), islG = new T.Group(); islG.position.set(1, 0, 1.5); w.g.add(islG); w.islG = islG;
-    w.rockM = new T.MeshStandardMaterial({ vertexColors: true, roughness: 0.95, metalness: 0.0, flatShading: true, envMapIntensity: 0.15 });
+    w.rockM = new T.MeshStandardMaterial({ vertexColors: true, roughness: 0.88, metalness: 0.0, envMapIntensity: 0.25 });
     w.rockG = zRockGeo(rr);
     var isl = new T.Mesh(w.rockG, w.rockM); isl.position.y = -0.36 - 1.7; islG.add(isl);
     var ped = new T.Mesh(new T.CylinderGeometry(2.96, 3.04, 0.36, 72, 1, true), new T.MeshStandardMaterial({ map: zFormulaTex(), emissiveMap: zFormulaTex(), emissive: 0xffffff, emissiveIntensity: 0.32, roughness: 0.55, metalness: 0.25 }));
     ped.position.y = -0.18; islG.add(ped);
     var capT = (function () { var c = document.createElement("canvas"); c.width = c.height = 512; var x = c.getContext("2d"), g = x.createRadialGradient(256, 256, 30, 256, 256, 256); g.addColorStop(0, "#efe6d6"); g.addColorStop(0.85, "#cdbfa8"); g.addColorStop(1, "#8f7c62"); x.fillStyle = g; x.fillRect(0, 0, 512, 512); x.strokeStyle = "rgba(190,150,70,.55)"; x.lineWidth = 3; [236, 222].forEach(function (r) { x.beginPath(); x.arc(256, 256, r, 0, 6.283); x.stroke(); }); for (var i = 0; i < 24; i++) { var a = i / 24 * 6.283; x.beginPath(); x.moveTo(256 + Math.cos(a) * 222, 256 + Math.sin(a) * 222); x.lineTo(256 + Math.cos(a) * 236, 256 + Math.sin(a) * 236); x.stroke(); } var t = new T.CanvasTexture(c); t.encoding = T.sRGBEncoding; return t; })();   // 台座の上: 大理石と、分度器の目盛り
-    var cap = new T.Mesh(new T.CircleGeometry(2.96, 72), new T.MeshStandardMaterial({ map: capT, roughness: 0.6 })); cap.rotation.x = -Math.PI / 2; cap.position.y = -0.004; islG.add(cap);
+    var cap = new T.Mesh(new T.CircleGeometry(2.96, 72), new T.MeshStandardMaterial({ map: capT, roughness: 0.6 })); cap.receiveShadow = true; cap.rotation.x = -Math.PI / 2; cap.position.y = -0.004; islG.add(cap);
     [[2.97, 0.0], [3.05, -0.36]].forEach(function (q) { var ring = new T.Mesh(new T.TorusGeometry(q[0], 0.03, 8, 120), new T.MeshBasicMaterial({ color: 0xffd98a, toneMapped: false })); ring.rotation.x = Math.PI / 2; ring.position.y = q[1]; islG.add(ring); });
     var cT = zCloudTex(); w.clouds = [];
     for (var ci = 0; ci < 11; ci++) { var cm = new T.Sprite(new T.SpriteMaterial({ map: cT, color: ci % 3 ? 0xffd9c2 : 0xf3c6b0, transparent: true, opacity: 0.88, depthWrite: false })); var ca = ci / 11 * 6.283 + rr() * 0.4, cr = 2.2 + rr() * 3.6, cs = 3.2 + rr() * 3.6; cm.userData = { a: ca, r: cr, y: -2.3 - rr() * 2.2, s: cs, v: (rr() - 0.5) * 0.05 }; cm.scale.set(cs * 1.6, cs, 1); w.g.add(cm); w.clouds.push(cm); }
     // 光の筋（夕日から）と流れ星: 塔の後ろの空（窓と同じく、いつもカメラの方を向く組に入れる）
     w.rays = new T.Mesh(new T.PlaneGeometry(1, 1), new T.MeshBasicMaterial({ map: zRaysTex(), transparent: true, opacity: 0.32, depthWrite: false, blending: T.AdditiveBlending, toneMapped: false }));
+    w.sunD = new T.Mesh(new T.PlaneGeometry(1, 1), new T.MeshBasicMaterial({ map: zDot(true), color: 0xfff0cc, transparent: true, opacity: 0.95, depthWrite: false, blending: T.AdditiveBlending, toneMapped: false }));   // 夕日の玉（塔の後ろ）。光のにじみで輝く
     w.star = new T.Mesh(new T.PlaneGeometry(1, 1), new T.MeshBasicMaterial({ map: zStreakTex(), transparent: true, opacity: 0, depthWrite: false, blending: T.AdditiveBlending, toneMapped: false }));
     // 3 金の粒（塔のまわりを昇る）
     var NP = 240, pa = new Float32Array(NP * 3); w.sp = [];
@@ -8297,7 +8435,7 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
     var key = fut.map(function (q) { return q.key; }).join() + "@" + [P.ppu, P.yA, P.yA2, P.yB].map(function (x) { return x.toFixed(1); }).join("/") + "/" + top;
     w.S = S; w.top = top; w.n = n;
     if (key === w.key) return; w.key = key;
-    for (var i = w.pg.children.length - 1; i >= 0; i--) { var o = w.pg.children[i]; w.pg.remove(o); if (o === w.rays || o === w.star) continue; o.traverse(function (q) { if (q.geometry && q.geometry !== w.rockG) q.geometry.dispose(); if (q.material && q.material !== w.rockM) { if (q.material.map && q.material.map._own) q.material.map.dispose(); q.material.dispose(); } }); }
+    for (var i = w.pg.children.length - 1; i >= 0; i--) { var o = w.pg.children[i]; w.pg.remove(o); if (o === w.rays || o === w.star || o === w.sunD) continue; o.traverse(function (q) { if (q.geometry && q.geometry !== w.rockG) q.geometry.dispose(); if (q.material && q.material !== w.rockM) { if (q.material.map && q.material.map._own) q.material.map.dispose(); q.material.dispose(); } }); }
     w.portals = [];
     var pu = P.ppu, wy = function (sy) { return top / 2 + ((P.yA2 + P.yB) / 2 - sy) / pu; }, u = 1 / pu;
     var tl = new T.TextureLoader(), roads = [];
@@ -8325,6 +8463,7 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
     var bc = new T.Sprite(new T.SpriteMaterial({ map: zDot(true), color: 0xffd27a, transparent: true, opacity: 0.9, depthWrite: false, blending: T.AdditiveBlending, toneMapped: false }));
     bc.scale.set(70 * u, 70 * u, 1); bc.position.set(0, top + 2 * u, 0); w.pg.add(bc); w.beacon = bc; w.bu = u;
     w.rays.scale.set(760 * u, 760 * u, 1); w.rays.position.set(0, wy(P.yB + 4), -top * 0.8 - 20 * u); w.pg.add(w.rays);   // 夕日（塔の足元の後ろ）から上へ光の筋
+    w.sunD.scale.set(230 * u, 230 * u, 1); w.sunD.position.copy(w.rays.position); w.sunD.position.z += 1 * u; w.pg.add(w.sunD);
     w.star.scale.set(120 * u, 8 * u, 1); w.pg.add(w.star); w.starU = { u: u, y0: wy(P.yA + 18), y1: wy(P.yA2 - 6), t: 2 };
   }
   function zWorldFrame(now, dt) {
@@ -8336,7 +8475,7 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
     w.su.res.value.set(renderer.domElement.width, renderer.domElement.height);
     w.su.bA.value = 1 - Math.min(1, (zen.yB + 40) / H); w.su.bB.value = 1 - Math.max(0, (zen.yA - 30) / H);
     w.pg.position.set(1, 0, 1.5); w.pg.rotation.y = zOb;   // 窓と道は、いつも塔の右に（回っても正面を向く）
-    var sv = !(zen && zen.split); w.pg.children.forEach(function (c) { if (c !== w.rays && c !== w.star) c.visible = sv; });   // 種類ごとの時は、窓と道と今の光を出さない
+    var sv = !(zen && zen.split); w.pg.children.forEach(function (c) { if (c !== w.rays && c !== w.star && c !== w.sunD) c.visible = sv; });   // 種類ごとの時は、窓と道と今の光を出さない
     w.portals.forEach(function (p) { p.g.position.y = p.y0 + Math.sin(w.t * 0.8 + p.k * 1.7) * 0.05 * p.sz; });
     if (w.roadU) w.roadU.t.value = w.t;
     var pa = w.pts.geometry.attributes.position, S = w.S, Hh = w.top * 1.15 + 1;
@@ -8346,7 +8485,7 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
     w.g.scale.set(1, 1, 1);
     w.islG.scale.set(S, S, S);
     w.clouds.forEach(function (c) { var q = c.userData; q.a += q.v * dt; c.position.set(1 + Math.cos(q.a) * q.r * S, q.y * S, 1.5 + Math.sin(q.a) * q.r * S); c.scale.set(q.s * 1.6 * S, q.s * S, 1); });
-    w.rays.rotation.z += dt * 0.015; w.rays.material.opacity = 0.26 + 0.06 * Math.sin(w.t * 0.5);
+    w.rays.rotation.z += dt * 0.015; w.rays.material.opacity = 0.3 + 0.07 * Math.sin(w.t * 0.5); if (w.sunD) w.sunD.material.opacity = 0.85 + 0.1 * Math.sin(w.t * 0.7);
     var su2 = w.starU; if (su2) { su2.t += dt; var ph = su2.t % 7.5; if (ph < 0.9) { var f = ph / 0.9; w.star.position.set((-150 + 300 * f) / 1 * su2.u, su2.y0 + (su2.y1 - su2.y0) * f, -10 * su2.u); w.star.rotation.z = Math.atan2(su2.y1 - su2.y0, 300 * su2.u); w.star.material.opacity = Math.sin(f * Math.PI) * 0.9; } else w.star.material.opacity = 0; }
   }
   // 窓の名前（右の空の部屋の下に、字で）
@@ -8371,6 +8510,8 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
   }
   var zHemi = new T.HemisphereLight(0xfff0dc, 0x3a2a20, 0.75), zSun = new T.DirectionalLight(0xffe4bc, 1.9), zFill = new T.DirectionalLight(0xbcd0ff, 0.45);
   zScene.add(zHemi); zScene.add(zSun); zScene.add(zSun.target); zScene.add(zFill); zScene.add(zFill.target);
+  var zRim = new T.DirectionalLight(0xffb870, 1.15); zScene.add(zRim); zScene.add(zRim.target);   // 後ろの夕日から、塔のふちと上の面を金色に
+  zSun.castShadow = true; zSun.shadow.mapSize.set(1024, 1024); zSun.shadow.bias = -0.0008; zSun.shadow.normalBias = 0.03; zSun.shadow.radius = 3; var zShK = "";   // 塔の影を島の上に落とす（11/7 立体を綺麗に）
   var zG = new T.Group(); zScene.add(zG);
   var zCore = new T.Mesh(new T.BoxGeometry(2.7, 1, 3.7), new T.MeshBasicMaterial({ color: 0x120d0a })); zCore.position.set(1, 0.5, 1.5); zScene.add(zCore);   // 石と石のすき間の影
   var zFloor = new T.Mesh(new T.CircleGeometry(1, 64), new T.MeshBasicMaterial({ transparent: true, depthWrite: false, map: (function () { var c = document.createElement("canvas"); c.width = c.height = 256; var x = c.getContext("2d"), g = x.createRadialGradient(128, 128, 0, 128, 128, 128); g.addColorStop(0, "rgba(150,104,60,.9)"); g.addColorStop(0.5, "rgba(96,62,34,.55)"); g.addColorStop(1, "rgba(40,24,12,0)"); x.fillStyle = g; x.fillRect(0, 0, 256, 256); var t = new T.CanvasTexture(c); t.encoding = T.sRGBEncoding; return t; })() }));
@@ -8385,33 +8526,44 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
     for (var i = zG.children.length - 1; i >= 0; i--) { var o = zG.children[i]; zG.remove(o); if (o.isInstancedMesh) { if (o.dispose) o.dispose(); } else o.traverse(function (q) { if (q.geometry) q.geometry.dispose(); }); }
   }
   function zMatOf(k) {
+    // 石は部屋と同じ手触り（石の凸凹の地図）。色は種類の色のまま（つやの膜で明るくしない）。11/7 CEO「立体をもっと綺麗に」
     var src = matFor(k, 0), m = zMats[k] || (zMats[k] = new T.MeshStandardMaterial({ roughness: 0.32, metalness: 0.02, envMapIntensity: 0.9 }));
     if (m.map !== (src.map || null)) { m.map = src.map || null; m.needsUpdate = true; }
+    if (m.normalMap !== (src.normalMap || null)) { m.normalMap = src.normalMap || null; m.normalScale.set(0.32, 0.32); m.needsUpdate = true; }
     m.color.copy(src.color); m.userData.src = src; return m;
   }
   // 11/7 CEO「瞑想や算数などが、どれだけ積み上がったのか分けて見たい」: 種類ごとの塔を横に並べる。
   // 1本は 2×2 の石が1段（20分）、3段で1時間（金の線）。並びは種類の順（論文・算数・MMA・瞑想・足した種類）
+  // 種類ごとの塔を、今週・今月・今年・全部で分けて見る（11/7 CEO「月・週・年で分けて」）。週は月曜から
+  var zPer = "all"; try { zPer = window.localStorage.getItem("tw-zper") || "all"; } catch (e) {}
+  var PER_NAME = { w: "今週", m: "今月", y: "今年", all: "全部" };
+  function perStart(p) { var d = new Date(); d.setHours(0, 0, 0, 0); if (p === "w") d.setDate(d.getDate() - (d.getDay() + 6) % 7); else if (p === "m") d.setDate(1); else if (p === "y") { d.setMonth(0); d.setDate(1); } else return null; return d; }
   function zenBuildSplit(all, geo) {
+    var nAll = all.length, ps = perStart(zPer); if (ps) all = all.filter(function (b) { return b.date && new Date(b.date) >= ps; });
     var KS = window.TOU_KINDS || KINDS, cnt = {}, order = KS.map(function (k) { return k.key; });
     all.forEach(function (b) { cnt[b.type] = (cnt[b.type] || 0) + 1; if (order.indexOf(b.type) < 0) order.push(b.type); });
     var keys = order.filter(function (k) { return cnt[k] > 0; }), nk = Math.max(1, keys.length), TW = 2, GAP = 1.6, Wr = nk * TW + (nk - 1) * GAP, x0 = 1 - Wr / 2 + TW / 2;
     var mt = new T.Matrix4(), Lmax = 0, cols = [];
     keys.forEach(function (k, i) {
-      var c = cnt[k], cx = x0 + i * (TW + GAP), im = new T.InstancedMesh(geo, zMatOf(k), c);
+      var c = cnt[k], cx = x0 + i * (TW + GAP), im = new T.InstancedMesh(geo, zMatOf(k), c), colG = new T.Group(); colG.userData.rise = i; zG.add(colG);   // 塔ごとの組（順に下から伸びる）
+      im.castShadow = im.receiveShadow = c < 3000;
       for (var j = 0; j < c; j++) { var l = Math.floor(j / 4), q = j % 4; mt.makeTranslation(cx - 0.5 + (q % 2), l + CUBE / 2, 1 + Math.floor(q / 2)); im.setMatrixAt(j, mt); } im.frustumCulled = false;   // 石の並びは原点から遠い。大きくして横の塔を見ても消えない様に
-      im.instanceMatrix.needsUpdate = true; zG.add(im);
+      im.instanceMatrix.needsUpdate = true; colG.add(im);
       var L = Math.ceil(c / 4); Lmax = Math.max(Lmax, L);
-      var core = new T.Mesh(new T.BoxGeometry(1.7, 1, 1.7), zCore.material); core.scale.y = Math.max(0.01, Math.floor(c / 4) - 0.2); core.position.set(cx, 0.1 + core.scale.y / 2, 1.5); core.visible = c >= 4; zG.add(core);
+      var core = new T.Mesh(new T.BoxGeometry(1.7, 1, 1.7), zCore.material); core.scale.y = Math.max(0.01, Math.floor(c / 4) - 0.2); core.position.set(cx, 0.1 + core.scale.y / 2, 1.5); core.visible = c >= 4; colG.add(core);
       var th = 0.05, fr = new T.Group();
       [[0, -1.18, 2.4, th], [0, 1.18, 2.4, th], [-1.18, 0, th, 2.4], [1.18, 0, th, 2.4]].forEach(function (q2) { var bx = new T.Mesh(new T.BoxGeometry(q2[2], th, q2[3]), zGold); bx.position.set(cx + q2[0], 0.02, 1.5 + q2[1]); fr.add(bx); });
       for (var hh = 3; hh < L; hh += 3) [[0, -1.06, 2.16, 0.035], [0, 1.06, 2.16, 0.035], [-1.06, 0, 0.035, 2.16], [1.06, 0, 0.035, 2.16]].forEach(function (q2) { var bx = new T.Mesh(new T.BoxGeometry(q2[2], 0.035, q2[3]), zGold); bx.position.set(cx + q2[0], hh, 1.5 + q2[1]); fr.add(bx); });
-      zG.add(fr);
+      colG.add(fr);
       var KD = KS.filter(function (q) { return q.key === k; })[0] || { name: k, mark: "■", color: COL[k] || "#888" };
       cols.push({ key: k, cx: cx, L: L, m: c * 5, name: KD.name, mark: KD.mark, color: KD.color || COL[k] });
     });
     zCore.visible = false;
+    // 一番高い塔のてっぺんに、金の光の冠（いちばん積んだ種類が一目で分かる）
+    var best = cols.reduce(function (a, q) { return !a || q.m > a.m ? q : a; }, null);
+    if (best && cols.length > 1) { var cr = new T.Sprite(new T.SpriteMaterial({ map: zDot(true), color: 0xffd27a, transparent: true, opacity: 0.85, depthWrite: false, blending: T.AdditiveBlending, toneMapped: false })); cr.position.set(best.cx, best.L + 0.7, 1.5); cr.scale.set(3.4, 3.4, 1); cr.userData.crown = best.L + 0.7; zG.add(cr); }
     var sc = Math.max(5, Wr * 0.75); zFloor.scale.set(sc, sc, 1);
-    return { n: all.length, top: Math.max(3, Lmax), st: [], cols: cols, wr: Wr };
+    return { n: nAll, top: Math.max(3, Lmax), st: [], cols: cols, wr: Wr };
   }
   function zenBuild(split) {
     zClear();
@@ -8422,7 +8574,7 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
     var mt = new T.Matrix4();
     Object.keys(by).forEach(function (k) {
       var ids = by[k], im = new T.InstancedMesh(geo, zMatOf(k), ids.length);
-      ids.forEach(function (gi, j) { var c = cellPos(gi); mt.makeTranslation(c.x, c.y, c.z); im.setMatrixAt(j, mt); });
+      ids.forEach(function (gi, j) { var c = cellPos(gi); mt.makeTranslation(c.x, c.y, c.z); im.setMatrixAt(j, mt); }); im.castShadow = im.receiveShadow = !big;
       im.instanceMatrix.needsUpdate = true; zG.add(im);
     });
     var F = Math.floor(n / 12), top = Math.max(1, Math.ceil(n / 12));
@@ -8438,61 +8590,126 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
     if (zen || !STG) return;
     if (preview >= 0) setPreview(-1);
     var sp = false; try { sp = window.localStorage.getItem("tw-zsplit") === "1"; } catch (e) {}
-    var r = zenBuild(sp); zen = { t0: performance.now(), top: r.top, n: r.n, st: r.st, zoom: 1, fy: null, split: sp, cols: r.cols || [], wr: r.wr || 0 };
+    var r = zenBuild(sp); zShK = ""; zen = { t0: performance.now(), tR: performance.now() + 250, top: r.top, n: r.n, st: r.st, zoom: 1, fy: null, split: sp, cols: r.cols || [], wr: r.wr || 0 };
     zScene.background = null;
     var nx = null; for (var i = 0; i < STAGES.length; i++) if (STAGES[i].h * 12 > r.n) { nx = STAGES[i]; break; }
-    zInfo.innerHTML = '<i>今までに積んだ高さ</i><b>' + hmTxt(r.n * 5) + '</b><span>' + Math.floor(r.n / 12) + '階' + (r.n % 12 ? "と" + (r.n % 12) + "個" : "") + '・1階で1時間</span>' + (nx ? '<em>次の ' + nx.name + 'まで あと ' + hmTxt(nx.h * 60 - r.n * 5) + '</em>' : "") + '<div class="zn-seg" role="tablist" aria-label="塔の見せ方"><button type="button" role="tab" data-zs="0">1本の塔</button><button type="button" role="tab" data-zs="1">種類ごと</button></div>';
+    zInfo.innerHTML = '<i>今までに積んだ高さ</i><b>' + hmTxt(r.n * 5) + '</b><span>' + Math.floor(r.n / 12) + '階' + (r.n % 12 ? "と" + (r.n % 12) + "個" : "") + '・1階で1時間</span>' + (nx ? '<em>次の ' + nx.name + 'まで あと ' + hmTxt(nx.h * 60 - r.n * 5) + '</em>' : "") + '<div class="zn-seg" role="tablist" aria-label="塔の見せ方"><button type="button" role="tab" data-zs="0">1本の塔</button><button type="button" role="tab" data-zs="1">種類ごと</button></div>' +
+      '<div class="zn-per" role="tablist" aria-label="いつの分">' + ["w", "m", "y", "all"].map(function (p) { return '<button type="button" role="tab" data-zp="' + p + '">' + PER_NAME[p] + '</button>'; }).join("") + '</div><small class="zn-pt"></small>';
     zSegPaint();
     zenUi.hidden = false; document.body.classList.add("tw-zen"); zenBand(); zenBtn.querySelector("span").textContent = "部屋へ戻る"; zenBtn.setAttribute("aria-pressed", "true");
     lastNow = 0; kick();
   }
-  function zSegPaint() { if (!zen) return; [].forEach.call(zInfo.querySelectorAll("[data-zs]"), function (b) { var on = (b.getAttribute("data-zs") === "1") === !!zen.split; b.classList.toggle("on", on); b.setAttribute("aria-selected", on ? "true" : "false"); }); zenUi.classList.toggle("zn-split", !!zen.split); }
+  // 数が、前の数から今の数へ数え上がる（積んだ分が増えていく気持ちよさ）
+  function countTo(el, to) {
+    var from = el._v == null ? 0 : el._v; el._to = to; if (reduced || from === to) { el._v = to; el.textContent = hmTxt(to); return; }
+    var t0 = performance.now(), dur = 900;
+    (function step() { if (el._to !== to) return; var f = Math.min(1, (performance.now() - t0) / dur), e = 1 - Math.pow(1 - f, 3), v = Math.round(from + (to - from) * e); el._v = v; el.textContent = hmTxt(v); if (f < 1) (window.requestAnimationFrame || setTimeout)(step, 16); })();
+  }
+  function zPerPaint() {
+    if (!zen) return; [].forEach.call(zInfo.querySelectorAll("[data-zp]"), function (b) { var on = b.getAttribute("data-zp") === zPer; b.classList.toggle("on", on); b.setAttribute("aria-selected", on ? "true" : "false"); });
+    // 種類ごとの時は、大きい数をその期間の合計に（札を小さくして、塔と名前の場所を広く）
+    var I = zInfo.querySelector("i"), B = zInfo.querySelector("b"), pt = zInfo.querySelector(".zn-pt"), m = (zen.cols || []).reduce(function (a, c) { return a + c.m; }, 0);
+    if (I && B) { if (zen.split) { I.textContent = zPer === "all" ? "今までに積んだ高さ" : PER_NAME[zPer] + "に積んだ高さ"; countTo(B, m); } else { I.textContent = "今までに積んだ高さ"; countTo(B, zen.n * 5); } }
+    if (pt) pt.textContent = zen.split && !m ? PER_NAME[zPer] + "は、まだ積んでいません" : "";
+  }
+  function zSegPaint() { zPerPaint(); if (!zen) return; [].forEach.call(zInfo.querySelectorAll("[data-zs]"), function (b) { var on = (b.getAttribute("data-zs") === "1") === !!zen.split; b.classList.toggle("on", on); b.setAttribute("aria-selected", on ? "true" : "false"); }); zenUi.classList.toggle("zn-split", !!zen.split); }
   function zenSplit(v) {
     if (!zen || !!zen.split === !!v) return;
-    var r = zenBuild(v); zen.split = !!v; zen.top = r.top; zen.st = r.st; zen.cols = r.cols || []; zen.wr = r.wr || 0; zen.zoom = 1; zen.fy = null; zen.fx = null; zen.o0 = null; zen.pinch = null; zen.pan = null; zen.t0 = performance.now() - 900;
+    var r = zenBuild(v); zen.split = !!v; zen.tR = performance.now(); zen.top = r.top; zen.st = r.st; zen.cols = r.cols || []; zen.wr = r.wr || 0; zen.zoom = 1; zen.fy = null; zen.fx = null; zen.o0 = null; zen.labSm = 0; zen.labX = 0; zen.pinch = null; zen.pan = null; zen.t0 = performance.now() - 900;
     try { window.localStorage.setItem("tw-zsplit", v ? "1" : "0"); } catch (e) {}
     zSegPaint(); lastNow = 0; kick();
   }
   window.SORA3D_ZSPLIT = function (v) { if (v === undefined) return zen ? !!zen.split : null; zenSplit(v); };
-  zInfo.addEventListener("click", function (e) { var b = e.target.closest ? e.target.closest("[data-zs]") : null; if (!b) return; e.stopPropagation(); zenSplit(b.getAttribute("data-zs") === "1"); }, false);
-  ["pointerdown", "touchstart"].forEach(function (ev) { zInfo.addEventListener(ev, function (e) { if (e.target.closest && e.target.closest(".zn-seg")) e.stopPropagation(); }, { passive: true }); });
-  var zSL = [];   // 種類ごとの塔の名前と時間（塔の足元）
+  zInfo.addEventListener("click", function (e) {
+    var pb = e.target.closest ? e.target.closest("[data-zp]") : null;
+    if (pb && zen && zen.split) { e.stopPropagation(); zPer = pb.getAttribute("data-zp"); try { window.localStorage.setItem("tw-zper", zPer); } catch (er) {} var r = zenBuild(true); zen.tR = performance.now(); zen.top = r.top; zen.st = r.st; zen.cols = r.cols || []; zen.wr = r.wr || 0; zen.zoom = 1; zen.fy = null; zen.fx = null; zen.o0 = null; zen.labSm = 0; zen.labX = 0; zen.pinch = null; zen.pan = null; zen.t0 = performance.now() - 900; zSegPaint(); setTimeout(zenBand, 30); lastNow = 0; kick(); return; }
+    var b = e.target.closest ? e.target.closest("[data-zs]") : null; if (!b) return; e.stopPropagation(); zenSplit(b.getAttribute("data-zs") === "1"); }, false);
+  ["pointerdown", "touchstart"].forEach(function (ev) { zInfo.addEventListener(ev, function (e) { if (e.target.closest && e.target.closest(".zn-seg,.zn-per")) e.stopPropagation(); }, { passive: true }); });
+  var zSL = [];   // 種類ごとの塔の札: 塔の上に「印と名前・時間」、足元に印。細い線で塔とつなぐ（11/7 CEO「名前が出たり出なかったり・被る」→ 隠さず、重なる時は上へずらす）
   function zSplitLabels(cA, cB) {
-    var v = new T.Vector3(), cols = zen.cols || [], put = function (el, x, y, up) { var bw = el.offsetWidth || 50, bh = el.offsetHeight || 18, L = Math.max(4, Math.min(W - bw - 4, x - bw / 2)), Y = up ? y - bh : y; el.style.transform = "translate(" + L.toFixed(1) + "px," + Y.toFixed(1) + "px)"; return [L, Y, L + bw, Y + bh, x]; };
-    var tops = [], names = [], spx = W * 0.6;
-    if (cols.length > 1) { v.set(cols[0].cx, 0, 2.7).project(zCam); var x0p = v.x; v.set(cols[1].cx, 0, 2.7).project(zCam); spx = Math.abs(v.x - x0p) * 0.5 * W; }
-    cols.forEach(function (c, i) {
-      var a = zSL[i * 2], b = zSL[i * 2 + 1];
-      if (!a) { a = zSL[i * 2] = document.createElement("div"); zenUi.appendChild(a); b = zSL[i * 2 + 1] = document.createElement("div"); zenUi.appendChild(b); }
-      var nar = spx < 66, hh2 = Math.floor(c.m / 60), mm2 = c.m % 60;   // 塔の間がせまい時（小さいスマホ・種類が多い）は、時間を2段に（4時間／20分）
-      var ta = '<i style="color:' + c.color + '">' + c.mark + '</i>' + c.name, tb = nar && hh2 && mm2 ? hh2 + "時間<br>" + mm2 + "分" : hmTxt(c.m);
-      if (a._t !== ta) { a.innerHTML = ta; a._t = ta; } if (b._t !== tb) { b.innerHTML = tb; b._t = tb; }
-      a.className = "zn-k zn-kn" + (spx < 48 ? " sm" : ""); b.className = "zn-k zn-kt" + (nar ? " nar" : "");
-      a.style.maxWidth = Math.max(28, spx - 3).toFixed(0) + "px";   // 名前は印の下に。となりの塔との間より広くしない（長い名前は「…」）
-      v.set(c.cx, -0.05, 2.45).project(zCam); var ax = put(a, (v.x * 0.5 + 0.5) * W, (-v.y * 0.5 + 0.5) * H + 2, false), axIn = (v.x * 0.5 + 0.5) * W;
-      var aOk = (zen.zoom <= 1.01 || ax[3] < cB + 4) && axIn > -10 && axIn < W + 10 && !names.some(function (q) { return q[0] < ax[2] + 1 && ax[0] < q[2] + 1 && q[1] < ax[3] && ax[1] < q[3]; });   // 帯の外・画面の外・となりの名前と重なる時は出さない（回した時・大きくした時）
-      if (aOk) names.push(ax); a.style.opacity = aOk ? "1" : "0";
-      v.set(c.cx, c.L + 0.25, 1.5).project(zCam); var bx = put(b, (v.x * 0.5 + 0.5) * W, (-v.y * 0.5 + 0.5) * H - 2, true);
-      for (var tr = 0; tr < 4 && tops.some(function (q) { return q[0] < bx[2] + 2 && bx[0] < q[2] + 2 && q[1] < bx[3] && bx[1] < q[3]; }); tr++) {   // 重なる時は、重なった字の上へ
-        var over = tops.filter(function (q) { return q[0] < bx[2] + 2 && bx[0] < q[2] + 2 && q[1] < bx[3] && bx[1] < q[3]; }), yT = Math.min.apply(null, over.map(function (q) { return q[1]; }));
-        var rx0 = bx[4]; bx = put(b, (bx[0] + bx[2]) / 2, yT - 1, true); bx[4] = rx0;
-      }
-      var bIn = bx[4], bOk = bx[1] > cA - 30 && (zen.zoom <= 1.01 || bx[3] < cB) && bIn > 0 && bIn < W; if (bOk) tops.push(bx); b.style.opacity = bOk ? "1" : "0";
+    var v = new T.Vector3(), cols = zen.cols || [], scr = function (x, y, z) { v.set(x, y, z).project(zCam); return [(v.x * 0.5 + 0.5) * W, (-v.y * 0.5 + 0.5) * H, v.z]; };
+    var items = cols.map(function (c, i) {
+      var s = zSL[i]; if (!s) { s = zSL[i] = { a: document.createElement("div"), b: document.createElement("div"), l: document.createElement("i") }; s.a.className = "zn-k zn-km"; s.b.className = "zn-k zn-kl"; s.l.className = "zn-k zn-kline"; zenUi.appendChild(s.l); zenUi.appendChild(s.a); zenUi.appendChild(s.b); }
+      var ta = '<i style="color:' + c.color + '">' + c.mark + '</i>', tb = '<span class="kn"><i style="color:' + c.color + '">' + c.mark + '</i>' + c.name + '</span><span class="kt">' + hmTxt(c.m) + '</span>';
+      if (s.a._t !== ta) { s.a.innerHTML = ta; s.a._t = ta; } if (s.b._t !== tb) { s.b.innerHTML = tb; s.b._t = tb; }
+      s.b.style.borderColor = c.color; s.b.classList.toggle("sm", (zen.labSm || 0) > 0); s.b.classList.toggle("xs", (zen.labSm || 0) > 1);
+      var base = scr(c.cx, -0.05, 2.45), topP = scr(c.cx, c.L + 0.2, 1.5), lft = scr(c.cx - 1.1, 0, 1.5), rgt = scr(c.cx + 1.1, 0, 1.5);
+      var vis = Math.max(lft[0], rgt[0]) > 0 && Math.min(lft[0], rgt[0]) < W && base[2] < 1;   // 塔が画面に入っているか
+      return { c: c, s: s, x: topP[0], y: topP[1], bx: base[0], by: base[1], vis: vis, w: s.b.offsetWidth || 60, h: s.b.offsetHeight || 30, tr: [Math.min(lft[0], rgt[0]), topP[1] - 2, Math.max(lft[0], rgt[0]), base[1]] };
     });
-    for (var j = cols.length * 2; j < zSL.length; j++) zSL[j].style.opacity = "0";
+    var placed = [], order = items.filter(function (q) { return q.vis; }).sort(function (p, q) { return p.y - q.y; });   // 高い塔の札から置く
+    var yMin = cA + 2, yMax = cB - 2;
+    if ((zen.zoom || 1) <= 1.01) {   // 全体の時: 札を段に並べる（段は上から）。自分の塔のてっぺんのすぐ上の段から探し、空いている所へ。重ならない
+      var cover = 0, rowH = Math.max.apply(null, order.map(function (q) { return q.h; }).concat([28])) + 3, nRow = Math.max(1, Math.floor((yMax - yMin) / rowH)), ends = [], miss = 0, byX = order.slice().sort(function (p, q) { return p.x - q.x; });
+      for (var k0 = 0; k0 < nRow; k0++) ends.push([]);
+      var fits = function (r, L) { return ends[r].every(function (e) { return L + 0 >= e[1] + 4 || L + 0 + 0 <= e[0] - 4 - 0; }); };
+      // 札の幅の合計から、札の段が何段いるかを決め、その分だけ塔を下げる（塔の絵に札がかぶらない様に）
+      var sumW = order.reduce(function (a, q) { return a + q.w + 6; }, 0), needR = Math.ceil(sumW / Math.max(100, W - 6));
+      zen.labHT = Math.max(0, needR - 1 + (zen.labX || 0)) * rowH;
+      var towers = order.map(function (q) { return q.tr; });
+      var onTower = function (L, Y, w, h) { return towers.some(function (t) { return L < t[2] - 1 && L + w > t[0] + 1 && Y < t[3] && Y + h > t[1]; }); };
+      // 札から塔への細い線が、ほかの札を横切らない様に（線も札も、置いた物を覚えて確かめる）
+      var boxes = [], lines = [];
+      var lineX = function (q, L) { return Math.max(L + 6, Math.min(L + q.w - 6, q.x)); };
+      var crosses = function (q, L, Y) {
+        if (lines.some(function (ln) { return ln[0] > L - 3 && ln[0] < L + q.w + 3 && ln[1] < Y + q.h && ln[2] > Y; })) return true;   // ほかの線が、この札を通る
+        var lx = lineX(q, L), y1 = Y + q.h, y2 = q.y; return boxes.some(function (b) { return lx > b[0] - 3 && lx < b[2] + 3 && b[1] < y2 && b[3] > y1; });   // この札の線が、ほかの札を通る
+      };
+      byX.forEach(function (q) {
+        var L0 = Math.max(3, Math.min(W - q.w - 3, q.x - q.w / 2)), rTop = Math.floor((q.y - 3 - yMin) / rowH) - 1, pref = [];
+        for (var r1 = Math.min(nRow - 1, rTop); r1 >= 0; r1--) pref.push(r1);   // 塔の上の段（近い順）
+        for (var r2 = Math.max(0, rTop + 1); r2 < nRow; r2++) pref.push(r2);   // 無ければ下の段
+        var got = -1, Lg = L0;
+        for (var pass = 0; pass < 4 && got < 0; pass++)   // 1回目は塔の絵にかぶらない所だけ。無い時だけ2回目（札どうしは必ず重ならない）
+          for (var t = 0; t < pref.length && got < 0; t++) { var r = pref[t], Yr = yMin + r * rowH; [0, 12, -12, 24, -24, 36, -36, 48, -48].some(function (dx) { var L = Math.max(3, Math.min(W - q.w - 3, L0 + dx)); if ((q.x < L + 7 && L > 3) || (q.x > L + q.w - 7 && L < W - q.w - 3)) return false;   // 札は、いつも自分の塔の真上（線がまっすぐ塔へ）
+          if (ends[r].every(function (e) { return L >= e[1] + 4 || L + q.w <= e[0] - 4; }) && (pass > 1 || !onTower(L, Yr, q.w, q.h)) && (pass === 1 || pass === 3 || !crosses(q, L, Yr))) { got = r; Lg = L; return true; } return false; }); }
+        if (got < 0) { got = 0; Lg = L0; miss = 1; } else if (pass > 2) cover = 1;   // 順: 塔にも線にもかぶらない → 線は札の後ろを通ってよい → 塔にかぶってよい
+        boxes.push([Lg, yMin + got * rowH, Lg + q.w, yMin + got * rowH + q.h]); lines.push([lineX(q, Lg), yMin + got * rowH + q.h, q.y]);
+        ends[got].push([Lg, Lg + q.w]); q.L = Lg; q.Y = yMin + got * rowH;
+      });
+      if (miss) { if ((zen.labSm || 0) < 2) zen.labSm = (zen.labSm || 0) + 1; else zen.labX = Math.min(3, (zen.labX || 0) + 1); }   // 入らない時は、次の絵から字を小さくする（2段階）→ それでもなら札の段を足す
+      else if (cover && performance.now() - zen.t0 > 1800) { if ((zen.labSm || 0) < 2) zen.labSm = (zen.labSm || 0) + 1; else zen.labX = Math.min(3, (zen.labX || 0) + 1); }   // 札が塔の絵にかぶる時は、字を小さく → それでもなら塔を下げて札の段を足す
+      order = [];
+    }
+    order.forEach(function (q) {
+      var L = Math.max(3, Math.min(W - q.w - 3, q.x - q.w / 2)), Y = Math.max(yMin, Math.min(yMax - q.h, q.y - q.h - 4));
+      for (var tr = 0; tr < 30; tr++) {
+        var hit = placed.filter(function (r) { return r[0] < L + q.w + 3 && L < r[2] + 3 && r[1] < Y + q.h + 2 && Y < r[3] + 2; });
+        if (!hit.length) break;
+        var up = Math.min.apply(null, hit.map(function (r) { return r[1]; })) - q.h - 2;
+        if (up >= yMin) { Y = up; continue; }
+        var dn = Math.max.apply(null, hit.map(function (r) { return r[3]; })) + 2;   // 上に空きが無い時は、横へずらす
+        var rr = Math.max.apply(null, hit.map(function (r) { return r[2]; })) + 3; if (rr + q.w <= W - 3) { L = rr; continue; }
+        var ll = Math.min.apply(null, hit.map(function (r) { return r[0]; })) - 3 - q.w; if (ll >= 3) { L = ll; continue; }
+        Y = dn;
+      }
+      placed.push([L, Y, L + q.w, Y + q.h]); q.L = L; q.Y = Y;
+    });
+    items.forEach(function (q) {
+      var s = q.s;
+      if (!q.vis || q.L == null) { s.a.style.opacity = s.b.style.opacity = s.l.style.opacity = "0"; return; }
+      s.b.style.transform = "translate(" + q.L.toFixed(1) + "px," + q.Y.toFixed(1) + "px)"; s.b.style.opacity = "1";
+      var aw = s.a.offsetWidth || 14, okA = q.by > cA && q.by < cB - 4 && q.bx > 0 && q.bx < W;
+      s.a.style.transform = "translate(" + (q.bx - aw / 2).toFixed(1) + "px," + (q.by + 1).toFixed(1) + "px)"; s.a.style.opacity = okA ? "1" : "0";
+      var lx = Math.max(q.L + 6, Math.min(q.L + q.w - 6, q.x)), y1 = q.Y + q.h, y2 = Math.max(y1, Math.min(cB, q.y));   // 札から塔のてっぺんへ細い線
+      s.l.style.transform = "translate(" + lx.toFixed(1) + "px," + y1.toFixed(1) + "px)"; s.l.style.height = Math.max(0, y2 - y1).toFixed(1) + "px"; s.l.style.background = q.c.color; s.l.style.opacity = y2 - y1 > 6 ? "0.85" : "0"; q.ln = y2 - y1 > 6 ? [lx, y1, y2] : null;
+    });
+    for (var j = cols.length; j < zSL.length; j++) zSL[j].a.style.opacity = zSL[j].b.style.opacity = zSL[j].l.style.opacity = "0";
+    zen._lab = items.map(function (q) { return { n: q.c.name, vis: q.vis && q.L != null, t: q.tr, b: q.L == null ? null : [q.L, q.Y, q.L + q.w, q.Y + q.h], ln: q.ln || null }; });   // 試しの道具が、札と塔の絵のかぶりを数える
   }
+  function zTopY() { var b = document.querySelector(".app-bar"), hr = host.getBoundingClientRect(); return b ? Math.max(0, b.getBoundingClientRect().bottom - hr.top + 6) : 8; }   // 大きい時の帯の上（題の下）
   function zenClose() {
     if (!zen) return;
-    zen = null; zenUi.hidden = true; document.body.classList.remove("tw-zen"); zenBtn.querySelector("span").textContent = "全部の高さ"; zenBtn.setAttribute("aria-pressed", "false");
+    zen = null; setZoomed(rZ.z > 1.01); zenUi.hidden = true; document.body.classList.remove("tw-zen"); zenBtn.querySelector("span").textContent = "全部の高さ"; zenBtn.setAttribute("aria-pressed", "false");
     zClear(); look = 0; lookV = 0; travel = null; camY = null; lastNow = 0; shadowKey = ""; kick();
   }
   // 塔を入れる帯（11/5 CEO「枠にもろかぶり」）: 上は数の札の下（「今」の字の分を空ける）、下は記録のボタンと下のボタンの上。札の位置は実際に測る
   function zenBand() {
-    if (!zen) return;
+    if (!zen || zoomOn) return;   // 大きくしている間（札とボタンを隠している間）は測り直さない
     var hr = host.getBoundingClientRect(), ir = zInfo.getBoundingClientRect(), yA = ir.bottom - hr.top + 30, yB = H - 24;
     [document.getElementById("modosu"), document.querySelector(".plus.plus4"), zenBtn].forEach(function (el) { if (el) { var r = el.getBoundingClientRect(); if (r.height) yB = Math.min(yB, r.top - hr.top - 22); } });
     if (yB - yA < 80) yB = yA + 80;   // 札がとても大きい時も、塔は小さく入れる（帯を広げて札にかぶせない）
-    zen.yA = yA; zen.yB = yB;
+    zen.yA = yA; zen.yB = yB; zen.yTop = zTopY();
   }
   window.addEventListener("resize", function () { if (zen) setTimeout(zenBand, 60); });
   window.addEventListener("tw-layout", function () { if (zen) zenBand(); });   // ボタンの場所を測り直した後（app.js のかぶりの見張り）
@@ -8501,15 +8718,15 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
   // 大きい時は、1本の指の上下で塔を上り下りする。左右は今まで通り回る
   var zP = {};
   function zMid() { var ks = Object.keys(zP), a = zP[ks[ks.length - 2]], b = zP[ks[ks.length - 1]]; return { d: Math.max(1, Math.hypot(a.x - b.x, a.y - b.y)), y: (a.y + b.y) / 2, x: (a.x + b.x) / 2 }; }
-  cv.addEventListener("pointerdown", function (e) {
-    if (!zen) return; if (e.isPrimary) zP = {};   // 1本目の指が触れた時は、前の指の残りを消す（指を離した知らせが来ない時も、つまめる様に）
+  window.addEventListener("pointerdown", function (e) {
+    if (!zen || e.pointerType === "mouse" && e.target !== cv) return; if (e.isPrimary) zP = {};   // 1本目の指が触れた時は、前の指の残りを消す（指を離した知らせが来ない時も、つまめる様に）
     zP[e.pointerId] = { x: e.clientX, y: e.clientY };
     var n = Object.keys(zP).length;
     if (n >= 2 && zen.ppu) { var m = zMid(); zen.pan = null; var hr0 = host.getBoundingClientRect(); zen.pinch = { d0: m.d, z0: zen.zoom, wy: zen.ty + (zen.ym - (m.y - hr0.top)) / zen.ppu, wx: (zen.tx || 1) + (m.x - hr0.left - W / 2) / zen.ppu / Math.max(0.35, Math.abs(Math.cos(zOb))), p0: zen.ppu }; }
     if (n >= 2 && zen.pinch && zen.split && zen.cols && zen.cols.length) { var pc0 = zen.pinch, cn = zen.cols.reduce(function (b2, c2) { return Math.abs(c2.cx - pc0.wx) < Math.abs(b2.cx - pc0.wx) ? c2 : b2; }); pc0.wy = Math.min(pc0.wy, cn.L * 0.6 + 0.6); }   // 低い塔の上の空をつまんでも、その塔が見える高さで大きくする
-    else if (n === 1 && zen.ppu) zen.pan = { y0: e.clientY, f0: zen.ty, p0: zen.ppu };
-  });
-  cv.addEventListener("pointermove", function (e) {
+    else if (n === 1 && zen.ppu && e.target === cv) zen.pan = { y0: e.clientY, f0: zen.ty, p0: zen.ppu };
+  }, true);
+  window.addEventListener("pointermove", function (e) {
     if (!zen || !zP[e.pointerId]) return; zP[e.pointerId].x = e.clientX; zP[e.pointerId].y = e.clientY;
     if (zen.pinch && Object.keys(zP).length >= 2) {
       var m = zMid(), pc = zen.pinch, zm = Math.max(1, Math.min(zen.zMax || 1, pc.z0 * m.d / pc.d0)), pn = pc.p0 * zm / pc.z0;
@@ -8517,11 +8734,36 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
     } else if (zen.pan && zen.zoom > 1.01) {
       var dy = e.clientY - zen.pan.y0; if (Math.abs(dy) > 4) { zen.fy = zen.pan.f0 + dy / zen.pan.p0; kick(); }
     }
-  });
+  }, true);
   function zUp(e) { if (!zen) { zP = {}; return; } delete zP[e.pointerId]; zen.pinch = null; zen.pan = null; var ks = Object.keys(zP); if (ks.length === 1 && zen.ppu) zen.pan = { y0: zP[ks[0]].y, f0: zen.ty, p0: zen.ppu }; }
-  cv.addEventListener("pointerup", zUp); cv.addEventListener("pointercancel", zUp);
-  ["gesturestart", "gesturechange"].forEach(function (ev) { document.addEventListener(ev, function (e) { if (zen) e.preventDefault(); }, { passive: false }); });   // iPhone の画面ごとの拡大を止める
-  window.SORA3D_ZOOM = function (z, fy, fx) { if (!zen) return null; if (z != null) zen.zoom = Math.max(1, Math.min(zen.zMax || 1, z)); if (fy !== undefined) zen.fy = fy; if (fx !== undefined) zen.fx = fx; kick(); return { zoom: zen.zoom, ty: zen.ty, zMax: zen.zMax, tx: zen.tx, ob: zOb }; };
+  window.addEventListener("pointerup", zUp, true); window.addEventListener("pointercancel", zUp, true);
+  ["gesturestart", "gesturechange"].forEach(function (ev) { document.addEventListener(ev, function (e) { if (zen || (APP && visible())) e.preventDefault(); }, { passive: false }); });   // iPhone の画面ごとの拡大を止める
+  // 部屋の画面と見学の部屋: 二本指で大きく・二本指を動かすと見る所が動く・せばめると全体（画面のどこをつまんでも）
+  var rP = {};
+  function rMid() { var ks = Object.keys(rP), a = rP[ks[ks.length - 2]], b = rP[ks[ks.length - 1]]; return { d: Math.max(1, Math.hypot(a.x - b.x, a.y - b.y)), x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }; }
+  window.addEventListener("pointerdown", function (e) {
+    if (zen || !visible() || document.querySelector(".tw-log:not([hidden])")) return; if (e.isPrimary) { rP = {}; rPin = null; }
+    if (e.pointerType === "mouse") return;
+    var hr = host.getBoundingClientRect(); rP[e.pointerId] = { x: e.clientX - hr.left, y: e.clientY - hr.top };
+    if (Object.keys(rP).length >= 2) { var m = rMid(); if (rZ.z <= 1.001) { rZ.cx = W / 2; rZ.cy = H / 2; } rPin = { d0: m.d, z0: rZ.z, bx: rZ.cx + (m.x - W / 2) / rZ.z, by: rZ.cy + (m.y - H / 2) / rZ.z }; drag = null; }
+  }, true);
+  window.addEventListener("pointermove", function (e) {
+    if (zen || !rP[e.pointerId]) return; var hr = host.getBoundingClientRect(); rP[e.pointerId].x = e.clientX - hr.left; rP[e.pointerId].y = e.clientY - hr.top;
+    if (!rPin || Object.keys(rP).length < 2) return;
+    var m = rMid(), z = Math.max(1, Math.min(4, rPin.z0 * m.d / rPin.d0)); rZ.z = z; rZ.cx = rPin.bx - (m.x - W / 2) / z; rZ.cy = rPin.by - (m.y - H / 2) / z; rClamp();
+    camOff(); camera.updateProjectionMatrix(); setZoomed(z > 1.01); kick();
+  }, true);
+  function rUp(e) { delete rP[e.pointerId]; if (Object.keys(rP).length < 2 && rPin) { rPin = null; drag = null; } }
+  window.addEventListener("pointerup", rUp, true); window.addEventListener("pointercancel", rUp, true);
+  // 二回すばやく触ると、全体に戻る（大きくしている時）
+  var tapT = 0, tapX = 0, tapY = 0;
+  window.addEventListener("pointerup", function (e) {
+    if (!visible() || !e.isPrimary) return; var t = performance.now(), near = Math.hypot(e.clientX - tapX, e.clientY - tapY) < 40;
+    if (t - tapT < 380 && near && zoomOn) { if (zen) { zen.zoom = 1; zen.fy = null; zen.fx = null; } rZ.z = 1; camOff(); camera.updateProjectionMatrix(); setZoomed(false); kick(); tapT = 0; return; }
+    tapT = t; tapX = e.clientX; tapY = e.clientY;
+  }, true);
+  window.SORA3D_RZOOM = function (z, cx, cy) { if (z != null) { rZ.z = Math.max(1, Math.min(4, z)); rZ.cx = cx != null ? cx : W / 2; rZ.cy = cy != null ? cy : H / 2; rClamp(); camOff(); camera.updateProjectionMatrix(); setZoomed(rZ.z > 1.01); kick(); } return { z: rZ.z, cx: rZ.cx, cy: rZ.cy }; };
+  window.SORA3D_ZOOM = function (z, fy, fx) { if (!zen) return null; if (z != null) zen.zoom = Math.max(1, Math.min(zen.zMax || 1, z)); if (fy !== undefined) zen.fy = fy; if (fx !== undefined) zen.fx = fx; kick(); return { zoom: zen.zoom, ty: zen.ty, zMax: zen.zMax, tx: zen.tx, ob: zOb, dFit: zen.dFit, yA: zen.yA, yB: zen.yB, labH: zen.labH }; };
   zenBtn.addEventListener("click", function (e) { e.stopPropagation(); if (zen) zenClose(); else zenOpen(); }, false);
   function zTick(i) {
     var el = zTicks[i]; if (!el) { el = zTicks[i] = document.createElement("div"); zRule.appendChild(el); }
@@ -8533,11 +8775,14 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
     zCam.aspect = W / H;
     var top = zen.top, fh = Math.tan(zCam.fov * D2R / 2), u = reduced ? 1 : sstep((now - zen.t0) / 1600), SP = !!zen.split;
     if (SP && zen.o0 == null) zen.o0 = orbit;
-    var ob = SP ? orbit - zen.o0 + (reduced ? 0 : 0.32 * Math.sin(now / 7000)) : orbit; zOb = ob;   // 種類ごとの時は、正面から少しだけゆれる。指で左右に動かすと回る（11/7 CEO「別々のブロックも回せる様に」）
-    var yA2 = SP ? zen.yA + 26 : zen.yA + (zen.yB - zen.yA) * ZSKY, band = (zen.yB - yA2) / H, dFit = Math.max((top + 1.2) / (2 * fh * band), 4.6 / (fh * zCam.aspect * 0.55), 10, SP ? (zen.wr + 2.4) / (2 * fh * zCam.aspect * 0.9) : 0);   // 縦は、数の札と下のボタンの間の帯に入る遠さ（種類ごとの時は横の並びも入る遠さ）
-    zen.zMax = SP ? Math.max(1, Math.min(60, W * 0.92 / (4.6 * (H / 2) / (fh * dFit)))) : Math.max(1, Math.min(60, (W - 122 - 20) / (5.8 * (H / 2) / (fh * dFit))));   // 一番大きくして、塔が目盛りの右の空きに入るまで
+    if (SP) { var oR = orbit - zen.o0; if (oR > 0.75) { orbit = zen.o0 + 0.75; orbitV = 0; } else if (oR < -0.75) { orbit = zen.o0 - 0.75; orbitV = 0; } }   // 種類ごとは、斜め45度くらいまで回る（真横から見ると塔と名前が重なるため）
+    var ob = SP ? orbit - zen.o0 + (reduced ? 0 : 0.18 * Math.sin(now / 7000)) : orbit; zOb = ob;   // 種類ごとの時は、正面から少しだけゆれる。指で左右に動かすと回る（11/7 CEO「別々のブロックも回せる様に」）
+    if (SP) { zen.labH = (zen.labH || 0) + ((zen.labHT || 0) - (zen.labH || 0)) * Math.min(1, dt * 8); }
+    var kZ0 = sstep(((zen.zoom || 1) - 1) / 0.35), yA2 = SP ? Math.min(zen.yA - 22 + (zen.labH || 48) * (1 - kZ0), zen.yB - Math.max(zen.labX ? 84 : 120, (zen.yB - zen.yA) * (zen.labX ? 0.4 : 0.55))) : zen.yA + (zen.yB - zen.yA) * ZSKY, band = (zen.yB - yA2) / H, dFit = Math.max((top + 1.2) / (2 * fh * band), 4.6 / (fh * zCam.aspect * 0.55), 10, SP ? (zen.wr + 2.4) / (2 * fh * zCam.aspect * 0.9) : 0);   // 縦は、数の札と下のボタンの間の帯に入る遠さ（種類ごとの時は横の並びも入る遠さ）
+    zen.dFit = dFit; zen.zMax = SP ? Math.max(1, Math.min(60, W * 0.92 / (4.6 * (H / 2) / (fh * dFit)))) : Math.max(1, Math.min(60, (W - 122 - 20) / (5.8 * (H / 2) / (fh * dFit))));   // 一番大きくして、塔が目盛りの右の空きに入るまで
     var Z = Math.max(1, Math.min(zen.zMax, zen.zoom || 1)), d = (10 + (dFit - 10) * u) / Z, ty = top - 0.6 + (top / 2 - (top - 0.6)) * u;
-    var half = (zen.yB - yA2) / 2 / ((H / 2) / (fh * d)), lo = Math.min(top / 2, half - 0.6), hi = Math.max(top / 2, top + 0.6 - half);
+    var kZ = sstep((Z - 1) / 0.35), yAz = yA2 + ((zen.yTop != null ? zen.yTop : 8) - yA2) * kZ, yBz = zen.yB + (H - 10 - zen.yB) * kZ; setZoomed(Z > 1.01 || rZ.z > 1.01);   // 大きくした時は、帯を画面全部へ広げる（11/7 CEO「画面全部でアップ」）。上の札と下のボタンは隠れる
+    var half = (yBz - yAz) / 2 / ((H / 2) / (fh * d)), lo = Math.min(top / 2, half - 0.6), hi = Math.max(top / 2, top + 0.6 - half);
     if (u >= 1 && zen.fy != null) { zen.fy = Math.max(lo, Math.min(hi, zen.fy)); ty = zen.fy; }
     if (Z <= 1.001 && !zen.pinch) zen.fy = null;
     var cy = ty + (2.4 * (1 - u) + Math.min(dFit * 0.1, 30) * u) / Z;
@@ -8545,34 +8790,50 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
     var fxM = SP ? zen.wr / 2 : 0, tx = SP && zen.fx != null ? (zen.fx = Math.max(1 - fxM, Math.min(1 + fxM, zen.fx))) : 1; zen.tx = tx;   // 種類ごとで大きくした時は、つまんだ所の塔へ寄る
     zCam.position.set(tx + Math.sin(ob) * d, cy, 1.5 + Math.cos(ob) * d);
     zCam.near = Math.max(0.1, d * 0.02); zCam.far = d * 3 + top + 200; var pp0 = (H / 2) / (fh * Math.hypot(d, cy - ty)), dx = SP ? 0 : Math.max(0, 122 + 2.9 * pp0 + 6 - W / 2);   // 大きくした時は、塔を右へ寄せて左の目盛りの場所を空ける
-    zCam.setViewOffset(W, H, -Math.round(dx), Math.round(H / 2 - (yA2 + zen.yB) / 2), W, H);   // 塔の真ん中を帯の真ん中へ
+    zCam.setViewOffset(W, H, -Math.round(dx), Math.round(H / 2 - (yAz + yBz) / 2), W, H);   // 塔の真ん中を帯の真ん中へ
     zCam.lookAt(tx, ty, 1.5);
-    zSun.position.set(tx + Math.sin(ob + 0.8) * 40, ty + 40, 1.5 + Math.cos(ob + 0.8) * 40); zSun.target.position.set(tx, ty, 1.5);
+    if (SP && kZ < 0.999) { var off0 = Math.round(H / 2 - (yAz + yBz) / 2); zCam.updateMatrixWorld(); zCam.updateProjectionMatrix(); var pb = new T.Vector3(1, 0, 2.5).project(zCam), yb0 = (-pb.y * 0.5 + 0.5) * H; zCam.setViewOffset(W, H, 0, Math.round(off0 + (yb0 - (zen.yB - 4)) * (1 - kZ)), W, H); }   // 種類ごと（全体）: 島の前のふちを、下のボタンの少し上にそろえる（塔が低い時に下へ沈まない・札の段の分だけ下がらない）
+    var Sz = SP ? Math.max(1, (zen.wr / 2 + 0.9) / 2.96) : Math.max(1, top / 14), sD = 30 * Sz;   // 光の向きは前と同じ。影を島の上に落とすため、光は島の真ん中を向く
+    zSun.position.set(1 + Math.sin(ob + 0.8) * sD, sD, 1.5 + Math.cos(ob + 0.8) * sD); zSun.target.position.set(1, 0, 1.5);
+    zRim.position.set(1 - Math.sin(ob) * sD, sD * 0.55, 1.5 - Math.cos(ob) * sD); zRim.target.position.set(1, 0, 1.5);
+    var sc0 = zSun.shadow.camera, sR = 3.7 * Sz; if (sc0.right !== sR) { sc0.left = -sR; sc0.right = sR; sc0.top = sR * 1.5; sc0.bottom = -sR * 1.2; sc0.near = sD * 0.3; sc0.far = sD * 2.4 + sR * 2; sc0.updateProjectionMatrix(); }
+    // 種類ごとの塔が、順に下から伸びる（少し行き過ぎて戻る）。一番の塔の冠は、伸び切ってから息をする
+    var tR = zen.tR || 0, rising = false, cE = 1;
+    zG.children.forEach(function (g) {
+      if (g.userData.rise == null) return;
+      var f = reduced ? 1 : Math.max(0, Math.min(1, (now - tR - g.userData.rise * 70) / 760)), e = f >= 1 ? 1 : 1 + 2.70158 * Math.pow(f - 1, 3) + 1.70158 * Math.pow(f - 1, 2);
+      g.scale.y = Math.max(0.002, e); if (f < 1) rising = true;
+    });
+    zG.children.forEach(function (g) { if (g.userData.crown == null) return; var a = rising ? 0 : Math.min(1, (now - tR - 1200) / 500); cE = 0.62 + 0.2 * Math.sin(now / 520); g.material.opacity = Math.max(0, a) * cE; var cs = 3.1 + 0.4 * Math.sin(now / 520); g.scale.set(cs, cs, 1); });
+    var shK2 = [Math.round(ob * 50), Sz.toFixed(2), zen.n, SP ? 1 : 0, zPer, (zen.cols || []).length].join();
+    if (shK2 !== zShK || rising) { zShK = shK2; zen.shNeed = true; }
     zFill.position.set(1 + Math.sin(ob - 2.2) * 40, ty + 10, 1.5 + Math.cos(ob - 2.2) * 40); zFill.target.position.set(1, ty, 1.5);
     zScene.environment = envRT ? envRT.texture : null;
-    Object.keys(zMats).forEach(function (k) { var m = zMats[k], sm = m.userData.src; if (sm && sm.map && m.map !== sm.map) { m.map = sm.map; m.color.copy(sm.color); m.needsUpdate = true; } });   // 床の下に沈んでいた種類の石の模様は、後から届く
+    Object.keys(zMats).forEach(function (k) { var m = zMats[k], sm = m.userData.src; if (sm && sm.map && m.map !== sm.map) { m.map = sm.map; m.color.copy(sm.color); m.needsUpdate = true; } if (sm && sm.normalMap && m.normalMap !== sm.normalMap) { m.normalMap = sm.normalMap; m.normalScale.set(0.32, 0.32); m.needsUpdate = true; } });   // 床の下に沈んでいた種類の石の模様は、後から届く
     zWorldSet(zen.n, top, { ppu: (H / 2) / (fh * Math.hypot(dFit, Math.min(dFit * 0.1, 30))), yA: zen.yA, yA2: yA2, yB: zen.yB, S: SP ? Math.max(1, (zen.wr / 2 + 0.9) / 2.96) : 0 });
     zWorldFrame(now, dt);
     // 空（後ろ）を先に描き、その上に塔・島・窓。大きくした時は、塔などを札とボタンの間の窓だけに描く（札やボタンにかぶせない）
+    var pz = POST && POST.ok; if (pz) POST.begin();   // 光のにじみ（裏の紙に描いてから仕上げる）
     renderer.render(zBgOnly, zSkyCam);
     renderer.autoClear = false; renderer.clearDepth();
-    if (Z > 1.01) { var wA = Math.max(0, zen.yA - 8), wB = Math.min(H, zen.yB + 8); renderer.setScissorTest(true); renderer.setScissor(0, H - wB, W, wB - wA); }
+    if (zen.shNeed) { zen.shNeed = false; renderer.shadowMap.needsUpdate = true; }   // 影の地図は、回した時・塔が変わった時だけ描き直す
     renderer.render(zScene, zCam);
     renderer.setScissorTest(false); renderer.autoClear = true;
+    if (pz) POST.end();
     // 高さの目盛り（左）: 0時間から今の高さまで、5〜7本
     var steps = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000], stp = steps[steps.length - 1], vis = Math.min(top, 2 * half);
     for (var k = 0; k < steps.length; k++) if (vis / steps[k] <= 6) { stp = steps[k]; break; }
     var v = new T.Vector3(), yOf = function (h) { v.set(1, h, 1.5).project(zCam); return (-v.y * 0.5 + 0.5) * H; };
     var y0 = yOf(0), yT = yOf(zen.n / 12), cxs = (v.set(1, ty, 1.5).project(zCam).x * 0.5 + 0.5) * W;
     var ppu = (H / 2) / (fh * zCam.position.distanceTo(new T.Vector3(tx, ty, 1.5)));
-    zen.ppu = ppu; zen.ty = ty; zen.ym = (yA2 + zen.yB) / 2;
-    var cA = zen.yA - (Z > 1.01 ? 0 : 24), cB = zen.yB + (Z > 1.01 ? 8 : 16);   // 目盛りは帯の中だけ（数の札・下のボタンに字をかぶせない）
+    zen.ppu = ppu; zen.ty = ty; zen.ym = (yAz + yBz) / 2;
+    var cA = Z > 1.01 ? yAz : zen.yA - 24, cB = Z > 1.01 ? yBz : zen.yB + 16;   // 目盛りは帯の中だけ（数の札・下のボタンに字をかぶせない）
     if (SP) {   // 種類ごと: 目盛りと窓の名前は出さず、塔の足元に種類の名前と時間
       for (var j0 = 0; j0 < zTicks.length; j0++) zTicks[j0].className = "zn-t zn-off";
       zLine.style.height = "0px"; if (zW) zW.labels.forEach(function (el) { el.style.opacity = "0"; });
       zSplitLabels(cA, cB); zenUi.style.opacity = (0.15 + 0.85 * u).toFixed(2); return;
     }
-    zSL.forEach(function (el) { el.style.opacity = "0"; });
+    zSL.forEach(function (s) { s.a.style.opacity = s.b.style.opacity = s.l.style.opacity = "0"; });
     var rx = Math.max(Z > 1.01 ? 52 : 10, cxs - 2.6 * ppu - 76);   // 大きくした時は「今 ○時間」の字が左で切れない所まで
     zRule.style.transform = "translateX(" + rx.toFixed(1) + "px)";
     var lA = Math.max(cA, Math.min(yT, y0)), lB = Math.min(cB, Math.max(yT, y0));
@@ -8589,6 +8850,7 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
   }
   window.SORA3D_SCREEN = function (i) { return W ? scr(i) : null; };
   window.SORA3D_ZEN = function (on) { if (on) zenOpen(); else zenClose(); };
+  window.SORA3D_ZLAB = function () { return zen && zen._lab; };
   window.SORA3D_ZSHOW = function (v) { zG.visible = zCore.visible = v; if (zW) { zW.pg.visible = v; } kick(); };   // 見本の絵を撮る時に、塔と部屋を隠す（11/7 種類の塔の完成イメージ）
   window.SORA3D_DEBUG = { info: function () { return [renderer.info.render.calls, renderer.info.render.triangles, renderer.info.memory.textures, renderer.info.programs ? renderer.info.programs.length : 0, renderer.getPixelRatio(), renderer.shadowMap.enabled]; }, set: function (n) { var bl = []; for (var i = 0; i < n; i++) bl.push({ type: KINDS[i % KINDS.length].key }); take({ blocks: bl, lastAddedIndex: n - 1 }); }, look: function (v) { look = v; camY = null; roomW = null; }, gaze: function (v) { gaze = v; gazeTo = null; }, orbit: function (v) { orbit = v; }, hzT: function () { return mats[Object.keys(mats)[0]].onBeforeCompile ? "has" : "none"; }, hz: function () { return [hzU.hzN.value, hzU.hzF.value, hzU.hzK.value, hzU.hzC.value.getHexString(), camY, Object.keys(mats).length]; }, fc: function () { return frontC.map(function (c) { return [c.position.x.toFixed(1), c.position.y.toFixed(1), c.position.z.toFixed(1), c.material.opacity.toFixed(2), c.visible, !!c.material.map]; }).concat([[camera.position.x.toFixed(1), camera.position.y.toFixed(1), camera.position.z.toFixed(1)]]); } };
 })();
@@ -8664,10 +8926,13 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
   ];
   // 自分で足した種類（10/31 17:59 CEO「論文や数学以外にも積み上げたい物を足せる仕組みを」）。このスマホに残す。消さずに「しまう」だけ（前の記録の数が崩れない様に）
   try { (JSON.parse(window.localStorage.getItem("tw-kinds") || "[]") || []).forEach(function (k) { if (k && k.key && k.name) KINDS.push(k); }); } catch (e) {}
-  window.TOU_KINDS = KINDS;
+  // 元の4つの種類の色も、後から変えられる（11/7 CEO「色を後で変更できる自由さ」）。変えた色はこのスマホに残す
+  var KDEF = {}; KINDS.slice(0, 4).forEach(function (k) { KDEF[k.key] = k.color; });
+  try { var ov = JSON.parse(window.localStorage.getItem("tw-kind-base") || "{}") || {}; KINDS.slice(0, 4).forEach(function (k) { var o = ov[k.key]; if (o && o.color) { k.color = o.color; k.base = k.key; } }); } catch (e) {}
+  window.TOU_KINDS = KINDS; window.TOU_KDEF = KDEF;
   function Z() { var a = []; for (var i = 0; i < KINDS.length; i++) a.push(0); return a; }
   function kindVars(k) { var r = document.documentElement.style; r.setProperty("--" + k.key, k.color); r.setProperty("--" + k.key + "2", k.color); r.setProperty("--" + k.key + "3", k.color); }
-  KINDS.slice(4).forEach(kindVars);
+  KINDS.slice(4).forEach(kindVars); KINDS.slice(0, 4).forEach(function (k) { if (k.base) kindVars(k); });
   // 1日の分（論文・算数・MMA・瞑想）。本番は 0個から（10/27 CEO が「0個から始める」を選んだ）
   var records = [Z()];
   var planned = [10,5,5,10];
@@ -9159,7 +9424,13 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
     var ok = saveKinds(); render(); return ok ? k : null;
   };
   window.TW_EDIT_KIND = function (key, d) {
-    var k = KINDS.filter(function (q) { return q.key === key; })[0]; if (!k || KINDS.indexOf(k) < 4) return false;
+    var k = KINDS.filter(function (q) { return q.key === key; })[0]; if (!k) return false;
+    if (KINDS.indexOf(k) < 4) {   // 元の種類は、色だけ変えられる（元の色に戻すと、元の石の模様に戻る）
+      if (!d.color) return false; k.color = d.color; if (d.color === KDEF[key]) delete k.base; else k.base = key;
+      try { var ov2 = JSON.parse(window.localStorage.getItem("tw-kind-base") || "{}") || {}; if (k.base) ov2[key] = { color: k.color }; else delete ov2[key]; window.localStorage.setItem("tw-kind-base", JSON.stringify(ov2)); } catch (e) { return false; }
+      if (k.base) kindVars(k); else { var rs = document.documentElement.style; rs.removeProperty("--" + key); rs.removeProperty("--" + key + "2"); rs.removeProperty("--" + key + "3"); }
+      render(); return true;
+    }
     ["name", "mark", "color", "base", "hidden"].forEach(function (f) { if (d[f] !== undefined) k[f] = f === "name" ? String(d[f]).slice(0, 8) : d[f]; });
     kindVars(k); var ok = saveKinds(); render(); return ok;
   };
@@ -9231,6 +9502,17 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
   }
   ["ima","machi","zumi"].forEach(function(j){var s=document.createElement("span");s.className="k-"+j;s.textContent=NA[j]+" "+n[j];kazu.appendChild(s);});
   if(!ichiran.children.length){var hs=document.querySelector(".hitome"); if(hs)hs.hidden=true;}
+  // 色を選ぶ（11/7）
+  var IRO={kuro:"dark",wine:"light",midori:"light",sakura:"light",sora:"light"};
+  [].forEach.call(document.querySelectorAll(".iro-erabu button"),function(b){
+    var k=b.getAttribute("data-iro"), r=document.documentElement;
+    b.setAttribute("aria-pressed",String((r.getAttribute("data-iro")||"")===k));
+    b.addEventListener("click",function(){
+      if(k){r.setAttribute("data-iro",k);r.setAttribute("data-theme",IRO[k]);}else{r.removeAttribute("data-iro");r.removeAttribute("data-theme");}
+      try{if(k)localStorage.setItem("kami-iro-1107",k);else localStorage.removeItem("kami-iro-1107");}catch(e){}
+      [].forEach.call(document.querySelectorAll(".iro-erabu button"),function(x){x.setAttribute("aria-pressed",String(x===b));});
+    });
+  });
   // 全部閉じて、一番上へ戻る（11/6 の基準）
   document.getElementById("tojiru").addEventListener("click",function(){
     [].forEach.call(document.querySelectorAll("details"),function(d){d.open=false;});
@@ -9254,7 +9536,7 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
 </body>
 </html>
 
-<script>window.TRI_VER="7a08d95332";
+<script>window.TRI_VER="55b07f396d";
 // ===== 積み上げ帳アプリ: 全画面の形・音の合図・留守番係 =====
 (function () {
   var root = document.documentElement;
@@ -9561,7 +9843,13 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
     var n = p4.querySelectorAll("button[data-plus], button[data-x]").length;
     p4.classList.toggle("many", n > 4); p4.style.setProperty("--pn", n);
     window.dispatchEvent(new Event("resize"));
+    fitNames();
   }
+  // 長い名前（レスリング練習など）は、切らずに、ボタンに入る大きさまで字を小さくする（11/7 CEO「字の重なり・切れは言われる前に直す」）
+  function fitNames() { [].forEach.call(p4.querySelectorAll("button .pn"), function (el) { el.style.fontSize = ""; el.style.letterSpacing = ""; var bt = el.closest("button"); if (bt) bt.style.gridColumn = ""; var fit = function (min) { var fs = parseFloat(getComputedStyle(el).fontSize) || 17, n = 0; while (el.scrollWidth > el.clientWidth + 0.5 && fs > min && n++ < 24) { fs -= 0.5; el.style.fontSize = fs + "px"; el.style.letterSpacing = "0"; } return el.scrollWidth <= el.clientWidth + 0.5; };
+    if (!fit(12.5) && bt && !bt.classList.contains("p-add")) { bt.style.gridColumn = "span 2"; el.style.fontSize = ""; el.style.letterSpacing = ""; fit(10); }   // 12px でも入らない時は、ボタンを2つ分の幅に
+  }); }
+  window.addEventListener("resize", function () { setTimeout(fitNames, 80); });
   p4.addEventListener("click", function (e) {
     var b = e.target.closest("button[data-x]"); if (b) { window.TW_ADD(b.getAttribute("data-x")); return; }
     if (e.target.closest(".p-add")) openK();
@@ -9570,7 +9858,7 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
   var sh = document.createElement("div"); sh.className = "tw-log tw-kind"; sh.hidden = true; sh.setAttribute("role", "dialog"); sh.setAttribute("aria-label", "積み上げる種類");
   var bg = document.createElement("div"); bg.className = "tw-log-bg"; bg.hidden = true;
   document.body.appendChild(bg); document.body.appendChild(sh);
-  var pick = { c: 0, m: 0 };
+  var pick = { c: 0, m: 0 }, recol = null;
   function paintK() {
     var h = '<div class="tl-head"><b>積み上げる種類</b><button type="button" class="tl-x">とじる</button></div>';
     h += '<div class="tk-new"><label>新しい種類の名前<input type="text" maxlength="8" placeholder="例: 英語・読書・図面" autocomplete="off"></label>';
@@ -9580,7 +9868,12 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
     h += '<button type="button" class="tk-add">この種類を足す</button><p class="tk-msg" aria-live="polite"></p></div>';
     h += '<div class="tk-list"><b>今の種類</b>';
     kinds().forEach(function (k, i) {
-      h += '<div class="tk-k' + (k.hidden ? " off" : "") + '"><i style="color:' + k.color + '">' + k.mark + '</i><b>' + k.name + '</b>' + (i < 4 ? '<small>元の種類</small>' : '<button type="button" data-hide="' + k.key + '">' + (k.hidden ? "ボタンに出す" : "しまう") + '</button>') + '</div>';
+      h += '<div class="tk-k' + (k.hidden ? " off" : "") + (recol === k.key ? " on" : "") + '"><i style="color:' + k.color + '">' + k.mark + '</i><b>' + k.name + '</b>' + (i < 4 ? '<small>元の種類</small>' : '') + '<button type="button" class="tk-rc" data-recol="' + k.key + '"><s style="background:' + k.color + '"></s>色</button>' + (i < 4 ? '' : '<button type="button" data-hide="' + k.key + '">' + (k.hidden ? "ボタンに出す" : "しまう") + '</button>') + '</div>';
+      if (recol === k.key) {   // 色を後から変える（11/7 CEO「色を後で変更できる自由さ」）: 使っていない色と、元の色
+        var def = (window.TOU_KDEF || {})[k.key], opts = COLS.map(function (c, ci) { return { c: c[0], n: c[1], b: c[2] }; });
+        if (def) opts.unshift({ c: def, n: "元の色", b: "" });
+        h += '<div class="tk-row tk-cols tk-recol"><span>色</span>' + opts.map(function (o) { var me = o.c.toLowerCase() === String(k.color).toLowerCase(), u = !me && usedCol(o.c); return '<button type="button" class="tk-c' + (me ? " on" : "") + (u ? " used" : "") + '" data-rc="' + o.c + '" data-rb="' + o.b + '" style="background:' + o.c + '" aria-label="' + o.n + (u ? "（もう使っている）" : "") + '"' + (u ? " disabled" : "") + '></button>'; }).join("") + '</div>';
+      }
     });
     h += '<p class="tk-note">しまっても、それまでの記録と塔の石は消えません。</p></div>';
     sh.innerHTML = h;
@@ -9593,6 +9886,13 @@ window.TOU_E = {"ao": "a/d5bbb0e801e640.png", "mi": "a/b9f26485a8c09f.png", "sa"
     if (t.closest(".tl-x")) { closeK(); return; }
     var c = t.closest("[data-c]"); if (c) { pick.c = +c.getAttribute("data-c"); [].forEach.call(sh.querySelectorAll(".tk-c"), function (x) { x.classList.toggle("on", x === c); }); return; }
     var m = t.closest("[data-m]"); if (m) { pick.m = +m.getAttribute("data-m"); [].forEach.call(sh.querySelectorAll(".tk-m"), function (x) { x.classList.toggle("on", x === m); }); return; }
+    var rc = t.closest("[data-recol]"); if (rc) { var rk = rc.getAttribute("data-recol"); recol = recol === rk ? null : rk; paintK(); return; }
+    var rcc = t.closest("[data-rc]"); if (rcc && recol) {
+      var nc = rcc.getAttribute("data-rc"), nb = rcc.getAttribute("data-rb"), ki = kinds().map(function (q) { return q.key; }).indexOf(recol), d = { color: nc };
+      if (ki >= 4 && nb) d.base = nb;
+      if (window.TW_EDIT_KIND(recol, d)) { if (window.SORA3D_RECOLOR) window.SORA3D_RECOLOR(recol); paintPlus(); if (window.TW_KINDS_CHANGED) window.TW_KINDS_CHANGED(); }
+      paintK(); return;
+    }
     var hd = t.closest("[data-hide]"); if (hd) { var key = hd.getAttribute("data-hide"), k = kinds().filter(function (q) { return q.key === key; })[0]; if (k) { window.TW_EDIT_KIND(key, { hidden: !k.hidden }); paintPlus(); paintK(); } return; }
     if (t.closest(".tk-add")) {
       var inp = sh.querySelector(".tk-new input"), name = (inp.value || "").trim(), msg = sh.querySelector(".tk-msg");
