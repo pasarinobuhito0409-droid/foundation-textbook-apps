@@ -8239,12 +8239,12 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
     if (!STG || !st || !st.blocks) return takeShown(st);
     lastFull = st;
     var full = st.blocks.filter(function (b) { return b && !b.planned; }); fullN = full.length;
-    var added0 = typeof st.lastAddedIndex === "number" && st.lastAddedIndex === fullN - 1, addN = added0 && seenN >= 0 ? Math.max(0, fullN - seenN) : 0; seenN = fullN;
+    var added0 = typeof st.lastAddedIndex === "number" && (st.lastAddedIndex === fullN - 1 || (st.lastAddedIndex >= 0 && seenN >= 0 && fullN > seenN)), addN = added0 && seenN >= 0 ? Math.max(0, fullN - seenN) : 0; seenN = fullN;   // 達成の数が増えた時も「積んだ」とする（時間で押した時、入れた石が列の最後に来ず、落ちないことが有った）
     if (added0 && zen) zenClose();   // 全部の高さを見ている間に積んだら、今の部屋へ戻って落ちるのを見せる
     if (added0 && sink) { tower.position.y = 0; hfCur = sinkTo; sinkTo = -1; sink = null; shadowKey = ""; }   // 沈む途中に積んだら、沈むのを先に済ませる（並びがずれて落ちなかった）
     // 塔は段階をまたいで続く。床の上には、できた階を KEEP 階と今の階だけ見せ、その下は床の下へ沈める（部屋だけが替わる）
     var si = stageOf(fullN), hfT = Math.max(0, Math.floor(fullN / 12) - KEEP);
-    var added = typeof st.lastAddedIndex === "number" && st.lastAddedIndex === fullN - 1;
+    var added = added0;   // 上と同じ判定（seenN はもう更新したので、ここで数え直さない）
     if (added && preview >= 0) setPreview(-1);   // 見学中に積んだら、今の部屋へ戻って着地を見せる
     if (stagePend >= 0 && si !== stagePend) stagePend = -1;   // 待っている間に もどした時
     if (si !== stCur) {
@@ -8255,7 +8255,7 @@ window.SORA3D = {"pano_machi": "a/348b8e08673641.jpg", "sun_machi": [0.665, 0.37
     else if (!sink) { hfCur = hfT; sinkTo = -1; }
     var b0 = hfCur * 12; dispB0 = b0;
     rimG.visible = b0 > 0;
-    takeShown({ blocks: full.slice(b0), lastAddedIndex: added ? st.lastAddedIndex - b0 : -1 }, addN);
+    takeShown({ blocks: full.slice(b0), lastAddedIndex: added ? fullN - 1 - b0 : -1 }, addN);   // 落とすのは塔の上に増えた段（今まで落ちていた時と同じ値）
   }
 
   function goStage(si) {
